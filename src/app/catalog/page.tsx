@@ -65,27 +65,27 @@ export default function CatalogPage() {
     <>
       <Header />
 
-      <main className="flex-1 bg-[#07080f]">
+      <main className="flex-1 bg-[#fffaf7]">
         {/* Page header */}
-        <div className="border-b border-white/5 bg-[#07080f]">
+        <div className="border-b border-black/8 bg-white">
           <div className="mx-auto max-w-7xl px-4 py-6">
-            <nav className="flex items-center gap-2 text-xs text-[#64748b] mb-3">
-              <a href="/" className="hover:text-[#94a3b8] transition-colors">Главная</a>
+            <nav className="flex items-center gap-2 text-xs text-[#a8a29e] mb-3">
+              <a href="/" className="hover:text-[#78716c] transition-colors">Главная</a>
               <span>/</span>
-              <span className="text-[#94a3b8]">Каталог</span>
+              <span className="text-[#78716c]">Каталог</span>
               {activeCategory && (
                 <>
                   <span>/</span>
-                  <span className="text-[#f1f5f9]">{activeCategory.name}</span>
+                  <span className="text-[#1c1917]">{activeCategory.name}</span>
                 </>
               )}
             </nav>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h1 className="text-xl font-bold text-[#f1f5f9]">
+                <h1 className="text-xl font-bold text-[#1c1917]">
                   {activeCategory ? activeCategory.name : 'Каталог'}
                 </h1>
-                <p className="text-sm text-[#64748b] mt-0.5">
+                <p className="text-sm text-[#78716c] mt-0.5">
                   {formatNumber(filtered.length)} позиций
                   {activeCategory && ` · ${activeCategory.description}`}
                 </p>
@@ -105,17 +105,17 @@ export default function CatalogPage() {
               {/* Mobile overlay */}
               {filtersOpen && (
                 <div
-                  className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden"
+                  className="fixed inset-0 bg-black/30 backdrop-blur-sm lg:hidden"
                   onClick={() => setFiltersOpen(false)}
                 />
               )}
 
-              <div className="relative z-10 w-64 bg-[#0d0f1e] lg:bg-transparent border border-white/6 lg:border-transparent rounded-xl lg:rounded-none p-4 lg:p-0 max-h-screen overflow-y-auto ml-auto lg:ml-0">
+              <div className="relative z-10 w-64 bg-white lg:bg-transparent border border-black/8 lg:border-transparent rounded-xl lg:rounded-none p-4 lg:p-0 max-h-screen overflow-y-auto ml-auto lg:ml-0 shadow-lg lg:shadow-none">
                 <div className="flex items-center justify-between mb-4 lg:mb-0">
-                  <span className="text-sm font-semibold text-[#f1f5f9]">Фильтры</span>
+                  <span className="text-sm font-semibold text-[#1c1917]">Фильтры</span>
                   <button
                     onClick={() => setFiltersOpen(false)}
-                    className="lg:hidden text-[#64748b] hover:text-[#f1f5f9]"
+                    className="lg:hidden text-[#a8a29e] hover:text-[#1c1917]"
                   >
                     <X size={16} />
                   </button>
@@ -123,22 +123,22 @@ export default function CatalogPage() {
 
                 {/* Category filter */}
                 <div className="space-y-1 lg:pt-0">
-                  <div className="text-xs text-[#64748b] uppercase tracking-wider mb-2 lg:mb-3 lg:mt-0">
+                  <div className="text-xs text-[#a8a29e] uppercase tracking-wider mb-2 lg:mb-3 lg:mt-0">
                     Категория
                   </div>
                   <button
                     onClick={() => setSelectedCategory(null)}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all ${
                       selectedCategory === null
-                        ? 'bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/20'
-                        : 'text-[#94a3b8] hover:bg-white/4 hover:text-[#f1f5f9]'
+                        ? 'bg-[#166534]/8 text-[#166534] border border-[#166534]/15'
+                        : 'text-[#78716c] hover:bg-black/4 hover:text-[#1c1917]'
                     }`}
                   >
                     <span className="flex items-center gap-2">
                       <span className="font-mono text-xs opacity-60">◆</span>
                       Все категории
                     </span>
-                    <span className="text-xs text-[#64748b]">{products.length}</span>
+                    <span className="text-xs text-[#a8a29e]">{products.length}</span>
                   </button>
                   {categories.map((cat) => {
                     const count = products.filter((p) => p.categorySlug === cat.slug).length
@@ -149,34 +149,34 @@ export default function CatalogPage() {
                         onClick={() => setSelectedCategory(cat.slug === selectedCategory ? null : cat.slug)}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all ${
                           selectedCategory === cat.slug
-                            ? 'bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/20'
-                            : 'text-[#94a3b8] hover:bg-white/4 hover:text-[#f1f5f9]'
+                            ? 'bg-[#166534]/8 text-[#166534] border border-[#166534]/15'
+                            : 'text-[#78716c] hover:bg-black/4 hover:text-[#1c1917]'
                         }`}
                       >
                         <span className="flex items-center gap-2">
                           <span className="font-mono text-xs opacity-60">{cat.icon}</span>
                           {cat.name}
                         </span>
-                        <span className="text-xs text-[#64748b]">{count}</span>
+                        <span className="text-xs text-[#a8a29e]">{count}</span>
                       </button>
                     )
                   })}
                 </div>
 
                 {/* Availability filter */}
-                <div className="mt-6 pt-6 border-t border-white/5">
-                  <div className="text-xs text-[#64748b] uppercase tracking-wider mb-3">Наличие</div>
+                <div className="mt-6 pt-6 border-t border-black/6">
+                  <div className="text-xs text-[#a8a29e] uppercase tracking-wider mb-3">Наличие</div>
                   <label className="flex items-center gap-3 cursor-pointer group">
                     <div
                       className={`relative size-4 rounded border transition-all ${
                         inStockOnly
-                          ? 'bg-[#22d3ee] border-[#22d3ee]'
-                          : 'bg-transparent border-white/20 group-hover:border-white/40'
+                          ? 'bg-[#166534] border-[#166534]'
+                          : 'bg-transparent border-black/20 group-hover:border-black/40'
                       }`}
                     >
                       {inStockOnly && (
                         <svg className="absolute inset-0 m-auto" width="10" height="8" viewBox="0 0 10 8" fill="none">
-                          <path d="M1 4L4 7L9 1" stroke="#07080f" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M1 4L4 7L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       )}
                       <input
@@ -186,7 +186,7 @@ export default function CatalogPage() {
                         className="absolute inset-0 opacity-0 cursor-pointer"
                       />
                     </div>
-                    <span className="text-sm text-[#94a3b8] group-hover:text-[#f1f5f9] transition-colors">
+                    <span className="text-sm text-[#78716c] group-hover:text-[#1c1917] transition-colors">
                       Только в наличии
                     </span>
                   </label>
@@ -200,7 +200,7 @@ export default function CatalogPage() {
                       setInStockOnly(false)
                       setSearchQuery('')
                     }}
-                    className="mt-6 w-full flex items-center justify-center gap-1.5 py-2 text-xs text-[#64748b] hover:text-[#94a3b8] border border-white/8 hover:border-white/15 rounded-lg transition-all"
+                    className="mt-6 w-full flex items-center justify-center gap-1.5 py-2 text-xs text-[#78716c] hover:text-[#1c1917] border border-black/8 hover:border-black/15 rounded-lg transition-all"
                   >
                     <X size={12} />
                     Сбросить фильтры
@@ -216,7 +216,7 @@ export default function CatalogPage() {
                 {/* Mobile filter button */}
                 <button
                   onClick={() => setFiltersOpen(true)}
-                  className="lg:hidden flex items-center gap-1.5 h-9 px-3 text-sm text-[#94a3b8] bg-[#0d0f1e] border border-white/6 hover:border-white/12 rounded-lg transition-all"
+                  className="lg:hidden flex items-center gap-1.5 h-9 px-3 text-sm text-[#78716c] bg-white border border-black/8 hover:border-black/15 rounded-lg transition-all shadow-sm"
                 >
                   <SlidersHorizontal size={14} />
                   Фильтры
@@ -224,18 +224,18 @@ export default function CatalogPage() {
 
                 {/* Search */}
                 <div className="relative flex-1 max-w-sm">
-                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
+                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Поиск по каталогу..."
-                    className="w-full h-9 pl-8 pr-4 text-sm bg-[#0d0f1e] border border-white/6 rounded-lg text-[#f1f5f9] placeholder-[#64748b] outline-none focus:border-[#22d3ee]/40 focus:ring-2 focus:ring-[#22d3ee]/10 transition-all"
+                    className="w-full h-9 pl-8 pr-4 text-sm bg-white border border-black/8 rounded-lg text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#166534]/40 focus:ring-2 focus:ring-[#166534]/10 transition-all shadow-sm"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748b] hover:text-[#f1f5f9]"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#a8a29e] hover:text-[#1c1917]"
                     >
                       <X size={13} />
                     </button>
@@ -248,21 +248,21 @@ export default function CatalogPage() {
                     <select
                       value={sort}
                       onChange={(e) => setSort(e.target.value as SortOption)}
-                      className="appearance-none h-9 pl-3 pr-8 text-sm bg-[#0d0f1e] border border-white/6 rounded-lg text-[#94a3b8] outline-none focus:border-[#22d3ee]/40 transition-all cursor-pointer"
+                      className="appearance-none h-9 pl-3 pr-8 text-sm bg-white border border-black/8 rounded-lg text-[#78716c] outline-none focus:border-[#166534]/40 transition-all cursor-pointer shadow-sm"
                     >
                       {sortOptions.map((o) => (
                         <option key={o.value} value={o.value}>{o.label}</option>
                       ))}
                     </select>
-                    <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748b] pointer-events-none" />
+                    <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#a8a29e] pointer-events-none" />
                   </div>
 
                   {/* View toggle */}
-                  <div className="hidden sm:flex items-center bg-[#0d0f1e] border border-white/6 rounded-lg p-0.5">
+                  <div className="hidden sm:flex items-center bg-white border border-black/8 rounded-lg p-0.5 shadow-sm">
                     <button
                       onClick={() => setViewMode('grid')}
                       className={`flex items-center justify-center size-8 rounded-md transition-all ${
-                        viewMode === 'grid' ? 'bg-[#22d3ee]/10 text-[#22d3ee]' : 'text-[#64748b] hover:text-[#94a3b8]'
+                        viewMode === 'grid' ? 'bg-[#166534]/8 text-[#166534]' : 'text-[#a8a29e] hover:text-[#78716c]'
                       }`}
                     >
                       <Grid3X3 size={14} />
@@ -270,7 +270,7 @@ export default function CatalogPage() {
                     <button
                       onClick={() => setViewMode('list')}
                       className={`flex items-center justify-center size-8 rounded-md transition-all ${
-                        viewMode === 'list' ? 'bg-[#22d3ee]/10 text-[#22d3ee]' : 'text-[#64748b] hover:text-[#94a3b8]'
+                        viewMode === 'list' ? 'bg-[#166534]/8 text-[#166534]' : 'text-[#a8a29e] hover:text-[#78716c]'
                       }`}
                     >
                       <List size={14} />
@@ -282,11 +282,11 @@ export default function CatalogPage() {
               {/* Active filters */}
               {(selectedCategory || inStockOnly) && (
                 <div className="flex flex-wrap items-center gap-2 mb-4">
-                  <span className="text-xs text-[#64748b]">Фильтры:</span>
+                  <span className="text-xs text-[#a8a29e]">Фильтры:</span>
                   {activeCategory && (
                     <button
                       onClick={() => setSelectedCategory(null)}
-                      className="flex items-center gap-1 px-2 py-1 text-xs text-[#22d3ee] bg-[#22d3ee]/10 border border-[#22d3ee]/20 rounded-lg hover:bg-[#22d3ee]/15 transition-all"
+                      className="flex items-center gap-1 px-2 py-1 text-xs text-[#166534] bg-[#166534]/8 border border-[#166534]/15 rounded-lg hover:bg-[#166534]/12 transition-all"
                     >
                       {activeCategory.name}
                       <X size={10} />
@@ -295,7 +295,7 @@ export default function CatalogPage() {
                   {inStockOnly && (
                     <button
                       onClick={() => setInStockOnly(false)}
-                      className="flex items-center gap-1 px-2 py-1 text-xs text-[#34d399] bg-[#34d399]/10 border border-[#34d399]/20 rounded-lg hover:bg-[#34d399]/15 transition-all"
+                      className="flex items-center gap-1 px-2 py-1 text-xs text-[#f97316] bg-[#f97316]/8 border border-[#f97316]/15 rounded-lg hover:bg-[#f97316]/12 transition-all"
                     >
                       В наличии
                       <X size={10} />
@@ -307,9 +307,9 @@ export default function CatalogPage() {
               {/* Products grid */}
               {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
-                  <div className="text-5xl mb-4 opacity-20">◆</div>
-                  <h3 className="text-lg font-semibold text-[#f1f5f9] mb-2">Ничего не найдено</h3>
-                  <p className="text-sm text-[#64748b]">
+                  <div className="text-5xl mb-4 opacity-20 text-[#166534]">◆</div>
+                  <h3 className="text-lg font-semibold text-[#1c1917] mb-2">Ничего не найдено</h3>
+                  <p className="text-sm text-[#78716c]">
                     Попробуйте изменить фильтры или поисковый запрос
                   </p>
                 </div>
@@ -335,8 +335,8 @@ export default function CatalogPage() {
                       key={i}
                       className={`flex items-center justify-center size-9 text-sm rounded-lg transition-all ${
                         page === 1
-                          ? 'bg-[#22d3ee]/10 text-[#22d3ee] border border-[#22d3ee]/20'
-                          : 'text-[#64748b] hover:text-[#94a3b8] hover:bg-white/4'
+                          ? 'bg-[#166534] text-white shadow-sm'
+                          : 'text-[#78716c] hover:text-[#1c1917] hover:bg-black/5'
                       }`}
                     >
                       {page}

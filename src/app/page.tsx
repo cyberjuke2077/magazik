@@ -2,10 +2,9 @@ import Link from 'next/link'
 import { Truck, Shield, Headphones, Zap, ArrowRight, TrendingUp, Package2 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
-import { ProductCard } from '@/components/catalog/product-card'
 import { CategoryCard } from '@/components/catalog/category-card'
 import { SearchBar } from '@/components/ui/search-bar'
-import { categories, featuredProducts } from '@/lib/mock-data'
+import { categories } from '@/lib/mock-data'
 import { formatNumber } from '@/lib/utils'
 
 const stats = [
@@ -20,29 +19,33 @@ const features = [
     icon: Truck,
     title: 'Доставка в день заказа',
     description: 'Отправляем заказы до 15:00 в тот же день. DHL, СДЭК, Почта России.',
-    color: 'text-[#22d3ee]',
-    bg: 'bg-[#22d3ee]/10',
+    color: 'text-[#166534]',
+    bg: 'bg-[#166534]/8',
+    border: 'border-[#166534]/12',
   },
   {
     icon: Shield,
     title: 'Оригинальные компоненты',
     description: 'Работаем только с официальными дистрибьюторами. Все компоненты сертифицированы.',
-    color: 'text-[#818cf8]',
-    bg: 'bg-[#818cf8]/10',
+    color: 'text-[#f97316]',
+    bg: 'bg-[#f97316]/8',
+    border: 'border-[#f97316]/12',
   },
   {
     icon: TrendingUp,
     title: 'Оптовые цены',
     description: 'Специальные цены от 100 единиц. Индивидуальные условия для постоянных клиентов.',
-    color: 'text-[#34d399]',
-    bg: 'bg-[#34d399]/10',
+    color: 'text-[#166534]',
+    bg: 'bg-[#166534]/8',
+    border: 'border-[#166534]/12',
   },
   {
     icon: Headphones,
     title: 'Техническая поддержка',
     description: 'Инженеры на связи пн–пт 9:00–18:00. Помощь с подбором и заменами.',
-    color: 'text-[#fb923c]',
-    bg: 'bg-[#fb923c]/10',
+    color: 'text-[#f97316]',
+    bg: 'bg-[#f97316]/8',
+    border: 'border-[#f97316]/12',
   },
 ]
 
@@ -55,42 +58,43 @@ export default function HomePage() {
 
       <main className="flex-1">
         {/* ── Hero ── */}
-        <section className="relative overflow-hidden bg-[#07080f] py-20 md:py-28">
-          {/* Grid pattern */}
+        <section className="relative overflow-hidden bg-[#fffaf7] py-20 md:py-28">
+          {/* Subtle circuit grid */}
+          <div className="absolute inset-0 hero-grid" />
+          {/* Peach glow bottom */}
           <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(34,211,238,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.04) 1px, transparent 1px)',
-              backgroundSize: '50px 50px',
-            }}
-          />
-          {/* Bottom glow */}
-          <div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                'radial-gradient(ellipse 80% 60% at 50% 100%, rgba(34,211,238,0.06) 0%, transparent 70%)',
+                'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(249,115,22,0.07) 0%, transparent 70%)',
             }}
           />
-          {/* Top line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#22d3ee]/20 to-transparent" />
+          {/* Green glow top-left */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse 50% 40% at 0% 0%, rgba(22,101,52,0.05) 0%, transparent 60%)',
+            }}
+          />
+          {/* Top border line */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#166534]/20 to-transparent" />
 
           <div className="relative mx-auto max-w-5xl px-4 text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 bg-[#22d3ee]/8 border border-[#22d3ee]/15 rounded-full text-xs text-[#22d3ee] font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 bg-[#166534]/8 border border-[#166534]/15 rounded-full text-xs text-[#166534] font-medium">
               <Zap size={11} />
               {formatNumber(totalProducts)}+ компонентов в наличии
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#f1f5f9] leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1c1917] leading-tight mb-4">
               Электронные компоненты
               <br />
               <span className="text-gradient">для ваших проектов</span>
             </h1>
 
-            <p className="text-base md:text-lg text-[#64748b] max-w-xl mx-auto mb-10 leading-relaxed">
+            <p className="text-base md:text-lg text-[#78716c] max-w-xl mx-auto mb-10 leading-relaxed">
               Резисторы, конденсаторы, микросхемы, датчики и контроллеры.
               Оптом и в розницу — с доставкой по всей России.
             </p>
@@ -104,8 +108,8 @@ export default function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="text-2xl md:text-3xl font-bold text-[#f1f5f9]">{stat.value}</div>
-                  <div className="text-xs text-[#64748b] mt-0.5">{stat.label}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-[#1c1917]">{stat.value}</div>
+                  <div className="text-xs text-[#78716c] mt-0.5">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -113,16 +117,16 @@ export default function HomePage() {
         </section>
 
         {/* ── Categories ── */}
-        <section className="py-14 bg-[#07080f]">
+        <section className="py-14 bg-white">
           <div className="mx-auto max-w-7xl px-4">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <h2 className="text-xl md:text-2xl font-bold text-[#f1f5f9]">Категории</h2>
-                <p className="text-sm text-[#64748b] mt-1">{categories.length} категорий · Всегда в наличии</p>
+                <h2 className="text-xl md:text-2xl font-bold text-[#1c1917]">Категории</h2>
+                <p className="text-sm text-[#78716c] mt-1">{categories.length} категорий · Всегда в наличии</p>
               </div>
               <Link
                 href="/catalog"
-                className="flex items-center gap-1.5 text-sm text-[#22d3ee] hover:text-[#22d3ee]/80 transition-colors"
+                className="flex items-center gap-1.5 text-sm text-[#166534] hover:text-[#15803d] font-medium transition-colors"
               >
                 Весь каталог
                 <ArrowRight size={14} />
@@ -137,40 +141,12 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── Featured products ── */}
-        <section className="py-14 bg-[#0a0c19]">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Zap size={14} className="text-[#22d3ee]" />
-                  <span className="text-xs text-[#22d3ee] uppercase tracking-wider font-medium">Топ продаж</span>
-                </div>
-                <h2 className="text-xl md:text-2xl font-bold text-[#f1f5f9]">Популярные компоненты</h2>
-              </div>
-              <Link
-                href="/catalog"
-                className="flex items-center gap-1.5 text-sm text-[#22d3ee] hover:text-[#22d3ee]/80 transition-colors"
-              >
-                Все товары
-                <ArrowRight size={14} />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ── Features ── */}
-        <section className="py-14 bg-[#07080f]">
+        <section className="py-14 bg-[#fffaf7]">
           <div className="mx-auto max-w-7xl px-4">
             <div className="text-center mb-10">
-              <h2 className="text-xl md:text-2xl font-bold text-[#f1f5f9]">Почему выбирают нас</h2>
-              <p className="text-sm text-[#64748b] mt-2">
+              <h2 className="text-xl md:text-2xl font-bold text-[#1c1917]">Почему выбирают нас</h2>
+              <p className="text-sm text-[#78716c] mt-2">
                 Работаем с 2012 года — знаем, что важно для инженеров и закупщиков
               </p>
             </div>
@@ -178,13 +154,13 @@ export default function HomePage() {
               {features.map((feature) => (
                 <div
                   key={feature.title}
-                  className="flex flex-col gap-3 p-5 bg-[#0d0f1e] border border-white/6 rounded-xl hover:border-white/10 transition-colors"
+                  className={`flex flex-col gap-3 p-5 bg-white border ${feature.border} rounded-xl hover:shadow-md transition-all card-hover`}
                 >
                   <div className={`flex size-10 items-center justify-center rounded-xl ${feature.bg}`}>
                     <feature.icon size={18} className={feature.color} />
                   </div>
-                  <h3 className="text-sm font-semibold text-[#f1f5f9]">{feature.title}</h3>
-                  <p className="text-xs text-[#64748b] leading-relaxed">{feature.description}</p>
+                  <h3 className="text-sm font-semibold text-[#1c1917]">{feature.title}</h3>
+                  <p className="text-xs text-[#78716c] leading-relaxed">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -192,23 +168,32 @@ export default function HomePage() {
         </section>
 
         {/* ── CTA Banner ── */}
-        <section className="py-10 bg-[#0a0c19]">
+        <section className="py-10 bg-white">
           <div className="mx-auto max-w-7xl px-4">
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0d0f1e] to-[#111427] border border-[#22d3ee]/15 p-8 md:p-10">
-              {/* Glow */}
-              <div className="absolute -top-20 -right-20 size-64 rounded-full bg-[#22d3ee]/5 blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-20 -left-20 size-64 rounded-full bg-[#818cf8]/5 blur-3xl pointer-events-none" />
+            <div className="relative overflow-hidden rounded-2xl bg-[#166534] p-8 md:p-10">
+              {/* Subtle pattern */}
+              <div
+                className="absolute inset-0 opacity-10"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
+                  backgroundSize: '30px 30px',
+                }}
+              />
+              {/* Peach glow */}
+              <div className="absolute -top-16 -right-16 size-56 rounded-full bg-[#f97316]/20 blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-16 -left-16 size-56 rounded-full bg-white/5 blur-3xl pointer-events-none" />
 
               <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div>
                   <div className="flex items-center gap-2 mb-2">
-                    <Package2 size={16} className="text-[#22d3ee]" />
-                    <span className="text-xs text-[#22d3ee] uppercase tracking-wider font-medium">Оптовые поставки</span>
+                    <Package2 size={16} className="text-[#fed7aa]" />
+                    <span className="text-xs text-[#fed7aa] uppercase tracking-wider font-medium">Оптовые поставки</span>
                   </div>
-                  <h2 className="text-xl md:text-2xl font-bold text-[#f1f5f9] mb-2">
+                  <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                     Нужен крупный заказ?
                   </h2>
-                  <p className="text-sm text-[#64748b] max-w-md">
+                  <p className="text-sm text-white/70 max-w-md">
                     Специальные цены от 100 единиц. Работаем по договору,
                     выставляем счёт, предоставляем все документы.
                   </p>
@@ -216,14 +201,14 @@ export default function HomePage() {
                 <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                   <Link
                     href="/wholesale"
-                    className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-[#07080f] bg-[#22d3ee] hover:bg-[#22d3ee]/90 rounded-xl transition-all btn-primary"
+                    className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-[#166534] bg-white hover:bg-[#fffaf7] rounded-xl transition-all btn-primary shadow-sm"
                   >
                     Узнать условия
                     <ArrowRight size={15} />
                   </Link>
                   <Link
                     href="/catalog"
-                    className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-medium text-[#94a3b8] bg-white/5 hover:bg-white/8 border border-white/8 rounded-xl transition-all"
+                    className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-medium text-white/80 bg-white/10 hover:bg-white/15 border border-white/20 rounded-xl transition-all"
                   >
                     Открыть каталог
                   </Link>

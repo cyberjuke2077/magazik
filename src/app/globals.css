@@ -6,33 +6,46 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --color-bg: #07080f;
-  --color-surface: #0d0f1e;
-  --color-surface-2: #111427;
-  --color-surface-3: #161a33;
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-strong: rgba(255, 255, 255, 0.1);
+  /* Surfaces */
+  --color-bg: #fffaf7;
+  --color-bg-2: #fff5ee;
+  --color-surface: #ffffff;
+  --color-surface-2: #fef3e8;
+  --color-surface-3: #fde8d0;
 
-  --color-cyan: #22d3ee;
-  --color-cyan-dim: rgba(34, 211, 238, 0.12);
-  --color-cyan-glow: rgba(34, 211, 238, 0.25);
-  --color-indigo: #818cf8;
-  --color-indigo-dim: rgba(129, 140, 248, 0.12);
+  /* Borders */
+  --color-border: rgba(0, 0, 0, 0.07);
+  --color-border-strong: rgba(0, 0, 0, 0.13);
 
-  --color-text: #f1f5f9;
-  --color-muted: #64748b;
-  --color-muted-light: #94a3b8;
+  /* Green accent (primary) */
+  --color-green: #166534;
+  --color-green-mid: #15803d;
+  --color-green-light: #22c55e;
+  --color-green-dim: rgba(22, 101, 52, 0.08);
+  --color-green-glow: rgba(22, 101, 52, 0.18);
 
-  --color-green: #34d399;
-  --color-green-dim: rgba(52, 211, 153, 0.12);
-  --color-orange: #fb923c;
-  --color-red: #f87171;
-  --color-red-dim: rgba(248, 113, 113, 0.12);
+  /* Peach accent */
+  --color-peach: #f97316;
+  --color-peach-light: #fb923c;
+  --color-peach-pale: #fed7aa;
+  --color-peach-dim: rgba(249, 115, 22, 0.10);
+
+  /* Text */
+  --color-text: #1c1917;
+  --color-text-2: #44403c;
+  --color-muted: #78716c;
+  --color-muted-light: #a8a29e;
+
+  /* Status */
+  --color-success: #15803d;
+  --color-success-dim: rgba(21, 128, 61, 0.10);
+  --color-error: #dc2626;
+  --color-error-dim: rgba(220, 38, 38, 0.10);
 }
 
 :root {
-  --background: #07080f;
-  --foreground: #f1f5f9;
+  --background: #fffaf7;
+  --foreground: #1c1917;
 }
 
 * {
@@ -57,39 +70,33 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-surface);
+  background: #fef3e8;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-surface-3);
+  background: #fde8d0;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-strong);
+  background: #fed7aa;
 }
 
 /* Selection */
 ::selection {
-  background: var(--color-cyan-dim);
-  color: var(--color-cyan);
+  background: var(--color-green-dim);
+  color: var(--color-green);
 }
 
-/* Hero grid pattern */
+/* Hero circuit pattern — тонкая сетка под электронику */
 .hero-grid {
   background-image:
-    linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(22, 101, 52, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 101, 52, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
-/* Glow effects */
-.glow-cyan {
-  box-shadow: 0 0 30px var(--color-cyan-glow);
-}
-.glow-cyan-sm {
-  box-shadow: 0 0 15px var(--color-cyan-glow);
-}
+/* Gradient text */
 .text-gradient {
-  background: linear-gradient(135deg, #f1f5f9 0%, var(--color-cyan) 100%);
+  background: linear-gradient(135deg, #166534 0%, #f97316 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -118,31 +125,35 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-surface) 25%,
-    var(--color-surface-2) 50%,
-    var(--color-surface) 75%
+    #fef3e8 25%,
+    #fde8d0 50%,
+    #fef3e8 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
-/* Card hover transition */
+/* Card hover */
 .card-hover {
   transition: transform 300ms ease-out, box-shadow 300ms ease-out, border-color 300ms ease-out;
 }
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(34, 211, 238, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(22, 101, 52, 0.10), 0 0 0 1px rgba(22, 101, 52, 0.12);
 }
 
-/* Button base */
+/* Button primary */
 .btn-primary {
   transition: transform 200ms ease-out, box-shadow 200ms ease-out, opacity 150ms ease;
 }
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px var(--color-cyan-glow);
+  box-shadow: 0 4px 16px var(--color-green-glow);
 }
 .btn-primary:active {
   transform: scale(0.97);
 }
+
+/* No scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
