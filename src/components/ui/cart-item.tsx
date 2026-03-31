@@ -89,6 +89,12 @@ export function CartItemRow({
         )}
       </div>
 
+      {/* Unit price */}
+      <div className="w-24 text-left flex-shrink-0 hidden md:block">
+        <div className="text-base text-gray-700">{formatPrice(unitPrice)}</div>
+        <div className="text-xs text-gray-400">за шт.</div>
+      </div>
+
       {/* Quantity stepper */}
       <div className="flex items-center border border-gray-300 rounded overflow-hidden flex-shrink-0 w-[110px]">
         <button
