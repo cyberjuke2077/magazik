@@ -96,16 +96,16 @@ export function CartItemRow({
       </div>
 
       {/* Quantity stepper */}
-      <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden flex-shrink-0 w-[126px]">
+      <div className="flex items-center border border-gray-300 rounded overflow-hidden flex-shrink-0 w-[110px]">
         <button
           onClick={() => {
             const newQty = quantity - 1
             if (newQty >= product.minOrder) onUpdateQuantity(product.id, newQty)
           }}
           disabled={quantity <= product.minOrder}
-          className="w-9 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r-2 border-gray-300"
+          className="w-8 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r border-gray-300"
         >
-          <Minus size={14} />
+          <Minus size={12} />
         </button>
         <input
           type="text"
@@ -114,13 +114,13 @@ export function CartItemRow({
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           onKeyDown={handleInputKeyDown}
-          className="w-12 h-10 flex items-center justify-center text-base font-semibold text-gray-900 bg-white text-center outline-none"
+          className="w-10 h-9 flex items-center justify-center text-sm font-medium text-gray-900 bg-white text-center outline-none"
         />
         <button
           onClick={() => onUpdateQuantity(product.id, quantity + 1)}
-          className="w-9 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors border-l-2 border-gray-300"
+          className="w-8 h-9 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors border-l border-gray-300"
         >
-          <Plus size={14} />
+          <Plus size={12} />
         </button>
       </div>
 
