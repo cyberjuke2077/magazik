@@ -90,7 +90,7 @@ export function CartItemRow({
       </div>
 
       {/* Unit price */}
-      <div className="w-24 text-right flex-shrink-0 hidden md:block">
+      <div className="w-24 text-right flex-shrink-0 hidden md:block pr-4">
         <div className="text-base text-gray-700">{formatPrice(unitPrice)}</div>
         <div className="text-xs text-gray-400">за шт.</div>
       </div>
@@ -125,7 +125,7 @@ export function CartItemRow({
       </div>
 
       {/* Line total */}
-      <div className="w-28 text-right flex-shrink-0 hidden md:block">
+      <div className="w-28 text-right flex-shrink-0 hidden md:block pl-4">
         <div className="text-lg font-bold text-gray-900">{formatPrice(lineTotal)}</div>
       </div>
 
