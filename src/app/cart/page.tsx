@@ -183,7 +183,7 @@ export default function CartPage() {
 
                 {/* Column headers */}
                 <div className="ml-auto hidden md:flex items-center text-sm text-gray-500 font-medium">
-                  <span className="w-20" />
+                  <span className="w-20 -mr-2.5" />
                   <span className="flex-1" />
                   <span className="w-24 text-left">Цена</span>
                   <span className="w-[110px] text-center">Количество</span>
