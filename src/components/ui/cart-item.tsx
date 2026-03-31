@@ -32,11 +32,11 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
   const isWholesale = product.priceWholesale !== undefined && quantity >= product.minOrder
 
   return (
-    <div className="group flex items-start gap-4 p-4 bg-white border border-black/8 rounded-xl shadow-sm hover:shadow-md hover:border-black/12 transition-all duration-200">
+    <div className="group flex items-start gap-4 p-4 bg-white border border-black/8 rounded shadow-sm hover:shadow-md hover:border-black/12 transition-all duration-200">
       {/* Icon */}
       <Link
         href={`/product/${product.slug}`}
-        className="flex items-center justify-center size-16 shrink-0 rounded-xl bg-[#fef3e8] border border-black/6 font-mono text-2xl text-[#166534] opacity-60 hover:opacity-90 transition-opacity"
+        className="flex items-center justify-center size-16 shrink-0 rounded bg-[#e8f4ff] border border-black/6 font-mono text-2xl text-[#0066cc] opacity-60 hover:opacity-90 transition-opacity"
       >
         {icon}
       </Link>
@@ -47,12 +47,12 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
           <div className="min-w-0">
             <Link
               href={`/product/${product.slug}`}
-              className="text-sm font-medium text-[#1c1917] hover:text-[#166534] transition-colors line-clamp-2 leading-snug"
+              className="text-sm font-medium text-[#1c1917] hover:text-[#0066cc] transition-colors line-clamp-2 leading-snug"
             >
               {product.name}
             </Link>
             <div className="flex items-center gap-2 mt-1">
-              <span className="font-mono text-[10px] text-[#a8a29e] bg-[#fef3e8] px-1.5 py-0.5 rounded">
+              <span className="font-mono text-[10px] text-[#a8a29e] bg-[#e8f4ff] px-1.5 py-0.5 rounded">
                 {product.partNumber}
               </span>
               <span className="text-[10px] text-[#a8a29e]">{product.manufacturer}</span>
@@ -62,7 +62,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
           {/* Remove button */}
           <button
             onClick={() => onRemove(product.id)}
-            className="shrink-0 flex items-center justify-center size-7 rounded-lg text-[#a8a29e] hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+            className="shrink-0 flex items-center justify-center size-7 rounded text-[#a8a29e] hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
             aria-label="Удалить товар"
           >
             <Trash2 size={14} />
@@ -73,13 +73,13 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
         <div className="flex items-center gap-1.5 mt-2 text-xs">
           {product.inStock ? (
             <>
-              <span className="size-1.5 rounded-full bg-[#15803d]" />
-              <span className="text-[#15803d]">В наличии</span>
+              <span className="size-1.5 rounded-sm bg-[#0052a3]" />
+              <span className="text-[#0052a3]">В наличии</span>
               <span className="text-[#a8a29e]">· {formatNumber(product.stockCount)} {product.unit}</span>
             </>
           ) : (
             <>
-              <span className="size-1.5 rounded-full bg-red-400" />
+              <span className="size-1.5 rounded-sm bg-red-400" />
               <span className="text-red-500">Нет в наличии</span>
             </>
           )}
@@ -88,7 +88,7 @@ export function CartItemRow({ item, onUpdateQuantity, onRemove }: CartItemRowPro
         {/* Bottom row: quantity + price */}
         <div className="flex items-center justify-between mt-3 gap-3">
           {/* Quantity stepper */}
-          <div className="flex items-center gap-1 bg-[#fef3e8] border border-black/8 rounded-lg p-0.5">
+          <div className="flex items-center gap-1 bg-[#e8f4ff] border border-black/8 rounded p-0.5">
             <button
               onClick={() => onUpdateQuantity(product.id, quantity - 1)}
               disabled={quantity <= product.minOrder}

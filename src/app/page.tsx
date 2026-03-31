@@ -1,365 +1,450 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import {
   Truck, Shield, Headphones, TrendingUp,
   ArrowRight, ChevronLeft, ChevronRight, Zap,
-  Users, Package, Star, Clock,
 } from 'lucide-react'
+
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { ProductCard } from '@/components/catalog/product-card'
 import { CategoryIcon } from '@/components/ui/component-icons'
 import { categories, products, featuredProducts } from '@/lib/mock-data'
-import { formatNumber } from '@/lib/utils'
 
-/* ── Category themes ── */
-const catTheme: Record<string, { bg: string; text: string; hover: string; border: string }> = {
-  rezistory:    { bg: 'bg-blue-50',    text: 'text-blue-600',    hover: 'hover:bg-blue-100',    border: 'border-blue-100' },
-  kondensatory: { bg: 'bg-cyan-50',    text: 'text-cyan-600',    hover: 'hover:bg-cyan-100',    border: 'border-cyan-100' },
-  mikroskhemy:  { bg: 'bg-indigo-50',  text: 'text-indigo-600',  hover: 'hover:bg-indigo-100',  border: 'border-indigo-100' },
-  tranzistory:  { bg: 'bg-violet-50',  text: 'text-violet-600',  hover: 'hover:bg-violet-100',  border: 'border-violet-100' },
-  rele:         { bg: 'bg-emerald-50', text: 'text-emerald-600', hover: 'hover:bg-emerald-100', border: 'border-emerald-100' },
-  datchiki:     { bg: 'bg-teal-50',    text: 'text-teal-600',    hover: 'hover:bg-teal-100',    border: 'border-teal-100' },
-  kontrollery:  { bg: 'bg-orange-50',  text: 'text-orange-600',  hover: 'hover:bg-orange-100',  border: 'border-orange-100' },
-  diody:        { bg: 'bg-red-50',     text: 'text-red-600',     hover: 'hover:bg-red-100',     border: 'border-red-100' },
-  svetodiody:   { bg: 'bg-yellow-50',  text: 'text-yellow-600',  hover: 'hover:bg-yellow-100',  border: 'border-yellow-100' },
-  razyomy:      { bg: 'bg-pink-50',    text: 'text-pink-600',    hover: 'hover:bg-pink-100',    border: 'border-pink-100' },
+/* ── Category theme ── */
+const catTheme = {
+  bg:    'bg-[#e8f4ff]',
+  text:  'text-[#0066cc]',
+  border: 'border-[#0066cc]/10',
 }
 
-/* ── Slides ── */
+/* ── Slides — одно фото на всех слайдах, разный текст ── */
 const slides = [
   {
     tag: 'Новинки',
     title: 'Микроконтроллеры\nSTM32 и ESP32',
-    desc: 'ARM Cortex-M, WiFi, Bluetooth — всё в наличии. Отправка в день заказа.',
+    desc: 'ARM Cortex-M, WiFi, Bluetooth — всё в наличии. Доставка 1–2 недели.',
     cta: 'Смотреть',
     href: '/catalog?category=kontrollery',
-    gradient: 'from-[#0a1f10] via-[#0f2d1a] to-[#0a1f10]',
-    accentColor: '#4ade80',
-    slug: 'kontrollery',
   },
   {
     tag: 'Популярное',
-    title: 'Пассивные\nкомпоненты оптом',
-    desc: 'Резисторы, конденсаторы Yageo и Murata. Скидки до 40% от 100 шт.',
-    cta: 'Узнать цены',
-    href: '/wholesale',
-    gradient: 'from-[#0f0f1a] via-[#16213e] to-[#0f0f1a]',
-    accentColor: '#818cf8',
-    slug: 'rezistory',
+    title: 'Пассивные\nкомпоненты',
+    desc: 'Резисторы, конденсаторы Yageo и Murata. Широкий выбор, доставка 1–2 недели.',
+    cta: 'Смотреть',
+    href: '/catalog?category=rezistory',
   },
   {
     tag: 'Акция',
     title: 'Датчики и сенсоры\nдля IoT-проектов',
-    desc: 'DS18B20, DHT22, BMP280, MPU6050. Широкий выбор, быстрая доставка.',
+    desc: 'DS18B20, DHT22, BMP280, MPU6050. Широкий выбор, доставка 1–2 недели.',
     cta: 'В каталог',
     href: '/catalog?category=datchiki',
-    gradient: 'from-[#120a1f] via-[#1e0f35] to-[#120a1f]',
-    accentColor: '#c084fc',
-    slug: 'datchiki',
+  },
+  {
+    tag: 'Хит',
+    title: 'Разъёмы и\nсоединители',
+    desc: 'USB Type-C, JST, Molex, XT60. Более 35 000 позиций в наличии.',
+    cta: 'Выбрать',
+    href: '/catalog?category=razyomy',
+  },
+  {
+    tag: 'Скидки',
+    title: 'Диоды и\nтранзисторы',
+    desc: 'IRF540N, BC547, 1N4007, SS34. Оригинальные компоненты от ведущих брендов.',
+    cta: 'Смотреть',
+    href: '/catalog?category=diody',
   },
 ]
 
-/* ── Stats ── */
-const stats = [
-  { icon: Package, value: '500 000+', label: 'позиций в каталоге', color: 'text-[#166534]' },
-  { icon: Users,   value: '45 000+',  label: 'постоянных клиентов', color: 'text-indigo-500' },
-  { icon: Star,    value: '4.9',      label: 'средняя оценка',      color: 'text-yellow-500' },
-  { icon: Clock,   value: '12 лет',   label: 'на рынке',            color: 'text-[#f97316]' },
+/* ── News ── */
+const news = [
+  { date: '28.03.2026', title: 'Новые микроконтроллеры STM32H7 — расширенный ассортимент', slug: 'stm32h7' },
+  { date: '25.03.2026', title: 'Поступление датчиков Sensirion SHT40 и SCD41', slug: 'sensirion' },
+  { date: '20.03.2026', title: 'Скидки до 30% на конденсаторы Murata серии GRM', slug: 'murata-sale' },
+  { date: '15.03.2026', title: 'Новые разъёмы Molex Micro-Fit 3.0 в наличии', slug: 'molex' },
 ]
 
 /* ── Features ── */
 const features = [
-  {
-    icon: Truck,
-    title: 'Доставка в день заказа',
-    desc: 'Отправляем до 15:00. СДЭК, DHL, Почта России по всей России.',
-    color: 'text-[#166534]',
-    bg: 'bg-[#f0fdf4]',
-    border: 'border-[#166534]/10',
-  },
-  {
-    icon: Shield,
-    title: 'Оригинальные компоненты',
-    desc: 'Только официальные дистрибьюторы. Сертификаты на все позиции.',
-    color: 'text-[#f97316]',
-    bg: 'bg-orange-50',
-    border: 'border-orange-100',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Оптовые цены',
-    desc: 'Скидки до 40% от 100 единиц. Персональный менеджер для бизнеса.',
-    color: 'text-indigo-500',
-    bg: 'bg-indigo-50',
-    border: 'border-indigo-100',
-  },
-  {
-    icon: Headphones,
-    title: 'Техническая поддержка',
-    desc: 'Инженеры на связи пн–пт 9:00–18:00. Помощь с подбором и заменами.',
-    color: 'text-[#166534]',
-    bg: 'bg-[#f0fdf4]',
-    border: 'border-[#166534]/10',
-  },
+  { icon: Truck,      title: 'Доставка 1–2 недели',      desc: 'СДЭК, DHL, Почта России по всей стране', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+  { icon: Shield,     title: 'Оригинальные компоненты',   desc: 'Только официальные дистрибьюторы',       color: 'text-[#f97316]', bg: 'bg-orange-50' },
+  { icon: TrendingUp, title: 'Выгодные цены',              desc: 'Конкурентные цены на весь ассортимент',   color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+  { icon: Headphones, title: 'Техподдержка',              desc: 'Инженеры на связи пн–пт 9:00–18:00',     color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
 ]
 
-/* ── Product tabs ── */
-type Tab = 'hits' | 'new' | 'sale'
-const tabs: { id: Tab; label: string }[] = [
-  { id: 'hits', label: '🔥 Хиты продаж' },
-  { id: 'new',  label: '✨ Новинки' },
-  { id: 'sale', label: '💰 Скидки' },
-]
+/* ── ProductModule — chipdip "often-slider" style ── */
+interface ProductModuleProps {
+  title: string
+  href: string
+  products: typeof import('@/lib/mock-data').products
+  accent: string   // цвет фона секции
+  ctaTitle: string
+  ctaDesc: string
+}
 
-export default function HomePage() {
-  const [slide, setSlide] = useState(0)
-  const [activeTab, setActiveTab] = useState<Tab>('hits')
+function ProductModule({ title, href, products: items, accent, ctaTitle, ctaDesc }: ProductModuleProps) {
+  return (
+    <section className="py-3">
+      <div className="mx-auto max-w-[1400px] px-4">
+        <div className={`rounded overflow-hidden ${accent}`}>
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 pt-6 pb-4">
+            <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+            <div className="flex items-center gap-1">
+              <Link
+                href={href}
+                className="flex items-center justify-center size-7 rounded-sm bg-white/70 hover:bg-white text-gray-500 hover:text-gray-800 transition-all border border-gray-200/60"
+              >
+                <ChevronLeft size={14} />
+              </Link>
+              <Link
+                href={href}
+                className="flex items-center justify-center size-7 rounded-sm bg-white/70 hover:bg-white text-gray-500 hover:text-gray-800 transition-all border border-gray-200/60"
+              >
+                <ChevronRight size={14} />
+              </Link>
+            </div>
+          </div>
 
-  const tabProducts: Record<Tab, typeof products> = {
-    hits: featuredProducts,
-    new:  products.slice(0, 4),
-    sale: products.filter((p) => p.priceWholesale).slice(0, 4),
+          {/* Cards row — 4 карточки + CTA */}
+          <div className="grid grid-cols-5 px-4 pb-4 gap-3">
+            {items.map((product) => (
+              <div key={product.id} className="bg-white rounded overflow-hidden shadow-sm">
+                <ProductCard product={product} />
+              </div>
+            ))}
+
+            {/* CTA card */}
+            <div className="bg-white rounded border border-gray-200 flex flex-col justify-between p-5 shadow-sm">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">{ctaTitle}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{ctaDesc}</p>
+              </div>
+              <Link
+                href={href}
+                className="mt-5 flex items-center justify-center h-11 px-4 text-sm font-bold text-white bg-[#1c2d38] hover:bg-[#0f1e27] rounded transition-all"
+              >
+                Перейти к выбору
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ══════════════════════════════════════════════════════
+   AUTO-SLIDER HOOK
+══════════════════════════════════════════════════════ */
+function useAutoSlider(total: number, interval = 6000) {
+  const [current, setCurrent] = useState(0)
+  const [animating, setAnimating] = useState(false)
+  const [direction, setDirection] = useState<'left' | 'right'>('right')
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  function reset() {
+    if (timerRef.current) clearInterval(timerRef.current)
+    timerRef.current = setInterval(() => {
+      setDirection('right')
+      setAnimating(true)
+      setTimeout(() => {
+        setCurrent((c) => (c + 1) % total)
+        setAnimating(false)
+      }, 400)
+    }, interval)
   }
 
-  const s = slides[slide]
+  useEffect(() => {
+    reset()
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [total, interval])
+
+  function go(idx: number, dir: 'left' | 'right' = 'right') {
+    if (animating) return
+    setDirection(dir)
+    setAnimating(true)
+    setTimeout(() => {
+      setCurrent(idx)
+      setAnimating(false)
+    }, 400)
+    reset()
+  }
+
+  function prev() { go((current - 1 + total) % total, 'left') }
+  function next() { go((current + 1) % total, 'right') }
+
+  return { current, go, prev, next }
+}
+
+/* ══════════════════════════════════════════════════════
+   PAGE
+══════════════════════════════════════════════════════ */
+export default function HomePage() {
+  const { current: slide, go, prev, next } = useAutoSlider(slides.length, 6000)
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
-      <main className="flex-1 bg-white">
+      <StickyNav />
+      <main className="flex-1">
 
         {/* ══════════════════════════════════
-            HERO — Slider + Side banners
+            MAIN SLIDER — chipdip style
+            (в контейнере, не на весь экран)
         ══════════════════════════════════ */}
-        <section className="border-b border-gray-100">
-          <div className="mx-auto max-w-7xl px-4 py-5">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <section className="border-b border-gray-100 py-4 bg-white">
+          <div className="mx-auto max-w-[1400px] px-4">
 
-              {/* Slider */}
-              <div
-                className={`lg:col-span-2 relative rounded-2xl overflow-hidden bg-gradient-to-br ${s.gradient}`}
-                style={{ minHeight: 320 }}
+            {/* Слайдер — как у chipdip: фиксированная высота, скруглённые углы */}
+            <div className="relative overflow-hidden rounded bg-black" style={{ height: 375 }}>
+
+              {/* Фото */}
+              <Image
+                src="/slider-hero.png"
+                alt="Electromagaz"
+                fill
+                className="object-cover object-center"
+                priority
+              />
+
+              {/* Стрелки */}
+              <button
+                onClick={prev}
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 rounded-sm bg-black/25 hover:bg-black/50 text-white transition-all backdrop-blur-sm"
               >
-                {/* Circuit dot grid */}
-                <div
-                  className="absolute inset-0 opacity-[0.08]"
-                  style={{
-                    backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                    backgroundSize: '24px 24px',
-                  }}
-                />
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 rounded-sm bg-black/25 hover:bg-black/50 text-white transition-all backdrop-blur-sm"
+              >
+                <ChevronRight size={18} />
+              </button>
 
-                {/* Big SVG icon — floating */}
-                <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-[0.08] animate-float pointer-events-none">
-                  <CategoryIcon slug={s.slug} size={200} className="text-white" />
-                </div>
-
-                {/* Content */}
-                <div className="relative z-10 flex flex-col justify-center h-full p-8 md:p-12">
-                  <span
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-5 w-fit"
-                    style={{ backgroundColor: `${s.accentColor}25`, color: s.accentColor }}
-                  >
-                    <Zap size={10} />{s.tag}
-                  </span>
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-white mb-3 leading-tight whitespace-pre-line tracking-tight">
-                    {s.title}
-                  </h2>
-                  <p className="text-white/55 text-sm mb-7 max-w-xs leading-relaxed">{s.desc}</p>
-                  <Link
-                    href={s.href}
-                    className="inline-flex items-center gap-2 h-11 px-6 text-sm font-bold rounded-xl w-fit transition-all hover:opacity-90 active:scale-95 shadow-lg"
-                    style={{ backgroundColor: s.accentColor, color: '#0a1f10' }}
-                  >
-                    {s.cta} <ArrowRight size={15} />
-                  </Link>
-                </div>
-
-                {/* Dots */}
-                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                  {slides.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setSlide(i)}
-                      className={`rounded-full transition-all duration-300 ${
-                        i === slide ? 'w-7 h-2.5 bg-white' : 'size-2.5 bg-white/30 hover:bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                {/* Arrows */}
-                <button
-                  onClick={() => setSlide((s) => (s - 1 + slides.length) % slides.length)}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-sm"
-                >
-                  <ChevronLeft size={18} />
-                </button>
-                <button
-                  onClick={() => setSlide((s) => (s + 1) % slides.length)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-sm"
-                >
-                  <ChevronRight size={18} />
-                </button>
-              </div>
-
-              {/* Side banners */}
-              <div className="flex flex-col gap-4">
-                <Link
-                  href="/catalog?category=datchiki"
-                  className="flex-1 flex flex-col justify-between p-5 rounded-2xl bg-[#f0fdf4] border border-[#166534]/10 hover:border-[#166534]/25 hover:shadow-lg hover:shadow-[#166534]/8 transition-all duration-300 group"
-                >
-                  <div>
-                    <div className="mb-3 animate-float" style={{ animationDelay: '0.5s' }}>
-                      <CategoryIcon slug="datchiki" size={44} className="text-[#166534] opacity-60 group-hover:opacity-90 transition-opacity" />
-                    </div>
-                    <div className="text-base font-bold text-gray-900 mb-1">Датчики и сенсоры</div>
-                    <div className="text-sm text-gray-500">DS18B20, DHT22, BMP280</div>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs font-bold text-[#166534] mt-4">
-                    Смотреть <ArrowRight size={12} />
-                  </div>
-                </Link>
-
-                <Link
-                  href="/wholesale"
-                  className="flex-1 flex flex-col justify-between p-5 rounded-2xl bg-orange-50 border border-orange-100 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-100 transition-all duration-300 group"
-                >
-                  <div>
-                    <div className="mb-3 animate-float" style={{ animationDelay: '1s' }}>
-                      <CategoryIcon slug="razyomy" size={44} className="text-[#f97316] opacity-60 group-hover:opacity-90 transition-opacity" />
-                    </div>
-                    <div className="text-base font-bold text-gray-900 mb-1">Оптовые поставки</div>
-                    <div className="text-sm text-gray-500">Скидки до 40% от 100 шт.</div>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs font-bold text-[#f97316] mt-4">
-                    Узнать условия <ArrowRight size={12} />
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════
-            STATS
-        ══════════════════════════════════ */}
-        <section className="border-b border-gray-100 bg-gray-50">
-          <div className="mx-auto max-w-7xl px-4 py-6">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {stats.map((stat) => (
-                <div key={stat.label} className="flex items-center gap-3 bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-                  <div className={`flex size-10 items-center justify-center rounded-xl bg-gray-50 shrink-0`}>
-                    <stat.icon size={18} className={stat.color} />
-                  </div>
-                  <div>
-                    <div className="text-xl font-extrabold text-gray-900 leading-none">{stat.value}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════
-            CATEGORIES
-        ══════════════════════════════════ */}
-        <section className="border-b border-gray-100 py-8">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="section-heading">Категории</h2>
-              <Link href="/catalog" className="flex items-center gap-1.5 text-sm font-semibold text-[#166534] hover:underline">
-                Все категории <ArrowRight size={14} />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-5 lg:grid-cols-10 gap-3">
-              {categories.map((cat) => {
-                const theme = catTheme[cat.slug] ?? { bg: 'bg-gray-50', text: 'text-gray-500', hover: 'hover:bg-gray-100', border: 'border-gray-100' }
-                return (
-                  <Link
-                    key={cat.id}
-                    href={`/catalog?category=${cat.slug}`}
-                    className={`group flex flex-col items-center gap-2.5 p-3 rounded-2xl border ${theme.bg} ${theme.border} ${theme.hover} transition-all duration-200 hover:shadow-md hover:-translate-y-0.5`}
-                  >
-                    <div className="icon-svg">
-                      <CategoryIcon
-                        slug={cat.slug}
-                        size={36}
-                        className={`${theme.text} opacity-65 group-hover:opacity-100 transition-opacity`}
-                      />
-                    </div>
-                    <span className="text-[11px] font-semibold text-gray-700 text-center leading-tight group-hover:text-gray-900 transition-colors">
-                      {cat.name}
-                    </span>
-                    <span className="text-[10px] text-gray-400">{formatNumber(cat.count)}</span>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════
-            PRODUCTS WITH TABS
-        ══════════════════════════════════ */}
-        <section className="py-10">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-1 bg-gray-100 rounded-2xl p-1">
-                {tabs.map((tab) => (
+              {/* Точки */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                {slides.map((_, i) => (
                   <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-5 py-2 text-sm font-semibold rounded-xl transition-all duration-200 ${
-                      activeTab === tab.id
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
+                    key={i}
+                    onClick={() => go(i, i > slide ? 'right' : 'left')}
+                    className={`rounded-sm transition-all duration-300 ${
+                      i === slide ? 'w-6 h-2 bg-white' : 'size-2 bg-white/40 hover:bg-white/60'
                     }`}
-                  >
-                    {tab.label}
-                  </button>
+                  />
                 ))}
               </div>
-              <Link href="/catalog" className="flex items-center gap-1.5 text-sm font-semibold text-[#166534] hover:underline">
-                Все товары <ArrowRight size={14} />
-              </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {tabProducts[activeTab].map((product, i) => (
-                <div
-                  key={product.id}
-                  className="animate-fade-up"
-                  style={{ animationDelay: `${i * 60}ms` }}
+            {/* Превью-миниатюры — как у chipdip */}
+            <div className="grid mt-2" style={{ gridTemplateColumns: `repeat(${slides.length}, 1fr)`, gap: '6px' }}>
+              {slides.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => go(i, i > slide ? 'right' : 'left')}
+                  className={`relative overflow-hidden rounded transition-all duration-200 ${
+                    i === slide
+                      ? 'ring-2 ring-[#0066cc] ring-offset-1'
+                      : 'opacity-60 hover:opacity-90'
+                  }`}
+                  style={{ aspectRatio: '16/9' }}
                 >
-                  <ProductCard product={product} />
-                </div>
+                  <Image
+                    src="/slider-hero.png"
+                    alt={`Слайд ${i + 1}`}
+                    fill
+                    className="object-cover object-center"
+                  />
+                </button>
               ))}
             </div>
           </div>
         </section>
+
+        {/* ══════════════════════════════════
+            NEWS (без партнёрского баннера)
+        ══════════════════════════════════ */}
+        <section className="border-b border-gray-100 py-10">
+          <div className="mx-auto max-w-[1400px] px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold text-gray-900">Новости</h2>
+              <Link href="/brands" className="text-sm text-[#0066cc] hover:underline font-medium">
+                Все новости
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {news.map((item) => (
+                <Link
+                  key={item.slug}
+                  href="/brands"
+                  className="flex items-start gap-3 p-3 rounded bg-gray-50 hover:bg-[#e8f4ff] border border-gray-100 hover:border-[#0066cc]/15 transition-all duration-200 group"
+                >
+                  <div className="flex size-10 items-center justify-center rounded bg-white border border-gray-100 shrink-0">
+                    <Zap size={14} className="text-[#0066cc]" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] text-gray-400 mb-1">{item.date}</div>
+                    <div className="text-xs font-semibold text-gray-800 leading-snug group-hover:text-[#0066cc] transition-colors line-clamp-2">
+                      {item.title}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════
+            POPULAR CATEGORIES
+        ══════════════════════════════════ */}
+        <section className="border-b border-gray-100 py-10">
+          <div className="mx-auto max-w-[1400px] px-4">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-bold text-gray-900">Популярные категории</h2>
+              <Link href="/catalog" className="text-sm text-[#0066cc] hover:underline font-medium">
+                Все категории
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {/* Large tile — Микросхемы */}
+              <Link
+                href="/catalog?category=mikroskhemy"
+                className="row-span-2 flex flex-col justify-between p-6 rounded bg-[#e8f4ff] border border-[#0066cc]/10 hover:border-[#0066cc]/25 hover:shadow-lg transition-all duration-300 group min-h-[280px]"
+              >
+                <div>
+                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0052a3] transition-colors">Микросхемы</div>
+                  <div className="text-xs text-gray-500">62 000 позиций</div>
+                </div>
+                <div className="flex justify-end">
+                  <div className="animate-float">
+                    <CategoryIcon slug="mikroskhemy" size={100} className="text-[#0066cc] opacity-50 group-hover:opacity-80 transition-opacity" />
+                  </div>
+                </div>
+              </Link>
+
+              {[
+                { slug: 'rezistory',    label: 'Резисторы',    count: '48 200', size: 60 },
+                { slug: 'kondensatory', label: 'Конденсаторы', count: '31 500', size: 60 },
+              ].map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/catalog?category=${cat.slug}`}
+                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} border ${catTheme.border} hover:shadow-md transition-all duration-200 group`}
+                >
+                  <div>
+                    <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
+                    <div className="text-xs text-gray-400">{cat.count}</div>
+                  </div>
+                  <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40 group-hover:opacity-70 transition-opacity`} />
+                </Link>
+              ))}
+
+              {/* Large tile — Контроллеры */}
+              <Link
+                href="/catalog?category=kontrollery"
+                className="row-span-2 flex flex-col justify-between p-6 rounded bg-[#e8f4ff] border border-[#0066cc]/10 hover:border-[#0066cc]/25 hover:shadow-lg transition-all duration-300 group min-h-[280px]"
+              >
+                <div>
+                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0052a3] transition-colors">Контроллеры</div>
+                  <div className="text-xs text-gray-500">9 400 позиций</div>
+                </div>
+                <div className="flex justify-end">
+                  <div className="animate-float" style={{ animationDelay: '1s' }}>
+                    <CategoryIcon slug="kontrollery" size={100} className="text-[#0066cc] opacity-50 group-hover:opacity-80 transition-opacity" />
+                  </div>
+                </div>
+              </Link>
+
+              {[
+                { slug: 'tranzistory', label: 'Транзисторы', count: '18 700', size: 60 },
+                { slug: 'datchiki',    label: 'Датчики',     count: '12 800', size: 60 },
+              ].map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/catalog?category=${cat.slug}`}
+                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} border ${catTheme.border} hover:shadow-md transition-all duration-200 group`}
+                >
+                  <div>
+                    <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
+                    <div className="text-xs text-gray-400">{cat.count}</div>
+                  </div>
+                  <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40 group-hover:opacity-70 transition-opacity`} />
+                </Link>
+              ))}
+
+              {[
+                { slug: 'diody',      label: 'Диоды',      count: '22 300' },
+                { slug: 'svetodiody', label: 'Светодиоды', count: '8 900' },
+                { slug: 'rele',       label: 'Реле',       count: '4 200' },
+                { slug: 'razyomy',    label: 'Разъёмы',    count: '35 600' },
+              ].map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/catalog?category=${cat.slug}`}
+                  className={`flex items-center justify-between p-4 rounded ${catTheme.bg} border ${catTheme.border} hover:shadow-md transition-all duration-200 group`}
+                >
+                  <div>
+                    <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
+                    <div className="text-xs text-gray-400">{cat.count}</div>
+                  </div>
+                  <CategoryIcon slug={cat.slug} size={44} className={`${catTheme.text} opacity-35 group-hover:opacity-65 transition-opacity`} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════
+            ХИТЫ ПРОДАЖ — chipdip style
+        ══════════════════════════════════ */}
+        <ProductModule
+          title="Хиты продаж"
+          href="/hits"
+          products={featuredProducts.slice(0, 4)}
+          accent="bg-[#dbeeff]"
+          ctaTitle="Самые популярные товары"
+          ctaDesc="Выбор наших покупателей"
+        />
+
+        {/* ══════════════════════════════════
+            НАБИРАЮТ ПОПУЛЯРНОСТЬ
+        ══════════════════════════════════ */}
+        <ProductModule
+          title="Набирают популярность"
+          href="/popular"
+          products={products.filter((p) => !p.featured).slice(0, 4)}
+          accent="bg-[#d6f5e8]"
+          ctaTitle="Успейте купить первым"
+          ctaDesc="Новинки, которые пользуются повышенным спросом"
+        />
+
+        {/* ══════════════════════════════════
+            ЛУЧШИЕ ПРЕДЛОЖЕНИЯ
+        ══════════════════════════════════ */}
+        <ProductModule
+          title="Лучшие предложения"
+          href="/best"
+          products={products.filter((p) => p.priceWholesale).slice(0, 4)}
+          accent="bg-[#ede8ff]"
+          ctaTitle="Выгодное предложение"
+          ctaDesc="Узнайте о выгодных предложениях и специальных ценах. Только в этом месяце!"
+        />
 
         {/* ══════════════════════════════════
             FEATURES
         ══════════════════════════════════ */}
-        <section className="py-10 bg-gray-50 border-t border-gray-100">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="text-center mb-8">
-              <h2 className="section-heading mb-2">Почему выбирают нас</h2>
-              <p className="text-gray-500 text-sm">Работаем с 2012 года — знаем, что важно для инженеров и закупщиков</p>
-            </div>
+        <section className="py-12 bg-gray-50 border-b border-gray-100 mt-4">
+          <div className="mx-auto max-w-[1400px] px-4">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {features.map((f, i) => (
-                <div
-                  key={f.title}
-                  className={`flex flex-col gap-4 p-5 bg-white rounded-2xl border ${f.border} shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5`}
-                >
-                  <div className={`flex size-11 items-center justify-center rounded-xl ${f.bg}`}>
+              {features.map((f) => (
+                <div key={f.title} className="flex items-start gap-4 p-5 bg-white rounded border border-gray-100 shadow-sm">
+                  <div className={`flex size-11 items-center justify-center rounded ${f.bg} shrink-0`}>
                     <f.icon size={20} className={f.color} />
                   </div>
                   <div>
@@ -372,63 +457,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ══════════════════════════════════
-            CTA WHOLESALE
-        ══════════════════════════════════ */}
-        <section className="py-10">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f2d1a] via-[#166534] to-[#0f2d1a] px-8 py-12 md:px-14">
-              {/* Dot grid */}
-              <div
-                className="absolute inset-0 opacity-[0.07]"
-                style={{
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-                  backgroundSize: '24px 24px',
-                }}
-              />
-              {/* Glow orbs */}
-              <div className="absolute -top-16 -right-16 size-64 rounded-full bg-[#f97316]/15 blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-16 -left-16 size-64 rounded-full bg-[#4ade80]/10 blur-3xl pointer-events-none" />
 
-              {/* Floating icon */}
-              <div className="absolute right-12 top-1/2 -translate-y-1/2 opacity-[0.06] animate-float pointer-events-none hidden lg:block">
-                <CategoryIcon slug="mikroskhemy" size={180} className="text-white" />
-              </div>
-
-              <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold text-green-300 uppercase tracking-widest">Оптовые поставки</span>
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-3 leading-tight tracking-tight">
-                    Нужен крупный заказ?
-                  </h2>
-                  <p className="text-sm text-white/55 max-w-md leading-relaxed">
-                    Скидки до 40% от 100 единиц. Работаем по договору,
-                    выставляем счёт, предоставляем все документы.
-                  </p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                  <Link
-                    href="/wholesale"
-                    className="flex items-center gap-2 h-12 px-7 text-sm font-bold text-[#166534] bg-white hover:bg-gray-50 rounded-2xl transition-all shadow-lg hover:shadow-xl active:scale-95"
-                  >
-                    Узнать условия <ArrowRight size={15} />
-                  </Link>
-                  <Link
-                    href="/catalog"
-                    className="flex items-center justify-center h-12 px-7 text-sm font-semibold text-white/80 bg-white/10 hover:bg-white/15 border border-white/20 rounded-2xl transition-all"
-                  >
-                    Каталог
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

@@ -16,7 +16,7 @@ export default function ProductError({ error, reset }: ErrorProps) {
       <Header />
       <main className="flex-1 flex items-center justify-center bg-[#fffaf7] py-20">
         <div className="text-center max-w-sm mx-auto px-4">
-          <div className="inline-flex items-center justify-center size-16 rounded-2xl bg-red-50 border border-red-100 mb-5">
+          <div className="inline-flex items-center justify-center size-16 rounded bg-red-50 border border-red-100 mb-5">
             <AlertTriangle size={28} className="text-red-400" />
           </div>
           <h1 className="text-xl font-bold text-[#1c1917] mb-2">Ошибка загрузки товара</h1>
@@ -26,14 +26,14 @@ export default function ProductError({ error, reset }: ErrorProps) {
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={reset}
-              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-white bg-[#166534] hover:bg-[#15803d] rounded-xl transition-all btn-primary shadow-sm"
+              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
             >
               <RefreshCw size={14} />
               Повторить
             </button>
             <Link
               href="/catalog"
-              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-[#78716c] bg-white border border-black/8 hover:border-black/15 rounded-xl transition-all"
+              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-[#78716c] bg-white border border-black/8 hover:border-black/15 rounded transition-all"
             >
               <ArrowLeft size={14} />
               В каталог

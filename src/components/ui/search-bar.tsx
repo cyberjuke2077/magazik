@@ -51,15 +51,15 @@ export function SearchBar() {
     <div className="relative w-full max-w-2xl mx-auto">
       <form onSubmit={handleSearch}>
         <div
-          className={`relative flex items-center rounded-2xl border transition-all duration-300 ${
+          className={`relative flex items-center rounded border transition-all duration-300 ${
             focused
-              ? 'border-[#166534]/40 shadow-[0_0_0_4px_rgba(22,101,52,0.08)] bg-white'
+              ? 'border-[#0066cc]/40 shadow-[0_0_0_4px_rgba(22,101,52,0.08)] bg-white'
               : 'border-black/10 bg-white hover:border-black/15 shadow-sm'
           }`}
         >
           <Search
             size={18}
-            className={`absolute left-4 transition-colors ${focused ? 'text-[#166534]' : 'text-[#a8a29e]'}`}
+            className={`absolute left-4 transition-colors ${focused ? 'text-[#0066cc]' : 'text-[#a8a29e]'}`}
           />
           <input
             ref={inputRef}
@@ -74,7 +74,7 @@ export function SearchBar() {
           />
           <button
             type="submit"
-            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-[#166534] hover:bg-[#15803d] rounded-xl transition-all btn-primary shadow-sm"
+            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
           >
             Найти
             <ArrowRight size={14} />
@@ -84,7 +84,7 @@ export function SearchBar() {
 
       {/* Dropdown */}
       {focused && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-black/8 rounded-2xl shadow-xl shadow-black/10 overflow-hidden z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-black/8 rounded shadow-xl shadow-black/10 overflow-hidden z-50">
           {results.length > 0 ? (
             <>
               <div className="px-4 py-2 border-b border-black/6">
@@ -94,9 +94,9 @@ export function SearchBar() {
                 <a
                   key={product.id}
                   href={`/product/${product.slug}`}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-[#fef3e8] transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-[#e8f4ff] transition-colors"
                 >
-                  <div className="flex items-center justify-center size-8 rounded-lg bg-[#fef3e8] font-mono text-sm text-[#166534] shrink-0 border border-black/6">
+                  <div className="flex items-center justify-center size-8 rounded bg-[#e8f4ff] font-mono text-sm text-[#0066cc] shrink-0 border border-black/6">
                     {product.partNumber.slice(0, 2)}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -105,14 +105,14 @@ export function SearchBar() {
                       {product.partNumber} · {product.manufacturer}
                     </div>
                   </div>
-                  <div className="text-sm font-semibold text-[#166534] shrink-0">
+                  <div className="text-sm font-semibold text-[#0066cc] shrink-0">
                     {product.price.toFixed(2)} ₽
                   </div>
                 </a>
               ))}
               <a
                 href={`/catalog?q=${encodeURIComponent(query)}`}
-                className="flex items-center justify-center gap-2 py-3 text-sm text-[#166534] hover:bg-[#166534]/5 border-t border-black/6 transition-colors font-medium"
+                className="flex items-center justify-center gap-2 py-3 text-sm text-[#0066cc] hover:bg-[#0066cc]/5 border-t border-black/6 transition-colors font-medium"
               >
                 Показать все результаты
                 <ArrowRight size={13} />
@@ -122,7 +122,7 @@ export function SearchBar() {
             <>
               <div className="px-4 pt-4 pb-2">
                 <div className="flex items-center gap-2 text-xs text-[#a8a29e] uppercase tracking-wider mb-3">
-                  <Zap size={10} className="text-[#166534]" />
+                  <Zap size={10} className="text-[#0066cc]" />
                   Популярные запросы
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -131,7 +131,7 @@ export function SearchBar() {
                       key={term}
                       type="button"
                       onClick={() => handlePopular(term)}
-                      className="flex items-center gap-1 px-2.5 py-1 text-xs text-[#44403c] bg-[#fef3e8] hover:bg-[#fde8d0] hover:text-[#166534] rounded-lg border border-black/6 hover:border-[#166534]/20 transition-all"
+                      className="flex items-center gap-1 px-2.5 py-1 text-xs text-[#44403c] bg-[#e8f4ff] hover:bg-[#e0f2fe] hover:text-[#0066cc] rounded border border-black/6 hover:border-[#0066cc]/20 transition-all"
                     >
                       <Clock size={9} className="opacity-50" />
                       {term}

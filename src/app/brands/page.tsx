@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ChevronRight, ExternalLink, Search } from 'lucide-react'
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 interface Brand {
@@ -25,7 +26,7 @@ const brands: Brand[] = [
     categories: ['Резисторы', 'Конденсаторы', 'Индуктивности'],
     productCount: 48200,
     featured: true,
-    color: 'from-blue-500/10 to-blue-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'murata',
@@ -36,7 +37,7 @@ const brands: Brand[] = [
     categories: ['Конденсаторы', 'Фильтры', 'Модули'],
     productCount: 31500,
     featured: true,
-    color: 'from-red-500/10 to-red-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'stmicroelectronics',
@@ -47,7 +48,7 @@ const brands: Brand[] = [
     categories: ['Микроконтроллеры', 'Силовые устройства', 'Датчики'],
     productCount: 12400,
     featured: true,
-    color: 'from-indigo-500/10 to-indigo-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'infineon',
@@ -58,7 +59,7 @@ const brands: Brand[] = [
     categories: ['Транзисторы', 'Диоды', 'Микросхемы'],
     productCount: 18700,
     featured: true,
-    color: 'from-emerald-500/10 to-emerald-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'texas-instruments',
@@ -69,7 +70,7 @@ const brands: Brand[] = [
     categories: ['Микросхемы', 'Операционные усилители', 'АЦП/ЦАП'],
     productCount: 24600,
     featured: true,
-    color: 'from-orange-500/10 to-orange-600/5',
+    color: 'from-[#f97316]/8 to-[#f97316]/3',
   },
   {
     id: 'espressif',
@@ -80,7 +81,7 @@ const brands: Brand[] = [
     categories: ['Контроллеры', 'Модули WiFi', 'Модули BT'],
     productCount: 4200,
     featured: true,
-    color: 'from-cyan-500/10 to-cyan-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'vishay',
@@ -91,7 +92,7 @@ const brands: Brand[] = [
     categories: ['Диоды', 'Резисторы', 'Конденсаторы'],
     productCount: 45000,
     featured: false,
-    color: 'from-violet-500/10 to-violet-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'analog-devices',
@@ -102,7 +103,7 @@ const brands: Brand[] = [
     categories: ['Датчики', 'АЦП/ЦАП', 'Усилители'],
     productCount: 6700,
     featured: false,
-    color: 'from-teal-500/10 to-teal-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'worldsemi',
@@ -113,7 +114,7 @@ const brands: Brand[] = [
     categories: ['Светодиоды', 'RGB-матрицы'],
     productCount: 28000,
     featured: false,
-    color: 'from-yellow-500/10 to-yellow-600/5',
+    color: 'from-[#f97316]/8 to-[#f97316]/3',
   },
   {
     id: 'songle',
@@ -124,7 +125,7 @@ const brands: Brand[] = [
     categories: ['Реле'],
     productCount: 4200,
     featured: false,
-    color: 'from-pink-500/10 to-pink-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'gct',
@@ -135,7 +136,7 @@ const brands: Brand[] = [
     categories: ['Разъёмы', 'USB', 'Клеммы'],
     productCount: 12300,
     featured: false,
-    color: 'from-slate-500/10 to-slate-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
   {
     id: 'sharp',
@@ -146,22 +147,29 @@ const brands: Brand[] = [
     categories: ['Оптопары', 'Фотодиоды', 'Датчики'],
     productCount: 34000,
     featured: false,
-    color: 'from-gray-500/10 to-gray-600/5',
+    color: 'from-[#0066cc]/8 to-[#0066cc]/3',
   },
 ]
 
 const featuredBrands = brands.filter((b) => b.featured)
-const allBrands = brands.sort((a, b) => a.name.localeCompare(b.name))
+// Китайские бренды первыми, затем остальные по алфавиту
+const allBrands = [...brands].sort((a, b) => {
+  const aChinese = a.country === 'Китай' ? 0 : 1
+  const bChinese = b.country === 'Китай' ? 0 : 1
+  if (aChinese !== bChinese) return aChinese - bChinese
+  return a.name.localeCompare(b.name)
+})
 
 export default function BrandsPage() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
+      <StickyNav />
 
-      <main className="flex-1 bg-[#fffaf7]">
+      <main>
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="mx-auto max-w-[1400px] px-4 py-3">
             <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
               <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -172,7 +180,7 @@ export default function BrandsPage() {
 
         {/* Hero */}
         <div className="bg-white border-b border-black/8">
-          <div className="mx-auto max-w-7xl px-4 py-10">
+          <div className="mx-auto max-w-[1400px] px-4 py-10">
             <h1 className="text-2xl md:text-3xl font-bold text-[#1c1917] mb-2">Бренды</h1>
             <p className="text-[#78716c] max-w-xl">
               Работаем только с официальными дистрибьюторами ведущих мировых производителей.
@@ -181,7 +189,7 @@ export default function BrandsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-10 space-y-12">
+        <div className="mx-auto max-w-[1400px] px-4 py-10 space-y-12">
 
           {/* Featured brands */}
           <section>
@@ -194,7 +202,7 @@ export default function BrandsPage() {
                 <Link
                   key={brand.id}
                   href={`/catalog?brand=${brand.id}`}
-                  className="group relative flex flex-col bg-white border border-black/8 rounded-xl p-5 shadow-sm card-hover overflow-hidden"
+                  className="group relative flex flex-col bg-white border border-black/8 rounded p-5 shadow-sm card-hover overflow-hidden"
                 >
                   {/* Gradient bg */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${brand.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
@@ -206,11 +214,11 @@ export default function BrandsPage() {
                           <span className="text-lg">{brand.flag}</span>
                           <span className="text-xs text-[#a8a29e]">{brand.country}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-[#1c1917] group-hover:text-[#166534] transition-colors">
+                        <h3 className="text-lg font-bold text-[#1c1917] group-hover:text-[#0066cc] transition-colors">
                           {brand.name}
                         </h3>
                       </div>
-                      <ExternalLink size={14} className="text-[#a8a29e] group-hover:text-[#166534] transition-colors mt-1 shrink-0" />
+                      <ExternalLink size={14} className="text-[#a8a29e] group-hover:text-[#0066cc] transition-colors mt-1 shrink-0" />
                     </div>
 
                     <p className="text-xs text-[#78716c] leading-relaxed mb-4 line-clamp-2">
@@ -221,7 +229,7 @@ export default function BrandsPage() {
                       {brand.categories.map((cat) => (
                         <span
                           key={cat}
-                          className="px-2 py-0.5 text-[10px] text-[#78716c] bg-[#fef3e8] border border-black/6 rounded-full"
+                          className="px-2 py-0.5 text-[10px] text-[#78716c] bg-[#e8f4ff] border border-black/6 rounded-sm"
                         >
                           {cat}
                         </span>
@@ -232,7 +240,7 @@ export default function BrandsPage() {
                       <span className="text-xs text-[#a8a29e]">
                         {brand.productCount.toLocaleString('ru-RU')} позиций
                       </span>
-                      <span className="text-xs font-medium text-[#166534] group-hover:underline">
+                      <span className="text-xs font-medium text-[#0066cc] group-hover:underline">
                         Смотреть товары →
                       </span>
                     </div>
@@ -248,19 +256,19 @@ export default function BrandsPage() {
               <h2 className="text-lg font-bold text-[#1c1917]">Все бренды</h2>
               <span className="text-sm text-[#a8a29e]">{allBrands.length} производителей</span>
             </div>
-            <div className="bg-white border border-black/8 rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white border border-black/8 rounded shadow-sm overflow-hidden">
               {allBrands.map((brand, i) => (
                 <Link
                   key={brand.id}
                   href={`/catalog?brand=${brand.id}`}
-                  className={`flex items-center justify-between px-5 py-3.5 hover:bg-[#fef3e8] transition-colors group ${
+                  className={`flex items-center justify-between px-5 py-3.5 hover:bg-[#e8f4ff] transition-colors group ${
                     i !== 0 ? 'border-t border-black/5' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-base">{brand.flag}</span>
                     <div>
-                      <span className="text-sm font-medium text-[#1c1917] group-hover:text-[#166534] transition-colors">
+                      <span className="text-sm font-medium text-[#1c1917] group-hover:text-[#0066cc] transition-colors">
                         {brand.name}
                       </span>
                       <span className="text-xs text-[#a8a29e] ml-2">{brand.country}</span>
@@ -269,7 +277,7 @@ export default function BrandsPage() {
                   <div className="flex items-center gap-4">
                     <div className="hidden sm:flex flex-wrap gap-1">
                       {brand.categories.slice(0, 2).map((cat) => (
-                        <span key={cat} className="text-[10px] text-[#a8a29e] bg-[#fef3e8] px-1.5 py-0.5 rounded border border-black/6">
+                        <span key={cat} className="text-[10px] text-[#a8a29e] bg-[#e8f4ff] px-1.5 py-0.5 rounded border border-black/6">
                           {cat}
                         </span>
                       ))}
@@ -277,7 +285,7 @@ export default function BrandsPage() {
                     <span className="text-xs text-[#a8a29e] shrink-0">
                       {brand.productCount.toLocaleString('ru-RU')} поз.
                     </span>
-                    <ChevronRight size={14} className="text-[#a8a29e] group-hover:text-[#166534] transition-colors shrink-0" />
+                    <ChevronRight size={14} className="text-[#a8a29e] group-hover:text-[#0066cc] transition-colors shrink-0" />
                   </div>
                 </Link>
               ))}
@@ -285,7 +293,7 @@ export default function BrandsPage() {
           </section>
 
           {/* CTA */}
-          <section className="bg-[#166534] rounded-2xl p-8 text-center relative overflow-hidden">
+          <section className="bg-[#0066cc] rounded p-8 text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-10"
               style={{
                 backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
@@ -299,7 +307,7 @@ export default function BrandsPage() {
               </p>
               <a
                 href="mailto:info@electromagaz.ru"
-                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-[#166534] bg-white hover:bg-[#fffaf7] rounded-xl transition-all btn-primary shadow-sm"
+                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-[#0066cc] bg-white hover:bg-white rounded transition-all btn-primary shadow-sm"
               >
                 Написать запрос
               </a>
@@ -309,6 +317,6 @@ export default function BrandsPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   )
 }

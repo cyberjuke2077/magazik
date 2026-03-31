@@ -12,6 +12,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
 import { ProductCard } from '@/components/catalog/product-card'
@@ -23,7 +24,7 @@ const DELIVERY_PRICE = 350
 const DELIVERY_FREE_FROM = 5000
 
 export default function CartPage() {
-  const { items, mounted, totalItems, totalPrice, totalWholesale, removeItem, updateQuantity, clearCart } =
+  const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
     useCart()
 
   const deliveryFree = totalPrice >= DELIVERY_FREE_FROM
@@ -32,34 +33,36 @@ export default function CartPage() {
   // Skeleton while hydrating
   if (!mounted) {
     return (
-      <>
+      <div className="flex flex-col min-h-screen bg-white">
         <Header />
-        <main className="flex-1 bg-[#fffaf7]">
-          <div className="mx-auto max-w-7xl px-4 py-8">
-            <div className="h-6 w-48 skeleton rounded-lg mb-6" />
+        <StickyNav />
+        <main>
+          <div className="mx-auto max-w-[1400px] px-4 py-8">
+            <div className="h-6 w-48 skeleton rounded mb-6" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2 space-y-3">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-28 skeleton rounded-xl" />
+                  <div key={i} className="h-28 skeleton rounded" />
                 ))}
               </div>
-              <div className="h-64 skeleton rounded-xl" />
+              <div className="h-64 skeleton rounded" />
             </div>
           </div>
         </main>
         <Footer />
-      </>
+      </div>
     )
   }
 
   // Empty cart
   if (items.length === 0) {
     return (
-      <>
+      <div className="flex flex-col min-h-screen bg-white">
         <Header />
-        <main className="flex-1 bg-[#fffaf7]">
+        <StickyNav />
+        <main>
           <div className="border-b border-black/8 bg-white">
-            <div className="mx-auto max-w-7xl px-4 py-3">
+            <div className="mx-auto max-w-[1400px] px-4 py-3">
               <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
                 <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
                 <ChevronRight size={10} />
@@ -68,9 +71,9 @@ export default function CartPage() {
             </div>
           </div>
 
-          <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-            <div className="inline-flex items-center justify-center size-24 rounded-3xl bg-[#fef3e8] border border-black/8 mb-6">
-              <ShoppingCart size={40} className="text-[#166534] opacity-40" />
+          <div className="mx-auto max-w-[1400px] px-4 py-16 text-center">
+            <div className="inline-flex items-center justify-center size-24 rounded bg-[#e8f4ff] border border-black/8 mb-6">
+              <ShoppingCart size={40} className="text-[#0066cc] opacity-40" />
             </div>
             <h1 className="text-2xl font-bold text-[#1c1917] mb-2">Корзина пуста</h1>
             <p className="text-[#78716c] mb-8 max-w-sm mx-auto">
@@ -78,7 +81,7 @@ export default function CartPage() {
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-[#166534] hover:bg-[#15803d] rounded-xl transition-all btn-primary shadow-sm"
+              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
             >
               Перейти в каталог
               <ArrowRight size={15} />
@@ -95,18 +98,18 @@ export default function CartPage() {
           </div>
         </main>
         <Footer />
-      </>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
 
-      <main className="flex-1 bg-[#fffaf7]">
+      <main>
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="mx-auto max-w-[1400px] px-4 py-3">
             <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
               <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -115,7 +118,7 @@ export default function CartPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-8">
+        <div className="mx-auto max-w-[1400px] px-4 py-8">
           {/* Header row */}
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -127,7 +130,7 @@ export default function CartPage() {
             <div className="flex items-center gap-3">
               <Link
                 href="/catalog"
-                className="hidden sm:flex items-center gap-1.5 text-sm text-[#78716c] hover:text-[#166534] transition-colors"
+                className="hidden sm:flex items-center gap-1.5 text-sm text-[#78716c] hover:text-[#0066cc] transition-colors"
               >
                 <ArrowLeft size={14} />
                 Продолжить покупки
@@ -157,7 +160,7 @@ export default function CartPage() {
 
             {/* ── Order summary ── */}
             <div className="space-y-4">
-              <div className="bg-white border border-black/8 rounded-xl shadow-sm overflow-hidden">
+              <div className="bg-white border border-black/8 rounded shadow-sm overflow-hidden">
                 <div className="px-5 py-4 border-b border-black/6">
                   <h2 className="text-sm font-bold text-[#1c1917]">Итого</h2>
                 </div>
@@ -168,19 +171,12 @@ export default function CartPage() {
                     <span className="font-medium text-[#1c1917]">{formatPrice(totalPrice)}</span>
                   </div>
 
-                  {totalWholesale < totalPrice && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#78716c]">Оптовая скидка</span>
-                      <span className="font-medium text-[#f97316]">
-                        −{formatPrice(totalPrice - totalWholesale)}
-                      </span>
-                    </div>
-                  )}
+
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-[#78716c]">Доставка</span>
                     {deliveryFree ? (
-                      <span className="font-medium text-[#166534]">Бесплатно</span>
+                      <span className="font-medium text-[#0066cc]">Бесплатно</span>
                     ) : (
                       <span className="font-medium text-[#1c1917]">{formatPrice(DELIVERY_PRICE)}</span>
                     )}
@@ -197,7 +193,7 @@ export default function CartPage() {
                 <div className="px-5 pb-5">
                   <Link
                     href="/checkout"
-                    className="flex items-center justify-center gap-2 w-full h-12 text-sm font-semibold text-white bg-[#166534] hover:bg-[#15803d] rounded-xl transition-all btn-primary shadow-sm"
+                    className="flex items-center justify-center gap-2 w-full h-12 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
                   >
                     Оформить заказ
                     <ArrowRight size={15} />
@@ -209,22 +205,22 @@ export default function CartPage() {
               </div>
 
               {/* Trust badges */}
-              <div className="bg-white border border-black/8 rounded-xl shadow-sm p-4 space-y-3">
+              <div className="bg-white border border-black/8 rounded shadow-sm p-4 space-y-3">
                 <div className="flex items-center gap-3 text-xs text-[#78716c]">
-                  <div className="flex size-7 items-center justify-center rounded-lg bg-[#166534]/8 shrink-0">
-                    <Truck size={13} className="text-[#166534]" />
+                  <div className="flex size-7 items-center justify-center rounded bg-[#0066cc]/8 shrink-0">
+                    <Truck size={13} className="text-[#0066cc]" />
                   </div>
                   <span>Отправка в день заказа до 15:00</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-[#78716c]">
-                  <div className="flex size-7 items-center justify-center rounded-lg bg-[#f97316]/8 shrink-0">
+                  <div className="flex size-7 items-center justify-center rounded bg-[#f97316]/8 shrink-0">
                     <Shield size={13} className="text-[#f97316]" />
                   </div>
                   <span>Оригинальные компоненты с сертификатами</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-[#78716c]">
-                  <div className="flex size-7 items-center justify-center rounded-lg bg-[#166534]/8 shrink-0">
-                    <Package2 size={13} className="text-[#166534]" />
+                  <div className="flex size-7 items-center justify-center rounded bg-[#0066cc]/8 shrink-0">
+                    <Package2 size={13} className="text-[#0066cc]" />
                   </div>
                   <span>Возврат в течение 14 дней</span>
                 </div>
@@ -235,6 +231,6 @@ export default function CartPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   )
 }

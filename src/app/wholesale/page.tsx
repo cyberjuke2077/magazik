@@ -18,13 +18,14 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 const priceTiers = [
-  { from: 1, to: 99, label: 'Розница', discount: 0, color: 'text-[#78716c]', bg: 'bg-[#fef3e8]' },
+  { from: 1, to: 99, label: 'Розница', discount: 0, color: 'text-[#78716c]', bg: 'bg-[#e8f4ff]' },
   { from: 100, to: 499, label: 'Мелкий опт', discount: 15, color: 'text-[#f97316]', bg: 'bg-[#f97316]/8' },
-  { from: 500, to: 1999, label: 'Средний опт', discount: 25, color: 'text-[#166534]', bg: 'bg-[#166534]/8' },
-  { from: 2000, to: null, label: 'Крупный опт', discount: 40, color: 'text-[#166534]', bg: 'bg-[#166534]/15' },
+  { from: 500, to: 1999, label: 'Средний опт', discount: 25, color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/8' },
+  { from: 2000, to: null, label: 'Крупный опт', discount: 40, color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/15' },
 ]
 
 const benefits = [
@@ -32,8 +33,8 @@ const benefits = [
     icon: TrendingDown,
     title: 'Скидки до 40%',
     description: 'Прогрессивная система скидок в зависимости от объёма заказа',
-    color: 'text-[#166534]',
-    bg: 'bg-[#166534]/8',
+    color: 'text-[#0066cc]',
+    bg: 'bg-[#0066cc]/8',
   },
   {
     icon: FileText,
@@ -46,8 +47,8 @@ const benefits = [
     icon: Package2,
     title: 'Резервирование склада',
     description: 'Резервируем нужные позиции под ваши регулярные заказы',
-    color: 'text-[#166534]',
-    bg: 'bg-[#166534]/8',
+    color: 'text-[#0066cc]',
+    bg: 'bg-[#0066cc]/8',
   },
   {
     icon: Headphones,
@@ -98,13 +99,14 @@ export default function WholesalePage() {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
+      <StickyNav />
 
-      <main className="flex-1 bg-[#fffaf7]">
+      <main>
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="mx-auto max-w-[1400px] px-4 py-3">
             <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
               <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -114,16 +116,16 @@ export default function WholesalePage() {
         </div>
 
         {/* Hero */}
-        <div className="bg-[#166534] relative overflow-hidden">
+        <div className="bg-[#0066cc] relative overflow-hidden">
           <div className="absolute inset-0 opacity-10"
             style={{
               backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
               backgroundSize: '40px 40px',
             }}
           />
-          <div className="relative mx-auto max-w-7xl px-4 py-14">
+          <div className="relative mx-auto max-w-[1400px] px-4 py-14">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/15 border border-white/20 rounded-full text-xs text-white font-medium mb-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/15 border border-white/20 rounded-sm text-xs text-white font-medium mb-5">
                 <Package2 size={11} />
                 Оптовые поставки
               </div>
@@ -138,7 +140,7 @@ export default function WholesalePage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-12 space-y-14">
+        <div className="mx-auto max-w-[1400px] px-4 py-12 space-y-14">
 
           {/* Price tiers */}
           <section>
@@ -148,16 +150,16 @@ export default function WholesalePage() {
               {priceTiers.map((tier) => (
                 <div
                   key={tier.label}
-                  className={`relative flex flex-col p-5 bg-white border border-black/8 rounded-xl shadow-sm ${
-                    tier.discount >= 25 ? 'ring-2 ring-[#166534]/20' : ''
+                  className={`relative flex flex-col p-5 bg-white border border-black/8 rounded shadow-sm ${
+                    tier.discount >= 25 ? 'ring-2 ring-[#0066cc]/20' : ''
                   }`}
                 >
                   {tier.discount >= 25 && (
-                    <div className="absolute -top-2.5 left-4 px-2.5 py-0.5 bg-[#166534] text-white text-[10px] font-semibold rounded-full">
+                    <div className="absolute -top-2.5 left-4 px-2.5 py-0.5 bg-[#0066cc] text-white text-[10px] font-semibold rounded-sm">
                       Популярный
                     </div>
                   )}
-                  <div className={`inline-flex items-center self-start px-2.5 py-1 rounded-lg text-xs font-semibold mb-3 ${tier.bg} ${tier.color}`}>
+                  <div className={`inline-flex items-center self-start px-2.5 py-1 rounded text-xs font-semibold mb-3 ${tier.bg} ${tier.color}`}>
                     {tier.label}
                   </div>
                   <div className="text-3xl font-bold text-[#1c1917] mb-1">
@@ -178,8 +180,8 @@ export default function WholesalePage() {
             <h2 className="text-xl font-bold text-[#1c1917] mb-6">Преимущества оптовых клиентов</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {benefits.map((b) => (
-                <div key={b.title} className="flex flex-col gap-3 p-5 bg-white border border-black/8 rounded-xl shadow-sm">
-                  <div className={`flex size-10 items-center justify-center rounded-xl ${b.bg}`}>
+                <div key={b.title} className="flex flex-col gap-3 p-5 bg-white border border-black/8 rounded shadow-sm">
+                  <div className={`flex size-10 items-center justify-center rounded ${b.bg}`}>
                     <b.icon size={18} className={b.color} />
                   </div>
                   <h3 className="text-sm font-semibold text-[#1c1917]">{b.title}</h3>
@@ -194,25 +196,25 @@ export default function WholesalePage() {
             {/* Conditions */}
             <section>
               <h2 className="text-xl font-bold text-[#1c1917] mb-6">Условия сотрудничества</h2>
-              <div className="bg-white border border-black/8 rounded-xl shadow-sm p-6 space-y-3">
+              <div className="bg-white border border-black/8 rounded shadow-sm p-6 space-y-3">
                 {conditions.map((c) => (
                   <div key={c} className="flex items-start gap-3">
-                    <div className="flex size-5 items-center justify-center rounded-full bg-[#166534]/10 shrink-0 mt-0.5">
-                      <Check size={11} className="text-[#166534]" />
+                    <div className="flex size-5 items-center justify-center rounded-sm bg-[#0066cc]/10 shrink-0 mt-0.5">
+                      <Check size={11} className="text-[#0066cc]" />
                     </div>
                     <span className="text-sm text-[#44403c]">{c}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-5 bg-[#fef3e8] border border-[#f97316]/15 rounded-xl">
+              <div className="mt-6 p-5 bg-[#e8f4ff] border border-[#f97316]/15 rounded">
                 <h3 className="text-sm font-semibold text-[#1c1917] mb-2">Нужна срочная поставка?</h3>
                 <p className="text-xs text-[#78716c] mb-3">
                   Позвоните нам — обсудим условия и сроки в течение 15 минут.
                 </p>
                 <a
                   href="tel:+78005553535"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#166534] hover:underline"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#0066cc] hover:underline"
                 >
                   <Phone size={14} />
                   +7 (800) 555-35-35
@@ -223,11 +225,11 @@ export default function WholesalePage() {
             {/* Form */}
             <section>
               <h2 className="text-xl font-bold text-[#1c1917] mb-6">Оставить заявку</h2>
-              <div className="bg-white border border-black/8 rounded-xl shadow-sm p-6">
+              <div className="bg-white border border-black/8 rounded shadow-sm p-6">
                 {submitted ? (
                   <div className="text-center py-8">
-                    <div className="inline-flex items-center justify-center size-14 rounded-2xl bg-[#166534]/10 mb-4">
-                      <CheckCircle2 size={28} className="text-[#166534]" />
+                    <div className="inline-flex items-center justify-center size-14 rounded bg-[#0066cc]/10 mb-4">
+                      <CheckCircle2 size={28} className="text-[#0066cc]" />
                     </div>
                     <h3 className="text-base font-bold text-[#1c1917] mb-2">Заявка отправлена!</h3>
                     <p className="text-sm text-[#78716c]">
@@ -246,7 +248,7 @@ export default function WholesalePage() {
                             value={form.name}
                             onChange={(e) => set('name', e.target.value)}
                             placeholder="Иван Иванов"
-                            className="w-full h-10 pl-9 pr-4 text-sm bg-[#fef3e8] border border-black/8 rounded-lg text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#166534]/40 focus:ring-2 focus:ring-[#166534]/10 transition-all"
+                            className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
                           />
                         </div>
                       </div>
@@ -259,7 +261,7 @@ export default function WholesalePage() {
                             value={form.company}
                             onChange={(e) => set('company', e.target.value)}
                             placeholder="ООО «Название»"
-                            className="w-full h-10 pl-9 pr-4 text-sm bg-[#fef3e8] border border-black/8 rounded-lg text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#166534]/40 focus:ring-2 focus:ring-[#166534]/10 transition-all"
+                            className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
                           />
                         </div>
                       </div>
@@ -274,7 +276,7 @@ export default function WholesalePage() {
                           value={form.email}
                           onChange={(e) => set('email', e.target.value)}
                           placeholder="your@company.ru"
-                          className="w-full h-10 pl-9 pr-4 text-sm bg-[#fef3e8] border border-black/8 rounded-lg text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#166534]/40 focus:ring-2 focus:ring-[#166534]/10 transition-all"
+                          className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
                         />
                       </div>
                     </div>
@@ -288,7 +290,7 @@ export default function WholesalePage() {
                           value={form.phone}
                           onChange={(e) => set('phone', e.target.value)}
                           placeholder="+7 (999) 000-00-00"
-                          className="w-full h-10 pl-9 pr-4 text-sm bg-[#fef3e8] border border-black/8 rounded-lg text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#166534]/40 focus:ring-2 focus:ring-[#166534]/10 transition-all"
+                          className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
                         />
                       </div>
                     </div>
@@ -302,13 +304,13 @@ export default function WholesalePage() {
                           onChange={(e) => set('message', e.target.value)}
                           placeholder="Опишите ваши потребности: какие компоненты, объём, сроки..."
                           rows={3}
-                          className="w-full pl-9 pr-4 py-2.5 text-sm bg-[#fef3e8] border border-black/8 rounded-lg text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#166534]/40 focus:ring-2 focus:ring-[#166534]/10 transition-all resize-none"
+                          className="w-full pl-9 pr-4 py-2.5 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all resize-none"
                         />
                       </div>
                     </div>
 
                     {error && (
-                      <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600">
+                      <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-600">
                         <AlertCircle size={14} className="shrink-0" />
                         {error}
                       </div>
@@ -317,7 +319,7 @@ export default function WholesalePage() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full h-11 text-sm font-semibold text-white bg-[#166534] hover:bg-[#15803d] disabled:opacity-60 rounded-xl transition-all btn-primary shadow-sm"
+                      className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded transition-all btn-primary shadow-sm"
                     >
                       {loading ? 'Отправляем...' : 'Отправить заявку'}
                     </button>
@@ -330,6 +332,6 @@ export default function WholesalePage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   )
 }

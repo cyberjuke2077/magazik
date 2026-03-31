@@ -13,6 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 const deliveryMethods = [
@@ -22,8 +23,8 @@ const deliveryMethods = [
     time: '1–5 дней',
     price: 'от 250 ₽',
     description: 'Доставка до пункта выдачи или курьером до двери. Отслеживание в реальном времени.',
-    color: 'text-[#166534]',
-    bg: 'bg-[#166534]/8',
+    color: 'text-[#0066cc]',
+    bg: 'bg-[#0066cc]/8',
     available: 'По всей России',
   },
   {
@@ -42,8 +43,8 @@ const deliveryMethods = [
     time: '3–14 дней',
     price: 'от 150 ₽',
     description: 'Доставка в любой населённый пункт России. Наложенный платёж доступен.',
-    color: 'text-blue-600',
-    bg: 'bg-blue-50',
+    color: 'text-[#0066cc]',
+    bg: 'bg-[#e8f4ff]',
     available: 'Вся Россия',
   },
   {
@@ -52,8 +53,8 @@ const deliveryMethods = [
     time: 'В день заказа',
     price: 'Бесплатно',
     description: 'Забрать заказ можно в нашем офисе в Москве. Готовность заказа — 2 часа.',
-    color: 'text-[#166534]',
-    bg: 'bg-[#166534]/8',
+    color: 'text-[#0066cc]',
+    bg: 'bg-[#0066cc]/8',
     available: 'Москва',
   },
 ]
@@ -64,7 +65,7 @@ const paymentMethods = [
     name: 'Банковская карта',
     description: 'Visa, Mastercard, МИР. Оплата онлайн при оформлении заказа.',
     badge: 'Мгновенно',
-    badgeColor: 'text-[#166534] bg-[#166534]/8 border-[#166534]/15',
+    badgeColor: 'text-[#0066cc] bg-[#0066cc]/8 border-[#0066cc]/15',
   },
   {
     icon: Building,
@@ -78,7 +79,7 @@ const paymentMethods = [
     name: 'Наличными',
     description: 'При самовывозе из офиса или наложенным платежом через Почту России.',
     badge: 'При получении',
-    badgeColor: 'text-blue-600 bg-blue-50 border-blue-100',
+    badgeColor: 'text-[#0066cc] bg-[#e8f4ff] border-[#0066cc/15]',
   },
 ]
 
@@ -107,13 +108,14 @@ const faq = [
 
 export default function DeliveryPage() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-white">
       <Header />
+      <StickyNav />
 
-      <main className="flex-1 bg-[#fffaf7]">
+      <main>
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="mx-auto max-w-[1400px] px-4 py-3">
             <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
               <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -124,7 +126,7 @@ export default function DeliveryPage() {
 
         {/* Hero */}
         <div className="bg-white border-b border-black/8">
-          <div className="mx-auto max-w-7xl px-4 py-10">
+          <div className="mx-auto max-w-[1400px] px-4 py-10">
             <h1 className="text-2xl md:text-3xl font-bold text-[#1c1917] mb-2">Доставка и оплата</h1>
             <p className="text-[#78716c] max-w-xl">
               Отправляем заказы по всей России и СНГ. Заказы до 15:00 — в тот же день.
@@ -133,17 +135,17 @@ export default function DeliveryPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-12 space-y-14">
+        <div className="mx-auto max-w-[1400px] px-4 py-12 space-y-14">
 
           {/* Key info banner */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
-              { icon: Clock, label: 'Отправка в день заказа', sub: 'при заказе до 15:00', color: 'text-[#166534]', bg: 'bg-[#166534]/8' },
+              { icon: Clock, label: 'Отправка в день заказа', sub: 'при заказе до 15:00', color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/8' },
               { icon: Truck, label: 'Бесплатная доставка', sub: 'при заказе от 5 000 ₽', color: 'text-[#f97316]', bg: 'bg-[#f97316]/8' },
-              { icon: MapPin, label: 'Самовывоз бесплатно', sub: 'Москва, ул. Радиальная, 4', color: 'text-[#166534]', bg: 'bg-[#166534]/8' },
+              { icon: MapPin, label: 'Самовывоз бесплатно', sub: 'Москва, ул. Радиальная, 4', color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/8' },
             ].map((item) => (
-              <div key={item.label} className="flex items-center gap-4 p-5 bg-white border border-black/8 rounded-xl shadow-sm">
-                <div className={`flex size-11 items-center justify-center rounded-xl ${item.bg} shrink-0`}>
+              <div key={item.label} className="flex items-center gap-4 p-5 bg-white border border-black/8 rounded shadow-sm">
+                <div className={`flex size-11 items-center justify-center rounded ${item.bg} shrink-0`}>
                   <item.icon size={20} className={item.color} />
                 </div>
                 <div>
@@ -159,14 +161,14 @@ export default function DeliveryPage() {
             <h2 className="text-xl font-bold text-[#1c1917] mb-6">Способы доставки</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {deliveryMethods.map((method) => (
-                <div key={method.name} className="flex gap-4 p-5 bg-white border border-black/8 rounded-xl shadow-sm">
-                  <div className={`flex size-11 items-center justify-center rounded-xl ${method.bg} shrink-0`}>
+                <div key={method.name} className="flex gap-4 p-5 bg-white border border-black/8 rounded shadow-sm">
+                  <div className={`flex size-11 items-center justify-center rounded ${method.bg} shrink-0`}>
                     <method.icon size={20} className={method.color} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <h3 className="text-sm font-semibold text-[#1c1917]">{method.name}</h3>
-                      <span className="text-sm font-bold text-[#166534] shrink-0">{method.price}</span>
+                      <span className="text-sm font-bold text-[#0066cc] shrink-0">{method.price}</span>
                     </div>
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-xs text-[#78716c]">
@@ -190,12 +192,12 @@ export default function DeliveryPage() {
             <h2 className="text-xl font-bold text-[#1c1917] mb-6">Способы оплаты</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {paymentMethods.map((method) => (
-                <div key={method.name} className="flex flex-col gap-3 p-5 bg-white border border-black/8 rounded-xl shadow-sm">
+                <div key={method.name} className="flex flex-col gap-3 p-5 bg-white border border-black/8 rounded shadow-sm">
                   <div className="flex items-start justify-between">
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-[#fef3e8]">
-                      <method.icon size={18} className="text-[#166534]" />
+                    <div className="flex size-10 items-center justify-center rounded bg-[#e8f4ff]">
+                      <method.icon size={18} className="text-[#0066cc]" />
                     </div>
-                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${method.badgeColor}`}>
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-sm border ${method.badgeColor}`}>
                       {method.badge}
                     </span>
                   </div>
@@ -209,11 +211,11 @@ export default function DeliveryPage() {
           {/* Return policy */}
           <section>
             <h2 className="text-xl font-bold text-[#1c1917] mb-6">Возврат и обмен</h2>
-            <div className="bg-white border border-black/8 rounded-xl shadow-sm p-6">
+            <div className="bg-white border border-black/8 rounded shadow-sm p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <h3 className="text-sm font-semibold text-[#1c1917] mb-3 flex items-center gap-2">
-                    <CheckCircle2 size={15} className="text-[#166534]" />
+                    <CheckCircle2 size={15} className="text-[#0066cc]" />
                     Принимаем возврат
                   </h3>
                   <ul className="space-y-2">
@@ -224,7 +226,7 @@ export default function DeliveryPage() {
                       'Повреждение при доставке',
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-2 text-sm text-[#44403c]">
-                        <span className="size-1.5 rounded-full bg-[#166534] shrink-0" />
+                        <span className="size-1.5 rounded-full bg-[#0066cc] shrink-0" />
                         {item}
                       </li>
                     ))}
@@ -243,7 +245,7 @@ export default function DeliveryPage() {
                       'Прошло более 14 дней с момента получения',
                     ].map((item) => (
                       <li key={item} className="flex items-center gap-2 text-sm text-[#44403c]">
-                        <span className="size-1.5 rounded-full bg-[#f97316] shrink-0" />
+                        <span className="size-1.5 rounded-sm bg-[#f97316] shrink-0" />
                         {item}
                       </li>
                     ))}
@@ -259,7 +261,7 @@ export default function DeliveryPage() {
           {/* FAQ */}
           <section>
             <h2 className="text-xl font-bold text-[#1c1917] mb-6">Частые вопросы</h2>
-            <div className="bg-white border border-black/8 rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white border border-black/8 rounded shadow-sm overflow-hidden">
               {faq.map((item, i) => (
                 <div
                   key={i}
@@ -273,7 +275,7 @@ export default function DeliveryPage() {
           </section>
 
           {/* Contact */}
-          <section className="bg-[#fef3e8] border border-[#f97316]/15 rounded-2xl p-8">
+          <section className="bg-[#e8f4ff] border border-[#f97316]/15 rounded p-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-lg font-bold text-[#1c1917] mb-1">Остались вопросы?</h2>
@@ -282,14 +284,14 @@ export default function DeliveryPage() {
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                 <a
                   href="tel:+78005553535"
-                  className="flex items-center gap-2 h-10 px-5 text-sm font-semibold text-white bg-[#166534] hover:bg-[#15803d] rounded-xl transition-all btn-primary shadow-sm"
+                  className="flex items-center gap-2 h-10 px-5 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
                 >
                   <Phone size={14} />
                   Позвонить
                 </a>
                 <a
                   href="mailto:info@electromagaz.ru"
-                  className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-[#78716c] bg-white border border-black/8 hover:border-black/15 rounded-xl transition-all"
+                  className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-[#78716c] bg-white border border-black/8 hover:border-black/15 rounded transition-all"
                 >
                   Написать
                 </a>
@@ -300,6 +302,6 @@ export default function DeliveryPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   )
 }

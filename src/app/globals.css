@@ -7,15 +7,17 @@
 
 /* ── Design tokens ── */
 :root {
-  --green:       #166534;
-  --green-hover: #15803d;
-  --green-light: #f0fdf4;
-  --green-dim:   rgba(22, 101, 52, 0.08);
-  --green-glow:  rgba(22, 101, 52, 0.20);
+  /* 30% — Lazur (text & blocks) */
+  --azure:       #0066cc;
+  --azure-hover: #0052a3;
+  --azure-light: #e8f4ff;
+  --azure-dim:   rgba(0, 102, 204, 0.08);
+  --azure-glow:  rgba(0, 102, 204, 0.25);
 
-  --peach:       #f97316;
-  --peach-hover: #ea6c0a;
-  --peach-light: #fff7ed;
+  /* 10% — Accent (buttons & active) */
+  --accent:      #f97316;
+  --accent-hover: #ea6c0a;
+  --accent-light: #fff7ed;
 
   --text-1: #0f172a;
   --text-2: #334155;
@@ -25,11 +27,11 @@
   --border:   rgba(0,0,0,0.07);
   --border-2: rgba(0,0,0,0.12);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 6px;
+  --radius-2xl: 8px;
 
   --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
@@ -58,7 +60,7 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 /* ── Selection ── */
-::selection { background: var(--green-dim); color: var(--green); }
+::selection { background: var(--azure-dim); color: var(--azure); }
 
 /* ── Utilities ── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -189,7 +191,7 @@ body {
   transition: opacity 0.15s ease;
 }
 .btn-primary:hover::after { opacity: 1; }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--green-glow); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--azure-glow); }
 .btn-primary:active { transform: scale(0.97); }
 
 /* Ripple button */
@@ -220,8 +222,8 @@ body {
 }
 .input-base:focus {
   background: #fff;
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(22,101,52,0.10);
+  border-color: var(--azure);
+  box-shadow: 0 0 0 3px rgba(0,102,204,0.10);
 }
 .input-base::placeholder { color: var(--text-4); }
 
@@ -236,8 +238,8 @@ body {
   border-radius: 99px;
   letter-spacing: 0.01em;
 }
-.badge-green  { color: var(--green);  background: var(--green-light); }
-.badge-peach  { color: var(--peach);  background: var(--peach-light); }
+.badge-azure  { color: var(--azure);  background: var(--azure-light); }
+.badge-accent { color: var(--accent);  background: var(--accent-light); }
 .badge-gray   { color: var(--text-3); background: #f1f5f9; }
 
 /* Section heading */
@@ -250,8 +252,8 @@ body {
 }
 
 /* Gradient text */
-.text-gradient-green {
-  background: linear-gradient(135deg, var(--green) 0%, #22c55e 100%);
+.text-gradient-azure {
+  background: linear-gradient(135deg, var(--azure) 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -269,6 +271,69 @@ body {
 }
 
 /* Glow effect */
-.glow-green {
-  box-shadow: 0 0 0 1px rgba(22,101,52,0.15), 0 4px 24px rgba(22,101,52,0.15);
+.glow-azure {
+  box-shadow: 0 0 0 1px rgba(0,102,204,0.15), 0 4px 24px rgba(0,102,204,0.15);
+}
+
+/* ─────────────────────────────────────────
+   MARQUEE (brands ticker)
+───────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: flex;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+.animate-marquee:hover { animation-play-state: paused; }
+
+/* ─────────────────────────────────────────
+   SCAN LINE (hero oscilloscope effect)
+───────────────────────────────────────── */
+@keyframes scan-line {
+  0%   { top: -4px; opacity: 0; }
+  5%   { opacity: 0.6; }
+  95%  { opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(74,222,128,0.6) 30%, rgba(74,222,128,0.9) 50%, rgba(74,222,128,0.6) 70%, transparent 100%);
+  animation: scan-line 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 15;
+  filter: blur(0.5px);
+}
+
+/* ─────────────────────────────────────────
+   SLIDER THUMB ACTIVE
+───────────────────────────────────────── */
+.slider-thumb-active {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────
+   DELIVERY BANNER
+───────────────────────────────────────── */
+@keyframes delivery-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+.delivery-dot { animation: delivery-pulse 2s ease-in-out infinite; }
+
+/* ─────────────────────────────────────────
+   HEADER STICKY ROW 2
+   Ряд 2 (Каталог/Поиск) всегда виден
+   Ряд 1 уезжает при скролле
+───────────────────────────────────────── */
+.header-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
