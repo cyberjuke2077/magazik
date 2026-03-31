@@ -22,9 +22,11 @@ const catTheme = {
   border: 'border-[#0066cc]/10',
 }
 
-/* ── Slides — одно фото на всех слайдах, разный текст ── */
+/* ── Slides — разное фото для каждого слайда ── */
+// Путь к изображению: `/slider/slide-1.jpg` (положить в public/slider/)
 const slides = [
   {
+    image: '/slider/slide-1.jpg',  // TODO: добавить фото слайда
     tag: 'Новинки',
     title: 'Микроконтроллеры\nSTM32 и ESP32',
     desc: 'ARM Cortex-M, WiFi, Bluetooth — всё в наличии. Доставка 1–2 недели.',
@@ -32,6 +34,7 @@ const slides = [
     href: '/catalog?category=kontrollery',
   },
   {
+    image: '/slider/slide-2.jpg',  // TODO: добавить фото слайда
     tag: 'Популярное',
     title: 'Пассивные\nкомпоненты',
     desc: 'Резисторы, конденсаторы Yageo и Murata. Широкий выбор, доставка 1–2 недели.',
@@ -39,6 +42,7 @@ const slides = [
     href: '/catalog?category=rezistory',
   },
   {
+    image: '/slider/slide-3.jpg',  // TODO: добавить фото слайда
     tag: 'Акция',
     title: 'Датчики и сенсоры\nдля IoT-проектов',
     desc: 'DS18B20, DHT22, BMP280, MPU6050. Широкий выбор, доставка 1–2 недели.',
@@ -46,6 +50,7 @@ const slides = [
     href: '/catalog?category=datchiki',
   },
   {
+    image: '/slider/slide-4.jpg',  // TODO: добавить фото слайда
     tag: 'Хит',
     title: 'Разъёмы и\nсоединители',
     desc: 'USB Type-C, JST, Molex, XT60. Более 35 000 позиций в наличии.',
@@ -53,6 +58,7 @@ const slides = [
     href: '/catalog?category=razyomy',
   },
   {
+    image: '/slider/slide-5.jpg',  // TODO: добавить фото слайда
     tag: 'Скидки',
     title: 'Диоды и\nтранзисторы',
     desc: 'IRF540N, BC547, 1N4007, SS34. Оригинальные компоненты от ведущих брендов.',
@@ -204,14 +210,14 @@ export default function HomePage() {
             {/* Слайдер — как у chipdip: фиксированная высота, скруглённые углы */}
             <div className="relative overflow-hidden rounded bg-black" style={{ height: 375 }}>
 
-              {/* Фото */}
-              <Image
-                src="/slider-hero.png"
-                alt="Electromagaz"
-                fill
-                className="object-cover object-center"
-                priority
-              />
+              {/* Фото — placeholder пока нет изображений */}
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                <div className="text-center">
+                  <div className="text-6xl mb-2">📷</div>
+                  <p className="text-lg font-medium text-gray-500">{slides[slide].tag}</p>
+                  <p className="text-sm text-gray-400 mt-1">Изображение появится позже</p>
+                </div>
+              </div>
 
               {/* Стрелки */}
               <button
@@ -243,7 +249,7 @@ export default function HomePage() {
 
             {/* Превью-миниатюры — как у chipdip */}
             <div className="grid mt-2" style={{ gridTemplateColumns: `repeat(${slides.length}, 1fr)`, gap: '6px' }}>
-              {slides.map((_, i) => (
+              {slides.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => go(i, i > slide ? 'right' : 'left')}
@@ -254,12 +260,9 @@ export default function HomePage() {
                   }`}
                   style={{ aspectRatio: '16/9' }}
                 >
-                  <Image
-                    src="/slider-hero.png"
-                    alt={`Слайд ${i + 1}`}
-                    fill
-                    className="object-cover object-center"
-                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-xs text-gray-400 font-medium">
+                    {s.tag}
+                  </div>
                 </button>
               ))}
             </div>

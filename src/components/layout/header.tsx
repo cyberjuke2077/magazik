@@ -20,14 +20,14 @@ export function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0">
-              <div className="flex size-9 items-center justify-center bg-[#0066cc]">
-                <Zap size={18} className="text-white" />
+              <div className="flex size-10 items-center justify-center bg-[#0066cc]">
+                <Zap size={20} className="text-white" />
               </div>
               <div>
-                <div className="text-xl font-black text-gray-900 leading-none tracking-tight">
+                <div className="text-2xl font-extrabold text-gray-900 leading-none tracking-tight">
                   electro<span className="text-[#0066cc]">magaz</span><span className="text-[#0066cc]">.</span>
                 </div>
-                <div className="text-[10px] text-gray-400 leading-none mt-0.5">
+                <div className="text-xs text-gray-400 leading-none mt-0.5 font-medium">
                   электронные компоненты
                 </div>
               </div>
@@ -35,20 +35,20 @@ export function Header() {
 
             {/* Address */}
             <div className="hidden lg:flex flex-col leading-tight">
-              <a href="#" className="flex items-center gap-1 text-sm font-semibold text-gray-800 hover:text-[#0066cc] transition-colors">
-                <MapPin size={13} className="text-[#0066cc]" />
+              <a href="#" className="flex items-center gap-1 text-sm font-bold text-gray-800 hover:text-[#0066cc] transition-colors">
+                <MapPin size={14} className="text-[#0066cc]" />
                 Москва
               </a>
-              <span className="text-xs text-gray-400 ml-[17px]">ул. Радиальная, 4</span>
+              <span className="text-xs text-gray-500 ml-[18px]">ул. Радиальная, 4</span>
             </div>
 
             {/* Phone */}
             <div className="hidden lg:flex flex-col leading-tight">
-              <a href="tel:+78005553535" className="flex items-center gap-1 text-sm font-semibold text-gray-800 hover:text-[#0066cc] transition-colors">
-                <Phone size={13} className="text-[#0066cc]" />
+              <a href="tel:+78005553535" className="flex items-center gap-1 text-sm font-bold text-gray-800 hover:text-[#0066cc] transition-colors">
+                <Phone size={14} className="text-[#0066cc]" />
                 8 (800) 555-35-35
               </a>
-              <a href="mailto:info@electromagaz.ru" className="text-xs text-gray-400 ml-[17px] hover:text-[#0066cc] transition-colors">
+              <a href="mailto:info@electromagaz.ru" className="text-xs text-gray-500 ml-[18px] hover:text-[#0066cc] transition-colors">
                 info@electromagaz.ru
               </a>
             </div>
