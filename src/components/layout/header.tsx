@@ -16,7 +16,7 @@ export function Header() {
       ══════════════════════════════════ */}
       <div>
         <div className="mx-auto max-w-[1400px] px-4">
-          <div className="flex items-center gap-8 h-14">
+          <div className="flex items-center gap-10 h-18">
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -54,17 +54,17 @@ export function Header() {
             </div>
 
             {/* Delivery badge */}
-            <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 border border-gray-300 text-sm text-gray-700 hover:border-[#0066cc] hover:text-[#0066cc] transition-colors cursor-default">
-              <Truck size={13} className="text-[#0066cc]" />
+            <div className="hidden xl:flex items-center gap-2 px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 hover:border-[#0066cc] hover:text-[#0066cc] transition-colors cursor-default rounded-md">
+              <Truck size={15} className="text-[#0066cc]" />
               Доставка 1–2 недели
             </div>
 
             {/* Nav links */}
-            <nav className="hidden lg:flex items-center gap-5 ml-auto text-sm text-gray-600">
+            <nav className="hidden lg:flex items-center gap-6 ml-auto text-sm font-medium text-gray-600">
               <Link href="/delivery" className="hover:text-[#0066cc] transition-colors">Доставка</Link>
               <Link href="/brands"   className="hover:text-[#0066cc] transition-colors">Бренды</Link>
-              <a href="mailto:info@electromagaz.ru" className="flex items-center gap-1 hover:text-[#0066cc] transition-colors">
-                <Mail size={12} />
+              <a href="mailto:info@electromagaz.ru" className="flex items-center gap-1.5 hover:text-[#0066cc] transition-colors">
+                <Mail size={14} />
                 Написать
               </a>
             </nav>
