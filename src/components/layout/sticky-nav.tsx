@@ -11,7 +11,8 @@ import { CategoryIcon } from '@/components/ui/component-icons'
 export function StickyNav() {
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  const { totalItems } = useCart()
+  const { items } = useCart()
+  const cartCount = items.length
   const { user, mounted: authMounted } = useAuth()
   const catalogRef = useRef<HTMLDivElement>(null)
 
@@ -140,11 +141,9 @@ export function StickyNav() {
             >
               <div className="relative">
                 <ShoppingCart size={20} strokeWidth={1.5} />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full text-[10px] font-bold bg-[#0066cc] text-white animate-bounce-in">
-                    {totalItems > 99 ? '99+' : totalItems}
-                  </span>
-                )}
+                <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full text-[10px] font-bold bg-[#f97316] text-white">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
               </div>
               <span className="text-[11px] leading-none">Корзина</span>
             </Link>
@@ -153,11 +152,9 @@ export function StickyNav() {
           {/* Mobile cart */}
           <Link href="/cart" className="lg:hidden relative flex items-center justify-center size-9 text-gray-600">
             <ShoppingCart size={20} />
-            {totalItems > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center size-4 rounded-full text-[9px] font-bold bg-[#0066cc] text-white">
-                {totalItems}
-              </span>
-            )}
+            <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center size-4 rounded-full text-[9px] font-bold bg-[#f97316] text-white">
+              {cartCount > 99 ? '99+' : cartCount}
+            </span>
           </Link>
         </div>
       </div>
