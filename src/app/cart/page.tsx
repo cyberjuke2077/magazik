@@ -140,18 +140,18 @@ export default function CartPage() {
 
         <div className="mx-auto max-w-[1400px] px-4 py-6">
           {/* Page title */}
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-lg font-bold text-gray-900">
+          <div className="flex items-center justify-between mb-5">
+            <h1 className="text-xl font-bold text-gray-900">
               Корзина
-              <span className="ml-2 text-sm font-normal text-gray-400">
-                {totalItems} {totalItems === 1 ? 'товар' : totalItems < 5 ? 'товара' : 'товаров'}
+              <span className="ml-2 text-base font-normal text-gray-400">
+                ({totalItems} {totalItems === 1 ? 'товар' : totalItems < 5 ? 'товара' : 'товаров'})
               </span>
             </h1>
             <button
               onClick={clearCart}
-              className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors"
+              className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-500 transition-colors"
             >
-              <Trash2 size={13} />
+              <Trash2 size={15} />
               Очистить корзину
             </button>
           </div>
@@ -160,13 +160,13 @@ export default function CartPage() {
             {/* Left: items list */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 border border-gray-200 rounded-t text-sm">
-                <label className="flex items-center gap-2 cursor-pointer select-none text-gray-600 hover:text-gray-900 transition-colors">
+              <div className="flex items-center gap-5 px-5 py-3 bg-gray-50 border border-gray-200 rounded-t text-base">
+                <label className="flex items-center gap-3 cursor-pointer select-none text-gray-600 hover:text-gray-900 transition-colors">
                   <input
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleSelectAll}
-                    className="w-4 h-4 rounded border-gray-300 accent-[#0066cc]"
+                    className="w-5 h-5 rounded border-gray-300 accent-[#0066cc]"
                   />
                   Выбрать все
                 </label>
@@ -174,19 +174,19 @@ export default function CartPage() {
                 {selected.size > 0 && (
                   <button
                     onClick={deleteSelected}
-                    className="flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 transition-colors ml-2"
+                    className="flex items-center gap-2 text-sm text-red-500 hover:text-red-700 transition-colors ml-2"
                   >
-                    <Trash2 size={12} />
+                    <Trash2 size={14} />
                     Удалить выбранные ({selected.size})
                   </button>
                 )}
 
                 {/* Column headers */}
-                <div className="ml-auto hidden sm:flex items-center gap-0 text-xs text-gray-400">
-                  <span className="w-20 text-right">Цена</span>
+                <div className="ml-auto hidden sm:flex items-center gap-0 text-sm text-gray-400">
+                  <span className="w-24 text-right">Цена</span>
                   <span className="w-28 text-center">Количество</span>
-                  <span className="w-24 text-right">Сумма</span>
-                  <span className="w-7" />
+                  <span className="w-28 text-right">Сумма</span>
+                  <span className="w-9" />
                 </div>
               </div>
 
