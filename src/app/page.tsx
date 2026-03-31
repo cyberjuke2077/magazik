@@ -202,16 +202,14 @@ export default function HomePage() {
           <div className="mx-auto max-w-[1400px] px-4">
 
             {/* Слайдер — как у chipdip: фиксированная высота, скруглённые углы */}
-            <div className="relative overflow-hidden rounded bg-black" style={{ height: 375 }}>
+            <div className="relative overflow-hidden rounded bg-gradient-to-br from-[#e8f4ff] to-[#d6f5e8]" style={{ height: 375 }}>
 
-              {/* Фото */}
-              <Image
-                src="/slider-hero.png"
-                alt="Electromagaz"
-                fill
-                className="object-cover object-center"
-                priority
-              />
+              {/* Заглушка — заменить на реальное фото */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
+                <div className="text-6xl mb-2 opacity-30">📦</div>
+                <div className="text-sm font-medium">Изображение слайда</div>
+                <div className="text-xs opacity-70">Заменить в /public/slider-{'{index}'}.png</div>
+              </div>
 
               {/* Стрелки */}
               <button
@@ -243,23 +241,22 @@ export default function HomePage() {
 
             {/* Превью-миниатюры — как у chipdip */}
             <div className="grid mt-2" style={{ gridTemplateColumns: `repeat(${slides.length}, 1fr)`, gap: '6px' }}>
-              {slides.map((_, i) => (
+              {slides.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => go(i, i > slide ? 'right' : 'left')}
-                  className={`relative overflow-hidden rounded transition-all duration-200 ${
+                  className={`relative overflow-hidden rounded transition-all duration-200 flex items-center justify-center ${
                     i === slide
                       ? 'ring-2 ring-[#0066cc] ring-offset-1'
-                      : 'opacity-60 hover:opacity-90'
+                      : 'opacity-60 hover:opacity-90 bg-gray-100'
                   }`}
                   style={{ aspectRatio: '16/9' }}
                 >
-                  <Image
-                    src="/slider-hero.png"
-                    alt={`Слайд ${i + 1}`}
-                    fill
-                    className="object-cover object-center"
-                  />
+                  {/* Заглушка — заменить на реальное фото */}
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-gray-400">{i + 1}</div>
+                    <div className="text-[10px] text-gray-400">{s.tag}</div>
+                  </div>
                 </button>
               ))}
             </div>
