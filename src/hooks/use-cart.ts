@@ -80,7 +80,11 @@ export function useCart() {
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0)
 
-  const totalPrice = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0)
+  const totalPrice = items.reduce((sum, i) => {
+    const isWholesale = i.product.priceWholesale !== undefined && i.quantity >= i.product.minOrder
+    const price = isWholesale ? (i.product.priceWholesale ?? i.product.price) : i.product.price
+    return sum + price * i.quantity
+  }, 0)
 
   const totalWholesale = items.reduce(
     (sum, i) => sum + (i.product.priceWholesale ?? i.product.price) * i.quantity,
