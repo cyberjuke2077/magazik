@@ -1,34 +1,63 @@
 'use client'
 
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import {
   ShoppingCart,
-  ArrowLeft,
   ArrowRight,
-  Trash2,
-  Truck,
-  Shield,
-  Package2,
   ChevronRight,
+  Trash2,
+  Package,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
-import { ProductCard } from '@/components/catalog/product-card'
 import { useCart } from '@/hooks/use-cart'
-import { featuredProducts } from '@/lib/mock-data'
 import { formatPrice } from '@/lib/utils'
-
-const DELIVERY_PRICE = 350
-const DELIVERY_FREE_FROM = 5000
 
 export default function CartPage() {
   const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
     useCart()
 
-  const deliveryFree = totalPrice >= DELIVERY_FREE_FROM
-  const finalPrice = totalPrice + (deliveryFree ? 0 : DELIVERY_PRICE)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+
+  const allSelected = items.length > 0 && selected.size === items.length
+
+  function toggleSelectAll() {
+    if (allSelected) {
+      setSelected(new Set())
+    } else {
+      setSelected(new Set(items.map((i) => i.product.id)))
+    }
+  }
+
+  function toggleSelect(productId: string) {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(productId)) {
+        next.delete(productId)
+      } else {
+        next.add(productId)
+      }
+      return next
+    })
+  }
+
+  function deleteSelected() {
+    selected.forEach((id) => removeItem(id))
+    setSelected(new Set())
+  }
+
+  const selectedTotal = useMemo(() => {
+    return items
+      .filter((i) => selected.has(i.product.id))
+      .reduce((sum, i) => {
+        const isWholesale = i.product.priceWholesale !== undefined && i.quantity >= i.product.minOrder
+        const price = isWholesale ? (i.product.priceWholesale ?? i.product.price) : i.product.price
+        return sum + price * i.quantity
+      }, 0)
+  }, [items, selected])
 
   // Skeleton while hydrating
   if (!mounted) {
@@ -37,15 +66,12 @@ export default function CartPage() {
         <Header />
         <StickyNav />
         <main>
-          <div className="mx-auto max-w-[1400px] px-4 py-8">
-            <div className="h-6 w-48 skeleton rounded mb-6" />
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-28 skeleton rounded" />
-                ))}
-              </div>
-              <div className="h-64 skeleton rounded" />
+          <div className="mx-auto max-w-[1400px] px-4 py-6">
+            <div className="h-5 w-40 skeleton rounded mb-5" />
+            <div className="border border-gray-200 rounded">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-[72px] border-b border-gray-100 skeleton" />
+              ))}
             </div>
           </div>
         </main>
@@ -61,40 +87,33 @@ export default function CartPage() {
         <Header />
         <StickyNav />
         <main>
-          <div className="border-b border-black/8 bg-white">
-            <div className="mx-auto max-w-[1400px] px-4 py-3">
-              <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
-                <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
+          {/* Breadcrumb */}
+          <div className="border-b border-gray-100">
+            <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+              <nav className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
                 <ChevronRight size={10} />
-                <span className="text-[#78716c]">Корзина</span>
+                <span className="text-gray-600">Корзина</span>
               </nav>
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1400px] px-4 py-16 text-center">
-            <div className="inline-flex items-center justify-center size-24 rounded bg-[#e8f4ff] border border-black/8 mb-6">
-              <ShoppingCart size={40} className="text-[#0066cc] opacity-40" />
+          <div className="mx-auto max-w-[1400px] px-4 py-20 text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded border border-gray-200 bg-gray-50 mb-6">
+              <ShoppingCart size={36} className="text-gray-300" />
             </div>
-            <h1 className="text-2xl font-bold text-[#1c1917] mb-2">Корзина пуста</h1>
-            <p className="text-[#78716c] mb-8 max-w-sm mx-auto">
-              Добавьте компоненты из каталога, чтобы оформить заказ
+            <h1 className="text-xl font-bold text-gray-900 mb-2">Корзина пуста</h1>
+            <p className="text-sm text-gray-500 mb-8 max-w-xs mx-auto leading-relaxed">
+              Для выбора используйте каталог товаров или поиск.
+              Чтобы добавить товар в корзину, нажмите кнопку «В корзину».
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
+              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
             >
               Перейти в каталог
-              <ArrowRight size={15} />
+              <ArrowRight size={14} />
             </Link>
-
-            <div className="mt-16 text-left">
-              <h2 className="text-base font-bold text-[#1c1917] mb-4">Популярные товары</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {featuredProducts.slice(0, 4).map((p) => (
-                  <ProductCard key={p.id} product={p} />
-                ))}
-              </div>
-            </div>
           </div>
         </main>
         <Footer />
@@ -105,124 +124,157 @@ export default function CartPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
+      <StickyNav />
 
-      <main>
+      <main className="flex-1">
         {/* Breadcrumb */}
-        <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
-              <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
+        <div className="border-b border-gray-100">
+          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
+              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-[#78716c]">Корзина</span>
+              <span className="text-gray-600">Корзина</span>
             </nav>
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-8">
-          {/* Header row */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-xl font-bold text-[#1c1917]">Корзина</h1>
-              <p className="text-sm text-[#78716c] mt-0.5">
+        <div className="mx-auto max-w-[1400px] px-4 py-6">
+          {/* Page title */}
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-lg font-bold text-gray-900">
+              Корзина
+              <span className="ml-2 text-sm font-normal text-gray-400">
                 {totalItems} {totalItems === 1 ? 'товар' : totalItems < 5 ? 'товара' : 'товаров'}
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/catalog"
-                className="hidden sm:flex items-center gap-1.5 text-sm text-[#78716c] hover:text-[#0066cc] transition-colors"
-              >
-                <ArrowLeft size={14} />
-                Продолжить покупки
-              </Link>
-              <button
-                onClick={clearCart}
-                className="flex items-center gap-1.5 text-sm text-[#a8a29e] hover:text-red-500 transition-colors"
-              >
-                <Trash2 size={14} />
-                <span className="hidden sm:inline">Очистить</span>
-              </button>
-            </div>
+              </span>
+            </h1>
+            <button
+              onClick={clearCart}
+              className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-red-500 transition-colors"
+            >
+              <Trash2 size={13} />
+              Очистить корзину
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* ── Cart items ── */}
-            <div className="lg:col-span-2 space-y-3">
-              {items.map((item) => (
-                <CartItemRow
-                  key={item.product.id}
-                  item={item}
-                  onUpdateQuantity={updateQuantity}
-                  onRemove={removeItem}
-                />
-              ))}
-            </div>
+          <div className="flex gap-6 items-start">
+            {/* Left: items list */}
+            <div className="flex-1 min-w-0">
+              {/* Toolbar */}
+              <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 border border-gray-200 rounded-t text-sm">
+                <label className="flex items-center gap-2 cursor-pointer select-none text-gray-600 hover:text-gray-900 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={toggleSelectAll}
+                    className="w-4 h-4 rounded border-gray-300 accent-[#0066cc]"
+                  />
+                  Выбрать все
+                </label>
 
-            {/* ── Order summary ── */}
-            <div className="space-y-4">
-              <div className="bg-white border border-black/8 rounded shadow-sm overflow-hidden">
-                <div className="px-5 py-4 border-b border-black/6">
-                  <h2 className="text-sm font-bold text-[#1c1917]">Итого</h2>
-                </div>
-
-                <div className="px-5 py-4 space-y-3">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#78716c]">Товары ({totalItems} шт.)</span>
-                    <span className="font-medium text-[#1c1917]">{formatPrice(totalPrice)}</span>
-                  </div>
-
-
-
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#78716c]">Доставка</span>
-                    {deliveryFree ? (
-                      <span className="font-medium text-[#0066cc]">Бесплатно</span>
-                    ) : (
-                      <span className="font-medium text-[#1c1917]">{formatPrice(DELIVERY_PRICE)}</span>
-                    )}
-                  </div>
-
-                  <div className="border-t border-black/6 pt-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-base font-bold text-[#1c1917]">К оплате</span>
-                      <span className="text-xl font-bold text-[#1c1917]">{formatPrice(finalPrice)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="px-5 pb-5">
-                  <Link
-                    href="/checkout"
-                    className="flex items-center justify-center gap-2 w-full h-12 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
+                {selected.size > 0 && (
+                  <button
+                    onClick={deleteSelected}
+                    className="flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 transition-colors ml-2"
                   >
-                    Оформить заказ
-                    <ArrowRight size={15} />
-                  </Link>
-                  <p className="text-center text-[10px] text-[#a8a29e] mt-2">
-                    Нажимая кнопку, вы соглашаетесь с условиями
-                  </p>
+                    <Trash2 size={12} />
+                    Удалить выбранные ({selected.size})
+                  </button>
+                )}
+
+                {/* Column headers */}
+                <div className="ml-auto hidden sm:flex items-center gap-0 text-xs text-gray-400">
+                  <span className="w-20 text-right">Цена</span>
+                  <span className="w-28 text-center">Количество</span>
+                  <span className="w-24 text-right">Сумма</span>
+                  <span className="w-7" />
                 </div>
               </div>
 
-              {/* Trust badges */}
-              <div className="bg-white border border-black/8 rounded shadow-sm p-4 space-y-3">
-                <div className="flex items-center gap-3 text-xs text-[#78716c]">
-                  <div className="flex size-7 items-center justify-center rounded bg-[#0066cc]/8 shrink-0">
-                    <Truck size={13} className="text-[#0066cc]" />
-                  </div>
-                  <span>Отправка в день заказа до 15:00</span>
+              {/* Items */}
+              <div className="border-x border-b border-gray-200 rounded-b overflow-hidden">
+                {items.map((item) => (
+                  <CartItemRow
+                    key={item.product.id}
+                    item={item}
+                    selected={selected.has(item.product.id)}
+                    onToggleSelect={toggleSelect}
+                    onUpdateQuantity={updateQuantity}
+                    onRemove={(id) => {
+                      removeItem(id)
+                      setSelected((prev) => {
+                        const next = new Set(prev)
+                        next.delete(id)
+                        return next
+                      })
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Continue shopping */}
+              <div className="mt-4">
+                <Link
+                  href="/catalog"
+                  className="inline-flex items-center gap-1.5 text-sm text-[#0066cc] hover:text-[#0052a3] transition-colors"
+                >
+                  ← Продолжить покупки
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: summary */}
+            <div className="w-72 flex-shrink-0 sticky top-24">
+              <div className="border border-gray-200 rounded overflow-hidden">
+                {/* Header */}
+                <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                  <span className="text-sm font-semibold text-gray-900">Итого</span>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-[#78716c]">
-                  <div className="flex size-7 items-center justify-center rounded bg-[#f97316]/8 shrink-0">
-                    <Shield size={13} className="text-[#f97316]" />
+
+                <div className="px-4 py-4 space-y-2.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">Товаров в корзине:</span>
+                    <span className="font-medium text-gray-900">{totalItems} шт.</span>
                   </div>
-                  <span>Оригинальные компоненты с сертификатами</span>
+
+                  {selected.size > 0 && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-500">Выбрано:</span>
+                      <span className="font-medium text-gray-900">{formatPrice(selectedTotal)}</span>
+                    </div>
+                  )}
+
+                  <div className="border-t border-gray-100 pt-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Сумма заказа:</span>
+                      <span className="text-lg font-bold text-gray-900">{formatPrice(totalPrice)}</span>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-gray-400 leading-relaxed">
+                    Стоимость доставки рассчитывается при оформлении заказа
+                  </p>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-[#78716c]">
-                  <div className="flex size-7 items-center justify-center rounded bg-[#0066cc]/8 shrink-0">
-                    <Package2 size={13} className="text-[#0066cc]" />
+
+                <div className="px-4 pb-4">
+                  <Link
+                    href="/checkout"
+                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+                  >
+                    Оформить заказ
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+
+                {/* Advantages */}
+                <div className="border-t border-gray-100 px-4 py-3 space-y-2">
+                  <div className="flex items-start gap-2 text-xs text-gray-500">
+                    <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
+                    <span>Доставка по всей России</span>
                   </div>
-                  <span>Возврат в течение 14 дней</span>
+                  <div className="flex items-start gap-2 text-xs text-gray-500">
+                    <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
+                    <span>Оптовые цены от 10 шт.</span>
+                  </div>
                 </div>
               </div>
             </div>
