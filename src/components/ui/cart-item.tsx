@@ -90,20 +90,20 @@ export function CartItemRow({
       </div>
 
       {/* Unit price */}
-      <div className="w-24 text-right flex-shrink-0 hidden sm:block">
+      <div className="w-24 text-right flex-shrink-0 hidden md:block">
         <div className="text-base text-gray-700">{formatPrice(unitPrice)}</div>
         <div className="text-xs text-gray-400">за шт.</div>
       </div>
 
       {/* Quantity stepper */}
-      <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden flex-shrink-0">
+      <div className="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden flex-shrink-0 w-[126px]">
         <button
           onClick={() => {
             const newQty = quantity - 1
             if (newQty >= product.minOrder) onUpdateQuantity(product.id, newQty)
           }}
           disabled={quantity <= product.minOrder}
-          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r-2 border-gray-300"
+          className="w-9 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r-2 border-gray-300"
         >
           <Minus size={14} />
         </button>
@@ -114,18 +114,18 @@ export function CartItemRow({
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           onKeyDown={handleInputKeyDown}
-          className="w-14 h-10 flex items-center justify-center text-base font-semibold text-gray-900 bg-white text-center outline-none"
+          className="w-12 h-10 flex items-center justify-center text-base font-semibold text-gray-900 bg-white text-center outline-none"
         />
         <button
           onClick={() => onUpdateQuantity(product.id, quantity + 1)}
-          className="w-10 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors border-l-2 border-gray-300"
+          className="w-9 h-10 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors border-l-2 border-gray-300"
         >
           <Plus size={14} />
         </button>
       </div>
 
       {/* Line total */}
-      <div className="w-28 text-right flex-shrink-0">
+      <div className="w-28 text-right flex-shrink-0 hidden md:block">
         <div className="text-lg font-bold text-gray-900">{formatPrice(lineTotal)}</div>
       </div>
 
