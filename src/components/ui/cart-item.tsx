@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Minus, Plus, X, Package } from 'lucide-react'
 import { type CartItem } from '@/types'
@@ -21,9 +22,35 @@ export function CartItemRow({
   onRemove,
 }: CartItemRowProps) {
   const { product, quantity } = item
+  const [inputValue, setInputValue] = useState(String(quantity))
+
+  useEffect(() => {
+    setInputValue(String(quantity))
+  }, [quantity])
+
   const isWholesale = product.priceWholesale !== undefined && quantity >= product.minOrder
   const unitPrice = isWholesale ? (product.priceWholesale ?? product.price) : product.price
   const lineTotal = unitPrice * quantity
+
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value)
+  }
+
+  function handleInputBlur() {
+    const num = parseInt(inputValue, 10)
+    if (!isNaN(num) && num >= product.minOrder) {
+      onUpdateQuantity(product.id, num)
+    } else {
+      setInputValue(String(quantity))
+    }
+  }
+
+  function handleInputKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter') {
+      handleInputBlur()
+      ;(e.target as HTMLInputElement).blur()
+    }
+  }
 
   return (
     <div className={`flex items-center gap-3 px-4 py-3 border-b border-gray-100 transition-colors ${selected ? 'bg-[#f0f7ff]' : 'hover:bg-gray-50'}`}>
@@ -71,15 +98,24 @@ export function CartItemRow({
       {/* Quantity stepper */}
       <div className="flex items-center border border-gray-300 rounded overflow-hidden flex-shrink-0">
         <button
-          onClick={() => onUpdateQuantity(product.id, quantity - 1)}
+          onClick={() => {
+            const newQty = quantity - 1
+            if (newQty >= product.minOrder) onUpdateQuantity(product.id, newQty)
+          }}
           disabled={quantity <= product.minOrder}
           className="w-7 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border-r border-gray-300"
         >
           <Minus size={11} />
         </button>
-        <span className="w-10 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white">
-          {quantity}
-        </span>
+        <input
+          type="text"
+          inputMode="numeric"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onKeyDown={handleInputKeyDown}
+          className="w-10 h-8 flex items-center justify-center text-sm font-medium text-gray-900 bg-white text-center outline-none"
+        />
         <button
           onClick={() => onUpdateQuantity(product.id, quantity + 1)}
           className="w-7 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors border-l border-gray-300"
