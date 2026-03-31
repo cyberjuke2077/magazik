@@ -90,7 +90,7 @@ export function CartItemRow({
       </div>
 
       {/* Unit price */}
-      <div className="w-24 text-right flex-shrink-0 hidden md:block pr-4">
+      <div className="w-24 text-right flex-shrink-0 hidden md:block">
         <div className="text-base text-gray-700">{formatPrice(unitPrice)}</div>
         <div className="text-xs text-gray-400">за шт.</div>
       </div>
