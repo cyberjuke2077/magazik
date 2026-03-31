@@ -208,7 +208,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-[1400px] px-4">
 
             {/* Слайдер — как у chipdip: фиксированная высота, скруглённые углы */}
-            <div className="relative overflow-hidden rounded bg-black" style={{ height: 375 }}>
+            <div className="relative overflow-hidden rounded bg-gradient-to-br from-[#e8f4ff] to-[#d6f5e8]" style={{ height: 375 }}>
 
               {/* Фото — placeholder пока нет изображений */}
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
@@ -253,10 +253,10 @@ export default function HomePage() {
                 <button
                   key={i}
                   onClick={() => go(i, i > slide ? 'right' : 'left')}
-                  className={`relative overflow-hidden rounded transition-all duration-200 ${
+                  className={`relative overflow-hidden rounded transition-all duration-200 flex items-center justify-center ${
                     i === slide
                       ? 'ring-2 ring-[#0066cc] ring-offset-1'
-                      : 'opacity-60 hover:opacity-90'
+                      : 'opacity-60 hover:opacity-90 bg-gray-100'
                   }`}
                   style={{ aspectRatio: '16/9' }}
                 >
