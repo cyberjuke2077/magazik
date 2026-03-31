@@ -322,7 +322,7 @@ export default function ProductPage({ params }: PageProps) {
                     { name: 'СДЭК',          time: '1–5 дней',       price: 'от 250 ₽',  desc: 'До пункта выдачи или курьером до двери.' },
                     { name: 'DHL Express',    time: '1–3 дня',        price: 'от 490 ₽',  desc: 'Экспресс-доставка по России и СНГ.' },
                     { name: 'Почта России',   time: '3–14 дней',      price: 'от 150 ₽',  desc: 'В любой населённый пункт России.' },
-                    { name: 'Самовывоз',      time: 'В день заказа',  price: 'Бесплатно', desc: 'Москва, ул. Радиальная, 4.' },
+                    { name: 'Самовывоз',      time: 'В день заказа',  price: 'Бесплатно', desc: 'Москва' },
                   ].map((d) => (
                     <div key={d.name} className="flex items-start gap-4 p-4 bg-gray-50 rounded border border-gray-100">
                       <Truck size={18} className="text-[#0066cc] shrink-0 mt-0.5" />

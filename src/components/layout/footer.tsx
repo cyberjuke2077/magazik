@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Zap, Mail, Phone, MapPin, Send, ShieldCheck } from 'lucide-react'
+import { Mail, Phone, MapPin, Send, ShieldCheck } from 'lucide-react'
 
 const footerLinks = {
   catalog: {
@@ -64,11 +64,8 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex size-9 items-center justify-center rounded bg-[#0066cc] shadow-sm">
-                <Zap size={16} className="text-white" />
-              </div>
-              <span className="text-base font-bold text-gray-900">
+            <Link href="/" className="block mb-4">
+              <span className="text-xl font-bold text-gray-900 tracking-wide">
                 ELECTRO<span className="text-[#0066cc]">MAGAZ</span>
               </span>
             </Link>
@@ -86,7 +83,7 @@ export function Footer() {
               </a>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <MapPin size={13} className="text-[#0066cc] shrink-0" />
-                Москва, ул. Радиальная, 4
+                Москва
               </div>
             </div>
           </div>

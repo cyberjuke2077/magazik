@@ -79,46 +79,42 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Email</label>
-        <div className="relative">
-          <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            required
-            className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-          />
-        </div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="email@example.com"
+          required
+          className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+        />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Пароль</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Пароль</label>
         <div className="relative">
-          <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
           <input
             type={showPw ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
+            placeholder="Введите пароль"
             required
-            className="w-full h-10 pl-9 pr-10 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+            className="w-full h-11 px-3 pr-10 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
           />
           <button
             type="button"
             onClick={() => setShowPw(!showPw)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a8a29e] hover:text-[#78716c] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
           >
-            {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
+            {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-600">
+        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-600">
           <AlertCircle size={14} className="shrink-0" />
           {error}
         </div>
@@ -127,12 +123,12 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded transition-all btn-primary shadow-sm"
+        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded-md transition-all"
       >
-        {loading ? 'Входим...' : 'Войти'}
+        {loading ? 'Входим...' : 'Войти в аккаунт'}
       </button>
 
-      <p className="text-center text-sm text-[#78716c]">
+      <p className="text-center text-sm text-gray-500">
         Нет аккаунта?{' '}
         <button type="button" onClick={onSwitch} className="text-[#0066cc] font-medium hover:underline">
           Зарегистрироваться
@@ -169,90 +165,77 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-medium text-[#44403c] mb-1.5">Имя *</label>
-          <div className="relative">
-            <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-            <input
-              type="text"
-              value={form.name}
-              onChange={(e) => set('name', e.target.value)}
-              placeholder="Иван Иванов"
-              required
-              className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-[#44403c] mb-1.5">Телефон</label>
-          <div className="relative">
-            <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-            <input
-              type="tel"
-              value={form.phone}
-              onChange={(e) => set('phone', e.target.value)}
-              placeholder="+7 (999) 000-00-00"
-              className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Email *</label>
-        <div className="relative">
-          <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-          <input
-            type="email"
-            value={form.email}
-            onChange={(e) => set('email', e.target.value)}
-            placeholder="your@email.com"
-            required
-            className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Компания</label>
-        <div className="relative">
-          <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Имя *</label>
           <input
             type="text"
-            value={form.company}
-            onChange={(e) => set('company', e.target.value)}
-            placeholder="ООО «Название»"
-            className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+            value={form.name}
+            onChange={(e) => set('name', e.target.value)}
+            placeholder="Иван Иванов"
+            required
+            className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1.5">Телефон</label>
+          <input
+            type="tel"
+            value={form.phone}
+            onChange={(e) => set('phone', e.target.value)}
+            placeholder="+7 (999) 000-00-00"
+            className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Пароль *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Email *</label>
+        <input
+          type="email"
+          value={form.email}
+          onChange={(e) => set('email', e.target.value)}
+          placeholder="email@example.com"
+          required
+          className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Компания</label>
+        <input
+          type="text"
+          value={form.company}
+          onChange={(e) => set('company', e.target.value)}
+          placeholder="ООО «Название»"
+          className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Пароль *</label>
         <div className="relative">
-          <Lock size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
           <input
             type={showPw ? 'text' : 'password'}
             value={form.password}
             onChange={(e) => set('password', e.target.value)}
             placeholder="Минимум 6 символов"
             required
-            className="w-full h-10 pl-9 pr-10 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+            className="w-full h-11 px-3 pr-10 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
           />
           <button
             type="button"
             onClick={() => setShowPw(!showPw)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a8a29e] hover:text-[#78716c] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
           >
-            {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
+            {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-600">
+        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-600">
           <AlertCircle size={14} className="shrink-0" />
           {error}
         </div>
@@ -261,12 +244,12 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded transition-all btn-primary shadow-sm"
+        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded-md transition-all"
       >
         {loading ? 'Создаём аккаунт...' : 'Зарегистрироваться'}
       </button>
 
-      <p className="text-center text-sm text-[#78716c]">
+      <p className="text-center text-sm text-gray-500">
         Уже есть аккаунт?{' '}
         <button type="button" onClick={onSwitch} className="text-[#0066cc] font-medium hover:underline">
           Войти
@@ -437,12 +420,18 @@ export default function AccountPage() {
     return (
       <div className="flex flex-col min-h-screen bg-white">
         <Header />
-        <StickyNav />
-        <main>
-          <div className="mx-auto max-w-lg px-4 py-16">
-            <div className="h-8 w-48 skeleton rounded mb-8 mx-auto" />
-            <div className="h-96 skeleton rounded" />
+      <StickyNav />
+      <main>
+        {/* Breadcrumb */}
+        <div className="border-b border-gray-100 bg-white">
+          <div className="mx-auto max-w-[1400px] px-4 py-3">
+            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
+              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+              <ChevronRight size={10} />
+              <span className="text-gray-500">Личный кабинет</span>
+            </nav>
           </div>
+        </div>
         </main>
         <Footer />
       </div>
@@ -469,31 +458,28 @@ export default function AccountPage() {
             /* ── Auth forms ── */
             <div className="max-w-md mx-auto">
               <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center size-14 rounded bg-[#0066cc] mb-4 shadow-sm">
-                  <User size={24} className="text-white" />
-                </div>
-                <h1 className="text-2xl font-bold text-[#1c1917]">Личный кабинет</h1>
-                <p className="text-sm text-[#78716c] mt-1">Войдите или создайте аккаунт</p>
+                <h1 className="text-2xl font-bold text-gray-900">Личный кабинет</h1>
+                <p className="text-sm text-gray-500 mt-2">Войдите в свой аккаунт или зарегистрируйтесь</p>
               </div>
 
               {/* Tab switcher */}
-              <div className="flex bg-[#e8f4ff] border border-black/8 rounded p-1 mb-6">
+              <div className="flex border-b border-gray-200 mb-6">
                 {(['login', 'register'] as AuthTab[]).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setAuthTab(tab)}
-                    className={`flex-1 h-9 text-sm font-medium rounded transition-all ${
+                    className={`flex-1 pb-3 text-sm font-medium border-b-2 transition-all ${
                       authTab === tab
-                        ? 'bg-white text-[#1c1917] shadow-sm'
-                        : 'text-[#78716c] hover:text-[#1c1917]'
+                        ? 'border-[#0066cc] text-[#0066cc]'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    {tab === 'login' ? 'Войти' : 'Регистрация'}
+                    {tab === 'login' ? 'Вход' : 'Регистрация'}
                   </button>
                 ))}
               </div>
 
-              <div className="bg-white border border-black/8 rounded p-6 shadow-sm">
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
                 {authTab === 'login' ? (
                   <LoginForm onSwitch={() => setAuthTab('register')} />
                 ) : (

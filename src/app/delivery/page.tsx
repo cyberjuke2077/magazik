@@ -142,7 +142,7 @@ export default function DeliveryPage() {
             {[
               { icon: Clock, label: 'Отправка в день заказа', sub: 'при заказе до 15:00', color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/8' },
               { icon: Truck, label: 'Бесплатная доставка', sub: 'при заказе от 5 000 ₽', color: 'text-[#f97316]', bg: 'bg-[#f97316]/8' },
-              { icon: MapPin, label: 'Самовывоз бесплатно', sub: 'Москва, ул. Радиальная, 4', color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/8' },
+              { icon: MapPin, label: 'Самовывоз бесплатно', sub: 'Москва', color: 'text-[#0066cc]', bg: 'bg-[#0066cc]/8' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-4 p-5 bg-white border border-black/8 rounded shadow-sm">
                 <div className={`flex size-11 items-center justify-center rounded ${item.bg} shrink-0`}>
