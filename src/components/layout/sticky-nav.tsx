@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
-import { ShoppingCart, Search, User, Package, Menu, X } from 'lucide-react'
+import { ShoppingCart, Search, User, Package } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
 import { categories } from '@/lib/mock-data'
@@ -11,7 +11,7 @@ import { CategoryIcon } from '@/components/ui/component-icons'
 export function StickyNav() {
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  const { items } = useCart()
+  const { items, totalPrice, mounted: cartMounted } = useCart()
   const cartCount = items.length
   const { user, mounted: authMounted } = useAuth()
   const catalogRef = useRef<HTMLDivElement>(null)
@@ -26,27 +26,31 @@ export function StickyNav() {
     return () => document.removeEventListener('mousedown', onClickOutside)
   }, [])
 
+  const formattedTotal = cartMounted
+    ? totalPrice.toLocaleString('ru-RU', { maximumFractionDigits: 0 })
+    : ''
+
   return (
-    <div className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
+    <div className="sticky top-0 z-50">
       <div className="mx-auto max-w-[1400px] px-4">
-        <div className="flex items-center gap-3 h-14">
+        <div className="flex items-center h-[68px] rounded shadow-[0_0_15px_rgba(0,0,0,0.08),_0_6px_20px_rgba(0,0,0,0.1),_0_3px_8px_rgba(0,0,0,0.06)]">
 
           {/* Catalog button */}
           <div ref={catalogRef} className="relative shrink-0">
             <button
               onClick={() => setCatalogOpen(!catalogOpen)}
-              className={`flex items-center gap-2.5 h-11 px-5 text-sm font-bold transition-all ${
+              className={`flex items-center gap-3 h-[68px] px-7 font-bold transition-all rounded-l ${
                 catalogOpen
                   ? 'bg-[#0052a3] text-white'
                   : 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
               }`}
             >
-              <div className="grid grid-cols-2 gap-0.5 shrink-0">
-                {[...Array(4)].map((_, i) => (
-                  <div key={i} className="size-1.5 bg-white/80" />
+              <div className="grid grid-cols-3 gap-[2px] shrink-0">
+                {[...Array(9)].map((_, i) => (
+                  <div key={i} className="size-[4px] bg-white/90" />
                 ))}
               </div>
-              <span>Каталог</span>
+              <span className="text-[16px]">Каталог</span>
             </button>
 
             {/* Mega menu */}
@@ -86,66 +90,71 @@ export function StickyNav() {
             )}
           </div>
 
-          {/* Search */}
+          {/* Search — с тремя точками справа */}
           <div className="flex-1">
-            <div className="relative flex">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <div className="relative bg-white h-[68px]">
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder="Поиск среди 500 000 товаров"
-                className="flex-1 h-11 pl-10 pr-4 text-sm bg-white border border-gray-300 text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] transition-colors"
+                className="w-full h-full pl-12 pr-4 text-[16px] bg-transparent text-gray-900 placeholder-gray-400 outline-none"
               />
-              <button className="h-11 px-5 bg-gray-100 border border-l-0 border-gray-300 text-sm text-gray-600 hover:bg-gray-200 transition-colors shrink-0">
-                Найти
-              </button>
+              {/* Три точки — декоративный элемент */}
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-[3px]">
+                <div className="w-1 h-1 rounded-full bg-gray-400" />
+                <div className="w-1 h-1 rounded-full bg-gray-400" />
+                <div className="w-1 h-1 rounded-full bg-gray-400" />
+              </div>
             </div>
           </div>
 
-          {/* Right icons */}
-          <div className="hidden lg:flex items-center gap-1 shrink-0">
+          {/* Right icons — постоянный серый фон */}
+          <div className="hidden lg:flex items-stretch shrink-0 bg-gray-100 h-[68px] rounded-r">
             {authMounted && (
               user ? (
                 <Link
                   href="/account"
-                  className="flex flex-col items-center gap-0.5 px-4 py-1.5 text-gray-600 hover:text-[#0066cc] transition-colors"
+                  className="flex flex-col items-center justify-center gap-1.5 px-6 text-gray-600 hover:text-[#0066cc] transition-colors"
                 >
-                  <div className="flex size-6 items-center justify-center rounded-full bg-[#0066cc] text-white text-[10px] font-bold">
+                  <div className="flex size-7 items-center justify-center rounded-full bg-[#0066cc] text-white text-[11px] font-bold">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-[11px] leading-none">{user.name.split(' ')[0]}</span>
+                  <span className="text-[13px] leading-none whitespace-nowrap">{user.name.split(' ')[0]}</span>
                 </Link>
               ) : (
                 <Link
                   href="/account"
-                  className="flex flex-col items-center gap-0.5 px-4 py-1.5 text-gray-600 hover:text-[#0066cc] transition-colors"
+                  className="flex flex-col items-center justify-center gap-1.5 px-6 text-gray-600 hover:text-[#0066cc] transition-colors"
                 >
-                  <User size={20} strokeWidth={1.5} />
-                  <span className="text-[11px] leading-none">Вход</span>
+                  <User size={26} strokeWidth={1.5} />
+                  <span className="text-[13px] leading-none">Вход</span>
                 </Link>
               )
             )}
 
             <Link
               href="/account"
-              className="flex flex-col items-center gap-0.5 px-4 py-1.5 text-gray-600 hover:text-[#0066cc] transition-colors"
+              className="flex flex-col items-center justify-center gap-1.5 px-6 text-gray-600 hover:text-[#0066cc] transition-colors"
             >
-              <Package size={20} strokeWidth={1.5} />
-              <span className="text-[11px] leading-none">Заказы</span>
+              <Package size={26} strokeWidth={1.5} />
+              <span className="text-[13px] leading-none">Статус заказа</span>
             </Link>
 
             <Link
               href="/cart"
-              className="flex flex-col items-center gap-0.5 px-4 py-1.5 text-gray-600 hover:text-[#0066cc] transition-colors relative"
+              className="flex flex-col items-center justify-center gap-1.5 px-6 text-gray-600 hover:text-[#0066cc] transition-colors relative"
             >
               <div className="relative">
-                <ShoppingCart size={20} strokeWidth={1.5} />
-                <span className="absolute -top-1.5 -right-1.5 flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full text-[10px] font-bold bg-[#f97316] text-white">
+                <ShoppingCart size={26} strokeWidth={1.5} />
+                <span className="absolute -top-2 -right-2.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold bg-[#f97316] text-white leading-none">
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               </div>
-              <span className="text-[11px] leading-none">Корзина</span>
+              <span className="text-[13px] leading-none font-bold text-gray-800">
+                {cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Корзина'}
+              </span>
             </Link>
           </div>
 
