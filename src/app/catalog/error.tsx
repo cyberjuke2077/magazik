@@ -26,7 +26,7 @@ export default function CatalogError({ error, reset }: ErrorProps) {
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={reset}
-              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
+              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-all btn-primary shadow-sm"
             >
               <RefreshCw size={14} />
               Попробовать снова

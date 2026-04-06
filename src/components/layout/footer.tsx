@@ -48,9 +48,9 @@ export function Footer() {
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="flex-1 sm:w-60 h-10 px-3 text-sm bg-white border border-gray-200 rounded text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+                className="flex-1 sm:w-60 h-10 px-3 text-sm bg-white border border-gray-200 rounded text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 focus:shadow-[0_0_0_3px_rgba(0,102,204,0.08)] transition-all"
               />
-              <button className="flex items-center gap-1.5 h-10 px-4 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all shrink-0 shadow-sm">
+              <button className="flex items-center gap-1.5 h-10 px-4 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all shrink-0 shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]">
                 <Send size={13} />
                 Подписаться
               </button>
@@ -117,7 +117,7 @@ export function Footer() {
               <div className="relative">
                 {/* Жёлтое свечение вокруг знака */}
                 <div className="absolute inset-0 rounded bg-[#EAE60E]/20 blur-md scale-110 pointer-events-none" />
-                <div className="relative bg-white border-2 border-[#EAE60E]/60 rounded p-2 shadow-md">
+                <div className="relative bg-white border-2 border-[#EAE60E]/60 rounded p-2 shadow-[0_4px_12px_rgba(234,230,14,0.15)]">
                   <Image
                     src="/rst-quality.svg"
                     alt="Знак качества РСТ — Российский стандарт"

@@ -227,11 +227,6 @@ function LogoCard({
       href={`/catalog?brand=${brand.id}`}
       className={`group relative flex items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5 ${className}`}
     >
-      {/* country badge */}
-      <span className="absolute top-2 left-2 text-sm opacity-60 group-hover:opacity-100 transition-opacity">
-        {brand.flag}
-      </span>
-
       {brand.logo ? (
         <div className="relative w-full h-full flex items-center justify-center p-5">
           <Image
@@ -419,10 +414,10 @@ export default function BrandsPage() {
                   <Link
                     key={brand.id}
                     href={`/catalog?brand=${brand.id}`}
-                    className="group relative flex flex-col items-center justify-center gap-2 bg-[#f8f8f8] border border-black/6 rounded-lg p-4 h-24 overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5"
+                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-4 h-24 overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5"
                   >
                     {brand.logo ? (
-                      <div className="relative w-full flex-1">
+                      <div className="relative w-full h-full">
                         <Image
                           src={brand.logo}
                           alt={brand.name}
@@ -436,10 +431,6 @@ export default function BrandsPage() {
                         {brand.name}
                       </span>
                     )}
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs">{brand.flag}</span>
-                      <span className="text-[10px] text-[#a8a29e]">{brand.country}</span>
-                    </div>
                   </Link>
                 ))}
               </div>

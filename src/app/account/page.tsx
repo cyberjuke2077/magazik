@@ -123,7 +123,7 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded-md transition-all"
+        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] disabled:opacity-60 rounded-md transition-all"
       >
         {loading ? 'Входим...' : 'Войти в аккаунт'}
       </button>
@@ -244,7 +244,7 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded-md transition-all"
+        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] disabled:opacity-60 rounded-md transition-all"
       >
         {loading ? 'Создаём аккаунт...' : 'Зарегистрироваться'}
       </button>
@@ -344,8 +344,8 @@ function ProfileTab() {
             type="submit"
             className={`flex items-center gap-2 h-10 px-5 text-sm font-medium rounded transition-all btn-primary shadow-sm ${
               saved
-                ? 'bg-[#0052a3] text-white'
-                : 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
+                ? 'bg-[#0066cc] text-white'
+                : 'bg-[#0066cc] text-white hover:bg-[#0066cc]'
             }`}
           >
             {saved ? <><Check size={14} /> Сохранено</> : 'Сохранить изменения'}

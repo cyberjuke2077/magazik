@@ -127,11 +127,11 @@ function ProductListRow({ product }: { product: Product }) {
           disabled={!product.inStock}
           className={`flex items-center gap-1.5 h-9 px-4 text-sm font-bold transition-all ${
             added
-              ? 'bg-[#16a34a] text-white'
+              ? 'bg-[#16a34a] text-white shadow-[0_4px_12px_rgba(22,163,74,0.3)]'
               : inCart
               ? 'bg-[#e8f4ff] text-[#0066cc] border border-[#0066cc]/30'
               : product.inStock
-              ? 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
+              ? 'bg-[#0066cc] text-white hover:bg-[#0066cc] shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]'
               : 'bg-gray-100 text-gray-400 cursor-not-allowed'
           }`}
         >
@@ -242,9 +242,9 @@ function SidebarContent({
         <button
           onClick={onApply}
           disabled={!hasPendingChanges}
-          className={`w-full h-12 text-sm font-bold text-white transition-all ${
+          className={`w-full h-12 text-sm font-bold text-white transition-all rounded ${
             hasPendingChanges
-              ? 'bg-[#0066cc] hover:bg-[#0052a3]'
+              ? 'bg-[#0066cc] hover:bg-[#0066cc] shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]'
               : 'bg-gray-300 cursor-not-allowed'
           }`}
         >
@@ -412,7 +412,7 @@ export default function CatalogPage() {
             {/* ── Sidebar ── */}
             <aside className={`${filtersOpen ? 'fixed inset-0 z-50 flex' : 'hidden'} lg:relative lg:flex lg:inset-auto lg:z-auto flex-col w-[220px] shrink-0`}>
               {filtersOpen && <div className="fixed inset-0 bg-black/30 lg:hidden" onClick={() => setFiltersOpen(false)} />}
-              <div className="relative z-10 w-[220px] bg-white border border-gray-200 max-h-[calc(100vh-80px)] overflow-y-auto ml-auto lg:ml-0">
+              <div className="relative z-10 w-[220px] bg-white border border-gray-200 rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.06)] max-h-[calc(100vh-80px)] overflow-y-auto ml-auto lg:ml-0">
                 <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-gray-50">
                   <span className="text-xs font-bold text-gray-700 uppercase tracking-wide">Фильтры</span>
                   <button onClick={() => setFiltersOpen(false)} className="lg:hidden text-gray-400 hover:text-gray-700 p-1">
@@ -527,13 +527,13 @@ export default function CatalogPage() {
                   <div className="text-5xl mb-4 opacity-20">◆</div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">Ничего не найдено</h3>
                   <p className="text-sm text-gray-500 mb-5">Попробуйте изменить фильтры или поисковый запрос</p>
-                  <button onClick={resetAll} className="h-9 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] transition-all">
+                  <button onClick={resetAll} className="h-9 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] transition-all">
                     Сбросить фильтры
                   </button>
                 </div>
               ) : viewMode === 'list' ? (
                 /* LIST VIEW — chipdip style */
-                <div className="border border-gray-200">
+                <div className="border border-gray-200 rounded-lg shadow-sm overflow-hidden">
                   {filtered.map((product) => (
                     <ProductListRow key={product.id} product={product} />
                   ))}

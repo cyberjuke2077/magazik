@@ -95,9 +95,9 @@ interface ProductModuleProps {
 
 function ProductModule({ title, href, products: items, accent, ctaTitle, ctaDesc }: ProductModuleProps) {
   return (
-    <section className="py-3">
+    <section className="py-8">
       <div className="mx-auto max-w-[1400px] px-4">
-        <div className={`rounded overflow-hidden ${accent}`}>
+        <div className={`rounded-lg overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${accent}`}>
           {/* Header */}
           <div className="flex items-center justify-between px-6 pt-6 pb-4">
             <h2 className="text-xl font-bold text-gray-900">{title}</h2>
@@ -120,20 +120,20 @@ function ProductModule({ title, href, products: items, accent, ctaTitle, ctaDesc
           {/* Cards row — 4 карточки + CTA */}
           <div className="grid grid-cols-5 px-4 pb-4 gap-3">
             {items.map((product) => (
-              <div key={product.id} className="bg-white rounded overflow-hidden shadow-sm">
+              <div key={product.id} className="bg-white rounded-lg overflow-hidden">
                 <ProductCard product={product} />
               </div>
             ))}
 
             {/* CTA card */}
-            <div className="bg-white rounded border border-gray-200 flex flex-col justify-between p-5 shadow-sm">
+            <div className="bg-white rounded-lg border border-gray-200 flex flex-col justify-between p-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">{ctaTitle}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{ctaDesc}</p>
               </div>
               <Link
                 href={href}
-                className="mt-5 flex items-center justify-center h-11 px-4 text-sm font-bold text-white bg-[#1c2d38] hover:bg-[#0f1e27] rounded transition-all"
+                className="mt-5 flex items-center justify-center h-11 px-4 text-sm font-bold text-white bg-[#1c2d38] hover:bg-[#0f1e27] rounded transition-all shadow-[0_2px_4px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
               >
                 Перейти к выбору
               </Link>
@@ -204,11 +204,11 @@ export default function HomePage() {
             MAIN SLIDER — chipdip style
             (в контейнере, не на весь экран)
         ══════════════════════════════════ */}
-        <section className="border-b border-gray-100 py-4 bg-white">
+        <section className="py-8 bg-white">
           <div className="mx-auto max-w-[1400px] px-4">
 
             {/* Слайдер — как у chipdip: фиксированная высота, скруглённые углы */}
-            <div className="relative overflow-hidden rounded bg-gradient-to-br from-[#e8f4ff] to-[#d6f5e8]" style={{ height: 375 }}>
+            <div className="relative overflow-hidden rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.06)] bg-white" style={{ height: 375 }}>
 
               {/* Фото — placeholder пока нет изображений */}
               <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
@@ -272,22 +272,22 @@ export default function HomePage() {
         {/* ══════════════════════════════════
             NEWS (без партнёрского баннера)
         ══════════════════════════════════ */}
-        <section className="border-b border-gray-100 py-10">
+        <section className="py-16 bg-white">
           <div className="mx-auto max-w-[1400px] px-4">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-gray-900">Новости</h2>
               <Link href="/brands" className="text-sm text-[#0066cc] hover:underline font-medium">
                 Все новости
               </Link>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {news.map((item) => (
                 <Link
                   key={item.slug}
                   href="/brands"
-                  className="flex items-start gap-3 p-3 rounded bg-gray-50 hover:bg-[#e8f4ff] border border-gray-100 hover:border-[#0066cc]/15 transition-all duration-200 group"
+                  className="flex items-start gap-3 p-4 rounded-lg bg-gray-50 hover:bg-[#e8f4ff] hover:border-[#0066cc]/15 shadow-sm hover:shadow-[0_4px_12px_rgba(0,102,204,0.08)] transition-all duration-200 group"
                 >
-                  <div className="flex size-10 items-center justify-center rounded bg-white border border-gray-100 shrink-0">
+                  <div className="flex size-10 items-center justify-center rounded bg-white shrink-0">
                     <Zap size={14} className="text-[#0066cc]" />
                   </div>
                   <div>
@@ -305,23 +305,23 @@ export default function HomePage() {
         {/* ══════════════════════════════════
             POPULAR CATEGORIES
         ══════════════════════════════════ */}
-        <section className="border-b border-gray-100 py-10">
+        <section className="py-16 bg-white">
           <div className="mx-auto max-w-[1400px] px-4">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-gray-900">Популярные категории</h2>
               <Link href="/catalog" className="text-sm text-[#0066cc] hover:underline font-medium">
                 Все категории
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Large tile — Микросхемы */}
               <Link
                 href="/catalog?category=mikroskhemy"
-                className="row-span-2 flex flex-col justify-between p-6 rounded bg-[#e8f4ff] border border-[#0066cc]/10 hover:border-[#0066cc]/25 hover:shadow-lg transition-all duration-300 group min-h-[280px]"
+                className="row-span-2 flex flex-col justify-between p-6 rounded-lg bg-[#e8f4ff] hover:border-[#0066cc]/25 shadow-sm hover:shadow-[0_8px_24px_rgba(0,102,204,0.08)] transition-all duration-300 group min-h-[280px]"
               >
                 <div>
-                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0052a3] transition-colors">Микросхемы</div>
+                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0066cc] transition-colors">Микросхемы</div>
                   <div className="text-xs text-gray-500">62 000 позиций</div>
                 </div>
                 <div className="flex justify-end">
@@ -338,7 +338,7 @@ export default function HomePage() {
                 <Link
                   key={cat.slug}
                   href={`/catalog?category=${cat.slug}`}
-                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} border ${catTheme.border} hover:shadow-md transition-all duration-200 group`}
+                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} hover:shadow-md transition-all duration-200 group`}
                 >
                   <div>
                     <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
@@ -351,10 +351,10 @@ export default function HomePage() {
               {/* Large tile — Контроллеры */}
               <Link
                 href="/catalog?category=kontrollery"
-                className="row-span-2 flex flex-col justify-between p-6 rounded bg-[#e8f4ff] border border-[#0066cc]/10 hover:border-[#0066cc]/25 hover:shadow-lg transition-all duration-300 group min-h-[280px]"
+                className="row-span-2 flex flex-col justify-between p-6 rounded-lg bg-[#e8f4ff] hover:border-[#0066cc]/25 shadow-sm hover:shadow-[0_8px_24px_rgba(0,102,204,0.08)] transition-all duration-300 group min-h-[280px]"
               >
                 <div>
-                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0052a3] transition-colors">Контроллеры</div>
+                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0066cc] transition-colors">Контроллеры</div>
                   <div className="text-xs text-gray-500">9 400 позиций</div>
                 </div>
                 <div className="flex justify-end">
@@ -371,7 +371,7 @@ export default function HomePage() {
                 <Link
                   key={cat.slug}
                   href={`/catalog?category=${cat.slug}`}
-                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} border ${catTheme.border} hover:shadow-md transition-all duration-200 group`}
+                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} hover:shadow-md transition-all duration-200 group`}
                 >
                   <div>
                     <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
@@ -390,7 +390,7 @@ export default function HomePage() {
                 <Link
                   key={cat.slug}
                   href={`/catalog?category=${cat.slug}`}
-                  className={`flex items-center justify-between p-4 rounded ${catTheme.bg} border ${catTheme.border} hover:shadow-md transition-all duration-200 group`}
+                  className={`flex items-center justify-between p-4 rounded-lg ${catTheme.bg} shadow-sm hover:shadow-[0_4px_16px_rgba(0,102,204,0.08)] transition-all duration-200 group`}
                 >
                   <div>
                     <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
@@ -442,11 +442,11 @@ export default function HomePage() {
         {/* ══════════════════════════════════
             FEATURES
         ══════════════════════════════════ */}
-        <section className="py-12 bg-gray-50 border-b border-gray-100 mt-4">
+        <section className="py-16 bg-gray-50">
           <div className="mx-auto max-w-[1400px] px-4">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {features.map((f) => (
-                <div key={f.title} className="flex items-start gap-4 p-5 bg-white rounded border border-gray-100 shadow-sm">
+                <div key={f.title} className="flex items-start gap-4 p-6 bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow duration-200">
                   <div className={`flex size-11 items-center justify-center rounded ${f.bg} shrink-0`}>
                     <f.icon size={20} className={f.color} />
                   </div>

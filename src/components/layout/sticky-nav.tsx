@@ -33,7 +33,7 @@ export function StickyNav() {
   return (
     <div className="sticky top-0 z-50">
       <div className="mx-auto max-w-[1400px] px-4">
-        <div className="flex items-center h-[68px] rounded shadow-[0_0_15px_rgba(0,0,0,0.08),_0_6px_20px_rgba(0,0,0,0.1),_0_3px_8px_rgba(0,0,0,0.06)]">
+        <div className="flex items-center h-[68px] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.12),_0_4px_12px_rgba(0,102,204,0.15)] bg-white">
 
           {/* Catalog button */}
           <div ref={catalogRef} className="relative shrink-0">
@@ -55,7 +55,7 @@ export function StickyNav() {
 
             {/* Mega menu */}
             {catalogOpen && (
-              <div className="absolute top-full left-0 mt-0 w-[600px] bg-white border border-gray-200 shadow-xl overflow-hidden animate-slide-down z-50">
+              <div className="absolute top-full left-0 mt-0 w-[600px] bg-white border border-gray-200 rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden animate-slide-down z-50">
                 <div className="p-3 grid grid-cols-2 gap-0.5">
                   {categories.map((cat) => (
                     <Link
@@ -78,11 +78,11 @@ export function StickyNav() {
                 </div>
                 <div className="border-t border-gray-100 px-4 py-2.5 bg-gray-50 flex items-center justify-between">
                   <span className="text-xs text-gray-500">500 000+ позиций</span>
-                  <Link
-                    href="/catalog"
-                    onClick={() => setCatalogOpen(false)}
-                    className="text-xs font-semibold text-[#0066cc] hover:underline"
-                  >
+                    <Link
+                      href="/catalog"
+                      onClick={() => setCatalogOpen(false)}
+                      className="text-xs font-semibold text-[#0066cc] hover:underline"
+                    >
                     Весь каталог →
                   </Link>
                 </div>

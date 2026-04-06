@@ -109,7 +109,7 @@ export default function CartPage() {
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-colors"
             >
               Перейти в каталог
               <ArrowRight size={14} />
@@ -218,7 +218,7 @@ export default function CartPage() {
               <div className="mt-4">
                 <Link
                   href="/catalog"
-                  className="inline-flex items-center gap-1.5 text-sm text-[#0066cc] hover:text-[#0052a3] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm text-[#0066cc] hover:text-[#0066cc] transition-colors"
                 >
                   ← Продолжить покупки
                 </Link>
@@ -227,7 +227,7 @@ export default function CartPage() {
 
             {/* Right: summary */}
             <div className="w-72 flex-shrink-0 sticky top-24">
-              <div className="border border-gray-200 rounded overflow-hidden">
+              <div className="border border-gray-200 rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
                 {/* Header */}
                 <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
                   <span className="text-sm font-semibold text-gray-900">Итого</span>
@@ -261,7 +261,7 @@ export default function CartPage() {
                 <div className="px-4 pb-4">
                   <Link
                     href="/checkout"
-                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-all shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]"
                   >
                     Оформить заказ
                     <ArrowRight size={14} />

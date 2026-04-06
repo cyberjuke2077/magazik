@@ -71,7 +71,7 @@ export default function ProductPage({ params }: PageProps) {
             <div className="text-6xl mb-4 opacity-20">◆</div>
             <h1 className="text-xl font-bold text-gray-900 mb-2">Товар не найден</h1>
             <p className="text-sm text-gray-500 mb-6">Возможно, он был удалён или артикул изменился</p>
-            <Link href="/catalog" className="inline-flex items-center gap-2 h-10 px-5 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all">
+            <Link href="/catalog" className="inline-flex items-center gap-2 h-10 px-5 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-all">
               <ArrowLeft size={14} /> Вернуться в каталог
             </Link>
           </div>
@@ -130,9 +130,9 @@ export default function ProductPage({ params }: PageProps) {
                   <button
                     key={i}
                     onClick={() => setActiveThumb(i)}
-                    className={`flex items-center justify-center size-16 rounded border-2 text-xl font-mono transition-all ${
+                    className={`flex items-center justify-center size-16 rounded-lg border-2 text-xl font-mono transition-all ${
                       activeThumb === i
-                        ? `border-[#0066cc] ${cs.bg} ${cs.text}`
+                        ? `border-[#0066cc] ${cs.bg} ${cs.text} shadow-[0_2px_8px_rgba(0,102,204,0.2)]`
                         : 'border-gray-100 bg-gray-50 text-gray-300 hover:border-gray-200'
                     }`}
                   >
@@ -142,7 +142,7 @@ export default function ProductPage({ params }: PageProps) {
               </div>
 
               {/* Main image */}
-              <div className={`flex-1 relative ${cs.bg} rounded flex items-center justify-center overflow-hidden border border-gray-100`} style={{ minHeight: 360 }}>
+              <div className={`flex-1 relative ${cs.bg} rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.06)] flex items-center justify-center overflow-hidden border border-gray-100`} style={{ minHeight: 360 }}>
                 {/* Grid */}
                 <div className="absolute inset-0 opacity-20"
                   style={{
@@ -243,9 +243,9 @@ export default function ProductPage({ params }: PageProps) {
                   disabled={!product.inStock}
                   className={`flex-1 flex items-center justify-center gap-2 h-12 text-sm font-bold rounded transition-all ${
                     addedToCart
-                      ? 'bg-[#0052a3] text-white'
+                      ? 'bg-[#0066cc] text-white shadow-[0_4px_12px_rgba(0,102,204,0.3)]'
                       : product.inStock
-                      ? 'bg-[#0066cc] text-white hover:bg-[#0052a3] active:scale-[0.98]'
+                      ? 'bg-[#0066cc] text-white hover:bg-[#0066cc] active:scale-[0.98] shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]'
                       : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   }`}
                 >
@@ -274,7 +274,7 @@ export default function ProductPage({ params }: PageProps) {
           </div>
 
           {/* ── Tabs ── */}
-          <div className="border border-gray-100 rounded overflow-hidden mb-8 shadow-sm">
+          <div className="border border-gray-100 rounded-lg overflow-hidden mb-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
             <div className="flex border-b border-gray-100 bg-gray-50">
               {tabs.map((tab) => (
                 <button

@@ -74,7 +74,7 @@ export function SearchBar() {
           />
           <button
             type="submit"
-            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all btn-primary shadow-sm"
+            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-all btn-primary shadow-sm"
           >
             Найти
             <ArrowRight size={14} />

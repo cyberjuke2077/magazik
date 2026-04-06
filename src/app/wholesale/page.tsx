@@ -319,7 +319,7 @@ export default function WholesalePage() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded transition-all btn-primary shadow-sm"
+                      className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] disabled:opacity-60 rounded transition-all btn-primary shadow-sm"
                     >
                       {loading ? 'Отправляем...' : 'Отправить заявку'}
                     </button>
