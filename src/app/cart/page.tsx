@@ -8,17 +8,20 @@ import {
   ChevronRight,
   Trash2,
   Package,
+  AlertCircle,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
 import { useCart } from '@/hooks/use-cart'
+import { useAuth } from '@/hooks/use-auth'
 import { formatPrice } from '@/lib/utils'
 
 export default function CartPage() {
   const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
     useCart()
+  const { user, isVerified } = useAuth()
 
   const [selected, setSelected] = useState<Set<string>>(new Set())
 
@@ -259,13 +262,31 @@ export default function CartPage() {
                 </div>
 
                 <div className="px-4 pb-4">
-                  <Link
-                    href="/checkout"
-                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-all shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]"
-                  >
-                    Оформить заказ
-                    <ArrowRight size={14} />
-                  </Link>
+                  {user && !isVerified ? (
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2 p-3 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700">
+                        <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-gray-500" />
+                        <span>
+                          Для оформления заказа необходимо подтверждение аккаунта
+                        </span>
+                      </div>
+                      <button
+                        disabled
+                        className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-gray-400 bg-gray-100 rounded cursor-not-allowed"
+                      >
+                        Оформить заказ
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  ) : (
+                    <Link
+                      href="/checkout"
+                      className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+                    >
+                      Оформить заказ
+                      <ArrowRight size={14} />
+                    </Link>
+                  )}
                 </div>
 
                 {/* Advantages */}

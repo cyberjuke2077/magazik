@@ -23,10 +23,10 @@ const catTheme = {
 }
 
 /* ── Slides — разное фото для каждого слайда ── */
-// Путь к изображению: `/slider/slide-1.jpg` (положить в public/slider/)
+// Положи свои фотографии в public/slider/
 const slides = [
   {
-    image: '/slider/slide-1.jpg',  // TODO: добавить фото слайда
+    image: '/slider/slide-1.png',
     tag: 'Новинки',
     title: 'Микроконтроллеры\nSTM32 и ESP32',
     desc: 'ARM Cortex-M, WiFi, Bluetooth — всё в наличии. Доставка 1–2 недели.',
@@ -34,7 +34,7 @@ const slides = [
     href: '/catalog?category=kontrollery',
   },
   {
-    image: '/slider/slide-2.jpg',  // TODO: добавить фото слайда
+    image: '/slider/slide-2.png',
     tag: 'Популярное',
     title: 'Пассивные\nкомпоненты',
     desc: 'Резисторы, конденсаторы Yageo и Murata. Широкий выбор, доставка 1–2 недели.',
@@ -42,7 +42,7 @@ const slides = [
     href: '/catalog?category=rezistory',
   },
   {
-    image: '/slider/slide-3.jpg',  // TODO: добавить фото слайда
+    image: '/slider/slide-3.png',
     tag: 'Акция',
     title: 'Датчики и сенсоры\nдля IoT-проектов',
     desc: 'DS18B20, DHT22, BMP280, MPU6050. Широкий выбор, доставка 1–2 недели.',
@@ -50,7 +50,7 @@ const slides = [
     href: '/catalog?category=datchiki',
   },
   {
-    image: '/slider/slide-4.jpg',  // TODO: добавить фото слайда
+    image: '/slider/slide-4.png',
     tag: 'Хит',
     title: 'Разъёмы и\nсоединители',
     desc: 'USB Type-C, JST, Molex, XT60. Более 35 000 позиций в наличии.',
@@ -58,7 +58,7 @@ const slides = [
     href: '/catalog?category=razyomy',
   },
   {
-    image: '/slider/slide-5.jpg',  // TODO: добавить фото слайда
+    image: '/slider/slide-5.png',
     tag: 'Скидки',
     title: 'Диоды и\nтранзисторы',
     desc: 'IRF540N, BC547, 1N4007, SS34. Оригинальные компоненты от ведущих брендов.',
@@ -97,20 +97,20 @@ function ProductModule({ title, href, products: items, accent, ctaTitle, ctaDesc
   return (
     <section className="py-8">
       <div className="mx-auto max-w-[1400px] px-4">
-        <div className={`rounded-lg overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${accent}`}>
+        <div className={`rounded overflow-hidden ${accent}`}>
           {/* Header */}
           <div className="flex items-center justify-between px-6 pt-6 pb-4">
             <h2 className="text-xl font-bold text-gray-900">{title}</h2>
             <div className="flex items-center gap-1">
               <Link
                 href={href}
-                className="flex items-center justify-center size-7 rounded-sm bg-white/70 hover:bg-white text-gray-500 hover:text-gray-800 transition-all border border-gray-200/60"
+                className="flex items-center justify-center size-7 rounded bg-white/70 hover:bg-white text-gray-500 border border-gray-200/60"
               >
                 <ChevronLeft size={14} />
               </Link>
               <Link
                 href={href}
-                className="flex items-center justify-center size-7 rounded-sm bg-white/70 hover:bg-white text-gray-500 hover:text-gray-800 transition-all border border-gray-200/60"
+                className="flex items-center justify-center size-7 rounded bg-white/70 hover:bg-white text-gray-500 border border-gray-200/60"
               >
                 <ChevronRight size={14} />
               </Link>
@@ -120,20 +120,20 @@ function ProductModule({ title, href, products: items, accent, ctaTitle, ctaDesc
           {/* Cards row — 4 карточки + CTA */}
           <div className="grid grid-cols-5 px-4 pb-4 gap-3">
             {items.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg overflow-hidden">
+              <div key={product.id} className="bg-white rounded overflow-hidden">
                 <ProductCard product={product} />
               </div>
             ))}
 
             {/* CTA card */}
-            <div className="bg-white rounded-lg border border-gray-200 flex flex-col justify-between p-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+            <div className="bg-white border border-gray-200 flex flex-col justify-between p-5">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">{ctaTitle}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{ctaDesc}</p>
               </div>
               <Link
                 href={href}
-                className="mt-5 flex items-center justify-center h-11 px-4 text-sm font-bold text-white bg-[#1c2d38] hover:bg-[#0f1e27] rounded transition-all shadow-[0_2px_4px_rgba(0,0,0,0.15)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+                className="mt-5 flex items-center justify-center h-11 px-4 text-sm font-bold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded"
               >
                 Перейти к выбору
               </Link>
@@ -192,7 +192,7 @@ function useAutoSlider(total: number, interval = 6000) {
    PAGE
 ══════════════════════════════════════════════════════ */
 export default function HomePage() {
-  const { current: slide, go, prev, next } = useAutoSlider(slides.length, 6000)
+  const { current: slide, go, prev, next } = useAutoSlider(slides.length, 8000)
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -208,27 +208,29 @@ export default function HomePage() {
           <div className="mx-auto max-w-[1400px] px-4">
 
             {/* Слайдер — как у chipdip: фиксированная высота, скруглённые углы */}
-            <div className="relative overflow-hidden rounded-lg shadow-[0_4px_16px_rgba(0,0,0,0.06)] bg-white" style={{ height: 375 }}>
+            <div className="relative overflow-hidden rounded bg-white border border-gray-200" style={{ height: 375 }}>
 
-              {/* Фото — placeholder пока нет изображений */}
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-                <div className="text-center">
-                  <div className="text-6xl mb-2">📷</div>
-                  <p className="text-lg font-medium text-gray-500">{slides[slide].tag}</p>
-                  <p className="text-sm text-gray-400 mt-1">Изображение появится позже</p>
-                </div>
+              {/* Фото слайда */}
+              <div className="absolute inset-0">
+                <Image
+                  src={slides[slide].image}
+                  alt={slides[slide].title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
 
               {/* Стрелки */}
               <button
                 onClick={prev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 rounded-sm bg-black/25 hover:bg-black/50 text-white transition-all backdrop-blur-sm"
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 bg-black/30 hover:bg-black/50 text-white"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={next}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 rounded-sm bg-black/25 hover:bg-black/50 text-white transition-all backdrop-blur-sm"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center size-9 bg-black/30 hover:bg-black/50 text-white"
               >
                 <ChevronRight size={18} />
               </button>
@@ -239,7 +241,7 @@ export default function HomePage() {
                   <button
                     key={i}
                     onClick={() => go(i, i > slide ? 'right' : 'left')}
-                    className={`rounded-sm transition-all duration-300 ${
+                    className={`transition-all ${
                       i === slide ? 'w-6 h-2 bg-white' : 'size-2 bg-white/40 hover:bg-white/60'
                     }`}
                   />
@@ -247,22 +249,25 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Превью-миниатюры — как у chipdip */}
-            <div className="grid mt-2" style={{ gridTemplateColumns: `repeat(${slides.length}, 1fr)`, gap: '6px' }}>
+            {/* Миниатюры слайдов */}
+            <div className="mt-4 grid grid-cols-5 gap-3">
               {slides.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => go(i, i > slide ? 'right' : 'left')}
-                  className={`relative overflow-hidden rounded transition-all duration-200 flex items-center justify-center ${
-                    i === slide
-                      ? 'ring-2 ring-[#0066cc] ring-offset-1'
-                      : 'opacity-60 hover:opacity-90 bg-gray-100'
+                  className={`relative overflow-hidden rounded ${
+                    i === slide 
+                      ? 'ring-2 ring-[#0066cc]' 
+                      : 'opacity-70 hover:opacity-100'
                   }`}
-                  style={{ aspectRatio: '16/9' }}
+                  style={{ height: 120 }}
                 >
-                  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-xs text-gray-400 font-medium">
-                    {s.tag}
-                  </div>
+                  <Image
+                    src={s.image}
+                    alt={s.title}
+                    fill
+                    className="object-cover"
+                  />
                 </button>
               ))}
             </div>
@@ -285,14 +290,14 @@ export default function HomePage() {
                 <Link
                   key={item.slug}
                   href="/brands"
-                  className="flex items-start gap-3 p-4 rounded-lg bg-gray-50 hover:bg-[#e8f4ff] hover:border-[#0066cc]/15 shadow-sm hover:shadow-[0_4px_12px_rgba(0,102,204,0.08)] transition-all duration-200 group"
+                  className="flex items-start gap-3 p-4 bg-gray-50 hover:bg-gray-100 border border-gray-200"
                 >
-                  <div className="flex size-10 items-center justify-center rounded bg-white shrink-0">
+                  <div className="flex size-10 items-center justify-center bg-white shrink-0">
                     <Zap size={14} className="text-[#0066cc]" />
                   </div>
                   <div>
                     <div className="text-[11px] text-gray-400 mb-1">{item.date}</div>
-                    <div className="text-xs font-semibold text-gray-800 leading-snug group-hover:text-[#0066cc] transition-colors line-clamp-2">
+                    <div className="text-xs font-semibold text-gray-800 leading-snug line-clamp-2">
                       {item.title}
                     </div>
                   </div>
@@ -318,16 +323,14 @@ export default function HomePage() {
               {/* Large tile — Микросхемы */}
               <Link
                 href="/catalog?category=mikroskhemy"
-                className="row-span-2 flex flex-col justify-between p-6 rounded-lg bg-[#e8f4ff] hover:border-[#0066cc]/25 shadow-sm hover:shadow-[0_8px_24px_rgba(0,102,204,0.08)] transition-all duration-300 group min-h-[280px]"
+                className="row-span-2 flex flex-col justify-between p-6 bg-[#e8f4ff] border border-gray-200 hover:border-[#0066cc] group min-h-[280px]"
               >
                 <div>
-                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0066cc] transition-colors">Микросхемы</div>
+                  <div className="text-lg font-bold text-gray-900 mb-1">Микросхемы</div>
                   <div className="text-xs text-gray-500">62 000 позиций</div>
                 </div>
                 <div className="flex justify-end">
-                  <div className="animate-float">
-                    <CategoryIcon slug="mikroskhemy" size={100} className="text-[#0066cc] opacity-50 group-hover:opacity-80 transition-opacity" />
-                  </div>
+                  <CategoryIcon slug="mikroskhemy" size={100} className="text-[#0066cc] opacity-50" />
                 </div>
               </Link>
 
@@ -338,29 +341,27 @@ export default function HomePage() {
                 <Link
                   key={cat.slug}
                   href={`/catalog?category=${cat.slug}`}
-                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} hover:shadow-md transition-all duration-200 group`}
+                  className={`flex items-center justify-between p-5 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
                 >
                   <div>
                     <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
                     <div className="text-xs text-gray-400">{cat.count}</div>
                   </div>
-                  <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40 group-hover:opacity-70 transition-opacity`} />
+                  <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40`} />
                 </Link>
               ))}
 
               {/* Large tile — Контроллеры */}
               <Link
                 href="/catalog?category=kontrollery"
-                className="row-span-2 flex flex-col justify-between p-6 rounded-lg bg-[#e8f4ff] hover:border-[#0066cc]/25 shadow-sm hover:shadow-[0_8px_24px_rgba(0,102,204,0.08)] transition-all duration-300 group min-h-[280px]"
+                className="row-span-2 flex flex-col justify-between p-6 bg-[#e8f4ff] border border-gray-200 hover:border-[#0066cc] group min-h-[280px]"
               >
                 <div>
-                  <div className="text-lg font-bold text-gray-900 mb-1 group-hover:text-[#0066cc] transition-colors">Контроллеры</div>
+                  <div className="text-lg font-bold text-gray-900 mb-1">Контроллеры</div>
                   <div className="text-xs text-gray-500">9 400 позиций</div>
                 </div>
                 <div className="flex justify-end">
-                  <div className="animate-float" style={{ animationDelay: '1s' }}>
-                    <CategoryIcon slug="kontrollery" size={100} className="text-[#0066cc] opacity-50 group-hover:opacity-80 transition-opacity" />
-                  </div>
+                  <CategoryIcon slug="kontrollery" size={100} className="text-[#0066cc] opacity-50" />
                 </div>
               </Link>
 
@@ -371,13 +372,13 @@ export default function HomePage() {
                 <Link
                   key={cat.slug}
                   href={`/catalog?category=${cat.slug}`}
-                  className={`flex items-center justify-between p-5 rounded ${catTheme.bg} hover:shadow-md transition-all duration-200 group`}
+                  className={`flex items-center justify-between p-5 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
                 >
                   <div>
                     <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
                     <div className="text-xs text-gray-400">{cat.count}</div>
                   </div>
-                  <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40 group-hover:opacity-70 transition-opacity`} />
+                  <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40`} />
                 </Link>
               ))}
 
@@ -390,13 +391,13 @@ export default function HomePage() {
                 <Link
                   key={cat.slug}
                   href={`/catalog?category=${cat.slug}`}
-                  className={`flex items-center justify-between p-4 rounded-lg ${catTheme.bg} shadow-sm hover:shadow-[0_4px_16px_rgba(0,102,204,0.08)] transition-all duration-200 group`}
+                  className={`flex items-center justify-between p-4 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
                 >
                   <div>
                     <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
                     <div className="text-xs text-gray-400">{cat.count}</div>
                   </div>
-                  <CategoryIcon slug={cat.slug} size={44} className={`${catTheme.text} opacity-35 group-hover:opacity-65 transition-opacity`} />
+                  <CategoryIcon slug={cat.slug} size={44} className={`${catTheme.text} opacity-35`} />
                 </Link>
               ))}
             </div>
@@ -444,15 +445,15 @@ export default function HomePage() {
         ══════════════════════════════════ */}
         <section className="py-16 bg-gray-50">
           <div className="mx-auto max-w-[1400px] px-4">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-              {features.map((f) => (
-                <div key={f.title} className="flex items-start gap-4 p-6 bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow duration-200">
-                  <div className={`flex size-11 items-center justify-center rounded ${f.bg} shrink-0`}>
-                    <f.icon size={20} className={f.color} />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {features.map((feat, i) => (
+                <div key={i} className="flex items-start gap-3 p-4 bg-white border border-gray-200">
+                  <div className={`flex size-10 items-center justify-center ${feat.bg} shrink-0`}>
+                    <feat.icon size={20} className={feat.color} />
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-gray-900 mb-1">{f.title}</div>
-                    <div className="text-xs text-gray-500 leading-relaxed">{f.desc}</div>
+                    <div className="text-sm font-bold text-gray-900 mb-1">{feat.title}</div>
+                    <div className="text-xs text-gray-500 leading-relaxed">{feat.desc}</div>
                   </div>
                 </div>
               ))}

@@ -34,21 +34,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault()
-    if (btnRef.current) {
-      const btn = btnRef.current
-      const rect = btn.getBoundingClientRect()
-      const ripple = document.createElement('span')
-      const size = Math.max(rect.width, rect.height)
-      ripple.style.cssText = `
-        position:absolute;width:${size}px;height:${size}px;
-        left:${e.clientX - rect.left - size / 2}px;
-        top:${e.clientY - rect.top - size / 2}px;
-        border-radius:50%;background:rgba(255,255,255,0.35);
-        animation:ripple 0.6s ease-out forwards;pointer-events:none;
-      `
-      btn.appendChild(ripple)
-      setTimeout(() => ripple.remove(), 600)
-    }
     addItem(product, localQty)
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1800)
@@ -69,34 +54,21 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className={`group flex flex-col bg-white border border-gray-100 rounded overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-gray-200 hover:-translate-y-1 ${cardTheme.glow}`}
+      className="group flex flex-col bg-white border border-gray-200 rounded overflow-hidden hover:border-gray-300"
     >
       {/* Image zone */}
       <div
         className={`relative flex items-center justify-center overflow-hidden ${cardTheme.bg}`}
-        style={{ aspectRatio: '4/3' }}
+        style={{ height: '180px' }}
       >
-        {/* Circuit grid */}
-        <div
-          className="absolute inset-0 opacity-[0.4]"
-          style={{
-            backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
-            backgroundSize: '16px 16px',
-            color: 'rgba(0,0,0,0.06)',
-          }}
-        />
-
         {/* Icon */}
         <div className="relative z-10 icon-svg">
           <CategoryIcon
             slug={product.categorySlug}
             size={72}
-            className={`${cardTheme.iconColor} opacity-60 group-hover:opacity-100 transition-opacity duration-300`}
+            className={`${cardTheme.iconColor} opacity-70`}
           />
         </div>
-
-        {/* Glow */}
-        <div className={`absolute inset-0 ${cardTheme.bg} opacity-0 group-hover:opacity-40 transition-opacity duration-300 blur-xl`} />
 
         {/* Badges top-left */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-20">
@@ -128,7 +100,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.manufacturer}
         </div>
 
-        <h3 className="text-sm font-semibold text-gray-800 leading-snug line-clamp-2 group-hover:text-[#0066cc] transition-colors duration-200 flex-1">
+        <h3 className="text-sm font-semibold text-gray-800 leading-snug line-clamp-2 flex-1">
           {product.name}
         </h3>
 
@@ -166,7 +138,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <button
               onClick={handleMinus}
               disabled={displayQty <= product.minOrder}
-              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100 hover:text-[#0066cc] disabled:opacity-25 disabled:cursor-not-allowed transition-all active:scale-90"
+              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100 disabled:opacity-25 disabled:cursor-not-allowed"
             >
               <Minus size={12} />
             </button>
@@ -175,7 +147,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </span>
             <button
               onClick={handlePlus}
-              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100 hover:text-[#0066cc] transition-all active:scale-90"
+              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100"
             >
               <Plus size={12} />
             </button>
@@ -185,28 +157,28 @@ export function ProductCard({ product }: ProductCardProps) {
             ref={btnRef}
             onClick={handleAdd}
             disabled={!product.inStock}
-            className={`btn-ripple flex-1 flex items-center justify-center gap-1.5 h-9 text-xs font-bold rounded transition-all duration-200 relative overflow-hidden ${
+            className={`flex-1 flex items-center justify-center gap-1.5 h-9 text-xs font-bold rounded ${
               justAdded
-                ? 'bg-[#0052a3] text-white scale-95'
+                ? 'bg-[#0052a3] text-white'
                 : inCart
                 ? 'bg-[#0066cc]/10 text-[#0066cc] border border-[#0066cc]/20'
                 : product.inStock
-                ? 'bg-[#0066cc] text-white hover:bg-[#0052a3] active:scale-95 shadow-sm hover:shadow-md hover:shadow-[#0066cc]/20'
+                ? 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
             {justAdded ? (
-              <span className="flex items-center gap-1 animate-bounce-in">
+              <>
                 <Check size={13} />Добавлено!
-              </span>
+              </>
             ) : inCart ? (
-              <span className="flex items-center gap-1">
+              <>
                 <Check size={13} />В корзине
-              </span>
+              </>
             ) : (
-              <span className="flex items-center gap-1">
+              <>
                 <ShoppingCart size={13} />В корзину
-              </span>
+              </>
             )}
           </button>
         </div>

@@ -16,24 +16,38 @@ import {
   Settings,
   Check,
   AlertCircle,
+  LayoutDashboard,
+  Package,
+  BarChart3,
+  Heart,
+  MapPin,
+  Gift,
+  CreditCard,
+  FileText,
+  Bell,
+  Clock,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { useAuth } from '@/hooks/use-auth'
+import { AdminDashboard } from '@/components/admin/admin-dashboard'
+import { AdminOrders } from '@/components/admin/admin-orders'
+import { AdminAnalytics } from '@/components/admin/admin-analytics'
+import { AdminUsers } from '@/components/admin/admin-users'
 
 type AuthTab = 'login' | 'register'
-type AccountTab = 'profile' | 'orders'
+type AdminTab = 'dashboard' | 'orders' | 'analytics' | 'users'
 
-// Mock orders
-const mockOrders = [
+// Mock recent orders
+const recentOrders = [
   {
-    id: 'ORD-2024-001',
-    date: '15 марта 2024',
-    status: 'delivered',
-    statusLabel: 'Доставлен',
-    total: 4850,
-    items: 3,
+    id: 'ORD-2024-003',
+    date: '28 марта 2024',
+    status: 'shipped',
+    statusLabel: 'В пути',
+    total: 2100,
+    items: 2,
   },
   {
     id: 'ORD-2024-002',
@@ -43,14 +57,6 @@ const mockOrders = [
     total: 12300,
     items: 7,
   },
-  {
-    id: 'ORD-2024-003',
-    date: '28 марта 2024',
-    status: 'shipped',
-    statusLabel: 'В пути',
-    total: 2100,
-    items: 2,
-  },
 ]
 
 const statusColors: Record<string, string> = {
@@ -58,6 +64,17 @@ const statusColors: Record<string, string> = {
   processing: 'text-[#f97316] bg-[#f97316]/8 border-[#f97316]/15',
   shipped: 'text-[#0066cc] bg-[#e8f4ff] border-[#0066cc/15]',
 }
+
+const quickLinks = [
+  { icon: Package, label: 'Мои заказы', href: '/account', badge: '2' },
+  { icon: Heart, label: 'Избранное', href: '/account/favorites', badge: '5' },
+  { icon: Clock, label: 'История', href: '/account/history' },
+  { icon: Bell, label: 'Уведомления', href: '/account/notifications', badge: '3' },
+  { icon: CreditCard, label: 'Оплата', href: '/account/payment' },
+  { icon: MapPin, label: 'Адреса', href: '/account/addresses' },
+  { icon: Settings, label: 'Настройки', href: '/account/settings' },
+  { icon: Gift, label: 'Бонусы', href: '/account' },
+]
 
 function LoginForm({ onSwitch }: { onSwitch: () => void }) {
   const { login } = useAuth()
@@ -73,8 +90,13 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
     setLoading(true)
     setTimeout(() => {
       const result = login(email, password)
-      if (!result.success) setError(result.error ?? 'Ошибка входа')
-      setLoading(false)
+      if (!result.success) {
+        setError(result.error ?? 'Ошибка входа')
+        setLoading(false)
+      } else {
+        setLoading(false)
+        window.location.reload()
+      }
     }, 400)
   }
 
@@ -83,10 +105,10 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
         <input
-          type="email"
+          type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="email@example.com"
+          placeholder="Введите Email"
           required
           className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
         />
@@ -123,14 +145,14 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] disabled:opacity-60 rounded-md transition-all"
+        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded-md transition-all"
       >
         {loading ? 'Входим...' : 'Войти в аккаунт'}
       </button>
 
       <p className="text-center text-sm text-gray-500">
         Нет аккаунта?{' '}
-        <button type="button" onClick={onSwitch} className="text-[#0066cc] font-medium hover:underline">
+        <button type="button" onClick={onSwitch} className="text-[#0066cc] hover:underline font-medium">
           Зарегистрироваться
         </button>
       </p>
@@ -140,7 +162,16 @@ function LoginForm({ onSwitch }: { onSwitch: () => void }) {
 
 function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   const { register } = useAuth()
-  const [form, setForm] = useState({ name: '', email: '', password: '', phone: '', company: '' })
+  const [form, setForm] = useState({ 
+    name: '', 
+    email: '', 
+    password: '', 
+    phone: '', 
+    userType: 'individual' as const,
+    companyName: '',
+    inn: '',
+    position: ''
+  })
   const [showPw, setShowPw] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -158,36 +189,38 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     }
     setLoading(true)
     setTimeout(() => {
-      const result = register(form)
-      if (!result.success) setError(result.error ?? 'Ошибка регистрации')
-      setLoading(false)
+      const result = register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        phone: form.phone,
+        userType: form.userType,
+        companyName: form.companyName,
+        inn: form.inn,
+        position: form.position,
+      })
+      if (!result.success) {
+        setError(result.error ?? 'Ошибка регистрации')
+        setLoading(false)
+      } else {
+        setLoading(false)
+        window.location.reload()
+      }
     }, 400)
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Имя *</label>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => set('name', e.target.value)}
-            placeholder="Иван Иванов"
-            required
-            className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1.5">Телефон</label>
-          <input
-            type="tel"
-            value={form.phone}
-            onChange={(e) => set('phone', e.target.value)}
-            placeholder="+7 (999) 000-00-00"
-            className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-          />
-        </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Имя *</label>
+        <input
+          type="text"
+          value={form.name}
+          onChange={(e) => set('name', e.target.value)}
+          placeholder="Иван Петров"
+          required
+          className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+        />
       </div>
 
       <div>
@@ -198,17 +231,6 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
           onChange={(e) => set('email', e.target.value)}
           placeholder="email@example.com"
           required
-          className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Компания</label>
-        <input
-          type="text"
-          value={form.company}
-          onChange={(e) => set('company', e.target.value)}
-          placeholder="ООО «Название»"
           className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
         />
       </div>
@@ -234,6 +256,17 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         </div>
       </div>
 
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">Телефон</label>
+        <input
+          type="tel"
+          value={form.phone}
+          onChange={(e) => set('phone', e.target.value)}
+          placeholder="+7 (999) 123-45-67"
+          className="w-full h-11 px-3 text-sm border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
+        />
+      </div>
+
       {error && (
         <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-600">
           <AlertCircle size={14} className="shrink-0" />
@@ -244,14 +277,14 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] disabled:opacity-60 rounded-md transition-all"
+        className="w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] disabled:opacity-60 rounded-md transition-all"
       >
-        {loading ? 'Создаём аккаунт...' : 'Зарегистрироваться'}
+        {loading ? 'Регистрируем...' : 'Создать аккаунт'}
       </button>
 
       <p className="text-center text-sm text-gray-500">
         Уже есть аккаунт?{' '}
-        <button type="button" onClick={onSwitch} className="text-[#0066cc] font-medium hover:underline">
+        <button type="button" onClick={onSwitch} className="text-[#0066cc] hover:underline font-medium">
           Войти
         </button>
       </p>
@@ -259,287 +292,266 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   )
 }
 
-function ProfileTab() {
-  const { user, updateProfile, logout } = useAuth()
-  const [form, setForm] = useState({
-    name: user?.name ?? '',
-    phone: user?.phone ?? '',
-    company: user?.company ?? '',
-  })
-  const [saved, setSaved] = useState(false)
-
-  function set(field: string, value: string) {
-    setForm((f) => ({ ...f, [field]: value }))
-  }
-
-  function handleSave(e: React.FormEvent) {
-    e.preventDefault()
-    updateProfile(form)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
-  }
-
-  return (
-    <div className="space-y-6">
-      {/* User card */}
-      <div className="flex items-center gap-4 p-5 bg-[#e8f4ff] border border-[#0066cc]/15 rounded">
-        <div className="flex size-14 items-center justify-center rounded bg-[#0066cc] text-white text-xl font-bold shrink-0">
-          {user?.name.charAt(0).toUpperCase()}
-        </div>
-        <div>
-          <div className="font-semibold text-[#1c1917]">{user?.name}</div>
-          <div className="text-sm text-[#78716c]">{user?.email}</div>
-          {user?.company && <div className="text-xs text-[#a8a29e] mt-0.5">{user.company}</div>}
-        </div>
-      </div>
-
-      {/* Edit form */}
-      <form onSubmit={handleSave} className="space-y-4">
-        <h3 className="text-sm font-semibold text-[#1c1917]">Личные данные</h3>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-medium text-[#44403c] mb-1.5">Имя</label>
-            <div className="relative">
-              <User size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => set('name', e.target.value)}
-                className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-[#44403c] mb-1.5">Телефон</label>
-            <div className="relative">
-              <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={(e) => set('phone', e.target.value)}
-                placeholder="+7 (999) 000-00-00"
-                className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-xs font-medium text-[#44403c] mb-1.5">Компания</label>
-          <div className="relative">
-            <Building2 size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
-            <input
-              type="text"
-              value={form.company}
-              onChange={(e) => set('company', e.target.value)}
-              placeholder="ООО «Название»"
-              className="w-full h-10 pl-9 pr-4 text-sm bg-[#e8f4ff] border border-black/8 rounded text-[#1c1917] placeholder-[#a8a29e] outline-none focus:border-[#0066cc]/40 focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            className={`flex items-center gap-2 h-10 px-5 text-sm font-medium rounded transition-all btn-primary shadow-sm ${
-              saved
-                ? 'bg-[#0066cc] text-white'
-                : 'bg-[#0066cc] text-white hover:bg-[#0066cc]'
-            }`}
-          >
-            {saved ? <><Check size={14} /> Сохранено</> : 'Сохранить изменения'}
-          </button>
-        </div>
-      </form>
-
-      {/* Logout */}
-      <div className="pt-4 border-t border-black/6">
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 text-sm text-[#a8a29e] hover:text-red-500 transition-colors"
-        >
-          <LogOut size={14} />
-          Выйти из аккаунта
-        </button>
-      </div>
-    </div>
-  )
-}
-
-function OrdersTab() {
-  return (
-    <div className="space-y-3">
-      {mockOrders.length === 0 ? (
-        <div className="text-center py-12">
-          <ShoppingBag size={40} className="mx-auto text-[#a8a29e] opacity-40 mb-3" />
-          <p className="text-sm text-[#78716c]">Заказов пока нет</p>
-          <Link
-            href="/catalog"
-            className="inline-flex items-center gap-1.5 mt-4 text-sm text-[#0066cc] font-medium hover:underline"
-          >
-            Перейти в каталог
-          </Link>
-        </div>
-      ) : (
-        mockOrders.map((order) => (
-          <div
-            key={order.id}
-            className="flex items-center justify-between p-4 bg-white border border-black/8 rounded shadow-sm hover:shadow-md transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="flex size-10 items-center justify-center rounded bg-[#e8f4ff] shrink-0">
-                <ShoppingBag size={16} className="text-[#0066cc]" />
-              </div>
-              <div>
-                <div className="text-sm font-medium text-[#1c1917]">{order.id}</div>
-                <div className="text-xs text-[#a8a29e] mt-0.5">{order.date} · {order.items} товара</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className={`text-xs font-medium px-2.5 py-1 rounded-sm border ${statusColors[order.status]}`}>
-                {order.statusLabel}
-              </span>
-              <div className="text-right">
-                <div className="text-sm font-bold text-[#1c1917]">{order.total.toLocaleString('ru-RU')} ₽</div>
-              </div>
-            </div>
-          </div>
-        ))
-      )}
-    </div>
-  )
-}
-
 export default function AccountPage() {
-  const { user, mounted } = useAuth()
+  const { user, logout, isAdmin } = useAuth()
   const [authTab, setAuthTab] = useState<AuthTab>('login')
-  const [accountTab, setAccountTab] = useState<AccountTab>('profile')
+  const [adminTab, setAdminTab] = useState<AdminTab>('dashboard')
 
-  if (!mounted) {
+  // Admin panel
+  if (user && isAdmin) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <>
         <Header />
-      <StickyNav />
-      <main>
-        {/* Breadcrumb */}
-        <div className="border-b border-gray-100 bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
-              <ChevronRight size={10} />
-              <span className="text-gray-500">Личный кабинет</span>
-            </nav>
+        <StickyNav />
+        <main className="min-h-screen bg-gray-50 py-8">
+          <div className="mx-auto max-w-[1400px] px-4">
+            <div className="flex gap-6">
+              {/* Admin Sidebar */}
+              <div className="w-64 shrink-0">
+                <div className="bg-white border border-gray-200 rounded p-4 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
+                      <User size={20} className="text-gray-600" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-900">{user.name}</div>
+                      <div className="text-xs text-gray-500">Администратор</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white border border-gray-200 rounded overflow-hidden">
+                  <button
+                    onClick={() => setAdminTab('dashboard')}
+                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                      adminTab === 'dashboard'
+                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <LayoutDashboard size={18} />
+                    Дашборд
+                  </button>
+                  <button
+                    onClick={() => setAdminTab('orders')}
+                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                      adminTab === 'orders'
+                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Package size={18} />
+                    Заказы
+                  </button>
+                  <button
+                    onClick={() => setAdminTab('analytics')}
+                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                      adminTab === 'analytics'
+                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <BarChart3 size={18} />
+                    Аналитика
+                  </button>
+                  <button
+                    onClick={() => setAdminTab('users')}
+                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                      adminTab === 'users'
+                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <User size={18} />
+                    Пользователи
+                  </button>
+                  <button
+                    onClick={() => {
+                      logout()
+                      window.location.reload()
+                    }}
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100"
+                  >
+                    <LogOut size={18} />
+                    Выйти
+                  </button>
+                </div>
+              </div>
+
+              {/* Admin Content */}
+              <div className="flex-1">
+                {adminTab === 'dashboard' && <AdminDashboard />}
+                {adminTab === 'orders' && <AdminOrders />}
+                {adminTab === 'analytics' && <AdminAnalytics />}
+                {adminTab === 'users' && <AdminUsers />}
+              </div>
+            </div>
           </div>
-        </div>
         </main>
         <Footer />
-      </div>
+      </>
     )
   }
 
-  return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <Header />
-      <main>
-        {/* Breadcrumb */}
-        <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
-              <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
-              <ChevronRight size={10} />
-              <span className="text-[#78716c]">Личный кабинет</span>
-            </nav>
-          </div>
-        </div>
-
-        <div className="mx-auto max-w-[1400px] px-4 py-10">
-          {!user ? (
-            /* ── Auth forms ── */
-            <div className="max-w-md mx-auto">
-              <div className="text-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">Личный кабинет</h1>
-                <p className="text-sm text-gray-500 mt-2">Войдите в свой аккаунт или зарегистрируйтесь</p>
-              </div>
-
-              {/* Tab switcher */}
-              <div className="flex border-b border-gray-200 mb-6">
-                {(['login', 'register'] as AuthTab[]).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setAuthTab(tab)}
-                    className={`flex-1 pb-3 text-sm font-medium border-b-2 transition-all ${
-                      authTab === tab
-                        ? 'border-[#0066cc] text-[#0066cc]'
-                        : 'border-transparent text-gray-500 hover:text-gray-700'
-                    }`}
-                  >
-                    {tab === 'login' ? 'Вход' : 'Регистрация'}
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
-                {authTab === 'login' ? (
-                  <LoginForm onSwitch={() => setAuthTab('register')} />
-                ) : (
-                  <RegisterForm onSwitch={() => setAuthTab('login')} />
+  // User dashboard
+  if (user) {
+    return (
+      <>
+        <Header />
+        <StickyNav />
+        <main className="min-h-screen bg-gray-50 py-8">
+          <div className="mx-auto max-w-[1400px] px-4">
+            {/* Welcome Section with Verification Badge */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900">Привет, {user.name.split(' ')[0]}</h1>
+                {user.verificationStatus === 'verified' && (
+                  <span className="px-2 py-1 bg-green-50 text-green-700 text-xs border border-green-200 rounded">
+                    Верифицирован
+                  </span>
+                )}
+                {user.verificationStatus === 'pending' && (
+                  <span className="px-2 py-1 bg-yellow-50 text-yellow-700 text-xs border border-yellow-200 rounded">
+                    На проверке
+                  </span>
+                )}
+                {user.verificationStatus === 'unverified' && (
+                  <span className="px-2 py-1 bg-gray-50 text-gray-600 text-xs border border-gray-200 rounded">
+                    Не верифицирован
+                  </span>
+                )}
+                {user.verificationStatus === 'rejected' && (
+                  <span className="px-2 py-1 bg-red-50 text-red-700 text-xs border border-red-200 rounded">
+                    Отклонён
+                  </span>
                 )}
               </div>
+              <p className="text-gray-600">
+                {user.verificationStatus === 'verified' 
+                  ? 'Вот что происходит с вашими заказами'
+                  : 'Для совершения покупок требуется верификация аккаунта'}
+              </p>
             </div>
-          ) : (
-            /* ── Account dashboard ── */
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              {/* Sidebar */}
-              <aside className="lg:col-span-1">
-                <div className="bg-white border border-black/8 rounded shadow-sm overflow-hidden">
-                  <div className="p-4 border-b border-black/6 bg-[#e8f4ff]">
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-10 items-center justify-center rounded bg-[#0066cc] text-white font-bold shrink-0">
-                        {user.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold text-[#1c1917] truncate">{user.name}</div>
-                        <div className="text-xs text-[#78716c] truncate">{user.email}</div>
-                      </div>
+
+            {/* Quick Links */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+              {quickLinks.map((link, idx) => (
+                <Link
+                  key={idx}
+                  href={link.href}
+                  className="bg-white border border-gray-200 rounded p-4 hover:border-[#0066cc] transition-colors relative group"
+                >
+                  <div className="flex items-center gap-3">
+                    <link.icon size={20} className="text-gray-400 group-hover:text-[#0066cc] transition-colors" />
+                    <span className="text-sm text-gray-700">{link.label}</span>
+                    {link.badge && (
+                      <span className="ml-auto px-1.5 py-0.5 bg-red-500 text-white text-xs rounded">
+                        {link.badge}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* Recent Orders */}
+            <div className="bg-white border border-gray-200 rounded p-6 mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold text-gray-900">Мои заказы</h2>
+                <Link href="/account" className="text-sm text-[#0066cc] hover:underline">
+                  Посмотреть все
+                </Link>
+              </div>
+              <div className="space-y-3">
+                {recentOrders.map((order) => (
+                  <div key={order.id} className="flex items-center justify-between p-4 border border-gray-100 rounded hover:border-gray-200 transition-colors">
+                    <div>
+                      <div className="font-medium text-gray-900">{order.id}</div>
+                      <div className="text-sm text-gray-500 mt-1">{order.date} • {order.items} товара</div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className={`px-2.5 py-1 text-xs font-medium rounded ${statusColors[order.status]}`}>
+                        {order.statusLabel}
+                      </span>
+                      <div className="text-lg font-semibold text-gray-900">{order.total.toLocaleString()} ₽</div>
                     </div>
                   </div>
-                  <nav className="p-2">
-                    {([
-                      { id: 'profile', label: 'Профиль', icon: Settings },
-                      { id: 'orders', label: 'Мои заказы', icon: ShoppingBag },
-                    ] as { id: AccountTab; label: string; icon: React.ElementType }[]).map(({ id, label, icon: Icon }) => (
-                      <button
-                        key={id}
-                        onClick={() => setAccountTab(id)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-sm rounded transition-all ${
-                          accountTab === id
-                            ? 'bg-[#0066cc]/8 text-[#0066cc] font-medium'
-                            : 'text-[#78716c] hover:bg-black/4 hover:text-[#1c1917]'
-                        }`}
-                      >
-                        <Icon size={15} />
-                        {label}
-                      </button>
-                    ))}
-                  </nav>
-                </div>
-              </aside>
-
-              {/* Content */}
-              <div className="lg:col-span-3">
-                <div className="bg-white border border-black/8 rounded shadow-sm p-6">
-                  <h2 className="text-base font-bold text-[#1c1917] mb-5">
-                    {accountTab === 'profile' ? 'Профиль' : 'Мои заказы'}
-                  </h2>
-                  {accountTab === 'profile' ? <ProfileTab /> : <OrdersTab />}
-                </div>
+                ))}
               </div>
             </div>
-          )}
+
+            {/* Account Info */}
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-white border border-gray-200 rounded p-5">
+                <div className="text-sm text-gray-500 mb-1">Личная информация</div>
+                <div className="space-y-2 mb-3">
+                  <div className="text-sm text-gray-900">{user.name}</div>
+                  <div className="text-sm text-gray-600">{user.email}</div>
+                </div>
+                <Link
+                  href="/account/settings"
+                  className="text-sm text-[#0066cc] hover:underline"
+                >
+                  Редактировать →
+                </Link>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded p-5">
+                <div className="text-sm text-gray-500 mb-3">Полезные ссылки</div>
+                <div className="space-y-2">
+                  <Link href="/catalog" className="block text-sm text-gray-700 hover:text-[#0066cc]">
+                    Каталог товаров
+                  </Link>
+                  <Link href="/help" className="block text-sm text-gray-700 hover:text-[#0066cc]">
+                    Центр помощи
+                  </Link>
+                  <Link href="/delivery" className="block text-sm text-gray-700 hover:text-[#0066cc]">
+                    Доставка и оплата
+                  </Link>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded p-5">
+                <div className="text-sm text-gray-500 mb-3">Аккаунт</div>
+                <button
+                  onClick={() => {
+                    logout()
+                    window.location.reload()
+                  }}
+                  className="text-sm text-red-600 hover:underline"
+                >
+                  Выйти из аккаунта
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    )
+  }
+
+  // Login/Register forms
+  return (
+    <>
+      <Header />
+      <StickyNav />
+      <main className="min-h-screen bg-gray-50 py-12">
+        <div className="mx-auto max-w-md px-4">
+          <div className="bg-white border border-gray-200 rounded p-8">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6">
+              {authTab === 'login' ? 'Вход' : 'Регистрация'}
+            </h1>
+
+            {authTab === 'login' ? (
+              <LoginForm onSwitch={() => setAuthTab('register')} />
+            ) : (
+              <RegisterForm onSwitch={() => setAuthTab('login')} />
+            )}
+          </div>
         </div>
       </main>
       <Footer />
-    </div>
+    </>
   )
 }
