@@ -298,7 +298,7 @@ export function StickyNav() {
                 </span>
               </div>
               <span className="text-[13px] leading-none font-bold text-gray-800">
-                {cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Корзина'}
+                {cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Запрос'}
               </span>
             </Link>
           </div>
