@@ -244,7 +244,7 @@ function LogoCard({
             src={brand.logo}
             alt={brand.name}
             fill
-            className="object-contain transition-transform duration-300 group-hover:scale-110"
+            className="object-contain transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
           />
         </div>
@@ -433,7 +433,7 @@ export default function BrandsPage() {
                           src={brand.logo}
                           alt={brand.name}
                           fill
-                          className="object-contain transition-transform duration-300 group-hover:scale-110"
+                          className="object-contain transition-transform duration-300 group-hover:scale-105"
                           sizes="(max-width: 640px) 50vw, 16vw"
                         />
                       </div>
