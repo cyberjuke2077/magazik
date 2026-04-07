@@ -77,10 +77,10 @@ const news = [
 
 /* ── Features ── */
 const features = [
-  { icon: Truck,      title: 'Доставка 1–2 недели',      desc: 'СДЭК, DHL, Почта России по всей стране', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+  { icon: Truck,      title: 'Работаем под заказ',      desc: 'Минимальный заказ от 200 000 ₽', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
   { icon: Shield,     title: 'Оригинальные компоненты',   desc: 'Только официальные дистрибьюторы',       color: 'text-[#f97316]', bg: 'bg-orange-50' },
-  { icon: TrendingUp, title: 'Выгодные цены',              desc: 'Конкурентные цены на весь ассортимент',   color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
-  { icon: Headphones, title: 'Техподдержка',              desc: 'Инженеры на связи пн–пт 9:00–18:00',     color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+  { icon: TrendingUp, title: 'Для юр. лиц и ИП',              desc: 'Работаем с организациями по всей России',   color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+  { icon: Headphones, title: 'Ответ за 24 часа',              desc: 'Быстрое формирование коммерческого предложения',     color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
 ]
 
 /* ── ProductModule — chipdip "often-slider" style ── */
