@@ -368,8 +368,8 @@ export default function BrandsPage() {
               <LogoCard brand={brands.find((b) => b.id === 'infineon')!} className="col-span-1 row-span-1" />
 
               {/* Row 4 */}
-              {/* Holtek */}
-              <LogoCard brand={brands.find((b) => b.id === 'holtek')!} className="col-span-1 row-span-1" />
+              {/* Sharp */}
+              <LogoCard brand={brands.find((b) => b.id === 'sharp')!} className="col-span-1 row-span-1" />
               {/* Texas Instruments */}
               <LogoCard brand={brands.find((b) => b.id === 'texas-instruments')!} className="col-span-1 row-span-1" />
               {/* Vishay */}
