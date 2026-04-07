@@ -311,7 +311,7 @@ export default function CartPage() {
                     </div>
                   ) : (
                     <Link
-                      href="/checkout"
+                      href="/request-quote"
                       className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
                     >
                       Отправить запрос на КП
