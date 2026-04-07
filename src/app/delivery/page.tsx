@@ -1,178 +1,144 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
 import {
   ChevronRight,
   Truck,
   Clock,
-  MapPin,
-  CreditCard,
-  Banknote,
   Building,
-  Package,
+  FileText,
   Phone,
   CheckCircle2,
   AlertCircle,
-  Calculator,
-  Box,
+  Package,
   Shield,
   Award,
+  Mail,
+  Calculator,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { MIN_ORDER_AMOUNT, CONTACT_PHONE, CONTACT_EMAIL, REQUEST_PROCESSING_TIME } from '@/lib/constants'
+import { formatPrice } from '@/lib/utils'
 
-const deliveryMethods = [
+const workflowSteps = [
   {
-    icon: Truck,
-    name: 'СДЭК',
-    time: '1–5 дней',
-    price: 'от 250 ₽',
-    description: 'Доставка до пункта выдачи или курьером до двери. Отслеживание в реальном времени.',
-    color: 'text-[#0066cc]',
-    bg: 'bg-[#0066cc]/8',
-    available: 'По всей России',
-    cities: 'Москва, СПб, Казань, Екатеринбург и др.',
-    tracking: true,
-    insurance: true,
+    icon: FileText,
+    title: 'Отправка запроса',
+    desc: 'Вы формируете список товаров и отправляете запрос на коммерческое предложение через сайт',
+  },
+  {
+    icon: Calculator,
+    title: 'Согласование КП',
+    desc: 'Мы связываемся с вами в течение 24 часов, согласовываем цену, сроки и условия поставки',
+  },
+  {
+    icon: Building,
+    title: 'Выставление счёта',
+    desc: 'После согласования выставляем счёт на оплату с полным пакетом документов',
   },
   {
     icon: Truck,
-    name: 'DHL Express',
-    time: '1–3 дня',
-    price: 'от 490 ₽',
-    description: 'Экспресс-доставка по России и СНГ. Гарантированные сроки, страховка груза.',
-    color: 'text-[#f97316]',
-    bg: 'bg-[#f97316]/8',
-    available: 'Россия и СНГ',
-    cities: 'Крупные города',
-    tracking: true,
-    insurance: true,
+    title: 'Закупка и доставка',
+    desc: 'После оплаты закупаем товар у поставщиков и организуем доставку до вашего склада',
+  },
+]
+
+const deliveryOptions = [
+  {
+    icon: Truck,
+    name: 'Транспортная компания',
+    description: 'Организуем доставку через проверенные ТК (Деловые Линии, ПЭК, Байкал-Сервис). Стоимость и сроки рассчитываются индивидуально.',
+    features: ['Доставка до терминала или склада', 'Страхование груза', 'Трекинг отправления'],
   },
   {
     icon: Package,
-    name: 'Почта России',
-    time: '3–14 дней',
-    price: 'от 150 ₽',
-    description: 'Доставка в любой населённый пункт России. Наложенный платёж доступен.',
-    color: 'text-[#0066cc]',
-    bg: 'bg-[#e8f4ff]',
-    available: 'Вся Россия',
-    cities: 'Все населённые пункты',
-    tracking: true,
-    insurance: false,
+    name: 'Курьерская доставка',
+    description: 'Для срочных заказов организуем курьерскую доставку по Москве и МО. Доставка в день готовности заказа.',
+    features: ['Доставка до двери', 'Гибкий график', 'Только Москва и МО'],
   },
   {
-    icon: MapPin,
+    icon: Building,
     name: 'Самовывоз',
-    time: 'В день заказа',
-    price: 'Бесплатно',
-    description: 'Забрать заказ можно в нашем офисе в Москве. Готовность заказа — 2 часа.',
-    color: 'text-[#0066cc]',
-    bg: 'bg-[#0066cc]/8',
-    available: 'Москва',
-    cities: 'Москва, ул. Примерная, 123',
-    tracking: false,
-    insurance: false,
-  },
-]
-
-const cities = [
-  { name: 'Москва', days: '1–2', points: 450 },
-  { name: 'Санкт-Петербург', days: '2–3', points: 320 },
-  { name: 'Казань', days: '2–4', points: 85 },
-  { name: 'Екатеринбург', days: '3–5', points: 120 },
-  { name: 'Новосибирск', days: '4–6', points: 95 },
-  { name: 'Краснодар', days: '3–5', points: 110 },
-  { name: 'Владивосток', days: '5–8', points: 45 },
-  { name: 'Калининград', days: '4–6', points: 38 },
-]
-
-const packagingSteps = [
-  {
-    icon: Box,
-    title: 'Антистатическая упаковка',
-    desc: 'Все микросхемы и чувствительные компоненты упаковываются в антистатические пакеты',
-  },
-  {
-    icon: Shield,
-    title: 'Защита от повреждений',
-    desc: 'Используем пузырчатую плёнку и картонные вкладыши для защиты хрупких товаров',
-  },
-  {
-    icon: Package,
-    title: 'Надёжная коробка',
-    desc: 'Упаковываем в прочные картонные коробки с маркировкой "Хрупкое"',
-  },
-  {
-    icon: Award,
-    title: 'Проверка перед отправкой',
-    desc: 'Каждый заказ проверяется на комплектность и качество упаковки',
+    description: 'Вы можете забрать заказ самостоятельно после согласования готовности. Предварительный звонок обязателен.',
+    features: ['Бесплатно', 'По предварительной договорённости', 'Москва'],
   },
 ]
 
 const paymentMethods = [
   {
-    icon: CreditCard,
-    name: 'Банковская карта',
-    description: 'Visa, Mastercard, МИР. Оплата онлайн при оформлении заказа.',
-    badge: 'Мгновенно',
-    badgeColor: 'text-[#0066cc] bg-[#0066cc]/8 border-[#0066cc]/15',
-  },
-  {
     icon: Building,
     name: 'Безналичный расчёт',
-    description: 'Оплата по счёту для юридических лиц и ИП. Все необходимые документы.',
-    badge: 'Для бизнеса',
-    badgeColor: 'text-[#f97316] bg-[#f97316]/8 border-[#f97316]/15',
+    description: 'Основной способ оплаты для юридических лиц и ИП. Работаем по договору поставки.',
+    badge: 'Рекомендуем',
+    badgeColor: 'text-[#0066cc] bg-[#0066cc]/8 border-[#0066cc]/15',
+    features: [
+      'Оплата по счёту',
+      'Полный пакет документов (счёт, УПД, счёт-фактура)',
+      'Отсрочка платежа для постоянных клиентов',
+      'НДС 20%',
+    ],
   },
   {
-    icon: Banknote,
-    name: 'Наличными',
-    description: 'При самовывозе из офиса или наложенным платежом через Почту России.',
-    badge: 'При получении',
-    badgeColor: 'text-[#0066cc] bg-[#e8f4ff] border-[#0066cc/15]',
+    icon: FileText,
+    name: 'Предоплата 100%',
+    description: 'Для новых клиентов требуется полная предоплата. После оплаты начинаем закупку товара.',
+    badge: 'Для новых клиентов',
+    badgeColor: 'text-[#f97316] bg-[#f97316]/8 border-[#f97316]/15',
+    features: [
+      'Оплата после согласования КП',
+      'Закупка начинается после поступления средств',
+      'Все документы предоставляются',
+    ],
   },
+]
+
+const documents = [
+  'Счёт на оплату',
+  'Договор поставки (при необходимости)',
+  'Товарная накладная (ТОРГ-12)',
+  'Счёт-фактура',
+  'УПД (универсальный передаточный документ)',
+  'Сертификаты соответствия (по запросу)',
 ]
 
 const faq = [
   {
-    q: 'Когда отправляется заказ?',
-    a: 'Заказы, оформленные до 15:00 по московскому времени, отправляются в тот же день. Заказы после 15:00 — на следующий рабочий день.',
+    q: 'Какая минимальная сумма заказа?',
+    a: `Минимальная сумма заказа — ${formatPrice(MIN_ORDER_AMOUNT)}. Мы работаем только с оптовыми заказами для юридических лиц и ИП.`,
   },
   {
-    q: 'Как отследить заказ?',
-    a: 'После отправки вы получите трек-номер на email. Отслеживание доступно на сайте транспортной компании или в личном кабинете.',
+    q: 'Как быстро вы отвечаете на запрос?',
+    a: `Мы обрабатываем запросы в течение ${REQUEST_PROCESSING_TIME} в рабочие дни. Вы получите коммерческое предложение с ценами и сроками поставки.`,
   },
   {
-    q: 'Что делать, если товар пришёл повреждённым?',
-    a: 'Сфотографируйте повреждения при получении и свяжитесь с нами в течение 24 часов. Мы заменим товар или вернём деньги.',
+    q: 'Откуда вы закупаете товар?',
+    a: 'Мы работаем напрямую с официальными дистрибьюторами и производителями. Все компоненты оригинальные, с сертификатами.',
   },
   {
-    q: 'Возможна ли доставка за рубеж?',
-    a: 'Да, доставляем в страны СНГ через DHL. Стоимость и сроки рассчитываются индивидуально. Напишите нам для уточнения.',
+    q: 'Какие сроки поставки?',
+    a: 'Сроки зависят от наличия товара у поставщиков. Обычно 7-21 день с момента оплаты. Точные сроки согласовываем в коммерческом предложении.',
   },
   {
-    q: 'Есть ли минимальная сумма заказа?',
-    a: 'Минимальная сумма заказа — 500 ₽. При заказе от 5 000 ₽ доставка по России бесплатна.',
+    q: 'Можно ли получить отсрочку платежа?',
+    a: 'Да, для постоянных клиентов возможна отсрочка платежа до 30 дней. Условия обсуждаются индивидуально.',
+  },
+  {
+    q: 'Работаете ли вы с физическими лицами?',
+    a: 'Нет, мы специализируемся на B2B поставках и работаем только с юридическими лицами и индивидуальными предпринимателями.',
+  },
+  {
+    q: 'Какие документы нужны для работы?',
+    a: 'Для оформления заказа нужны: название компании, ИНН, контактное лицо, телефон и email. Договор поставки заключаем при необходимости.',
+  },
+  {
+    q: 'Возможен ли возврат товара?',
+    a: 'Возврат возможен в течение 14 дней, если товар ненадлежащего качества или не соответствует заказу. Товар должен быть в оригинальной упаковке, без следов монтажа.',
   },
 ]
 
 export default function DeliveryPage() {
-  const [selectedCity, setSelectedCity] = useState('Москва')
-  const [orderDate, setOrderDate] = useState('today')
-
-  const calculateDelivery = () => {
-    const city = cities.find(c => c.name === selectedCity)
-    if (!city) return 'Выберите город'
-    
-    const addDays = orderDate === 'today' ? 0 : 1
-    const [min, max] = city.days.split('–').map(d => parseInt(d))
-    
-    return `${min + addDays}–${max + addDays} дней`
-  }
-
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
@@ -185,7 +151,7 @@ export default function DeliveryPage() {
             <nav className="flex items-center gap-1.5 text-xs text-gray-400">
               <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-gray-600">Доставка и оплата</span>
+              <span className="text-gray-600">Условия работы</span>
             </nav>
           </div>
         </div>
@@ -193,10 +159,10 @@ export default function DeliveryPage() {
         {/* Hero */}
         <div className="bg-white py-12">
           <div className="mx-auto max-w-[1400px] px-4">
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">Доставка и оплата</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">Условия работы и доставка</h1>
             <p className="text-gray-600 max-w-2xl text-lg">
-              Отправляем заказы по всей России и СНГ. Заказы до 15:00 — в тот же день.
-              Бесплатная доставка от 5 000 ₽.
+              Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа — {formatPrice(MIN_ORDER_AMOUNT)}.
+              Ответ на запрос в течение {REQUEST_PROCESSING_TIME}.
             </p>
           </div>
         </div>
@@ -206,9 +172,9 @@ export default function DeliveryPage() {
           {/* Key info banner */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
-              { icon: Clock, label: 'Отправка в день заказа', sub: 'при заказе до 15:00', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
-              { icon: Truck, label: 'Бесплатная доставка', sub: 'при заказе от 5 000 ₽', color: 'text-[#f97316]', bg: 'bg-orange-50' },
-              { icon: MapPin, label: 'Самовывоз бесплатно', sub: 'Москва, готовность за 2 часа', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+              { icon: Building, label: 'Только для бизнеса', sub: 'Юр. лица и ИП', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-[#f97316]', bg: 'bg-orange-50' },
+              { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-4 p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <div className={`flex size-12 items-center justify-center rounded-lg ${item.bg} shrink-0`}>
@@ -222,121 +188,11 @@ export default function DeliveryPage() {
             ))}
           </div>
 
-          {/* Delivery Calculator */}
+          {/* Workflow */}
           <section>
-            <div className="flex items-center gap-3 mb-6">
-              <Calculator size={24} className="text-[#0066cc]" />
-              <h2 className="text-2xl font-bold text-gray-900">Когда придёт мой заказ?</h2>
-            </div>
-            <div className="bg-gradient-to-br from-[#e8f4ff] to-[#f0f9ff] rounded-lg p-8 shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Ваш город</label>
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full h-11 px-4 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0066cc] focus:border-transparent"
-                  >
-                    {cities.map((city) => (
-                      <option key={city.name} value={city.name}>{city.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Дата заказа</label>
-                  <select
-                    value={orderDate}
-                    onChange={(e) => setOrderDate(e.target.value)}
-                    className="w-full h-11 px-4 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0066cc] focus:border-transparent"
-                  >
-                    <option value="today">Сегодня (до 15:00)</option>
-                    <option value="tomorrow">Завтра</option>
-                  </select>
-                </div>
-                <div className="flex items-end">
-                  <div className="w-full h-11 px-4 bg-white rounded-lg flex items-center justify-center border-2 border-[#0066cc]">
-                    <span className="text-lg font-bold text-[#0066cc]">{calculateDelivery()}</span>
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-gray-600 mt-4">
-                * Сроки указаны для доставки СДЭК. Точная стоимость рассчитывается при оформлении заказа.
-              </p>
-            </div>
-          </section>
-
-          {/* Comparison Table */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Сравнение способов доставки</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full bg-white rounded-lg shadow-sm overflow-hidden">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Способ доставки</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Сроки</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Стоимость</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">География</th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-gray-900">Трекинг</th>
-                    <th className="px-6 py-4 text-center text-sm font-bold text-gray-900">Страховка</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {deliveryMethods.map((method, i) => (
-                    <tr key={method.name} className={`${i !== deliveryMethods.length - 1 ? 'border-b border-gray-100' : ''} hover:bg-gray-50 transition-colors`}>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className={`flex size-10 items-center justify-center rounded ${method.bg}`}>
-                            <method.icon size={18} className={method.color} />
-                          </div>
-                          <span className="text-sm font-semibold text-gray-900">{method.name}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{method.time}</td>
-                      <td className="px-6 py-4 text-sm font-semibold text-[#0066cc]">{method.price}</td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{method.cities}</td>
-                      <td className="px-6 py-4 text-center">
-                        {method.tracking ? (
-                          <CheckCircle2 size={18} className="text-green-600 mx-auto" />
-                        ) : (
-                          <span className="text-gray-300">—</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        {method.insurance ? (
-                          <CheckCircle2 size={18} className="text-green-600 mx-auto" />
-                        ) : (
-                          <span className="text-gray-300">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Cities with pickup points */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Пункты выдачи СДЭК</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {cities.map((city) => (
-                <div key={city.name} className="bg-white rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-sm font-bold text-gray-900">{city.name}</h3>
-                    <MapPin size={16} className="text-[#0066cc] shrink-0" />
-                  </div>
-                  <div className="text-xs text-gray-500 mb-1">{city.days} дней</div>
-                  <div className="text-xs text-gray-400">{city.points} пунктов выдачи</div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Packaging infographic */}
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Как мы упаковываем заказы</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Как мы работаем</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {packagingSteps.map((step, i) => (
+              {workflowSteps.map((step, i) => (
                 <div key={i} className="relative">
                   <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow h-full">
                     <div className="flex items-center gap-3 mb-4">
@@ -348,7 +204,7 @@ export default function DeliveryPage() {
                     <h3 className="text-sm font-bold text-gray-900 mb-2">{step.title}</h3>
                     <p className="text-xs text-gray-600 leading-relaxed">{step.desc}</p>
                   </div>
-                  {i < packagingSteps.length - 1 && (
+                  {i < workflowSteps.length - 1 && (
                     <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gray-200 -translate-y-1/2" />
                   )}
                 </div>
@@ -356,13 +212,45 @@ export default function DeliveryPage() {
             </div>
           </section>
 
+          {/* Delivery options */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Варианты доставки</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {deliveryOptions.map((option) => (
+                <div key={option.name} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex size-12 items-center justify-center rounded-lg bg-[#e8f4ff]">
+                      <option.icon size={22} className="text-[#0066cc]" />
+                    </div>
+                    <h3 className="text-base font-bold text-gray-900">{option.name}</h3>
+                  </div>
+                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{option.description}</p>
+                  <ul className="space-y-2">
+                    {option.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-xs text-gray-700">
+                        <CheckCircle2 size={14} className="text-green-600 shrink-0 mt-0.5" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <strong>Важно:</strong> Стоимость и сроки доставки рассчитываются индивидуально и включаются в коммерческое предложение.
+                Мы организуем доставку до вашего склада или терминала ТК в вашем городе.
+              </p>
+            </div>
+          </section>
+
           {/* Payment methods */}
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Способы оплаты</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {paymentMethods.map((method) => (
-                <div key={method.name} className="flex flex-col gap-4 p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-start justify-between">
+                <div key={method.name} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-start justify-between mb-4">
                     <div className="flex size-12 items-center justify-center rounded-lg bg-[#e8f4ff]">
                       <method.icon size={20} className="text-[#0066cc]" />
                     </div>
@@ -370,10 +258,36 @@ export default function DeliveryPage() {
                       {method.badge}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold text-gray-900">{method.name}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{method.description}</p>
+                  <h3 className="text-base font-bold text-gray-900 mb-2">{method.name}</h3>
+                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{method.description}</p>
+                  <ul className="space-y-2">
+                    {method.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-xs text-gray-700">
+                        <CheckCircle2 size={14} className="text-green-600 shrink-0 mt-0.5" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
+            </div>
+          </section>
+
+          {/* Documents */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Документы</h2>
+            <div className="bg-white rounded-lg shadow-sm p-8">
+              <p className="text-sm text-gray-600 mb-6">
+                Мы предоставляем полный пакет документов для бухгалтерии. Все документы оформляются в соответствии с требованиями законодательства РФ.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {documents.map((doc) => (
+                  <div key={doc} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                    <FileText size={18} className="text-[#0066cc] shrink-0 mt-0.5" />
+                    <span className="text-sm text-gray-900">{doc}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -390,9 +304,9 @@ export default function DeliveryPage() {
                   <ul className="space-y-3">
                     {[
                       'Товар ненадлежащего качества',
-                      'Товар не соответствует описанию',
-                      'Получен не тот товар',
-                      'Повреждение при доставке',
+                      'Товар не соответствует заказу',
+                      'Брак или дефект компонента',
+                      'Повреждение при транспортировке',
                     ].map((item) => (
                       <li key={item} className="flex items-start gap-3 text-sm text-gray-700">
                         <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />
@@ -408,7 +322,7 @@ export default function DeliveryPage() {
                   </h3>
                   <ul className="space-y-3">
                     {[
-                      'Товар надлежащего качества (кроме дистанционной продажи)',
+                      'Товар надлежащего качества',
                       'Товар со следами монтажа или пайки',
                       'Нарушена заводская упаковка',
                       'Прошло более 14 дней с момента получения',
@@ -422,7 +336,8 @@ export default function DeliveryPage() {
                 </div>
               </div>
               <div className="mt-6 pt-6 border-t border-gray-100 text-sm text-gray-600">
-                Для оформления возврата свяжитесь с нами по телефону или email в течение 14 дней с момента получения заказа.
+                Для оформления возврата свяжитесь с нами в течение 14 дней с момента получения заказа.
+                Возврат денежных средств осуществляется в течение 10 рабочих дней после получения товара.
               </div>
             </div>
           </section>
@@ -447,22 +362,22 @@ export default function DeliveryPage() {
           <section className="bg-gradient-to-br from-[#e8f4ff] to-[#f0f9ff] rounded-lg p-8 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Остались вопросы?</h2>
-                <p className="text-sm text-gray-600">Наши менеджеры готовы помочь пн–пт с 9:00 до 18:00</p>
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Готовы начать работу?</h2>
+                <p className="text-sm text-gray-600">Отправьте запрос на коммерческое предложение или свяжитесь с нами напрямую</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-                <a
-                  href="tel:+78005553535"
+                <Link
+                  href="/catalog"
                   className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-bold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded-lg transition-all shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]"
+                >
+                  Выбрать товары
+                </Link>
+                <a
+                  href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
+                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-lg transition-all shadow-sm"
                 >
                   <Phone size={16} />
                   Позвонить
-                </a>
-                <a
-                  href="mailto:info@electromagaz.ru"
-                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-lg transition-all shadow-sm"
-                >
-                  Написать
                 </a>
               </div>
             </div>
