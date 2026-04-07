@@ -250,8 +250,8 @@ export default function ProductPage({ params }: PageProps) {
                   }`}
                 >
                   {addedToCart
-                    ? <><Check size={16} /> Добавлено в корзину!</>
-                    : <><ShoppingCart size={16} /> В корзину · {formatPrice(product.price * quantity)}</>
+                    ? <><Check size={16} /> Добавлено в список!</>
+                    : <><ShoppingCart size={16} /> Добавить в запрос · {formatPrice(product.price * quantity)}</>
                   }
                 </button>
               </div>
@@ -259,9 +259,9 @@ export default function ProductPage({ params }: PageProps) {
               {/* Trust badges */}
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { icon: Truck,      label: 'Отправка сегодня', sub: 'до 15:00',       color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+                  { icon: Truck,      label: 'Под заказ', sub: 'от 200 000 ₽',       color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
                   { icon: Shield,     label: 'Оригинал',         sub: 'с сертификатом', color: 'text-[#f97316]', bg: 'bg-[#e8f4ff]' },
-                  { icon: RotateCcw,  label: 'Возврат',          sub: '14 дней',        color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+                  { icon: RotateCcw,  label: 'КП за 24 часа',          sub: 'быстрый ответ',        color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
                 ].map((b) => (
                   <div key={b.label} className={`flex flex-col items-center gap-1 p-3 ${b.bg} rounded text-center`}>
                     <b.icon size={16} className={b.color} />
