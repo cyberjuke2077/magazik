@@ -135,7 +135,7 @@ function ProductListRow({ product }: { product: Product }) {
               : 'bg-gray-100 text-gray-400 cursor-not-allowed'
           }`}
         >
-          {added ? <><Check size={13} />Добавлено</> : inCart ? <><Check size={13} />В корзине</> : <><ShoppingCart size={13} />В корзину</>}
+          {added ? <><Check size={13} />Добавлено</> : inCart ? <><Check size={13} />В списке</> : <><ShoppingCart size={13} />В запрос</>}
         </button>
       </div>
     </div>
