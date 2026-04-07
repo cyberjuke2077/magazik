@@ -276,7 +276,6 @@ export default function BrandsPage() {
   }, [search, activeLetter])
 
   const totalPositions = brands.reduce((s, b) => s + b.productCount, 0)
-  const chineseCount = brands.filter((b) => b.country === 'Китай').length
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -307,7 +306,6 @@ export default function BrandsPage() {
                 </span>
               </h1>
               <p className="text-sm text-[#78716c] mt-1">
-                ~{Math.round((chineseCount / brands.length) * 100)}% китайских производителей ·{' '}
                 {(totalPositions / 1000).toFixed(0)}к+ позиций в каталоге
               </p>
             </div>
