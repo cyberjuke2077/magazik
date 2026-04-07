@@ -239,12 +239,12 @@ function LogoCard({
       className={`group relative flex items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5 ${className}`}
     >
       {brand.logo ? (
-        <div className="relative w-full h-full flex items-center justify-center p-5">
+        <div className="relative w-full h-full flex items-center justify-center p-6">
           <Image
             src={brand.logo}
             alt={brand.name}
             fill
-            className="object-contain p-5 transition-transform duration-200 group-hover:scale-105"
+            className="object-contain transition-transform duration-300 group-hover:scale-110"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
           />
         </div>
@@ -321,8 +321,8 @@ export default function BrandsPage() {
 
             {/*
               Mosaic layout:
-              Row 1: large(2col×2row) | medium | medium | medium | medium
-              Row 2:                  | medium | medium | medium | medium
+              Row 1: large(2col×2row) | medium | medium | Xilinx(2col×2row)
+              Row 2:                  | medium | medium |
               Row 3: medium | medium  | large(2col×2row) | medium | medium
               Row 4: medium | medium  |                  | medium | medium
             */}
@@ -342,9 +342,9 @@ export default function BrandsPage() {
               <LogoCard brand={brands.find((b) => b.id === 'worldsemi')!} className="col-span-1 row-span-1" />
               {/* WCH */}
               <LogoCard brand={brands.find((b) => b.id === 'wch')!} className="col-span-1 row-span-1" />
-              {/* Yageo — large */}
+              {/* Xilinx — large (НОВЫЙ, ЗАМЕТНЫЙ) */}
               <LogoCard
-                brand={brands.find((b) => b.id === 'yageo')!}
+                brand={brands.find((b) => b.id === 'xilinx')!}
                 className="col-span-2 row-span-2"
               />
               {/* Hi-Link */}
@@ -357,21 +357,21 @@ export default function BrandsPage() {
               <LogoCard brand={brands.find((b) => b.id === 'murata')!} className="col-span-1 row-span-1" />
               {/* STMicro */}
               <LogoCard brand={brands.find((b) => b.id === 'stmicroelectronics')!} className="col-span-1 row-span-1" />
+              {/* Yageo — large */}
+              <LogoCard
+                brand={brands.find((b) => b.id === 'yageo')!}
+                className="col-span-2 row-span-2"
+              />
               {/* Winbond */}
               <LogoCard brand={brands.find((b) => b.id === 'winbond')!} className="col-span-1 row-span-1" />
               {/* Infineon */}
               <LogoCard brand={brands.find((b) => b.id === 'infineon')!} className="col-span-1 row-span-1" />
-              {/* Texas Instruments — large */}
-              <LogoCard
-                brand={brands.find((b) => b.id === 'texas-instruments')!}
-                className="col-span-2 row-span-2"
-              />
 
               {/* Row 4 */}
               {/* Holtek */}
               <LogoCard brand={brands.find((b) => b.id === 'holtek')!} className="col-span-1 row-span-1" />
-              {/* Sharp */}
-              <LogoCard brand={brands.find((b) => b.id === 'sharp')!} className="col-span-1 row-span-1" />
+              {/* Texas Instruments */}
+              <LogoCard brand={brands.find((b) => b.id === 'texas-instruments')!} className="col-span-1 row-span-1" />
               {/* Vishay */}
               <LogoCard brand={brands.find((b) => b.id === 'vishay')!} className="col-span-1 row-span-1" />
               {/* Analog Devices */}
@@ -425,7 +425,7 @@ export default function BrandsPage() {
                   <Link
                     key={brand.id}
                     href={`/catalog?brand=${brand.id}`}
-                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-4 h-24 overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5"
+                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-5 h-28 overflow-hidden transition-all duration-300 hover:border-[#0066cc]/30 hover:shadow-lg hover:-translate-y-1"
                   >
                     {brand.logo ? (
                       <div className="relative w-full h-full">
@@ -433,7 +433,7 @@ export default function BrandsPage() {
                           src={brand.logo}
                           alt={brand.name}
                           fill
-                          className="object-contain transition-transform duration-200 group-hover:scale-105"
+                          className="object-contain transition-transform duration-300 group-hover:scale-110"
                           sizes="(max-width: 640px) 50vw, 16vw"
                         />
                       </div>
