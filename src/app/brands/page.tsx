@@ -226,6 +226,37 @@ const brands: Brand[] = [
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
+function LogoCard({
+  brand,
+  className = '',
+}: {
+  brand: Brand
+  className?: string
+}) {
+  return (
+    <Link
+      href={`/catalog?brand=${brand.id}`}
+      className={`group relative flex items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5 ${className}`}
+    >
+      {brand.logo ? (
+        <div className="relative w-full h-full flex items-center justify-center p-6">
+          <Image
+            src={brand.logo}
+            alt={brand.name}
+            fill
+            className="object-contain transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+          />
+        </div>
+      ) : (
+        <span className="text-lg font-black text-[#1c1917] group-hover:text-[#0066cc] transition-colors px-4 text-center">
+          {brand.name}
+        </span>
+      )}
+    </Link>
+  )
+}
+
 export default function BrandsPage() {
   const [search, setSearch] = useState('')
   const [activeLetter, setActiveLetter] = useState<string | null>(null)
@@ -276,50 +307,75 @@ export default function BrandsPage() {
                 </span>
               </h1>
               <p className="text-sm text-[#78716c] mt-1">
+                ~{Math.round((chineseCount / brands.length) * 100)}% китайских производителей ·{' '}
                 {(totalPositions / 1000).toFixed(0)}к+ позиций в каталоге
               </p>
             </div>
           </div>
 
-          {/* ── Top brands grid ── */}
+          {/* ── Top brands mosaic ── */}
           <section>
             <h2 className="text-base font-bold text-[#1c1917] mb-5">
-              Популярные бренды
+              Топ {featuredBrands.length} брендов
             </h2>
 
-            {/* Квадратная сетка 4x4 */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {featuredBrands.map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={`/catalog?brand=${brand.id}`}
-                  className="group relative aspect-square bg-white border-2 border-gray-100 rounded-xl p-6 overflow-hidden transition-all duration-300 hover:border-[#0066cc] hover:shadow-xl hover:-translate-y-1"
-                >
-                  {brand.logo ? (
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <Image
-                        src={brand.logo}
-                        alt={brand.name}
-                        fill
-                        className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center h-full">
-                      <span className="text-lg font-black text-[#1c1917] group-hover:text-[#0066cc] transition-colors text-center">
-                        {brand.name}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {/* Hover overlay с информацией */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                    <div className="text-white text-sm font-semibold mb-1">{brand.name}</div>
-                    <div className="text-white/80 text-xs">{brand.productCount.toLocaleString()} товаров</div>
-                  </div>
-                </Link>
-              ))}
+            {/*
+              Mosaic layout:
+              Row 1: large(2col×2row) | medium | medium | Xilinx(2col×2row)
+              Row 2:                  | medium | medium |
+              Row 3: medium | medium  | large(2col×2row) | medium | medium
+              Row 4: medium | medium  |                  | medium | medium
+            */}
+            <div
+              className="grid gap-3"
+              style={{
+                gridTemplateColumns: 'repeat(6, 1fr)',
+                gridTemplateRows: 'repeat(4, 120px)',
+              }}
+            >
+              {/* Espressif — large */}
+              <LogoCard
+                brand={brands.find((b) => b.id === 'espressif')!}
+                className="col-span-2 row-span-2"
+              />
+              {/* WorldSemi */}
+              <LogoCard brand={brands.find((b) => b.id === 'worldsemi')!} className="col-span-1 row-span-1" />
+              {/* WCH */}
+              <LogoCard brand={brands.find((b) => b.id === 'wch')!} className="col-span-1 row-span-1" />
+              {/* Xilinx — large (НОВЫЙ, ЗАМЕТНЫЙ) */}
+              <LogoCard
+                brand={brands.find((b) => b.id === 'xilinx')!}
+                className="col-span-2 row-span-2"
+              />
+              {/* Hi-Link */}
+              <LogoCard brand={brands.find((b) => b.id === 'hilink')!} className="col-span-1 row-span-1" />
+              {/* GigaDevice */}
+              <LogoCard brand={brands.find((b) => b.id === 'gigadevice')!} className="col-span-1 row-span-1" />
+
+              {/* Row 3 */}
+              {/* Murata */}
+              <LogoCard brand={brands.find((b) => b.id === 'murata')!} className="col-span-1 row-span-1" />
+              {/* STMicro */}
+              <LogoCard brand={brands.find((b) => b.id === 'stmicroelectronics')!} className="col-span-1 row-span-1" />
+              {/* Yageo — large */}
+              <LogoCard
+                brand={brands.find((b) => b.id === 'yageo')!}
+                className="col-span-2 row-span-2"
+              />
+              {/* Winbond */}
+              <LogoCard brand={brands.find((b) => b.id === 'winbond')!} className="col-span-1 row-span-1" />
+              {/* Infineon */}
+              <LogoCard brand={brands.find((b) => b.id === 'infineon')!} className="col-span-1 row-span-1" />
+
+              {/* Row 4 */}
+              {/* Holtek */}
+              <LogoCard brand={brands.find((b) => b.id === 'holtek')!} className="col-span-1 row-span-1" />
+              {/* Texas Instruments */}
+              <LogoCard brand={brands.find((b) => b.id === 'texas-instruments')!} className="col-span-1 row-span-1" />
+              {/* Vishay */}
+              <LogoCard brand={brands.find((b) => b.id === 'vishay')!} className="col-span-1 row-span-1" />
+              {/* Analog Devices */}
+              <LogoCard brand={brands.find((b) => b.id === 'analog-devices')!} className="col-span-1 row-span-1" />
             </div>
           </section>
 
@@ -364,29 +420,27 @@ export default function BrandsPage() {
 
             {/* Brand grid */}
             {filteredBrands.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {filteredBrands.map((brand) => (
                   <Link
                     key={brand.id}
                     href={`/catalog?brand=${brand.id}`}
-                    className="group relative aspect-square bg-white border-2 border-gray-100 rounded-lg p-5 overflow-hidden transition-all duration-300 hover:border-[#0066cc] hover:shadow-lg hover:-translate-y-1"
+                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-5 h-28 overflow-hidden transition-all duration-300 hover:border-[#0066cc]/30 hover:shadow-lg hover:-translate-y-1"
                   >
                     {brand.logo ? (
-                      <div className="relative w-full h-full flex items-center justify-center">
+                      <div className="relative w-full h-full">
                         <Image
                           src={brand.logo}
                           alt={brand.name}
                           fill
-                          className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
-                          sizes="(max-width: 640px) 50vw, 20vw"
+                          className="object-contain transition-transform duration-300 group-hover:scale-105"
+                          sizes="(max-width: 640px) 50vw, 16vw"
                         />
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center h-full">
-                        <span className="text-sm font-bold text-[#1c1917] group-hover:text-[#0066cc] transition-colors text-center leading-tight">
-                          {brand.name}
-                        </span>
-                      </div>
+                      <span className="text-sm font-bold text-[#1c1917] group-hover:text-[#0066cc] transition-colors text-center leading-tight">
+                        {brand.name}
+                      </span>
                     )}
                   </Link>
                 ))}
