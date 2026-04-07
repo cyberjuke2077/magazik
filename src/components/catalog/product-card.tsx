@@ -173,11 +173,11 @@ export function ProductCard({ product }: ProductCardProps) {
               </>
             ) : inCart ? (
               <>
-                <Check size={13} />В корзине
+                <Check size={13} />В списке
               </>
             ) : (
               <>
-                <ShoppingCart size={13} />В корзину
+                <ShoppingCart size={13} />В запрос
               </>
             )}
           </button>
