@@ -14,9 +14,11 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
+import { OrderProgress } from '@/components/ui/order-progress'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
 import { formatPrice } from '@/lib/utils'
+import { MIN_ORDER_AMOUNT } from '@/lib/constants'
 
 export default function CartPage() {
   const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
@@ -96,7 +98,7 @@ export default function CartPage() {
               <nav className="flex items-center gap-1.5 text-xs text-gray-400">
                 <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
                 <ChevronRight size={10} />
-                <span className="text-gray-600">Корзина</span>
+                <span className="text-gray-600">Список запроса</span>
               </nav>
             </div>
           </div>
@@ -105,14 +107,14 @@ export default function CartPage() {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded border border-gray-200 bg-gray-50 mb-6">
               <ShoppingCart size={36} className="text-gray-300" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Корзина пуста</h1>
+            <h1 className="text-xl font-bold text-gray-900 mb-2">Список запроса пуст</h1>
             <p className="text-sm text-gray-500 mb-8 max-w-xs mx-auto leading-relaxed">
-              Для выбора используйте каталог товаров или поиск.
-              Чтобы добавить товар в корзину, нажмите кнопку «В корзину».
+              Добавьте товары в список для формирования запроса на коммерческое предложение.
+              Минимальная сумма заказа — 200 000 ₽.
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0066cc] rounded transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
             >
               Перейти в каталог
               <ArrowRight size={14} />
@@ -136,7 +138,7 @@ export default function CartPage() {
             <nav className="flex items-center gap-1.5 text-xs text-gray-400">
               <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-gray-600">Корзина</span>
+              <span className="text-gray-600">Список запроса</span>
             </nav>
           </div>
         </div>
@@ -145,7 +147,7 @@ export default function CartPage() {
           {/* Page title */}
           <div className="flex items-center justify-between mb-5">
             <h1 className="text-xl font-bold text-gray-900">
-              Корзина
+              Список запроса
               <span className="ml-2 text-base font-normal text-gray-400">
                 ({totalItems} {totalItems === 1 ? 'товар' : totalItems < 5 ? 'товара' : 'товаров'})
               </span>
@@ -155,7 +157,7 @@ export default function CartPage() {
               className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-500 transition-colors"
             >
               <Trash2 size={15} />
-              Очистить корзину
+              Очистить список
             </button>
           </div>
 
@@ -223,7 +225,7 @@ export default function CartPage() {
                   href="/catalog"
                   className="inline-flex items-center gap-1.5 text-sm text-[#0066cc] hover:text-[#0066cc] transition-colors"
                 >
-                  ← Продолжить покупки
+                  ← Продолжить выбор товаров
                 </Link>
               </div>
             </div>
@@ -236,9 +238,15 @@ export default function CartPage() {
                   <span className="text-sm font-semibold text-gray-900">Итого</span>
                 </div>
 
-                <div className="px-4 py-4 space-y-2.5">
+                <div className="px-4 py-4 space-y-3">
+                  {/* Order Progress */}
+                  <OrderProgress 
+                    currentAmount={totalPrice} 
+                    minAmount={MIN_ORDER_AMOUNT} 
+                  />
+
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Товаров в корзине:</span>
+                    <span className="text-gray-500">Товаров в списке:</span>
                     <span className="font-medium text-gray-900">{totalItems} шт.</span>
                   </div>
 
@@ -251,30 +259,53 @@ export default function CartPage() {
 
                   <div className="border-t border-gray-100 pt-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Сумма заказа:</span>
+                      <span className="text-sm text-gray-500">Сумма запроса:</span>
                       <span className="text-lg font-bold text-gray-900">{formatPrice(totalPrice)}</span>
                     </div>
                   </div>
 
-                  <p className="text-xs text-gray-400 leading-relaxed">
-                    Стоимость доставки рассчитывается при оформлении заказа
-                  </p>
+                  {totalPrice < MIN_ORDER_AMOUNT && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
+                      <p className="text-xs text-yellow-800 leading-relaxed">
+                        <strong>Минимальная сумма заказа:</strong> {formatPrice(MIN_ORDER_AMOUNT)}
+                      </p>
+                      <p className="text-xs text-yellow-700 mt-1">
+                        Мы работаем только с оптовыми заказами от 200 000 ₽
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="px-4 pb-4">
-                  {user && !isVerified ? (
+                  {totalPrice < MIN_ORDER_AMOUNT ? (
                     <div className="space-y-3">
-                      <div className="flex items-start gap-2 p-3 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700">
-                        <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-gray-500" />
+                      <div className="flex items-start gap-2 p-3 bg-orange-50 border border-orange-200 rounded text-sm text-orange-800">
+                        <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
                         <span>
-                          Для оформления заказа необходимо подтверждение аккаунта
+                          Добавьте товаров ещё на {formatPrice(MIN_ORDER_AMOUNT - totalPrice)} для отправки запроса
                         </span>
                       </div>
                       <button
                         disabled
                         className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-gray-400 bg-gray-100 rounded cursor-not-allowed"
                       >
-                        Оформить заказ
+                        Отправить запрос на КП
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  ) : user && !isVerified ? (
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2 p-3 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700">
+                        <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-gray-500" />
+                        <span>
+                          Для отправки запроса необходимо подтверждение аккаунта
+                        </span>
+                      </div>
+                      <button
+                        disabled
+                        className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-gray-400 bg-gray-100 rounded cursor-not-allowed"
+                      >
+                        Отправить запрос на КП
                         <ArrowRight size={14} />
                       </button>
                     </div>
@@ -283,7 +314,7 @@ export default function CartPage() {
                       href="/checkout"
                       className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
                     >
-                      Оформить заказ
+                      Отправить запрос на КП
                       <ArrowRight size={14} />
                     </Link>
                   )}
@@ -293,11 +324,15 @@ export default function CartPage() {
                 <div className="border-t border-gray-100 px-4 py-3 space-y-2">
                   <div className="flex items-start gap-2 text-xs text-gray-500">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
-                    <span>Доставка по всей России</span>
+                    <span>Работаем с юридическими лицами и ИП</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs text-gray-500">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
-                    <span>Оптовые цены от 10 шт.</span>
+                    <span>Минимальный заказ от 200 000 ₽</span>
+                  </div>
+                  <div className="flex items-start gap-2 text-xs text-gray-500">
+                    <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
+                    <span>Ответ на запрос в течение 24 часов</span>
                   </div>
                 </div>
               </div>
