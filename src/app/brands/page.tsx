@@ -320,17 +320,18 @@ export default function BrandsPage() {
             </h2>
 
             {/*
-              Mosaic layout:
+              Mosaic layout (расширенная):
               Row 1: large(2col×2row) | medium | medium | Xilinx(2col×2row)
               Row 2:                  | medium | medium |
               Row 3: medium | medium  | large(2col×2row) | medium | medium
               Row 4: medium | medium  |                  | medium | medium
+              Row 5: medium | medium  | medium | medium | medium | medium
             */}
             <div
               className="grid gap-3"
               style={{
                 gridTemplateColumns: 'repeat(6, 1fr)',
-                gridTemplateRows: 'repeat(4, 120px)',
+                gridTemplateRows: 'repeat(5, 120px)',
               }}
             >
               {/* Espressif — large */}
@@ -368,14 +369,22 @@ export default function BrandsPage() {
               <LogoCard brand={brands.find((b) => b.id === 'infineon')!} className="col-span-1 row-span-1" />
 
               {/* Row 4 */}
-              {/* Sharp */}
-              <LogoCard brand={brands.find((b) => b.id === 'sharp')!} className="col-span-1 row-span-1" />
+              {/* Holtek */}
+              <LogoCard brand={brands.find((b) => b.id === 'holtek')!} className="col-span-1 row-span-1" />
               {/* Texas Instruments */}
               <LogoCard brand={brands.find((b) => b.id === 'texas-instruments')!} className="col-span-1 row-span-1" />
               {/* Vishay */}
               <LogoCard brand={brands.find((b) => b.id === 'vishay')!} className="col-span-1 row-span-1" />
               {/* Analog Devices */}
               <LogoCard brand={brands.find((b) => b.id === 'analog-devices')!} className="col-span-1 row-span-1" />
+
+              {/* Row 5 - новый ряд */}
+              {/* Sharp */}
+              <LogoCard brand={brands.find((b) => b.id === 'sharp')!} className="col-span-1 row-span-1" />
+              {/* GCT */}
+              <LogoCard brand={brands.find((b) => b.id === 'gct')!} className="col-span-1 row-span-1" />
+              {/* Songle */}
+              <LogoCard brand={brands.find((b) => b.id === 'songle')!} className="col-span-1 row-span-1" />
             </div>
           </section>
 
