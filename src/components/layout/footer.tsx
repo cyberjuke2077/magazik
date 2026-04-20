@@ -157,6 +157,22 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* SHK Dev Copyright */}
+      <div className="text-center py-5 bg-gray-50 border-t border-gray-100">
+        <div className="text-sm text-gray-600">
+          Разработано в{' '}
+          <a 
+            href="https://sharashka.onrender.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#0066cc] font-semibold hover:text-[#0052a3] transition-colors"
+          >
+            SHK Dev
+          </a>
+          {' '}© 2026
+        </div>
+      </div>
     </footer>
   )
 }
