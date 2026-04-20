@@ -149,28 +149,26 @@ export function Footer() {
 
       {/* Bottom */}
       <div className="border-t border-gray-100">
-        <div className="mx-auto max-w-[1400px] px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-400">
-          <span>© 2024 Electromagaz. Все права защищены.</span>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-gray-600 transition-colors">Конфиденциальность</Link>
-            <Link href="/terms"   className="hover:text-gray-600 transition-colors">Условия</Link>
+        <div className="mx-auto max-w-[1400px] px-4 py-5">
+          <div className="flex flex-col items-center justify-center gap-2 text-center">
+            <span className="text-xs text-gray-400">© 2024 Electromagaz. Все права защищены.</span>
+            <div className="text-sm text-gray-600">
+              Разработано в{' '}
+              <a 
+                href="https://sharashka.onrender.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#0066cc] font-semibold hover:text-[#0052a3] transition-colors"
+              >
+                SHK Dev
+              </a>
+              {' '}© 2026
+            </div>
+            <div className="flex items-center gap-4 text-xs text-gray-400 mt-1">
+              <Link href="/privacy" className="hover:text-gray-600 transition-colors">Конфиденциальность</Link>
+              <Link href="/terms"   className="hover:text-gray-600 transition-colors">Условия</Link>
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* SHK Dev Copyright */}
-      <div className="text-center py-5 bg-gray-50 border-t border-gray-100">
-        <div className="text-sm text-gray-600">
-          Разработано в{' '}
-          <a 
-            href="https://sharashka.onrender.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-[#0066cc] font-semibold hover:text-[#0052a3] transition-colors"
-          >
-            SHK Dev
-          </a>
-          {' '}© 2026
         </div>
       </div>
     </footer>
