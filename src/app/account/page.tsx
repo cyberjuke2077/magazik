@@ -26,6 +26,10 @@ import {
   FileText,
   Bell,
   Clock,
+  ShoppingCart,
+  FolderTree,
+  Factory,
+  Download,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
@@ -35,9 +39,13 @@ import { AdminDashboard } from '@/components/admin/admin-dashboard'
 import { AdminOrders } from '@/components/admin/admin-orders'
 import { AdminAnalytics } from '@/components/admin/admin-analytics'
 import { AdminUsers } from '@/components/admin/admin-users'
+import { AdminProducts } from '@/components/admin/admin-products'
+import { AdminCategories } from '@/components/admin/admin-categories'
+import { AdminManufacturers } from '@/components/admin/admin-manufacturers'
+import { AdminImport } from '@/components/admin/admin-import'
 
 type AuthTab = 'login' | 'register'
-type AdminTab = 'dashboard' | 'orders' | 'analytics' | 'users'
+type AdminTab = 'dashboard' | 'orders' | 'analytics' | 'users' | 'products' | 'categories' | 'manufacturers' | 'import'
 
 // Mock recent orders
 const recentOrders = [
@@ -308,10 +316,10 @@ export default function AccountPage() {
             <div className="flex gap-6">
               {/* Admin Sidebar */}
               <div className="w-64 shrink-0">
-                <div className="bg-white border border-gray-200 rounded p-4 mb-4">
+                <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center">
-                      <User size={20} className="text-gray-600" />
+                    <div className="w-10 h-10 bg-[#0066cc] rounded flex items-center justify-center">
+                      <User size={18} className="text-white" />
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">{user.name}</div>
@@ -320,12 +328,12 @@ export default function AccountPage() {
                   </div>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded overflow-hidden">
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setAdminTab('dashboard')}
                     className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
                       adminTab === 'dashboard'
-                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        ? 'bg-[#0066cc] text-white'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -336,7 +344,7 @@ export default function AccountPage() {
                     onClick={() => setAdminTab('orders')}
                     className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
                       adminTab === 'orders'
-                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        ? 'bg-[#0066cc] text-white'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -347,7 +355,7 @@ export default function AccountPage() {
                     onClick={() => setAdminTab('analytics')}
                     className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
                       adminTab === 'analytics'
-                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        ? 'bg-[#0066cc] text-white'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
@@ -358,19 +366,68 @@ export default function AccountPage() {
                     onClick={() => setAdminTab('users')}
                     className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
                       adminTab === 'users'
-                        ? 'bg-blue-50 text-[#0066cc] border-l-2 border-[#0066cc]'
+                        ? 'bg-[#0066cc] text-white'
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
                     <User size={18} />
                     Пользователи
                   </button>
+                  
+                  <div className="border-t border-gray-200 mt-2 pt-2">
+                    <div className="px-4 py-2 text-xs font-semibold text-gray-500">КАТАЛОГ</div>
+                    <button
+                      onClick={() => setAdminTab('products')}
+                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                        adminTab === 'products'
+                          ? 'bg-[#0066cc] text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ShoppingCart size={18} />
+                      Товары
+                    </button>
+                    <button
+                      onClick={() => setAdminTab('categories')}
+                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                        adminTab === 'categories'
+                          ? 'bg-[#0066cc] text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <FolderTree size={18} />
+                      Категории
+                    </button>
+                    <button
+                      onClick={() => setAdminTab('manufacturers')}
+                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                        adminTab === 'manufacturers'
+                          ? 'bg-[#0066cc] text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Factory size={18} />
+                      Производители
+                    </button>
+                    <button
+                      onClick={() => setAdminTab('import')}
+                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
+                        adminTab === 'import'
+                          ? 'bg-[#0066cc] text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Download size={18} />
+                      Импорт
+                    </button>
+                  </div>
+                  
                   <button
                     onClick={() => {
                       logout()
                       window.location.reload()
                     }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100"
+                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-200"
                   >
                     <LogOut size={18} />
                     Выйти
@@ -384,6 +441,10 @@ export default function AccountPage() {
                 {adminTab === 'orders' && <AdminOrders />}
                 {adminTab === 'analytics' && <AdminAnalytics />}
                 {adminTab === 'users' && <AdminUsers />}
+                {adminTab === 'products' && <AdminProducts />}
+                {adminTab === 'categories' && <AdminCategories />}
+                {adminTab === 'manufacturers' && <AdminManufacturers />}
+                {adminTab === 'import' && <AdminImport />}
               </div>
             </div>
           </div>

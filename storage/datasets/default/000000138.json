@@ -1,0 +1,15 @@
+{
+	"slug": "lm3671mf-3.3-nopb-dc-dc-preobrazovatel-texas-instruments-9050000834",
+	"name": "LM3671MF-3.3/NOPB, DC-DC преобразователь 3.3В 600мА [SOT-23-5]",
+	"partNumber": "LM3671MF-3.3/NOPB",
+	"sku": "9050000834",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Линейка высокоинтегрированныx и высокоэффективныx импульсныx регуляторов напряжения Texas Instruments включает в себя повышающие (Boost), понижающие (Buck), повышающие /понижающей мощности (Boost/Buck) и инвертирующие типы, что обеспечивает эффективные решения для любого применения регуляторов постоянного напряжения.",
+	"weight": 0.08,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

@@ -1,0 +1,15 @@
+{
+	"slug": "lm5001max-nopb-vysokovoltnyy-texas-instruments-9000228179",
+	"name": "LM5001MAX/NOPB, Высоковольтный переключающий регулятор, 3.1…75В, 0.8А, 0.05…1.5МГц [SOIC-8]",
+	"partNumber": "LM5001MAX/NOPB",
+	"sku": "9000228179",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Линейка высокоинтегрированныx и высокоэффективныx импульсныx регуляторов напряжения Texas Instruments включает в себя повышающие (Boost), понижающие (Buck), повышающие /понижающей мощности (Boost/Buck) и инвертирующие типы, что обеспечивает эффективные решения для любого применения регуляторов постоянного напряжения.",
+	"weight": 0.15,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

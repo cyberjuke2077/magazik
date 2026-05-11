@@ -13,23 +13,29 @@ def load_excel_products(excel_dir: str) -> list:
     
     for excel_file in excel_path.glob("*.xlsx"):
         print(f"Loading {excel_file.name}...")
-        wb = load_workbook(excel_file, read_only=True)
-        ws = wb.active
-        
-        # Skip header row
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            if row[0]:  # Part number exists
-                part_number = str(row[0]).strip()
-                manufacturer = str(row[1]).strip() if row[1] else ""
-                package = str(row[2]).strip() if row[2] else None
-                
-                products.append({
-                    'part_number': part_number,
-                    'manufacturer': manufacturer,
-                    'package': package
-                })
-        
-        wb.close()
+        try:
+            # Don't use read_only to avoid filter parsing issues
+            wb = load_workbook(excel_file, data_only=True)
+            ws = wb.active
+            
+            # Skip header row
+            for row in ws.iter_rows(min_row=2, values_only=True):
+                if row and row[0]:  # Part number exists
+                    part_number = str(row[0]).strip()
+                    manufacturer = str(row[1]).strip() if len(row) > 1 and row[1] else ""
+                    package = str(row[2]).strip() if len(row) > 2 and row[2] else None
+                    
+                    products.append({
+                        'part_number': part_number,
+                        'manufacturer': manufacturer,
+                        'package': package
+                    })
+            
+            wb.close()
+            print(f"  Loaded {excel_file.name}: {len([p for p in products if p])} products")
+        except Exception as e:
+            print(f"  ⚠️  Error loading {excel_file.name}: {e}")
+            continue
     
     return products
 

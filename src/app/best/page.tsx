@@ -4,12 +4,11 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { ProductCard } from '@/components/catalog/product-card'
-import { products } from '@/lib/mock-data'
+import { getProducts } from '@/lib/queries/products'
 
-// "Лучшие предложения" — товары с оптовой ценой (скидкой)
-const bestProducts = products.filter((p) => p.priceWholesale).slice(0, 20)
-
-export default function BestPage() {
+export default async function BestPage() {
+  const products = await getProducts()
+  const bestProducts = products.filter((p) => p.priceWholesale).slice(0, 20)
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />

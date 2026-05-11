@@ -1,0 +1,15 @@
+{
+	"slug": "icl7660scpaz-invertiruyuschiy-preobrazovatel-intersil-4719",
+	"name": "ICL7660SCPAZ, Инвертирующий преобразователь напряжения [DIP-8]",
+	"partNumber": "ICL7660SCPAZ",
+	"sku": "4719",
+	"manufacturer": "Intersil",
+	"manufacturerSlug": "intersil",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Конденсаторный преобразователь с коммутацией ICL7660",
+	"weight": 1,
+	"specifications": "{}",
+	"datasheets": "[null,null]",
+	"images": "[]"
+}

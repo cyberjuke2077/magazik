@@ -1,0 +1,15 @@
+{
+	"slug": "lm5017mrx-nopb-dc-dc-preobrazovatel-adj-texas-instruments-9000217776",
+	"name": "LM5017MRX/NOPB, DC-DC преобразователь ADJ 600мА [SO-8]",
+	"partNumber": "LM5017MRX/NOPB",
+	"sku": "9000217776",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Преобразователь постоянного тока понижающий вход 9-100В, выход 1.25-90В/ 06А синхронный",
+	"weight": 0.15,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

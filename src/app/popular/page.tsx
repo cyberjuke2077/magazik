@@ -4,12 +4,11 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { ProductCard } from '@/components/catalog/product-card'
-import { products } from '@/lib/mock-data'
+import { getProducts } from '@/lib/queries/products'
 
-// Товары "набирающие популярность" — берём срез не из featured
-const popularProducts = products.filter((p) => !p.featured).slice(0, 20)
-
-export default function PopularPage() {
+export default async function PopularPage() {
+  const products = await getProducts()
+  const popularProducts = products.filter((p) => !p.featured).slice(0, 20)
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />

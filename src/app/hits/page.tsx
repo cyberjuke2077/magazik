@@ -4,9 +4,10 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { ProductCard } from '@/components/catalog/product-card'
-import { featuredProducts } from '@/lib/mock-data'
+import { getFeaturedProducts } from '@/lib/queries/products'
 
-export default function HitsPage() {
+export default async function HitsPage() {
+  const featuredProducts = await getFeaturedProducts()
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />

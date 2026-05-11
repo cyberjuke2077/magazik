@@ -6,22 +6,48 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate",
+    "import:chipdip": "tsx src/scripts/import-chipdip.ts"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "cheerio": "^1.2.0",
+    "crawlee": "^3.11.5",
+    "csv-parse": "^6.2.1",
+    "dotenv": "^17.4.2",
+    "fingerprint-generator": "^2.1.82",
+    "fingerprint-injector": "^2.1.82",
     "lucide-react": "^1.0.1",
     "next": "16.2.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "rebrowser-playwright": "^1.52.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^2.0.0",
+    "@vitest/ui": "^2.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "happy-dom": "^15.0.0",
+    "playwright": "^1.59.1",
+    "prisma": "^5.22.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.7.0",
+    "typescript": "^5",
+    "vitest": "^2.0.0"
   }
 }

@@ -1,0 +1,210 @@
+// Prisma schema for Electromagaz
+// PostgreSQL database configuration
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Category model with hierarchical structure (parent/child relationships)
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  icon        String?
+  description String?
+  color       String?
+  
+  // Hierarchy support
+  parentId    String?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Category[] @relation("CategoryHierarchy")
+  
+  // Relations
+  products    Product[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([slug])
+  @@index([parentId])
+}
+
+// Manufacturer model
+model Manufacturer {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  website     String?
+  
+  // Relations
+  products    Product[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  @@index([slug])
+  @@index([name])
+}
+
+// Product model - core product data
+model Product {
+  id                String    @id @default(cuid())
+  slug              String    @unique
+  name              String
+  partNumber        String
+  sku               String?   @unique
+  description       String?   @db.Text
+  
+  // Pricing (user-managed, not from parser)
+  price             Decimal?  @db.Decimal(10, 2)
+  priceWholesale    Decimal?  @db.Decimal(10, 2)
+  currency          String    @default("RUB")
+  
+  // Stock (user-managed)
+  inStock           Boolean   @default(false)
+  stockCount        Int       @default(0)
+  unit              String    @default("шт")
+  minOrder          Int       @default(1)
+  
+  // Physical properties
+  weight            Decimal?  @db.Decimal(10, 2) // Weight in grams
+  
+  // Relations
+  categoryId        String
+  category          Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  manufacturerId    String
+  manufacturer      Manufacturer   @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
+  
+  images            ProductImage[]
+  specifications    Specification[]
+  datasheets        Datasheet[]
+  
+  // Product analogs (many-to-many self-relation)
+  analogs           ProductAnalog[] @relation("ProductToAnalog")
+  analogOf          ProductAnalog[] @relation("AnalogToProduct")
+  
+  // Metadata
+  tags              String[]
+  featured          Boolean   @default(false)
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  @@index([slug])
+  @@index([partNumber])
+  @@index([sku])
+  @@index([categoryId])
+  @@index([manufacturerId])
+  @@index([partNumber, manufacturerId])
+}
+
+// ProductImage model - stores image URLs (one-to-many with Product)
+model ProductImage {
+  id          String   @id @default(cuid())
+  imageUrl    String
+  altText     String?
+  order       Int      @default(0)
+  
+  // Relations
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([productId])
+}
+
+// Specification model - key-value pairs for product specs (one-to-many with Product)
+model Specification {
+  id          String   @id @default(cuid())
+  key         String
+  value       String   @db.Text
+  order       Int      @default(0)
+  
+  // Relations
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([productId])
+  @@index([key])
+}
+
+// Datasheet model - PDF datasheet links (one-to-many with Product)
+model Datasheet {
+  id          String   @id @default(cuid())
+  title       String
+  url         String
+  fileSize    String?
+  language    String   @default("ru")
+  
+  // Relations
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([productId])
+}
+
+// ProductAnalog model - many-to-many self-relation for alternative products
+model ProductAnalog {
+  id          String   @id @default(cuid())
+  
+  // Relations
+  productId   String
+  product     Product  @relation("ProductToAnalog", fields: [productId], references: [id], onDelete: Cascade)
+  
+  analogId    String
+  analog      Product  @relation("AnalogToProduct", fields: [analogId], references: [id], onDelete: Cascade)
+  
+  // Metadata
+  note        String?
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([productId, analogId])
+  @@index([productId])
+  @@index([analogId])
+}
+
+// ImportProgress model - tracks background import progress
+model ImportProgress {
+  id                      String    @id @default(cuid())
+  status                  String    @default("pending") // pending, running, paused, completed, failed
+  
+  // Current progress
+  currentCategoryId       String?
+  currentCategorySlug     String?
+  currentCategoryName     String?
+  currentPage             Int       @default(1)
+  
+  // Statistics
+  totalCategories         Int       @default(0)
+  processedCategories     Int       @default(0)
+  totalProducts           Int       @default(0)
+  importedProducts        Int       @default(0)
+  updatedProducts         Int       @default(0)
+  failedProducts          Int       @default(0)
+  
+  // Performance metrics
+  estimatedTimeRemaining  Int?      // seconds
+  importSpeed             Decimal?  @db.Decimal(10, 2) // products per minute
+  
+  // Timestamps
+  startedAt               DateTime?
+  completedAt             DateTime?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  
+  @@index([status])
+  @@index([createdAt])
+}

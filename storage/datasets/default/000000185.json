@@ -1,0 +1,15 @@
+{
+	"slug": "mc33063ap1g-impulsnyy-ponizhayuschiy-on-semiconductor-60443",
+	"name": "MC33063AP1G, Импульсный понижающий/ повышающий/ инвертирующий преобразователь напряжения 1.5А, [DIP-8]",
+	"partNumber": "MC33063AP1G",
+	"sku": "60443",
+	"manufacturer": "ON Semiconductor",
+	"manufacturerSlug": "",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Описание IC: PMIC; преобразователь DC/DC; Uвх: 3?40ВDC; Uвых: 1,25?40ВDC Характеристики <table><tbody><tr><td>Категория</td>\n<td> Микросхема </td>\n</tr>\n<tr><td>Тип</td>\n<td> источника питания </td>\n</tr>\n<tr><td>Вид</td>\n<td> регулятор напряжения </td>\n</tr>\n</tbody></table>\n<table></table>",
+	"weight": 1,
+	"specifications": "{}",
+	"datasheets": "[null]",
+	"images": "[]"
+}

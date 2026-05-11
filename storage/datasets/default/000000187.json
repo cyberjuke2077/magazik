@@ -1,0 +1,15 @@
+{
+	"slug": "mc34063abd-tr-povyshayuschiy-st-microelectronics-9000088982",
+	"name": "MC34063ABD-TR, Повышающий/ понижающий преобразователь напряжения [SO-8]",
+	"partNumber": "MC34063ABD-TR",
+	"sku": "9000088982",
+	"manufacturer": "ST Microelectronics",
+	"manufacturerSlug": "",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Описание IC: driver; DC/DC converter; Uin: 3?40VDC; Uout: 1.25?38VDC; 1.5A Характеристики <table><tbody><tr><td>Категория</td>\n<td> Микросхема </td>\n</tr>\n<tr><td>Тип</td>\n<td> источника питания </td>\n</tr>\n<tr><td>Вид</td>\n<td> регулятор напряжения </td>\n</tr>\n</tbody></table>\n<table></table>",
+	"weight": 0.15,
+	"specifications": "{}",
+	"datasheets": "[null,null]",
+	"images": "[]"
+}

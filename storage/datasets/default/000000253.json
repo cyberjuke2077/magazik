@@ -1,0 +1,15 @@
+{
+	"slug": "tps54331dr-dc-dc-preobrazovatel-buck-adj-texas-instruments-9000058895",
+	"name": "TPS54331DR, DC/DC преобразователь, Buck, ADJ, 3А [SOIC-8]",
+	"partNumber": "TPS54331DR",
+	"sku": "9000058895",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Преобразователь постоянного тока понижающий подстраиваемый 3А",
+	"weight": 0.15,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

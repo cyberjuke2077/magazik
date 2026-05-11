@@ -1,0 +1,15 @@
+{
+	"slug": "tps54328ddar-dc-dc-preobrazovatel-texas-instruments-9000348678",
+	"name": "TPS54328DDAR, DC-DC преобразователь Step-Down с Eco-Mode, Uвых=0.76…7В, Iвых= 3А, 700кГц [SO-8 PowerPad.]",
+	"partNumber": "TPS54328DDAR",
+	"sku": "9000348678",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Преобразователь постоянного тока понижающий синхронный подстраиваемый 3А",
+	"weight": 0.3,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

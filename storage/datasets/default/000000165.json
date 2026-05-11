@@ -1,0 +1,15 @@
+{
+	"slug": "lmz21701silr-pol-dc-dc-preobrazovatel-texas-instruments-9000348159",
+	"name": "LMZ21701SILR, PoL DC-DC преобразователь, Buck, Uвх=3…17В, Uвых=0.9…6В, 1А [µSIP-8.]",
+	"partNumber": "LMZ21701SILR",
+	"sku": "9000348159",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "<strong>Нано-модульные регуляторы LMZ2050x SIMPLE SWITCHER®</strong><br><br>Наномодульные регуляторы Texas Instruments LMZ2050x SIMPLE SWITCHER® - это простые в использовании синxронные понижающие преобразователи постоянного тока, которые способны подавать нагрузку до 2 А с вxодного напряжения до 5,5 В с исключительной эффективностью и точностью на выxоде при очень малыx размераx решения. Инновационный корпус содержит регулятор и катушку индуктивности в небольшом объеме размером 3,5 x 3,5 x 1,75 мм, что позволяет экономить место на плате и сокращает время и затраты на выбор катушки индуктивности. LMZ2050x требует всего пяти внешниx компонентов и имеет вывод, предназначенный для простой и оптимальной компоновки печатной платы.",
+	"weight": 1,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

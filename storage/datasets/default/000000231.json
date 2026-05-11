@@ -1,0 +1,15 @@
+{
+	"slug": "tlv62568dbvr-dc-dc-preobrazovatel-buck-texas-instruments-9000811068",
+	"name": "TLV62568DBVR, DC/DC преобразователь, Buck, ADJ, 1А [SOT-23-5]",
+	"partNumber": "TLV62568DBVR",
+	"sku": "9000811068",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Понижающий импульсный регулятор IC с положительной регулировкой 0,6 В 1 Выxод 1A SC-74A, SOT-753",
+	"weight": 0.08,
+	"specifications": "{}",
+	"datasheets": "[null,null]",
+	"images": "[]"
+}

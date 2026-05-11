@@ -5,11 +5,12 @@ import random
 from typing import Optional, Dict
 from datetime import datetime, timedelta
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
-from playwright_stealth import stealth_async
+# from playwright_stealth import stealth_async  # Disabled - not compatible with Python 3.13
 
 from .config import CollectorConfig, DelayConfig
 from .extractors.base import BaseExtractor, ExtractResult
 from .extractors.chipdip import ChipDipExtractor
+from .extractors.google import GoogleExtractor
 from .utils import get_random_user_agent, human_like_scroll, random_mouse_movement, get_random_delay
 
 
@@ -32,16 +33,18 @@ class BrowserSession:
         
         # Extractors
         self.extractors = {
-            "chipdip": ChipDipExtractor(),
+            "chipdip": ChipDipExtractor("chipdip"),
+            "google": GoogleExtractor("google"),
         }
     
     async def start(self):
         """Start browser session."""
         self.playwright = await async_playwright().start()
         
-        # Launch browser with minimal args
+        # Launch Chrome (not Chromium) to avoid macOS compatibility issues
         self.browser = await self.playwright.chromium.launch(
-            headless=True
+            headless=True,
+            executable_path="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         )
         
         # Create context with random user agent
@@ -52,12 +55,8 @@ class BrowserSession:
             timezone_id='Europe/Moscow',
         )
         
-        # Create page and apply stealth
+        # Create page (stealth disabled - not compatible with Python 3.13)
         self.page = await self.context.new_page()
-        try:
-            await stealth_async(self.page)
-        except Exception as e:
-            print(f"Warning: stealth_async failed: {e}")
     
     async def close(self):
         """Close browser session."""

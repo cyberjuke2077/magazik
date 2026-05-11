@@ -1,0 +1,102 @@
+📦 Parsing specific category: deshifratory-1763
+
+📊 Found 1 categories to parse
+
+🔍 Stage 1: Collecting product URLs from catalogs...
+
+[32mINFO[39m [33m PlaywrightCrawler:[39m Starting the crawler.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 4 products on this page (total: 4)
+[32mINFO[39m [33m PlaywrightCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Final request statistics:[90m {"requestsFinished":1,"requestsFailed":0,"retryHistogram":[1],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7288,"requestsFinishedPerMinute":8,"requestsFailedPerMinute":0,"requestTotalDurationMillis":7288,"requestsTotal":1,"crawlerRuntimeMillis":7607}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Finished! Total 1 requests: 1 succeeded, 0 failed.[90m {"terminal":true}[39m
+
+✅ Catalog collection complete: 4 products found
+
+🤖 Stage 2: Parsing products with human behavior...
+
+[32mINFO[39m [33m PlaywrightCrawler:[39m Starting the crawler.
+[rebrowser-patches][frames._context] cannot get world, error: ProtocolError: Protocol error (Runtime.evaluate): Cannot find context with specified id
+    at /Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:116:57
+    at new Promise (<anonymous>)
+    at CRSession.send (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:115:12)
+    at CRSession.__re__getMainWorld (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:266:20)
+    at async CRSession.__re__emitExecutionContext (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:220:28)
+    at async Frame.evaluateExpression (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/frames.js:645:21) {
+  type: 'error',
+  method: 'Runtime.evaluate',
+  logs: undefined
+}
+[rebrowser-patches][frames._context] cannot get world, error: ProtocolError: Protocol error (Runtime.evaluate): Cannot find context with specified id
+    at /Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:116:57
+    at new Promise (<anonymous>)
+    at CRSession.send (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:115:12)
+    at CRSession.__re__getMainWorld (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:266:20)
+    at async CRSession.__re__emitExecutionContext (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:220:28)
+    at async Frame.evaluateExpression (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/frames.js:645:21) {
+  type: 'error',
+  method: 'Runtime.evaluate',
+  logs: undefined
+}
+[33mWARN[39m [33m PlaywrightCrawler:[39m ⚠️  Missing required fields: tecap-4.7-16v-a-20-nka475m16r8-b-g-nec-8056010678
+[33mWARN[39m [33m PlaywrightCrawler:[39m ⚠️  Missing required fields: vch-demodulyator-hmc908lc5-analog-devices-8043939896
+[rebrowser-patches][frames._context] cannot get world, error: ProtocolError: Protocol error (Runtime.evaluate): Cannot find context with specified id
+    at /Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:116:57
+    at new Promise (<anonymous>)
+    at CRSession.send (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:115:12)
+    at CRSession.__re__getMainWorld (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:266:20)
+    at runNextTicks (node:internal/process/task_queues:65:5)
+    at process.processImmediate (node:internal/timers:472:9)
+    at async CRSession.__re__emitExecutionContext (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:220:28)
+    at async Frame.evaluateExpression (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/frames.js:645:21) {
+  type: 'error',
+  method: 'Runtime.evaluate',
+  logs: undefined
+}
+[rebrowser-patches][frames._context] cannot get world, error: ProtocolError: Protocol error (Runtime.evaluate): Cannot find context with specified id
+    at /Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:116:57
+    at new Promise (<anonymous>)
+    at CRSession.send (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:115:12)
+    at CRSession.__re__getMainWorld (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:266:20)
+    at async CRSession.__re__emitExecutionContext (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:220:28)
+    at async Frame.evaluateExpression (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/frames.js:645:21) {
+  type: 'error',
+  method: 'Runtime.evaluate',
+  logs: undefined
+}
+[rebrowser-patches][frames._context] cannot get world, error: ProtocolError: Protocol error (Runtime.evaluate): Cannot find context with specified id
+    at /Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:116:57
+    at new Promise (<anonymous>)
+    at CRSession.send (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:115:12)
+    at CRSession.__re__getMainWorld (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:266:20)
+    at async CRSession.__re__emitExecutionContext (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:220:28)
+    at async Frame.evaluateExpression (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/frames.js:645:21) {
+  type: 'error',
+  method: 'Runtime.evaluate',
+  logs: undefined
+}
+[rebrowser-patches][frames._context] cannot get world, error: ProtocolError: Protocol error (Runtime.evaluate): Cannot find context with specified id
+    at /Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:116:57
+    at new Promise (<anonymous>)
+    at CRSession.send (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:115:12)
+    at CRSession.__re__getMainWorld (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:266:20)
+    at async CRSession.__re__emitExecutionContext (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/chromium/crConnection.js:220:28)
+    at async Frame.evaluateExpression (/Users/lux/Desktop/projects/electromagaz/node_modules/rebrowser-playwright/node_modules/playwright-core/lib/server/frames.js:645:21) {
+  type: 'error',
+  method: 'Runtime.evaluate',
+  logs: undefined
+}
+[33mWARN[39m [33m PlaywrightCrawler:[39m ⚠️  Missing required fields: drayver-cd4543bm-tr-hgsemi-8055726723
+[33mWARN[39m [33m PlaywrightCrawler:[39m ⚠️  Missing required fields: sp3-19a-0-5vt-1-5-kom-20-90-god-tembr-8056018780
+[32mINFO[39m [33m PlaywrightCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Final request statistics:[90m {"requestsFinished":4,"requestsFailed":0,"retryHistogram":[4],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":18117,"requestsFinishedPerMinute":5,"requestsFailedPerMinute":0,"requestTotalDurationMillis":72468,"requestsTotal":4,"crawlerRuntimeMillis":45895}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Finished! Total 4 requests: 4 succeeded, 0 failed.[90m {"terminal":true}[39m
+
+============================================================
+📊 PARSING COMPLETE
+============================================================
+✅ Success: 0
+❌ Failed: 4
+🚫 Captchas: 0
+⏱️  Time: 0.9 minutes
+⚡ Speed: 0.0 products/min
+============================================================

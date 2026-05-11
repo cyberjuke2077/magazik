@@ -1,36 +1,229 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Electromagaz
 
-## Getting Started
+Интернет-магазин микроэлектроники и промышленной автоматики. Большой каталог электронных компонентов с поиском по маркировке, корзиной, заказами и личным кабинетом.
 
-First, run the development server:
+## Технологический стек
+
+- **Framework:** Next.js 15 (App Router)
+- **Язык:** TypeScript (strict mode)
+- **Стили:** Tailwind CSS
+- **База данных:** PostgreSQL
+- **ORM:** Prisma
+- **Поиск:** Meilisearch
+- **Парсинг:** Cheerio
+
+## Быстрый старт
+
+### 1. Установка зависимостей
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Настройка базы данных
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Создайте файл `.env` на основе `.env.example`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+DATABASE_URL="postgresql://electromagaz:password@localhost:5432/electromagaz"
+```
 
-## Learn More
+Запустите PostgreSQL через Docker:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+docker-compose up -d postgres
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Примените миграции:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm prisma migrate dev
+```
 
-## Deploy on Vercel
+### 3. Импорт продуктов из ChipDip
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Импортируйте тестовую партию из 100 продуктов:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm tsx src/scripts/import-chipdip.ts
+```
+
+Подробнее: [docs/import-guide.md](docs/import-guide.md)
+
+### 4. Запуск dev-сервера
+
+```bash
+pnpm dev
+```
+
+Откройте [http://localhost:3000](http://localhost:3000)
+
+## Структура проекта
+
+```
+/
+├── src/
+│   ├── app/              # Next.js App Router (страницы)
+│   ├── components/       # React компоненты
+│   ├── lib/
+│   │   ├── parser/       # ChipDip парсер (Cheerio)
+│   │   ├── queries/      # Prisma запросы
+│   │   └── prisma.ts     # Prisma клиент
+│   └── scripts/
+│       └── import-chipdip.ts  # Скрипт импорта
+├── prisma/
+│   ├── schema.prisma     # Схема БД
+│   └── migrations/       # Миграции
+├── docs/
+│   ├── database-schema.md      # Дизайн схемы БД
+│   ├── parser-architecture.md  # Архитектура парсера
+│   └── import-guide.md         # Руководство по импорту
+└── AGENTS.md             # Инструкции для AI-агентов
+```
+
+## База данных
+
+### Схема
+
+Основные модели:
+- **Category** - Категории с иерархией (parent/child)
+- **Manufacturer** - Производители электроники
+- **Product** - Товары (название, артикул, описание)
+- **ProductImage** - Изображения (URL, без локального хранения)
+- **Specification** - Характеристики (key-value пары)
+- **Datasheet** - Ссылки на PDF даташиты
+- **ProductAnalog** - Аналоги/альтернативы (many-to-many)
+
+Подробнее: [docs/database-schema.md](docs/database-schema.md)
+
+### Prisma команды
+
+```bash
+# Применить миграции
+pnpm prisma migrate dev
+
+# Открыть Prisma Studio (GUI для БД)
+pnpm prisma studio
+
+# Сгенерировать Prisma клиент
+pnpm prisma generate
+
+# Сбросить БД (удалить все данные)
+pnpm prisma migrate reset
+```
+
+## Импорт продуктов
+
+### Быстрый импорт (100 продуктов)
+
+```bash
+pnpm tsx src/scripts/import-chipdip.ts
+```
+
+Время: ~2 минуты
+
+### Настройка импорта
+
+Отредактируйте `src/scripts/import-chipdip.ts`:
+
+```typescript
+await importProducts({
+  maxProducts: 100,     // Количество продуктов
+  batchSize: 10,        // Размер батча
+  catalogUrl: 'https://www.chipdip.ru/catalog/microcontrollers',
+})
+```
+
+### Масштабирование до 2M продуктов
+
+Подробное руководство: [docs/import-guide.md](docs/import-guide.md)
+
+**Стратегии:**
+- Параллельный импорт (несколько категорий одновременно)
+- Увеличение rate limit (если ChipDip разрешает)
+- Оптимизация размера батчей
+- Ночной импорт (cron jobs)
+
+## Разработка
+
+### Команды
+
+```bash
+# Dev-сервер
+pnpm dev
+
+# Сборка
+pnpm build
+
+# Продакшн-сервер
+pnpm start
+
+# Линтинг
+pnpm lint
+
+# Форматирование
+pnpm format
+
+# Тесты
+pnpm test
+
+# E2E тесты
+pnpm test:e2e
+```
+
+### Стиль кода
+
+Следуйте инструкциям в [AGENTS.md](AGENTS.md):
+- TypeScript strict mode
+- Именование: camelCase (функции), PascalCase (компоненты), kebab-case (файлы)
+- Импорты: группировка по (1) внешние библиотеки, (2) @/ алиасы, (3) относительные пути
+- Обработка ошибок: всегда явная, с контекстом
+- Без `any` типов - используйте `unknown`
+
+## Документация
+
+- **[docs/database-schema.md](docs/database-schema.md)** - Дизайн схемы БД, индексы, отношения
+- **[docs/parser-architecture.md](docs/parser-architecture.md)** - Архитектура парсера, модули, data flow
+- **[docs/import-guide.md](docs/import-guide.md)** - Импорт продуктов, troubleshooting, масштабирование
+- **[AGENTS.md](AGENTS.md)** - Инструкции для AI-агентов, конвенции проекта
+
+## Архитектура парсера
+
+Модульная система на чистых функциях:
+
+- **product-parser.ts** - Извлечение данных из HTML страниц продуктов
+- **catalog-scraper.ts** - Извлечение URL продуктов из каталога
+- **http-client.ts** - HTTP запросы с retry логикой
+- **rate-limiter.ts** - Rate limiting (1 req/sec по умолчанию)
+
+Подробнее: [docs/parser-architecture.md](docs/parser-architecture.md)
+
+## Деплой
+
+### Docker
+
+```bash
+# Сборка образа
+docker build -t electromagaz .
+
+# Запуск контейнера
+docker-compose up -d
+```
+
+### VPS
+
+1. Клонировать репозиторий
+2. Настроить `.env` с production DATABASE_URL
+3. Запустить PostgreSQL
+4. Применить миграции: `pnpm prisma migrate deploy`
+5. Собрать проект: `pnpm build`
+6. Запустить: `pnpm start`
+
+## Лицензия
+
+MIT
+
+## Поддержка
+
+- GitHub Issues - баги и feature requests
+- Discussions - вопросы и обсуждения

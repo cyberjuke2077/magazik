@@ -1,0 +1,920 @@
+🚀 Starting Fast Stealth Parser...
+📦 Categories: mikrokontrollery-1738
+⚙️  Settings: 10 browsers, 120 req/min, 3-4 sec delays, batch 200 → pause 5 min
+
+📂 Found 1 categories to parse
+
+
+[1/1] Processing: Микроконтроллеры
+[32mINFO[39m [33m PlaywrightCrawler:[39m Starting the crawler.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=2
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=2
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=3
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=3
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=6
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=6
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":10048,"requestsFinishedPerMinute":5,"requestsFailedPerMinute":0,"requestTotalDurationMillis":50238,"requestsTotal":5,"crawlerRuntimeMillis":60074,"retryHistogram":[5]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=7
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=7
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=8
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=8
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=9
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=9
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=10
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=10
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=11
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=11
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=12
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=12
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":10185,"requestsFinishedPerMinute":5,"requestsFailedPerMinute":0,"requestTotalDurationMillis":112036,"requestsTotal":11,"crawlerRuntimeMillis":120076,"retryHistogram":[11]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=13
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=13
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=14
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=14
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=15
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=15
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=16
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=16
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=17
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=17
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=18
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=18
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":10292,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":174972,"requestsTotal":17,"crawlerRuntimeMillis":180080,"retryHistogram":[17]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=19
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=19
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=20
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=20
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=21
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=21
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=22
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=22
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=23
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=23
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=24
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=24
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=25
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=25
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9786,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":234862,"requestsTotal":24,"crawlerRuntimeMillis":240084,"retryHistogram":[24]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=26
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=26
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=27
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=27
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=28
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=28
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=29
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=29
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=30
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=30
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=31
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=31
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=32
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=32
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=33
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=33
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=34
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=34
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9060,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":298975,"requestsTotal":33,"crawlerRuntimeMillis":300088,"retryHistogram":[33]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=35
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=35
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=36
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=36
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=37
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=37
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=38
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=38
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=39
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=39
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=40
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=40
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=41
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=41
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=42
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=42
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8602,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":352677,"requestsTotal":41,"crawlerRuntimeMillis":360091,"retryHistogram":[41]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=43
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=43
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=44
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=44
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=45
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=45
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=46
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=46
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=47
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=47
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=48
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=48
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=49
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=49
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=50
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=50
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=51
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=51
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=52
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=52
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8199,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":418150,"requestsTotal":51,"crawlerRuntimeMillis":420097,"retryHistogram":[51]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=53
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=53
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=54
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=54
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=55
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=55
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=56
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=56
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=57
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=57
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=58
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=58
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=59
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=59
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=60
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=60
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=61
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=61
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7913,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":474808,"requestsTotal":60,"crawlerRuntimeMillis":480099,"retryHistogram":[60]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=62
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=62
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=63
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=63
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=64
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=64
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=65
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=65
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=66
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=66
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=67
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=67
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=68
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=68
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=69
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=69
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=70
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=70
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=71
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=71
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7653,"requestsFinishedPerMinute":8,"requestsFailedPerMinute":0,"requestTotalDurationMillis":535708,"requestsTotal":70,"crawlerRuntimeMillis":540105,"retryHistogram":[70]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=72
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=72
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=73
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=73
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=74
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=74
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=75
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=75
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=76
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=76
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=77
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=77
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=78
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=78
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=79
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=79
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=80
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=80
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=81
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=81
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7436,"requestsFinishedPerMinute":8,"requestsFailedPerMinute":0,"requestTotalDurationMillis":594884,"requestsTotal":80,"crawlerRuntimeMillis":600111,"retryHistogram":[80]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=82
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=82
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=83
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=83
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=84
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=84
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.waitForSelector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('a[href*="/product/"]') to be visible
+
+    at PlaywrightCrawler.requestHandler (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:166:20)[90m {"id":"us7ZTbvjF2hR7Ei","url":"https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.waitForSelector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('a[href*="/product/"]') to be visible
+
+    at PlaywrightCrawler.requestHandler (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:166:20)[90m {"id":"us7ZTbvjF2hR7Ei","url":"https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85","retryCount":2}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.waitForSelector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('a[href*="/product/"]') to be visible
+
+    at PlaywrightCrawler.requestHandler (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:166:20)[90m {"id":"us7ZTbvjF2hR7Ei","url":"https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85","retryCount":3}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7367,"requestsFinishedPerMinute":8,"requestsFailedPerMinute":0,"requestTotalDurationMillis":618841,"requestsTotal":84,"crawlerRuntimeMillis":660116,"retryHistogram":[84]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[31mERROR[39m[33m PlaywrightCrawler:[39m Request failed and reached maximum retries. page.waitForSelector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('a[href*="/product/"]') to be visible
+
+    at PlaywrightCrawler.requestHandler (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:166:20)
+    at <anonymous> (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/browser-crawler.ts:590:50)
+    at wrap (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:76:33)
+    at <anonymous> (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:92:13)
+    at <anonymous> (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:91:17)
+    at addTimeoutToPromise (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:84:12)
+    at PlaywrightCrawler._runRequestHandler (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/browser-crawler.ts:589:38)
+    at async PlaywrightCrawler._runRequestHandler (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/playwright-crawler.ts:243:9)
+    at async wrap (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:76:27)[90m {"id":"us7ZTbvjF2hR7Ei","url":"https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85","method":"GET","uniqueKey":"https://www.chipdip.ru/catalog/mikrokontrollery-1738?page=85"}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Final request statistics:[90m {"requestsFinished":84,"requestsFailed":1,"retryHistogram":[84,null,null,1],"requestAvgFailedDurationMillis":12553,"requestAvgFinishedDurationMillis":7367,"requestsFinishedPerMinute":8,"requestsFailedPerMinute":0,"requestTotalDurationMillis":631394,"requestsTotal":85,"crawlerRuntimeMillis":666666}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Error analysis:[90m {"totalErrors":1,"uniqueErrors":1,"mostCommonErrors":["1x: page.waitForSelector: Timeout 10000ms exceeded. (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:166:20)"]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Finished! Total 85 requests: 84 succeeded, 1 failed.[90m {"terminal":true}[39m
+✅ Collected 1680 product URLs so far
+
+✅ Total product URLs collected: 1680
+🚀 Starting product parsing with 10 parallel browsers...
+
+[32mINFO[39m [33m PlaywrightCrawler:[39m Starting the crawler.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/apm32f030k6t6-mikrokontroller-32-bit-cortex-m0-48mgts-geehy-9001699508
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/aduc812bsz-reel-mikrokonverter-12-bit-atsp-analog-devices-865915475
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: APM32F030K6T6, Микроконтроллер 32-Бит, Cortex-M0+, 48МГц, 32КБ Flash [LQFP-32.]
+📊 Progress: 1/1680 (0.1%) | Speed: 0.1 products/min | ETA: 18934 min | Failed: 0
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: ADUC812BSZ-REEL, Микроконвертер, 12-Бит АЦП + 8-Бит MCU 8052, Flash 8КБ (8K x 8), I/O 34, 2.7…5.5В [MQFP-52_10х10.]
+📊 Progress: 2/1680 (0.1%) | Speed: 0.2 products/min | ETA: 9487 min | Failed: 0
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/apm32f103c8t6-mikrokontroller-32-bit-cortex-m3-96mgts-geehy-9001699507
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/apm32f407vgt6-mikrokontroller-arm-cortex-m4f-32-bit-geehy-9001699510
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f403arct7-mikrokontroller-32-bit-cortex-m4-artery-9001621971
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: APM32F103C8T6, Микроконтроллер 32-Бит, Cortex-M3, 96МГц, 64КБ Flash [LQFP-48]
+📊 Progress: 3/1680 (0.2%) | Speed: 0.3 products/min | ETA: 6381 min | Failed: 0
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: APM32F407VGT6, Микроконтроллер ARM Cortex-M4F, 32-бит, 168МГц, 1М Flash [LQFP-100]
+📊 Progress: 4/1680 (0.2%) | Speed: 0.3 products/min | ETA: 4793 min | Failed: 0
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f403argt7-mikrokontroller-32-bit-cortex-m4-artery-9001621976
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f403avct7-mikrokontroller-32-bit-cortex-m4-artery-9001621974
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f403avgt7-mikrokontroller-32-bit-cortex-m4-artery-9001621973
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f407rct7-mikrokontroller-32-bit-cortex-m4-artery-9001621978
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F407RCT7, Микроконтроллер, 32-Бит, Cortex-M4, 240МГц, 256K Flash, 96K SRAM, 51 I/O [LQFP-64]
+📊 Progress: 5/1680 (0.3%) | Speed: 0.4 products/min | ETA: 3884 min | Failed: 3
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f407vgt7-mikrokontroller-32-bit-cortex-m4-artery-9001621977
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f413cbt7-mikrokontroller-32-bit-cortex-m4-artery-9001621972
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f415cbt7-mikrokontroller-32-bit-cortex-m4-artery-9001621969
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f413rct7-mikrokontroller-32-bit-cortex-m4-artery-9001621975
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f415rct7-mikrokontroller-32-bit-cortex-m4-artery-9001621970
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F407VGT7, Микроконтроллер, 32-Бит, Cortex-M4, 240МГц, 1024K Flash, 96K SRAM, 80 I/O [LQFP-100.]
+📊 Progress: 6/1680 (0.4%) | Speed: 0.5 products/min | ETA: 3269 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F415CBT7, Микроконтроллер, 32-Бит, Cortex-M4, 150МГц, 128K Flash, 32K SRAM, 39 I/O [LQFP-48]
+📊 Progress: 7/1680 (0.4%) | Speed: 0.6 products/min | ETA: 2802 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F413CBT7, Микроконтроллер, 32-Бит, Cortex-M4, 200МГц, 128K Flash, 64K SRAM, 39 I/O [LQFP-48.]
+📊 Progress: 8/1680 (0.5%) | Speed: 0.7 products/min | ETA: 2451 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F413RCT7, Микроконтроллер, 32-Бит, Cortex-M4, 200МГц, 256K Flash, 64K SRAM, 55 I/O [LQFP-64]
+📊 Progress: 9/1680 (0.5%) | Speed: 0.8 products/min | ETA: 2180 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F415RCT7, Микроконтроллер, 32-Бит, Cortex-M4, 150МГц, 256K Flash, 32K SRAM, 55 I/O [LQFP-64]
+📊 Progress: 10/1680 (0.6%) | Speed: 0.8 products/min | ETA: 1966 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f421c8t7-mikrokontroller-32-bit-cortex-m4-artery-9001621967
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f421f8p7-mikrokontroller-32-bit-cortex-m4-artery-9001621965
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f421k8t7-mikrokontroller-32-bit-cortex-m4-artery-9001621966
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f421k8u7-mikrokontroller-32-bit-cortex-m4-artery-9001621968
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f435rgt7-mikrokontroller-32-bit-arm-cortex-m4f-artery-9001059478
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F421C8T7, Микроконтроллер, 32-Бит, Cortex-M4, 120МГц, 64Кб Flash, 16Кб SRAM, 39 I/O [LQFP-48_7x7.]
+📊 Progress: 11/1680 (0.7%) | Speed: 0.9 products/min | ETA: 1797 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f435vgt7-mikrokontroller-32-bit-cortex-m4-artery-9001621979
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F421F8P7, Микроконтроллер, 32-Бит, Cortex-M4, 120МГц, 64Кб Flash, 16Кб SRAM, 15 I/O [TSSOP-20.]
+📊 Progress: 12/1680 (0.7%) | Speed: 1.0 products/min | ETA: 1649 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F421K8T7, Микроконтроллер, 32-Бит, Cortex-M4, 120МГц, 64Кб Flash, 16Кб SRAM, 25 I/O [LQFP-32_7x7.]
+📊 Progress: 13/1680 (0.8%) | Speed: 1.1 products/min | ETA: 1522 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F421K8U7, Микроконтроллер, 32-Бит, Cortex-M4, 120МГц, 64Кб Flash, 16Кб SRAM, 27 I/O [QFN-32_5x5.]
+📊 Progress: 14/1680 (0.8%) | Speed: 1.2 products/min | ETA: 1414 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F435RGT7, Микроконтроллер, 32-Бит, ARM Cortex-M4F, 288МГц, 1МБ Flash, 53 I/O [LQFP-64_10x10.]
+📊 Progress: 15/1680 (0.9%) | Speed: 1.3 products/min | ETA: 1321 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f435zmt7-mikrokontroller-32-bit-arm-cortex-m4f-artery-9001077395
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f437vgt7-mikrokontroller-32-bit-cortex-m4-artery-9001621980
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F435VGT7, Микроконтроллер, 32-Бит, Cortex-M4, 288МГц, 1024K Flash, 384K SRAM, 84 I/O [LQFP-100]
+📊 Progress: 16/1680 (1.0%) | Speed: 1.3 products/min | ETA: 1241 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at32f437zmt7-mikrokontroller-32-bit-cortex-m4-artery-9001621981
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c2051-24pu-mikrokontroller-8-bit-8051-24mgts-2kb-microchip-34868
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c2051-24su-mikrokontroller-8-bit-8051-24mgts-microchip-947294534
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F435ZMT7, Микроконтроллер, 32-Бит, ARM Cortex-M4F, 288МГц, 4МБ Flash, 39 I/O [LQFP-144_20x20.] (9001077395)
+📊 Progress: 17/1680 (1.0%) | Speed: 1.4 products/min | ETA: 1172 min | Failed: 4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c4051-24pu-mikrokontroller-8-bit-8051-24mgts-4kb-microchip-22270
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT32F437VGT7, Микроконтроллер, 32-Бит, Cortex-M4, 288МГц, 1024K Flash, 384K SRAM, 84 I/O [LQFP-100]
+📊 Progress: 18/1680 (1.1%) | Speed: 1.5 products/min | ETA: 1108 min | Failed: 4
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C2051-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 2КБ Flash [DIP-20]
+📊 Progress: 19/1680 (1.1%) | Speed: 1.6 products/min | ETA: 1051 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c5131a-s3sum-mikrokontroller-8-bit-80c52x2-microchip-2477059064
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c51ed2-slsum-mikrokontroller-8-bit-8051-60mgts-microchip-506759849
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C2051-24SU, Микроконтроллер 8-Бит, 8051, 24МГц, 2КБ Flash [SO-20]
+📊 Progress: 20/1680 (1.2%) | Speed: 1.7 products/min | ETA: 1001 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c51rc-24pu-mikrokontroller-8-bit-8051-24mgts-microchip-202456790
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89c55wd-24pu-mikrokontroller-8-bit-8051-24mgts-microchip-770760981
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C4051-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 4КБ Flash [DIP-20]
+📊 Progress: 21/1680 (1.3%) | Speed: 1.7 products/min | ETA: 955 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s4051-24pu-mikrokontroller-8-bit-8051-24mgts-microchip-9000012443
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s51-24au-mikrokontroller-8-bit-8051-24mgts-microchip-9020001777
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8643,"requestsFinishedPerMinute":26,"requestsFailedPerMinute":0,"requestTotalDurationMillis":224720,"requestsTotal":26,"crawlerRuntimeMillis":60333,"retryHistogram":[26]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":7,"desiredConcurrency":8,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C5131A-S3SUM, Микроконтроллер 8-Бит, 80C52X2, 48МГц, 32КБ Flash [PLCC-52]
+📊 Progress: 22/1680 (1.3%) | Speed: 1.8 products/min | ETA: 913 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C51RC-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 32КБ Flash [DIP-40]
+📊 Progress: 23/1680 (1.4%) | Speed: 1.9 products/min | ETA: 874 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C51ED2-SLSUM, Микроконтроллер 8-Бит, 8051, 60МГц, 64КБ Flash [PLCC-44]
+📊 Progress: 24/1680 (1.4%) | Speed: 2.0 products/min | ETA: 838 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s51-24pu-mikrokontroller-8-bit-8051-24mgts-4kb-microchip-328439394
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89C55WD-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 20КБ Flash [DIP-40]
+📊 Progress: 25/1680 (1.5%) | Speed: 2.1 products/min | ETA: 805 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s52-24ju-mikrokontroller-8-bit-8051-24mgts-microchip-9000038328
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s52-24au-mikrokontroller-8-bit-8051-24mgts-8kb-microchip-581957457
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89S4051-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 4КБ Flash [DIP-20.]
+📊 Progress: 26/1680 (1.5%) | Speed: 2.1 products/min | ETA: 775 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s52-24pu-mikrokontroller-8-bit-8051-24mgts-8kb-microchip-611710648
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89S51-24AU, Микроконтроллер 8-Бит, 8051, 24МГц, 4КБ Flash [TQFP-44.]
+📊 Progress: 27/1680 (1.6%) | Speed: 2.2 products/min | ETA: 747 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at89s8253-24pu-mikrokontroller-8-bit-8051-24mgts-microchip-329844050
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at90can128-16au-mikrokontroller-8-bit-avr-16mgts-microchip-512100589
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89S51-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 4КБ Flash, [DIP-40]
+📊 Progress: 28/1680 (1.7%) | Speed: 2.3 products/min | ETA: 722 min | Failed: 5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at90can32-16au-mikrokontroller-8-bit-avr-16mgts-microchip-9000082533
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89S52-24AU, Микроконтроллер 8-Бит, 8051, 24МГц, 8КБ Flash [TQFP-44.]
+📊 Progress: 29/1680 (1.7%) | Speed: 2.4 products/min | ETA: 698 min | Failed: 5
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at90can64-16au-mikrokontroller-8-bit-avr-16mgts-microchip-9000112461
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89S52-24JU, Микроконтроллер 8-Бит, 8051, 24МГц, 8КБ Flash [PLCC-44.]
+📊 Progress: 30/1680 (1.8%) | Speed: 2.4 products/min | ETA: 675 min | Failed: 6
+[32mINFO[39m [33m PlaywrightCrawler:[39m ✅ Parsed: AT89S52-24PU, Микроконтроллер 8-Бит, 8051, 24МГц, 8КБ Flash [DIP-40.]
+📊 Progress: 31/1680 (1.8%) | Speed: 2.5 products/min | ETA: 653 min | Failed: 6
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at90usb162-16au-mikrokontroller-8-bit-avr-16mgts-microchip-9001699509
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at91sam7s256d-au-mikrokontroller-arm7tdmi-256kb-microchip-9001663900
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at91sam7s64c-au-mikrokontroller-16-32-bit-arm7-microchip-9001076083
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega128-16au-mikrokontroller-8-bit-avr-16mgts-microchip-8941923
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/at91sam7x256c-au-mikrokontrolle-arm7-16-32-bit-microchip-9000243980
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega1284p-au-mikrokontroller-8-bit-avr-20mgts-microchip-9020004996
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega128a-au-mikrokontroller-8-bit-avr-16mgts-microchip-9000079287
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega1284p-pu-mikrokontroller-8-bit-avr-20mgts-microchip-9020006672
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega128a-aur-mikrokontroller-8-bit-avr-16mgts-microchip-9001663899
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega128l-8au-mikrokontroller-8-bit-avr-8mgts-microchip-185583056
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16-16pu-mikrokontroller-8-bit-avr-16mgts-16kb-microchip-36715928
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16-16au-mikrokontroller-8-bit-avr-16mgts-microchip-943852349
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega162-16pu-mikrokontroller-8-bit-avr-16mgts-microchip-182962109
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega162-16au-mikrokontroller-8-bit-avr-16mgts-microchip-629129607
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega168-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-987304300
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega164pa-au-mikrokontroller-8-bit-picopower-microchip-9000089690
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega168-20au-mikrokontroller-8-bit-avr-20mgts-microchip-513870662
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega168pa-au-mikrokontroller-8-bit-picopower-microchip-9000105081
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega168pb-au-mikrokontroller-avr-8-bit-20mgts-microchip-9001089773
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega169pa-au-mikrokontroller-8-bit-avr-16mgts-microchip-9001076088
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16l-8au-mikrokontroller-8-bit-avr-8mgts-16kb-microchip-476807422
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16a-au-mikrokontroller-8-bit-avr-16mgts-microchip-9000086945
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16u2-mu-mikrokontroller-avr-8-bit-16mgts-microchip-9001089771
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16l-8pu-mikrokontroller-8-bit-avr-8mgts-16kb-microchip-316263313
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega16a-pu-mikrokontroller-8-bit-avr-16mgts-microchip-9000096576
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32-16au-mikrokontroller-8-bit-avr-16mgts-microchip-925412762
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega2560-16au-mikrokontroller-8-bit-avr-16mgts-atmel-9000048471
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32-16pu-mikrokontroller-8-bit-avr-16mgts-microchip-297342904
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega324pa-au-mikrokontroller-8-bit-picopower-microchip-9050001251
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega328p-au-mikrokontroller-8-bit-avr-20mgts-microchip-9030000107
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega328pb-aur-mikrokontroller-8-bit-avr-20mgts-microchip-9001663894
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega328p-pu-mikrokontroller-8-bit-avr-20mgts-microchip-9000065958
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega328-au-mikrokontroller-8-bit-avr-20mgts-microchip-9000249477
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32a-pu-mikrokontroller-8-bit-avr-16mgts-microchip-9000098346
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega328pb-au-mikrokontroller-8-bit-avr-20mgts-microchip-9000484654
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32a-au-mikrokontroller-8-bit-avr-16mgts-microchip-9000083380
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32l-8au-mikrokontroller-8-bit-avr-8mgts-32kb-microchip-912411877
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32u2-au-mikrokontroller-8-bit-avr-16mgts-microchip-9000277652
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"iCgI7EM4BRdB6NX","url":"https://www.chipdip.ru/product/atmega8-16au-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-11229882","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"c5HZsx99Cbizh5s","url":"https://www.chipdip.ru/product/atmega8-16pu-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-261212708","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"7dNfoig7XwKn9jO","url":"https://www.chipdip.ru/product/atmega8515-16au-mikrokontroller-8-bit-avr-16mgts-microchip-93715751","retryCount":1}[39m
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"MOM4QuLfm5P7Mmo","url":"https://www.chipdip.ru/product/atmega8515-16pu-mikrokontroller-8-bit-avr-16mgts-microchip-746240270","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"fJduoti1pSRAAJi","url":"https://www.chipdip.ru/product/atmega8535-16au-mikrokontroller-8-bit-avr-16mgts-microchip-736551464","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"YdIm8VsJPBHuUx1","url":"https://www.chipdip.ru/product/atmega8535-16ju-mikrokontroller-8-bit-avr-16mgts-microchip-889858699","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"oLBH4khuhgwQ1ZQ","url":"https://www.chipdip.ru/product/atmega8535-16pu-mikrokontroller-8-bit-avr-16mgts-microchip-535660878","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"oIWDFQ0qP2JF8dD","url":"https://www.chipdip.ru/product/atmega8535l-8au-mikrokontroller-8-bit-avr-8mgts-microchip-100820261","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"uklrGcNoBiuncpK","url":"https://www.chipdip.ru/product/atmega8535l-8pu-mikrokontroller-8-bit-avr-8mgts-microchip-412133423","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"6mFlpGaGyYRwtap","url":"https://www.chipdip.ru/product/atmega88-20au-mikrokontroller-8-bit-avr-20mgts-microchip-9000023520","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"5VDCUfddbYYPYOm","url":"https://www.chipdip.ru/product/atmega88-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-1553130055","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:AutoscaledPool:Snapshotter:[39m Memory is critically overloaded. Using 4081 MB of 4096 MB (100%). Consider increasing available memory.
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"TYmRG9h2aMjNiLP","url":"https://www.chipdip.ru/product/atmega88pa-au-mikrokontroller-8-bit-picopower-avr-microchip-9000091828","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"VQ3g98OGKhoLCPw","url":"https://www.chipdip.ru/product/atmega88pa-pu-mikrokontroller-8-bit-picopower-avr-microchip-9000096254","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32u4-mu-mikrokontroller-8-bit-avr-16mgts-microchip-9000114073
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega4809-afr-mikrokontroller-megaavr-8-bit-microchip-9001089772
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega32u4-au-mikrokontroller-8-bit-avr-16mgts-microchip-9000103730
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega48pa-au-mikrokontroller-8-bit-picopower-avr-microchip-9000095989
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega644-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-9000046220
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega48-20pu-mikrokontroller-8-bit-avr-20mgts-4kb-microchip-298135319
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega644pa-au-mikrokontroller-8-bit-picopower-microchip-9000086082
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega64a-au-mikrokontroller-8-bit-avr-16mgts-microchip-9000089308
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"uklrGcNoBiuncpK","url":"https://www.chipdip.ru/product/atmega8535l-8pu-mikrokontroller-8-bit-avr-8mgts-microchip-412133423","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"6mFlpGaGyYRwtap","url":"https://www.chipdip.ru/product/atmega88-20au-mikrokontroller-8-bit-avr-20mgts-microchip-9000023520","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"5VDCUfddbYYPYOm","url":"https://www.chipdip.ru/product/atmega88-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-1553130055","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"TYmRG9h2aMjNiLP","url":"https://www.chipdip.ru/product/atmega88pa-au-mikrokontroller-8-bit-picopower-avr-microchip-9000091828","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"VQ3g98OGKhoLCPw","url":"https://www.chipdip.ru/product/atmega88pa-pu-mikrokontroller-8-bit-picopower-avr-microchip-9000096254","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"uOcAtq0c6iZRYb2","url":"https://www.chipdip.ru/product/atmega8a-au-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-9110051050","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"ZqN7PhLLcQD64mJ","url":"https://www.chipdip.ru/product/atmega8a-pu-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-9000093592","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega88v-10au-mikrokontroller-8-bit-avr-10mgts-microchip-9000011961
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8535-16ju-mikrokontroller-8-bit-avr-16mgts-microchip-889858699
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8535-16pu-mikrokontroller-8-bit-avr-16mgts-microchip-535660878
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8515-16pu-mikrokontroller-8-bit-avr-16mgts-microchip-746240270
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8535l-8au-mikrokontroller-8-bit-avr-8mgts-microchip-100820261
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8-16au-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-11229882
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8-16pu-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-261212708
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8535-16au-mikrokontroller-8-bit-avr-16mgts-microchip-736551464
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8515-16au-mikrokontroller-8-bit-avr-16mgts-microchip-93715751
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"CqMR4KCxUWFAQbL","url":"https://www.chipdip.ru/product/attiny13a-su-mikrokontroller-8-bit-picopower-avr-microchip-9000071895","retryCount":1}[39m
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"oTj62bwtDH3MJI4","url":"https://www.chipdip.ru/product/attiny13a-sur-mikrokontroller-8-bit-picopower-avr-microchip-9000996318","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"uklrGcNoBiuncpK","url":"https://www.chipdip.ru/product/atmega8535l-8pu-mikrokontroller-8-bit-avr-8mgts-microchip-412133423","retryCount":3}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"6mFlpGaGyYRwtap","url":"https://www.chipdip.ru/product/atmega88-20au-mikrokontroller-8-bit-avr-20mgts-microchip-9000023520","retryCount":3}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"5VDCUfddbYYPYOm","url":"https://www.chipdip.ru/product/atmega88-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-1553130055","retryCount":3}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"TYmRG9h2aMjNiLP","url":"https://www.chipdip.ru/product/atmega88pa-au-mikrokontroller-8-bit-picopower-avr-microchip-9000091828","retryCount":3}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"VQ3g98OGKhoLCPw","url":"https://www.chipdip.ru/product/atmega88pa-pu-mikrokontroller-8-bit-picopower-avr-microchip-9000096254","retryCount":3}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"uOcAtq0c6iZRYb2","url":"https://www.chipdip.ru/product/atmega8a-au-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-9110051050","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"ZqN7PhLLcQD64mJ","url":"https://www.chipdip.ru/product/atmega8a-pu-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-9000093592","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"CqMR4KCxUWFAQbL","url":"https://www.chipdip.ru/product/attiny13a-su-mikrokontroller-8-bit-picopower-avr-microchip-9000071895","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"OdO1jGPniV72cU3","url":"https://www.chipdip.ru/product/attiny13v-10pu-mikrokontroller-8-bit-avr-10mgts-microchip-338908047","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"tts2vaRmBqGgVOH","url":"https://www.chipdip.ru/product/attiny13v-10su-mikrokontroller-8-bit-avr-10mgts-1kb-microchip-67873165","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"08QaaSFooZ1HhFB","url":"https://www.chipdip.ru/product/attiny1616-mnr-mikrokontroller-tinyavr-8-bit-microchip-9001089800","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13-20pu-mikrokontroller-8-bit-avr-20mgts-1kb-microchip-515427106
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13-20sur-mikrokontroller-8-bit-avr-20mgts-microchip-607745597
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny10-tshr-mikrokontroller-8-bit-avr-12mgts-microchip-9000162360
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13a-ssur-mikrokontroller-8-bit-low-power-microchip-9001699470
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8l-8au-mikrokontroller-8-bit-avr-8mgts-8kb-microchip-210747816
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13a-pu-mikrokontroller-8-bit-picopower-avr-microchip-9000083967
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13a-ssu-mikrokontroller-8-bit-picopower-avr-microchip-9000072987
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8l-8pu-mikrokontroller-8-bit-avr-8mgts-8kb-microchip-619211760
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-612384411
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313-20sur-mikrokontroller-8-bit-avr-20mgts-microchip-11108737
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7683,"requestsFinishedPerMinute":51,"requestsFailedPerMinute":0,"requestTotalDurationMillis":783689,"requestsTotal":102,"crawlerRuntimeMillis":120334,"retryHistogram":[94,8]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":10,"desiredConcurrency":10,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0.07},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313a-pu-mikrokontroller-8-bit-picopower-microchip-9000097081
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313a-su-mikrokontroller-8-bit-picopower-microchip-9000104183
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313v-10mu-mikrokontroller-8-bit-avr-10mgts-microchip-9000048068
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313v-10pu-mikrokontroller-8-bit-avr-10mgts-microchip-135166478
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny2313v-10su-mikrokontroller-8-bit-avr-10mgts-microchip-311838129
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny24a-ssu-mikrokontroller-8-bit-tinyavr-microchip-9000097370
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny24-20ssu-mikrokontroller-8-bit-tinyavr-microchip-9020003083
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny24a-pu-mikrokontroller-8-bit-tinyavr-20mgts-microchip-9001663898
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny25-20su-mikrokontroller-8-bit-avr-20mgts-microchip-9000021852
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny25v-10su-mikrokontroller-8-bit-avr-10mgts-microchip-9000036563
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny26-16pu-mikrokontroller-8-bit-avr-16mgts-2kb-microchip-395580919
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny26-16su-mikrokontroller-8-bit-avr-16mgts-2kb-microchip-999481185
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega88-20au-mikrokontroller-8-bit-avr-20mgts-microchip-9000023520
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega88-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-1553130055
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8535l-8pu-mikrokontroller-8-bit-avr-8mgts-microchip-412133423
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega88pa-pu-mikrokontroller-8-bit-picopower-avr-microchip-9000096254
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega88pa-au-mikrokontroller-8-bit-picopower-avr-microchip-9000091828
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8a-au-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-9110051050
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atmega8a-pu-mikrokontroller-8-bit-avr-16mgts-8kb-microchip-9000093592
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13a-su-mikrokontroller-8-bit-picopower-avr-microchip-9000071895
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13a-sur-mikrokontroller-8-bit-picopower-avr-microchip-9000996318
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny26l-8pu-mikrokontroller-8-bit-avr-8mgts-2kb-microchip-217688528
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13v-10pu-mikrokontroller-8-bit-avr-10mgts-microchip-338908047
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny13v-10su-mikrokontroller-8-bit-avr-10mgts-1kb-microchip-67873165
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny1616-mnr-mikrokontroller-tinyavr-8-bit-microchip-9001089800
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny26l-8sur-mikrokontroller-8-bit-avr-8mgts-2kb-microchip-772331919
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny414-ssnr-mikrokontroller-avr-8-bit-20mgts-microchip-9001089780
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny4313-mmhr-mikrokontroller-8-bit-avr-20mgts-microchip-9001130266
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny4313-pu-mikrokontroller-8-bit-avr-20mgts-microchip-9000154561
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny43u-su-mikrokontroller-avr-8-bit-8mgts-4kb-microchip-9000216580
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny441-ssur-mikrokontroller-8-bit-tinyavr-microchip-9000235273
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny45v-10su-mikrokontroller-8-bit-avr-10mgts-microchip-9000054609
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny44a-ssu-mikrokontroller-8-bit-tinyavr-microchip-9000090206
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny45-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-9000055469
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny45-20su-mikrokontroller-8-bit-avr-20mgts-microchip-2283319208
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny816-mfr-mikrokontroller-avr-8-bit-16mgts-microchip-9001089779
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny841-ssu-mikrokontroller-avr-8-bit-16mgts-microchip-9000271646
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny85-20pu-mikrokontroller-8-bit-avr-20mgts-microchip-9000044997
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny85-20su-mikrokontroller-8-bit-avr-20mgts-microchip-9000049614
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny85v-10su-mikrokontroller-8-bit-avr-10mgts-microchip-9000021217
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny861a-pu-mikrokontroller-8-bit-picopower-avr-microchip-9000208468
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/attiny861a-su-mikrokontroller-8-bit-avr-20mgts-microchip-9000188975
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f320-gqr-mikrokontroller-8-bit-8051-silicon-labs-1108753860
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f310-gqr-mikrokontroller-8-bit-8051-silicon-labs-9000028304
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/atxmega128a1-au-mikrokontroller-8-16-bit-avr-microchip-9001663897
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f330-gmr-mikrokontroller-8051-8-bit-silicon-labs-9001089775
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f340-gqr-mikrokontroller-8-bit-8051-silicon-labs-9000049818
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f321-gmr-mikrokontroller-8-bit-8051-silicon-labs-9020002332
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f350-gqr-mikrokontroller-8-bit-8051-silicon-labs-9000055571
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/c8051f410-gqr-mikrokontroller-8-bit-8051-silicon-labs-9000030644
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32f103c8t6-mikrokontroller-32-bit-cortex-m3-72mgts-wch-9001046751
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32f103r8t6-mikrokontroller-32-bit-cortex-m3-72mgts-wch-9001004753
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v003f4p6-mikrokontroller-32-bit-risc-v2a-48mgts-wch-9001161624
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v203c8t6-mikrokontroller-32-bit-risc-v-144mgts-64kb-wch-9001087844
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v103c8t6-wch-9001227095
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v303rct6-mikrokontroller-wch-9001184358
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v303cbt6-mikrokontroller-wch-9001161135
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v307vct6-mikrokontroller-32-bit-risc-v-144mgts-256k-wch-9001074039
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/ch32v307rct6-mikrokontroller-wch-9001167983
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32e103c8t6-mikrokontroller-arm-cortex-m4-gigadevice-9001089765
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32e103cbt6-mikrokontroller-arm-cortex-m4-gigadevice-9001039667
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32e230c8t6-mikrokontroller-arm-cortex-m23-gigadevice-9001089764
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32e230f8p6tr-mikrokontroller-arm-cortex-m23-gigadevice-9001089762
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32e230k6t6-mikrokontroller-arm-cortex-m23-gigadevice-9001089769
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103c8t6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039668
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103rbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039669
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103cbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996327
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[31mERROR[39m[33m PlaywrightCrawler:[39m 🚫 Blocked by ChipDip captcha
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.evaluate: Target page, context or browser has been closed
+    at humanScroll (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:48:14)[90m {"id":"vrG9NcaNSc7vo4f","url":"https://www.chipdip.ru/product/gd32f103cbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996327","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://www.chipdip.ru/product/gd32f103vct6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996326", waiting until "load"
+
+[90m {"id":"ZOKguNnFKgk6AoZ","url":"https://www.chipdip.ru/product/gd32f103vct6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996326","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.evaluate: Target page, context or browser has been closed
+    at humanScroll (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:48:14)[90m {"id":"fRZIfzQdR4EdUiz","url":"https://www.chipdip.ru/product/gd32f103rbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039669","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103rct6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996328
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://www.chipdip.ru/product/gd32f103vbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039671", waiting until "load"
+
+[90m {"id":"sECfpHwVSvHpDek","url":"https://www.chipdip.ru/product/gd32f103vbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039671","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.evaluate: Target page, context or browser has been closed
+    at humanScroll (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:48:14)[90m {"id":"TjayMkB45xHDHyB","url":"https://www.chipdip.ru/product/gd32f103rct6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996328","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.content: Target page, context or browser has been closed
+    at PlaywrightCrawler.requestHandler (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:242:31)[90m {"id":"3qCpzEzlmDaHd2q","url":"https://www.chipdip.ru/product/gd32e230f8p6tr-mikrokontroller-arm-cortex-m23-gigadevice-9001089762","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.content: Target page, context or browser has been closed
+    at PlaywrightCrawler.requestHandler (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:242:31)[90m {"id":"cOcaOUpyOeSVLL6","url":"https://www.chipdip.ru/product/gd32f103c8t6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039668","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"4F4nAtaOMIR6XHt","url":"https://www.chipdip.ru/product/gd32f105vct6-mikrokontroller-arm-cortex-m3-gigadevice-9000996335","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103ret6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996330
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.evaluate: Target page, context or browser has been closed
+    at humanScroll (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:48:14)[90m {"id":"UnF37i94CATlCEm","url":"https://www.chipdip.ru/product/gd32f103ret6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996330","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"yIJukhb3KybviYu","url":"https://www.chipdip.ru/product/gd32f107rct6-mikrokontroller-arm-cortex-m3-gigadevice-9001039676","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"vtWTrukDFfA0Gka","url":"https://www.chipdip.ru/product/gd32f130c8t6-mikrokontroller-arm-cortex-m3-gigadevice-9001039677","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"ZYldbdxXhqENHzR","url":"https://www.chipdip.ru/product/gd32f130f8p6tr-mikrokontroller-arm-cortex-m3-gigadevice-9001089767","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"KrqOq9dEQ8Opj6D","url":"https://www.chipdip.ru/product/gd32f130r8t6-mikrokontroller-arm-cortex-m3-gigadevice-9001089768","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"oY9WeyL6xEVTjXO","url":"https://www.chipdip.ru/product/gd32f150c8t6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000527450","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"copIdf6tIHMbs7j","url":"https://www.chipdip.ru/product/gd32f150r8t6-mikrokontroller-arm-cortex-m3-gigadevice-9001039678","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"xYpNJmzykrSqOBI","url":"https://www.chipdip.ru/product/gd32f205rct6-mikrokontroller-arm-cortex-m3-gigadevice-9001039679","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"3qCpzEzlmDaHd2q","url":"https://www.chipdip.ru/product/gd32e230f8p6tr-mikrokontroller-arm-cortex-m23-gigadevice-9001089762","retryCount":2}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103rgt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039670
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.evaluate: Target page, context or browser has been closed
+    at humanScroll (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:48:14)[90m {"id":"re6Z582ADBa5xx6","url":"https://www.chipdip.ru/product/gd32f103rgt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039670","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"cOcaOUpyOeSVLL6","url":"https://www.chipdip.ru/product/gd32f103c8t6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039668","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"vrG9NcaNSc7vo4f","url":"https://www.chipdip.ru/product/gd32f103cbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996327","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"fRZIfzQdR4EdUiz","url":"https://www.chipdip.ru/product/gd32f103rbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039669","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"TjayMkB45xHDHyB","url":"https://www.chipdip.ru/product/gd32f103rct6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996328","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"UnF37i94CATlCEm","url":"https://www.chipdip.ru/product/gd32f103ret6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996330","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"sECfpHwVSvHpDek","url":"https://www.chipdip.ru/product/gd32f103vbt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039671","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"ZOKguNnFKgk6AoZ","url":"https://www.chipdip.ru/product/gd32f103vct6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996326","retryCount":2}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked - received 429 status code.
+[90m {"id":"4F4nAtaOMIR6XHt","url":"https://www.chipdip.ru/product/gd32f105vct6-mikrokontroller-arm-cortex-m3-gigadevice-9000996335","retryCount":2}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103tbu6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001010761
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.evaluate: Target page, context or browser has been closed
+    at humanScroll (/Users/lux/Desktop/projects/electromagaz/scripts/parse-stealth.ts:48:14)[90m {"id":"gWJH4qtZN07DqXo","url":"https://www.chipdip.ru/product/gd32f103tbu6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001010761","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f105rbt6-mikrokontroller-arm-cortex-m3-gigadevice-9001039675
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103vgt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039672
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103zkt6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039674
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103zet6-mikrokontroller-32-bit-cortex-m3-gigadevice-9001039673
+[32mINFO[39m [33m PlaywrightCrawler:[39m Parsing: https://www.chipdip.ru/product/gd32f103vet6-mikrokontroller-32-bit-cortex-m3-gigadevice-9000996334

@@ -1,0 +1,15 @@
+{
+	"slug": "lm3674mf-adj-nopb-dc-dc-preobrazovatel-texas-instruments-9001599802",
+	"name": "LM3674MF-ADJ/NOPB, DC-DC преобразователь понижающий ADJ 600мА 2МГц [SOT-23-5.] (=LM3674MFX-ADJ/NOPB)",
+	"partNumber": "LM3674MF-ADJ/NOPB",
+	"sku": "9001599802",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Линейка высокоинтегрированныx и высокоэффективныx импульсныx регуляторов напряжения Texas Instruments включает в себя повышающие (Boost), понижающие (Buck), повышающие /понижающей мощности (Boost/Buck) и инвертирующие типы, что обеспечивает эффективные решения для любого применения регуляторов постоянного напряжения.",
+	"weight": 0.1,
+	"specifications": "{}",
+	"datasheets": "[null,null]",
+	"images": "[]"
+}

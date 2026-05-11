@@ -1,0 +1,15 @@
+{
+	"slug": "lm2594hvm-adj-dc-dc-preobrazovatel-step-down-umw-9001106135",
+	"name": "LM2594HVM-ADJ, DC-DC преобразователь, Step-Down, Uвх.=4.5…60В, Uвых=1.2.…37В, Iвых= 1.5А, 150кГц [SOIC-8.]",
+	"partNumber": "LM2594HVM-ADJ",
+	"sku": "9001106135",
+	"manufacturer": "UMW",
+	"manufacturerSlug": "",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Conv DC-DC 4.5V to 60V Inv/Step Down Single-Out 1.2V to 57V 0.5A 8-Pin SOIC T/R аналог:LM2594HVM-ADJ",
+	"weight": 0.15,
+	"specifications": "{}",
+	"datasheets": "[null]",
+	"images": "[]"
+}

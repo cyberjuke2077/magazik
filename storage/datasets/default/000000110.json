@@ -1,0 +1,15 @@
+{
+	"slug": "lm2621mm-nopb-povyshayuschiy-texas-instruments-5577602908",
+	"name": "LM2621MM/NOPB, Повышающий преобразователь напряжения с низковольтным входом 1.2В, [VSSOP-8]",
+	"partNumber": "LM2621MM/NOPB",
+	"sku": "5577602908",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Линейка высокоинтегрированныx и высокоэффективныx импульсныx регуляторов напряжения Texas Instruments включает в себя повышающие (Boost), понижающие (Buck), повышающие /понижающей мощности (Boost/Buck) и инвертирующие типы, что обеспечивает эффективные решения для любого применения регуляторов постоянного напряжения.",
+	"weight": 0.08,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

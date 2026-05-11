@@ -1,0 +1,15 @@
+{
+	"slug": "tps54260dgqr-dc-dc-preobrazovatel-texas-instruments-9000112225",
+	"name": "TPS54260DGQR, DC-DC преобразователь, понижающий, +0.8…58В, 2.5A [HVSSOP-10 EP]",
+	"partNumber": "TPS54260DGQR",
+	"sku": "9000112225",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Линейка высокоинтегрированныx и высокоэффективныx импульсныx регуляторов напряжения Texas Instruments включает в себя повышающие (Boost), понижающие (Buck), повышающие /понижающей мощности (Boost/Buck) и инвертирующие типы, что обеспечивает эффективные решения для любого применения регуляторов постоянного напряжения.",
+	"weight": 0.45,
+	"specifications": "{}",
+	"datasheets": "[null,null,null,null,null]",
+	"images": "[]"
+}

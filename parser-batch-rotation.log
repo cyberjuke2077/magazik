@@ -1,0 +1,504 @@
+🚀 Starting Fast Stealth Parser with Proxy Support...
+📦 Categories: dc-dc-preobrazovateli-2010
+⚙️  Settings: 10 browsers, 120 req/min, 3-4 sec delays, batch 200 → pause 5 min
+
+📦 Loading proxies from .env.proxies...
+✅ Loaded 20000 proxies
+✅ Proxy manager initialized with 20000 proxies
+
+📂 Found 1 categories to parse
+
+
+[1/1] Processing: DC-DC Преобразователи
+🔄 Using proxy: p.webshare.io:80 (yyinovqc-1)
+[32mINFO[39m [33m PlaywrightCrawler:[39m Starting the crawler.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=2
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=2
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=3
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=3
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=4
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=5
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=5
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":12450,"requestsFinishedPerMinute":4,"requestsFailedPerMinute":0,"requestTotalDurationMillis":49798,"requestsTotal":4,"crawlerRuntimeMillis":60152,"retryHistogram":[4]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=6
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=6
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=7
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=7
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=8
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=8
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=9
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=9
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=10
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=10
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":12056,"requestsFinishedPerMinute":4,"requestsFailedPerMinute":0,"requestTotalDurationMillis":108508,"requestsTotal":9,"crawlerRuntimeMillis":120156,"retryHistogram":[9]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=11
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=11
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=12
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=12
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=13
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=13
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=14
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=14
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=15
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=15
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=16
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=16
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":11783,"requestsFinishedPerMinute":5,"requestsFailedPerMinute":0,"requestTotalDurationMillis":176742,"requestsTotal":15,"crawlerRuntimeMillis":180159,"retryHistogram":[15]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=17
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=17
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=18
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=18
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=19
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=19
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=20
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=20
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=21
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=21
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=22
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=22
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":11245,"requestsFinishedPerMinute":5,"requestsFailedPerMinute":0,"requestTotalDurationMillis":236135,"requestsTotal":21,"crawlerRuntimeMillis":240163,"retryHistogram":[21]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=23
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=23
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=24
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=24
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=25
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=25
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=26
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=26
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=27
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=27
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=28
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=28
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=29
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=29
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":10449,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":292585,"requestsTotal":28,"crawlerRuntimeMillis":300167,"retryHistogram":[28]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=30
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=30
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=31
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=31
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=32
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=32
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=33
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=33
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=34
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=34
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=35
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=35
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=36
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=36
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=37
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9954,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":358361,"requestsTotal":36,"crawlerRuntimeMillis":360171,"retryHistogram":[36]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=37
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=38
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=38
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=39
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=39
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=40
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=40
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=41
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=41
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=42
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=42
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=43
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=43
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=44
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9723,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":418089,"requestsTotal":43,"crawlerRuntimeMillis":420173,"retryHistogram":[43]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=44
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=45
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=45
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=46
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=46
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=47
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=47
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=48
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=48
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=49
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=49
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=50
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=50
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=51
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=51
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9438,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":471879,"requestsTotal":50,"crawlerRuntimeMillis":480178,"retryHistogram":[50]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=52
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=52
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=53
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=53
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=54
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=54
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=55
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=55
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=56
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=56
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=57
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=57
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=58
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=58
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9346,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":532699,"requestsTotal":57,"crawlerRuntimeMillis":540183,"retryHistogram":[57]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=59
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=59
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=60
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=60
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=61
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=61
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=62
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=62
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=63
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=63
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=64
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=64
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=65
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=65
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=66
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9189,"requestsFinishedPerMinute":6,"requestsFailedPerMinute":0,"requestTotalDurationMillis":597291,"requestsTotal":65,"crawlerRuntimeMillis":600187,"retryHistogram":[65]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=66
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=67
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=67
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=68
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=68
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=69
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=69
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=70
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=70
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=71
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=71
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=72
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=72
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=73
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=73
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":9097,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":654984,"requestsTotal":72,"crawlerRuntimeMillis":660193,"retryHistogram":[72]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=74
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=74
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=75
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=75
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=76
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=76
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=77
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=77
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=78
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=78
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=79
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=79
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=80
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=80
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=81
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8970,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":717586,"requestsTotal":80,"crawlerRuntimeMillis":720196,"retryHistogram":[80]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=81
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=82
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=82
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=83
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=83
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=84
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=84
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=85
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=85
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=86
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=86
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=87
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=87
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=88
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=88
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8894,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":773815,"requestsTotal":87,"crawlerRuntimeMillis":780202,"retryHistogram":[87]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=89
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=89
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=90
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=90
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=91
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=91
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=92
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=92
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=93
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=93
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=94
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=94
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=95
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=95
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8853,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":832141,"requestsTotal":94,"crawlerRuntimeMillis":840208,"retryHistogram":[94]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":1,"desiredConcurrency":1,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=96
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=96
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=97
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=97
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=98
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=98
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=99
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=99
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found next page: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=100
+[32mINFO[39m [33m PlaywrightCrawler:[39m Fetching catalog: https://www.chipdip.ru/catalog/dc-dc-preobrazovateli-2010?page=100
+[32mINFO[39m [33m PlaywrightCrawler:[39m Found 20 products on this page
+[32mINFO[39m [33m PlaywrightCrawler:[39m Pager element exists
+[32mINFO[39m [33m PlaywrightCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[32mINFO[39m [33m PlaywrightCrawler:[39m Final request statistics:[90m {"requestsFinished":100,"requestsFailed":0,"retryHistogram":[100],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":8840,"requestsFinishedPerMinute":7,"requestsFailedPerMinute":0,"requestTotalDurationMillis":883988,"requestsTotal":100,"crawlerRuntimeMillis":885042}[39m
+[32mINFO[39m [33m PlaywrightCrawler:[39m Finished! Total 100 requests: 100 succeeded, 0 failed.[90m {"terminal":true}[39m
+✅ Collected 2000 product URLs so far
+
+✅ Total product URLs collected: 2000
+🚀 Starting product parsing with proxy rotation...
+
+
+🔄 Batch 1: Processing 30 products with proxy p.webshare.io:80
+[32mINFO[39m [33m PlaywrightCrawler:[39m Starting the crawler.
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":0,"requestTotalDurationMillis":0,"requestsTotal":0,"crawlerRuntimeMillis":60100,"retryHistogram":[]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":2,"desiredConcurrency":4,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":0,"requestTotalDurationMillis":0,"requestsTotal":0,"crawlerRuntimeMillis":120102,"retryHistogram":[]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":2,"desiredConcurrency":4,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"WcGH4atKqVJbkr1","url":"https://www.chipdip.ru/product/act4060ash-dc-dc-preobrazovatel-buck-uvh-4.5-24v-9020004925","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"2G15euFLKQdCMOX","url":"https://www.chipdip.ru/product/adm660arz-reel7-dc-dc-konverter-charge-pump-analog-devices-9000985953","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":0,"requestTotalDurationMillis":0,"requestsTotal":0,"crawlerRuntimeMillis":180104,"retryHistogram":[]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":5,"desiredConcurrency":7,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":0,"requestTotalDurationMillis":0,"requestsTotal":0,"crawlerRuntimeMillis":240105,"retryHistogram":[]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":5,"desiredConcurrency":7,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"Jm3VTWo9gIMeom0","url":"https://www.chipdip.ru/product/adp1111arz-imp-stabilizator-napryazheniya-ind-analog-devices-183836983","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"Vr3L7DcihwhygyW","url":"https://www.chipdip.ru/product/adp2301aujz-r7-dc-dc-preobrazovatel-analog-devices-9001582266","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"MhTkcokqw5N6V3L","url":"https://www.chipdip.ru/product/adp1111arz-5-impulsnyy-stabilizator-napryazheniya-analog-devices-10360","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"6dcthjff5fIYiEy","url":"https://www.chipdip.ru/product/aoz1073ail-dc-dc-preobrazovatel-step-down-adj-alpha-omega-9000255045","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. Navigation timed out after 120 seconds.[90m {"id":"dQL36JqrGxVRron","url":"https://www.chipdip.ru/product/aoz1212ai-dc-dc-preobrazovatel-buck-uvh-4.5-27v-alpha-omega-9000401469","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/aoz1280ci-dc-dc-preobrazovatel-step-down-alpha-omega-9000361378
+Call log:
+  - navigating to "https://www.chipdip.ru/product/aoz1280ci-dc-dc-preobrazovatel-step-down-alpha-omega-9000361378", waiting until "load"
+
+[90m {"id":"ZkUGQzSostagWDR","url":"https://www.chipdip.ru/product/aoz1280ci-dc-dc-preobrazovatel-step-down-alpha-omega-9000361378","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/aoz1282ci-dc-dc-preobrazovatel-buck-uvh-4.5-36v-alpha-omega-9000391568
+Call log:
+  - navigating to "https://www.chipdip.ru/product/aoz1282ci-dc-dc-preobrazovatel-buck-uvh-4.5-36v-alpha-omega-9000391568", waiting until "load"
+
+[90m {"id":"ACJyNN34LtrFCGD","url":"https://www.chipdip.ru/product/aoz1282ci-dc-dc-preobrazovatel-buck-uvh-4.5-36v-alpha-omega-9000391568","retryCount":1}[39m
+[32mINFO[39m [33m PlaywrightCrawler:Statistics:[39m PlaywrightCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":0,"requestTotalDurationMillis":0,"requestsTotal":0,"crawlerRuntimeMillis":300108,"retryHistogram":[]}[39m
+[32mINFO[39m [33m PlaywrightCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":10,"desiredConcurrency":10,"systemStatus":{"isSystemIdle":true,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":false,"limitRatio":0.6,"actualRatio":0},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/ap1501-12-ponizhayuschiy-dc-dc-preobrazovatel-12v-3a-umw-9001633736
+Call log:
+  - navigating to "https://www.chipdip.ru/product/ap1501-12-ponizhayuschiy-dc-dc-preobrazovatel-12v-3a-umw-9001633736", waiting until "load"
+
+[90m {"id":"2PwEuzfcJGkX8np","url":"https://www.chipdip.ru/product/ap1501-12-ponizhayuschiy-dc-dc-preobrazovatel-12v-3a-umw-9001633736","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/ap1501-3.3-ponizhayuschiy-dc-dc-preobrazovatel-3.3v-3a-umw-9001633737
+Call log:
+  - navigating to "https://www.chipdip.ru/product/ap1501-3.3-ponizhayuschiy-dc-dc-preobrazovatel-3.3v-3a-umw-9001633737", waiting until "load"
+
+[90m {"id":"AtbYvZPLFtTFU6i","url":"https://www.chipdip.ru/product/ap1501-3.3-ponizhayuschiy-dc-dc-preobrazovatel-3.3v-3a-umw-9001633737","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/ap2971tc-a1-dc-dc-preobrazovatel-buck-uvh-4.5-18v-chipown-9001304167
+Call log:
+  - navigating to "https://www.chipdip.ru/product/ap2971tc-a1-dc-dc-preobrazovatel-buck-uvh-4.5-18v-chipown-9001304167", waiting until "load"
+
+[90m {"id":"LOeZrZ4DbESXb3V","url":"https://www.chipdip.ru/product/ap2971tc-a1-dc-dc-preobrazovatel-buck-uvh-4.5-18v-chipown-9001304167","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/ap1501-adj-ponizhayuschiy-dc-dc-preobrazovatel-adj-3a-umw-9001633738
+Call log:
+  - navigating to "https://www.chipdip.ru/product/ap1501-adj-ponizhayuschiy-dc-dc-preobrazovatel-adj-3a-umw-9001633738", waiting until "load"
+
+[90m {"id":"CllZQUIRh8zWoVK","url":"https://www.chipdip.ru/product/ap1501-adj-ponizhayuschiy-dc-dc-preobrazovatel-adj-3a-umw-9001633738","retryCount":1}[39m
+[33mWARN[39m [33m PlaywrightCrawler:[39m Reclaiming failed request back to the list or queue. page.goto: net::ERR_CONNECTION_CLOSED at https://www.chipdip.ru/product/ap3211ktr-g1-dc-dc-preobrazovatel-buck-uvh-4.5-18v-diodes-9000849854
+Call log:
+  - navigating to "https://www.chipdip.ru/product/ap3211ktr-g1-dc-dc-preobrazovatel-buck-uvh-4.5-18v-diodes-9000849854", waiting until "load"
+
+[90m {"id":"MXor3bTY6HIRA2t","url":"https://www.chipdip.ru/product/ap3211ktr-g1-dc-dc-preobrazovatel-buck-uvh-4.5-18v-diodes-9000849854","retryCount":1}[39m

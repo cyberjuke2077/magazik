@@ -5,14 +5,34 @@ import { useState, useRef, useEffect } from 'react'
 import { ShoppingCart, Search, User, Package, Eye, EyeOff, Mail, Lock, Phone, Building2, Heart, Clock, Settings, Bell, CreditCard, MapPin, HelpCircle, LogOut } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
-import { categories } from '@/lib/mock-data'
 import { CategoryIcon } from '@/components/ui/component-icons'
 
-export function StickyNav() {
+interface CategoryWithChildren {
+  id: string
+  slug: string
+  name: string
+  icon: string | null
+  description: string | null
+  children: {
+    id: string
+    slug: string
+    name: string
+    icon: string | null
+  }[]
+}
+
+interface StickyNavProps {
+  categories?: CategoryWithChildren[]
+  totalProducts?: number
+}
+
+export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps) {
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
+  const catalogMenuRef = useRef<HTMLDivElement>(null)
   const { items, totalPrice, mounted: cartMounted } = useCart()
   const cartCount = items.length
   const { user, mounted: authMounted, logout } = useAuth()
@@ -21,8 +41,11 @@ export function StickyNav() {
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
+      // Close catalog if click is outside both button and menu
       if (catalogRef.current && !catalogRef.current.contains(e.target as Node)) {
-        setCatalogOpen(false)
+        if (catalogMenuRef.current && !catalogMenuRef.current.contains(e.target as Node)) {
+          setCatalogOpen(false)
+        }
       }
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
         setProfileDropdownOpen(false)
@@ -49,7 +72,7 @@ export function StickyNav() {
 
   return (
     <div className="sticky top-0 z-50">
-      <div className="mx-auto max-w-[1400px] px-4">
+      <div className="mx-auto max-w-[1400px] px-4 relative">
         <div className="flex items-center h-[68px] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.12),_0_4px_12px_rgba(0,102,204,0.15)] bg-white">
 
           {/* Catalog button */}
@@ -69,42 +92,6 @@ export function StickyNav() {
               </div>
               <span className="text-[16px]">Каталог</span>
             </button>
-
-            {/* Mega menu */}
-            {catalogOpen && (
-              <div className="absolute top-full left-0 mt-0 w-[600px] bg-white border border-gray-200 rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.12)] overflow-hidden animate-slide-down z-50">
-                <div className="p-3 grid grid-cols-2 gap-0.5">
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.slug}
-                      href={`/catalog?category=${cat.slug}`}
-                      onClick={() => setCatalogOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 hover:bg-gray-50 transition-colors group"
-                    >
-                      <div className="flex size-8 items-center justify-center bg-[#e8f4ff] shrink-0">
-                        <CategoryIcon slug={cat.slug} size={20} className="text-[#0066cc]" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm text-gray-800 group-hover:text-[#0066cc] transition-colors truncate">
-                          {cat.name}
-                        </div>
-                        <div className="text-xs text-gray-400 truncate">{cat.description}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-                <div className="border-t border-gray-100 px-4 py-2.5 bg-gray-50 flex items-center justify-between">
-                  <span className="text-xs text-gray-500">500 000+ позиций</span>
-                    <Link
-                      href="/catalog"
-                      onClick={() => setCatalogOpen(false)}
-                      className="text-xs font-semibold text-[#0066cc] hover:underline"
-                    >
-                    Весь каталог →
-                  </Link>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Search — с тремя точками справа */}
@@ -312,6 +299,86 @@ export function StickyNav() {
           </Link>
         </div>
       </div>
+
+      {/* Mega menu - ChipDip style - positioned absolutely relative to parent */}
+      {catalogOpen && (
+        <div ref={catalogMenuRef} className="absolute top-[68px] left-0 right-0 mx-auto max-w-[1400px] px-4 z-[60]">
+          <div className="bg-white border border-gray-200 shadow-xl max-h-[500px] overflow-y-auto">
+            <div className="flex">
+              {/* Left column - main categories */}
+              <div className="w-[240px] bg-white border-r border-gray-200">
+                <ul className="py-1">
+                  {categories.length > 0 ? (
+                    categories.map((cat) => (
+                      <li
+                        key={cat.slug}
+                        onMouseEnter={() => setHoveredCategory(cat.slug)}
+                        onMouseLeave={() => setHoveredCategory(null)}
+                      >
+                        <Link
+                          href={`/catalog/${cat.slug}`}
+                          className={`block px-4 py-2 text-sm transition-colors cursor-pointer ${
+                            hoveredCategory === cat.slug
+                              ? 'bg-[#f5f5f5] text-[#0066cc]'
+                              : 'text-gray-800 hover:bg-[#f5f5f5] hover:text-[#0066cc]'
+                          }`}
+                        >
+                          {cat.name}
+                        </Link>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="px-4 py-8 text-center text-gray-400 text-sm">
+                      Категории загружаются...
+                    </li>
+                  )}
+                </ul>
+              </div>
+
+              {/* Right column - subcategories */}
+              <div className="flex-1 bg-white p-4 overflow-y-auto">
+                {hoveredCategory && categories.find(c => c.slug === hoveredCategory)?.children.length > 0 ? (
+                  <div className="grid grid-cols-3 gap-x-6 gap-y-1">
+                    {categories
+                      .find(c => c.slug === hoveredCategory)
+?.children.map((subcat) => (
+                            <Link
+                              key={subcat.slug}
+                              href={`/catalog/${subcat.slug}`}
+                              className="text-sm text-gray-700 hover:text-[#0066cc] hover:underline transition-colors py-1 block"
+                            >
+                              {subcat.name}
+                            </Link>
+                          ))}
+                  </div>
+                ) : hoveredCategory ? (
+                  <div className="text-sm text-gray-400 py-8 text-center">
+                    Подкатегории отсутствуют
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-400 py-8 text-center">
+                    Наведите на категорию
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer with "Весь каталог" button */}
+            <div className="border-t border-gray-200 px-4 py-2 bg-gray-50 flex items-center justify-between">
+              <span className="text-xs text-gray-500">
+                {totalProducts > 0 ? `${totalProducts.toLocaleString('ru-RU')} товаров` : '2 000 000+ товаров'}
+              </span>
+              <Link
+                href="/catalog"
+                onClick={() => setCatalogOpen(false)}
+                className="text-xs font-semibold text-[#0066cc] hover:underline"
+              >
+                Весь каталог →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Auth Modal */}
       {authModalOpen && (

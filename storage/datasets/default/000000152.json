@@ -1,0 +1,15 @@
+{
+	"slug": "lm7705mm-nopb-dc-dc-preobrazovatel-charge-texas-instruments-9000529807",
+	"name": "LM7705MM/NOPB, DC-DC преобразователь, Charge Pump, Uвх=3…5.25В, Uвых=-0.23В, 0.026А, 92кГц [VSSOP-8.]",
+	"partNumber": "LM7705MM/NOPB",
+	"sku": "9000529807",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Описание Преобразователь постоянного тока NO Step-down type",
+	"weight": 0.1,
+	"specifications": "{}",
+	"datasheets": "[null,null]",
+	"images": "[]"
+}

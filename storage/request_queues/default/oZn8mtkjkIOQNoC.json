@@ -1,0 +1,9 @@
+{
+	"id": "oZn8mtkjkIOQNoC",
+	"json": "{\"id\":\"oZn8mtkjkIOQNoC\",\"url\":\"https://www.chipdip.ru/product/tps562200ddcr-dc-dc-preobrazovatel-adj-2a-texas-instruments-9000272374\",\"uniqueKey\":\"https://www.chipdip.ru/product/tps562200ddcr-dc-dc-preobrazovatel-adj-2a-texas-instruments-9000272374\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":1,\"errorMessages\":[\"Error: browserController.newPage() failed: TB3SORXFouQuGrnY88P3y\\nCause:browserContext.newPage: Target page, context or browser has been closed.\\n    at BrowserPool._createPageForBrowser (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/browser-pool.ts:595:19)\\n    at async <anonymous> (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/browser-pool.ts:456:20)\"],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":5}}}",
+	"method": "GET",
+	"orderNo": 1777676185694,
+	"retryCount": 1,
+	"uniqueKey": "https://www.chipdip.ru/product/tps562200ddcr-dc-dc-preobrazovatel-adj-2a-texas-instruments-9000272374",
+	"url": "https://www.chipdip.ru/product/tps562200ddcr-dc-dc-preobrazovatel-adj-2a-texas-instruments-9000272374"
+}

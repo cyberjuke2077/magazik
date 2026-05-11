@@ -1,0 +1,15 @@
+{
+	"slug": "tps55340pwpr-dc-dc-preobrazovatel-boost-texas-instruments-9000441854",
+	"name": "TPS55340PWPR, DC-DC преобразователь, Boost, Uвх=2.9…32В, Uвых=2.9…38В, 5.25А, 0.091…1.14МГц [HTSSOP-14.]",
+	"partNumber": "TPS55340PWPR",
+	"sku": "9000441854",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Преобразователь постоянного тока повышающий обратноходовой несимметричный",
+	"weight": 0.6,
+	"specifications": "{}",
+	"datasheets": "[null,null,null,null]",
+	"images": "[]"
+}

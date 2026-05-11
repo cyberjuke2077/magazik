@@ -1,0 +1,15 @@
+{
+	"slug": "lm2595s-5.0-ponizhayuschiy-dc-dc-preobrazovatel-umw-9001633728",
+	"name": "LM2595S-5.0, Понижающий DC-DC преобразователь Uвых=5.0В, 1А, 150кГц [TO-263-5L]",
+	"partNumber": "LM2595S-5.0",
+	"sku": "9001633728",
+	"manufacturer": "UMW",
+	"manufacturerSlug": "",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Понижающий импульсный регулятор IC с фиксированным положительным напряжением 5 В 1, Выxод 2A TO-263-6, D2PAK (5 выводов + Tab), TO-263BA",
+	"weight": 2.127,
+	"specifications": "{}",
+	"datasheets": "[null,null]",
+	"images": "[]"
+}

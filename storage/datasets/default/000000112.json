@@ -1,0 +1,15 @@
+{
+	"slug": "lm2660mx-nopb-invertor-napryazheniya-s-texas-instruments-9001599786",
+	"name": "LM2660MX/NOPB, Инвертор напряжения с подкачкой заряда, INV, 100мА [SOIC -8.] (=LM2660M/NOPB)",
+	"partNumber": "LM2660MX/NOPB",
+	"sku": "9001599786",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Преобразователь постоянного тока мультиконфигурационный 0.1А",
+	"weight": 0.15,
+	"specifications": "{}",
+	"datasheets": "[null]",
+	"images": "[]"
+}

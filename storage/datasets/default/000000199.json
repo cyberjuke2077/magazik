@@ -1,0 +1,15 @@
+{
+	"slug": "mcp1640t-i-chy-dc-dc-preobrazovatel-650mv-5.5v-microchip-9000109618",
+	"name": "MCP1640T-I/CHY, DC/DC преобразователь, 650мВ-5.5В (Vin), 2В-5.5В, 350мА, [SOT-23-6]",
+	"partNumber": "MCP1640T-I/CHY",
+	"sku": "9000109618",
+	"manufacturer": "Microchip",
+	"manufacturerSlug": "",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Преобразователь постоянного тока повышающий синхронный подстраиваемый 0.1А",
+	"weight": 0.1,
+	"specifications": "{}",
+	"datasheets": "[null,null,null,null]",
+	"images": "[]"
+}

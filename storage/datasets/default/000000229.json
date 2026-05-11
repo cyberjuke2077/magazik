@@ -1,0 +1,15 @@
+{
+	"slug": "tlv62150rgtr-dc-dc-preobrazovatel-buck-texas-instruments-9000685412",
+	"name": "TLV62150RGTR, DC-DC преобразователь, Buck, Uвх=4…17В, Uвых=0.9…5В, 1А, 2.5МГц [VQFN-16_3x3.]",
+	"partNumber": "TLV62150RGTR",
+	"sku": "9000685412",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Регулируемые преобразователи постоянного тока понижающего типа 900 мВ ~ 5 В 1 А 4 В ~ 17 В VQFN-16-EP (3x3) ROHS",
+	"weight": 0.5,
+	"specifications": "{}",
+	"datasheets": "[null]",
+	"images": "[]"
+}

@@ -1,0 +1,15 @@
+{
+	"slug": "lmr33630addar-dc-dc-preobrazovatel-buck-texas-instruments-9000818373",
+	"name": "LMR33630ADDAR, DC-DC преобразователь, Buck, Uвх=3.8…36В, Uвых=1…24В, 3А, 400кГц [SO-8_PowerPad.]",
+	"partNumber": "LMR33630ADDAR",
+	"sku": "9000818373",
+	"manufacturer": "Texas Instruments",
+	"manufacturerSlug": "texas-instruments",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Описание IC: PMIC; DC/DC converter,synchronous; Uin: 3.8?36VDC; 3A; Ch: 1",
+	"weight": 0.2,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

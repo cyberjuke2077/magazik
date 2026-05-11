@@ -1,0 +1,15 @@
+{
+	"slug": "st1s12gr-ponizhayuschiy-dc-dc-st-microelectronics-9001570235",
+	"name": "ST1S12GR, Понижающий DC/DC преобразователь ADJ 700мА [TSOT-23-5]",
+	"partNumber": "ST1S12GR",
+	"sku": "9001570235",
+	"manufacturer": "ST Microelectronics",
+	"manufacturerSlug": "",
+	"categorySlug": "dc-dc-preobrazovateli-2010",
+	"categoryName": "DC-DC Преобразователи",
+	"description": "Описание IC: driver; DC/DC converter; Uin: 2.5?5.5VDC; Uout: 0.6?5.5VDC Характеристики <table><tbody><tr><td>Категория</td>\n<td> Микросхема </td>\n</tr>\n<tr><td>Тип</td>\n<td> источника питания </td>\n</tr>\n<tr><td>Вид</td>\n<td> регулятор напряжения </td>\n</tr>\n</tbody></table>\n<table></table>",
+	"weight": 0.1,
+	"specifications": "{}",
+	"datasheets": "[null,null,null]",
+	"images": "[]"
+}

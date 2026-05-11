@@ -30,3 +30,15 @@ def test_chipdip_get_url():
     
     assert "chipdip.ru" in url
     assert "AOZ1284PI" in url
+
+
+def test_google_get_url():
+    """Test Google search URL generation."""
+    from scripts.collector.extractors.google import GoogleExtractor
+    
+    extractor = GoogleExtractor("google")
+    url = extractor.get_url("AOZ1284PI", "AOS")
+    
+    assert "google.com" in url
+    assert "AOZ1284PI" in url
+    assert "AOS" in url or "datasheet" in url

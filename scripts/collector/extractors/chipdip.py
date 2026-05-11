@@ -8,9 +8,9 @@ from .base import BaseExtractor, ExtractResult
 class ChipDipExtractor(BaseExtractor):
     """Extract data from ChipDip.ru."""
     
-    def __init__(self):
+    def __init__(self, name: str = "chipdip"):
         """Initialize ChipDip extractor."""
-        super().__init__("chipdip")
+        super().__init__(name)
         self.base_url = "https://www.chipdip.ru"
     
     def get_url(self, part_number: str, manufacturer: str) -> str:
@@ -26,12 +26,17 @@ class ChipDipExtractor(BaseExtractor):
         """Extract product data from ChipDip."""
         try:
             url = self.get_url(part_number, manufacturer)
+            # Use domcontentloaded for faster initial load
             await page.goto(url, wait_until="domcontentloaded", timeout=60000)
             
-            # Wait for search results
-            await page.wait_for_selector(".product-item, .no-results", timeout=10000)
+            # Wait longer for search results table to appear
+            try:
+                await page.wait_for_selector("table.itemlist", timeout=45000)
+            except:
+                # No results found
+                return ExtractResult.failure("Product not found on ChipDip")
             
-            # Check if no results
+            # Check if no results message exists
             no_results = await page.query_selector(".no-results")
             if no_results:
                 return ExtractResult.failure("Product not found on ChipDip")
@@ -50,11 +55,11 @@ class ChipDipExtractor(BaseExtractor):
     async def _extract_product_data(self, page: Page, part_number: str) -> Optional[Dict]:
         """Extract product data from page."""
         try:
-            # Find product link
-            product_link = await page.query_selector(f"a[href*='{part_number.lower()}']")
+            # Find product link in itemlist table
+            product_link = await page.query_selector(f"table.itemlist a.link[href*='{part_number.lower()}']")
             if not product_link:
-                # Try first product in results
-                product_link = await page.query_selector(".product-item a.link")
+                # Try first product in results table
+                product_link = await page.query_selector("table.itemlist tr.with-hover a.link")
             
             if not product_link:
                 return None
