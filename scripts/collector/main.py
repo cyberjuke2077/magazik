@@ -11,6 +11,7 @@ from .config import CollectorConfig
 from .database import ProgressDB
 from .session import BrowserSession
 from .tui import CollectorTUI
+from .storage import ProductStorage
 
 
 class Collector:
@@ -20,6 +21,7 @@ class Collector:
         """Initialize collector."""
         self.config = config
         self.db = ProgressDB(config.database.sqlite)
+        self.storage = ProductStorage()
         self.tui = CollectorTUI()
         self.sessions: List[BrowserSession] = []
         self.running = False
@@ -33,6 +35,10 @@ class Collector:
         # Setup signal handlers
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
+        
+        # Connect to PostgreSQL
+        await self.storage.connect()
+        self.tui.add_log("Connected to PostgreSQL")
         
         # Initialize sessions
         for i in range(self.config.sessions.count):
@@ -78,14 +84,25 @@ class Collector:
                 result = await session.extract_product_data(part_number, manufacturer)
                 
                 if result["data"]:
-                    # Save to database (PostgreSQL via Prisma)
-                    # TODO: Implement storage.save_product()
-                    
-                    self.db.mark_completed(product["id"])
-                    self.tui.add_log(
-                        f"✅ {part_number} - Found on {result['source']}",
-                        "SUCCESS"
+                    # Save to PostgreSQL via Prisma
+                    product_id = await self.storage.save_product(
+                        part_number=part_number,
+                        manufacturer_name=manufacturer,
+                        data=result["data"]
                     )
+                    
+                    if product_id:
+                        self.db.mark_completed(product["id"])
+                        self.tui.add_log(
+                            f"✅ {part_number} - Saved to DB (source: {result['source']})",
+                            "SUCCESS"
+                        )
+                    else:
+                        self.db.mark_failed(product["id"], "Failed to save to PostgreSQL")
+                        self.tui.add_log(
+                            f"⚠️ {part_number} - Extracted but failed to save",
+                            "WARNING"
+                        )
                 else:
                     self.db.mark_failed(product["id"], result["error"])
                     self.tui.add_log(
@@ -128,6 +145,10 @@ class Collector:
         for session in self.sessions:
             await session.close()
             self.tui.add_log(f"Session {session.session_id} closed")
+        
+        # Disconnect from PostgreSQL
+        await self.storage.disconnect()
+        self.tui.add_log("Disconnected from PostgreSQL")
         
         # Close database
         self.db.close()
