@@ -1,28 +1,27 @@
 """
-PostgreSQL storage module using Prisma ORM.
+PostgreSQL storage module using psycopg2.
 Saves extracted product data to the main database.
 """
 
-import asyncio
+import os
+import psycopg2
 from typing import Dict, Any, Optional, List
-from prisma import Prisma
-from prisma.models import Product, Manufacturer, Category, ProductImage, Specification, Datasheet
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 class ProductStorage:
-    """Handles saving product data to PostgreSQL via Prisma."""
+    """Handles saving product data to PostgreSQL via psycopg2."""
     
     def __init__(self):
-        self.db: Optional[Prisma] = None
+        self.conn = None
         self._default_category_id: Optional[str] = None
     
     async def connect(self):
         """Connect to PostgreSQL database."""
-        self.db = Prisma()
-        await self.db.connect()
+        database_url = os.getenv('DATABASE_URL', 'postgresql://postgres:electromagaz_dev_2026@localhost:5432/electromagaz')
+        self.conn = psycopg2.connect(database_url)
         logger.info("Connected to PostgreSQL")
         
         # Get or create default category for uncategorized products
@@ -30,48 +29,73 @@ class ProductStorage:
     
     async def disconnect(self):
         """Disconnect from PostgreSQL database."""
-        if self.db:
-            await self.db.disconnect()
+        if self.conn:
+            self.conn.close()
             logger.info("Disconnected from PostgreSQL")
     
     async def _ensure_default_category(self) -> str:
         """Ensure default category exists, create if not."""
-        category = await self.db.category.find_first(
-            where={'slug': 'uncategorized'}
+        cursor = self.conn.cursor()
+        
+        # Check if category exists
+        cursor.execute(
+            "SELECT id FROM \"Category\" WHERE slug = %s",
+            ('uncategorized',)
         )
+        result = cursor.fetchone()
         
-        if not category:
-            category = await self.db.category.create(
-                data={
-                    'slug': 'uncategorized',
-                    'name': 'Без категории',
-                    'description': 'Товары без категории'
-                }
+        if result:
+            category_id = result[0]
+        else:
+            # Create default category
+            cursor.execute(
+                """
+                INSERT INTO \"Category\" (id, slug, name, description, \"createdAt\", \"updatedAt\")
+                VALUES (gen_random_uuid()::text, %s, %s, %s, NOW(), NOW())
+                RETURNING id
+                """,
+                ('uncategorized', 'Без категории', 'Товары без категории')
             )
-            logger.info(f"Created default category: {category.id}")
+            category_id = cursor.fetchone()[0]
+            self.conn.commit()
+            logger.info(f"Created default category: {category_id}")
         
-        return category.id
+        cursor.close()
+        return category_id
     
     async def _get_or_create_manufacturer(self, name: str) -> str:
         """Get existing manufacturer or create new one."""
         # Normalize manufacturer name
         name = name.strip()
-        slug = name.lower().replace(' ', '-').replace('/', '-')
+        slug = name.lower().replace(' ', '-').replace('/', '-').replace('\\', '-')
         
-        manufacturer = await self.db.manufacturer.find_first(
-            where={'slug': slug}
+        cursor = self.conn.cursor()
+        
+        # Check if manufacturer exists
+        cursor.execute(
+            "SELECT id FROM \"Manufacturer\" WHERE slug = %s",
+            (slug,)
         )
+        result = cursor.fetchone()
         
-        if not manufacturer:
-            manufacturer = await self.db.manufacturer.create(
-                data={
-                    'name': name,
-                    'slug': slug
-                }
+        if result:
+            manufacturer_id = result[0]
+        else:
+            # Create manufacturer
+            cursor.execute(
+                """
+                INSERT INTO \"Manufacturer\" (id, name, slug, \"createdAt\", \"updatedAt\")
+                VALUES (gen_random_uuid()::text, %s, %s, NOW(), NOW())
+                RETURNING id
+                """,
+                (name, slug)
             )
-            logger.info(f"Created manufacturer: {name} ({manufacturer.id})")
+            manufacturer_id = cursor.fetchone()[0]
+            self.conn.commit()
+            logger.info(f"Created manufacturer: {name} ({manufacturer_id})")
         
-        return manufacturer.id
+        cursor.close()
+        return manufacturer_id
     
     async def save_product(
         self,
@@ -95,32 +119,40 @@ class ProductStorage:
             manufacturer_id = await self._get_or_create_manufacturer(manufacturer_name)
             
             # Generate slug from part number
-            slug = part_number.lower().replace('/', '-').replace(' ', '-')
+            slug = part_number.lower().replace('/', '-').replace(' ', '-').replace('\\', '-')
+            
+            cursor = self.conn.cursor()
             
             # Check if product already exists
-            existing = await self.db.product.find_first(
-                where={
-                    'partNumber': part_number,
-                    'manufacturerId': manufacturer_id
-                }
+            cursor.execute(
+                """
+                SELECT id FROM \"Product\" 
+                WHERE \"partNumber\" = %s AND \"manufacturerId\" = %s
+                """,
+                (part_number, manufacturer_id)
             )
+            existing = cursor.fetchone()
             
             if existing:
                 logger.info(f"Product {part_number} already exists, updating...")
-                product = await self._update_product(existing.id, data)
+                product_id = existing[0]
+                await self._update_product(product_id, data)
             else:
                 logger.info(f"Creating new product {part_number}...")
-                product = await self._create_product(
+                product_id = await self._create_product(
                     slug=slug,
                     part_number=part_number,
                     manufacturer_id=manufacturer_id,
                     data=data
                 )
             
-            return product.id if product else None
+            cursor.close()
+            return product_id
             
         except Exception as e:
             logger.error(f"Failed to save product {part_number}: {e}")
+            if self.conn:
+                self.conn.rollback()
             return None
     
     async def _create_product(
@@ -129,103 +161,135 @@ class ProductStorage:
         part_number: str,
         manufacturer_id: str,
         data: Dict[str, Any]
-    ) -> Optional[Product]:
+    ) -> Optional[str]:
         """Create new product with all related data."""
         try:
+            cursor = self.conn.cursor()
+            
             # Create product
-            product = await self.db.product.create(
-                data={
-                    'slug': slug,
-                    'name': data.get('name', part_number),
-                    'partNumber': part_number,
-                    'description': data.get('description'),
-                    'weight': float(data['weight']) if data.get('weight') else None,
-                    'categoryId': self._default_category_id,
-                    'manufacturerId': manufacturer_id,
-                    'inStock': False,
-                    'stockCount': 0
-                }
+            cursor.execute(
+                """
+                INSERT INTO \"Product\" (
+                    id, slug, name, \"partNumber\", description, weight,
+                    \"categoryId\", \"manufacturerId\", \"inStock\", \"stockCount\",
+                    \"createdAt\", \"updatedAt\"
+                )
+                VALUES (
+                    gen_random_uuid()::text, %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s,
+                    NOW(), NOW()
+                )
+                RETURNING id
+                """,
+                (
+                    slug,
+                    data.get('name', part_number),
+                    part_number,
+                    data.get('description'),
+                    float(data['weight']) if data.get('weight') else None,
+                    self._default_category_id,
+                    manufacturer_id,
+                    False,
+                    0
+                )
             )
+            product_id = cursor.fetchone()[0]
             
             # Create related data
-            await self._create_images(product.id, data.get('images', []))
-            await self._create_specifications(product.id, data.get('specifications', {}))
-            await self._create_datasheets(product.id, data.get('datasheets', []))
+            await self._create_images(cursor, product_id, data.get('images', []))
+            await self._create_specifications(cursor, product_id, data.get('specifications', {}))
+            await self._create_datasheets(cursor, product_id, data.get('datasheets', []))
             
-            logger.info(f"Created product {part_number} ({product.id})")
-            return product
+            self.conn.commit()
+            cursor.close()
+            
+            logger.info(f"Created product {part_number} ({product_id})")
+            return product_id
             
         except Exception as e:
             logger.error(f"Failed to create product {part_number}: {e}")
+            if self.conn:
+                self.conn.rollback()
             return None
     
     async def _update_product(
         self,
         product_id: str,
         data: Dict[str, Any]
-    ) -> Optional[Product]:
+    ) -> Optional[str]:
         """Update existing product with new data."""
         try:
+            cursor = self.conn.cursor()
+            
             # Update product
-            product = await self.db.product.update(
-                where={'id': product_id},
-                data={
-                    'name': data.get('name'),
-                    'description': data.get('description'),
-                    'weight': float(data['weight']) if data.get('weight') else None
-                }
+            cursor.execute(
+                """
+                UPDATE \"Product\"
+                SET name = %s, description = %s, weight = %s, \"updatedAt\" = NOW()
+                WHERE id = %s
+                """,
+                (
+                    data.get('name'),
+                    data.get('description'),
+                    float(data['weight']) if data.get('weight') else None,
+                    product_id
+                )
             )
             
             # Delete old related data
-            await self.db.productimage.delete_many(where={'productId': product_id})
-            await self.db.specification.delete_many(where={'productId': product_id})
-            await self.db.datasheet.delete_many(where={'productId': product_id})
+            cursor.execute("DELETE FROM \"ProductImage\" WHERE \"productId\" = %s", (product_id,))
+            cursor.execute("DELETE FROM \"Specification\" WHERE \"productId\" = %s", (product_id,))
+            cursor.execute("DELETE FROM \"Datasheet\" WHERE \"productId\" = %s", (product_id,))
             
             # Create new related data
-            await self._create_images(product_id, data.get('images', []))
-            await self._create_specifications(product_id, data.get('specifications', {}))
-            await self._create_datasheets(product_id, data.get('datasheets', []))
+            await self._create_images(cursor, product_id, data.get('images', []))
+            await self._create_specifications(cursor, product_id, data.get('specifications', {}))
+            await self._create_datasheets(cursor, product_id, data.get('datasheets', []))
+            
+            self.conn.commit()
+            cursor.close()
             
             logger.info(f"Updated product {product_id}")
-            return product
+            return product_id
             
         except Exception as e:
             logger.error(f"Failed to update product {product_id}: {e}")
+            if self.conn:
+                self.conn.rollback()
             return None
     
-    async def _create_images(self, product_id: str, images: List[str]):
+    async def _create_images(self, cursor, product_id: str, images: List[str]):
         """Create product images."""
         for i, image_url in enumerate(images):
             if image_url:
-                await self.db.productimage.create(
-                    data={
-                        'productId': product_id,
-                        'imageUrl': image_url,
-                        'order': i
-                    }
+                cursor.execute(
+                    """
+                    INSERT INTO \"ProductImage\" (id, \"productId\", \"imageUrl\", \"order\", \"createdAt\")
+                    VALUES (gen_random_uuid()::text, %s, %s, %s, NOW())
+                    """,
+                    (product_id, image_url, i)
                 )
     
-    async def _create_specifications(self, product_id: str, specs: Dict[str, str]):
+    async def _create_specifications(self, cursor, product_id: str, specs: Dict[str, str]):
         """Create product specifications."""
         for i, (key, value) in enumerate(specs.items()):
             if key and value:
-                await self.db.specification.create(
-                    data={
-                        'productId': product_id,
-                        'key': key,
-                        'value': value,
-                        'order': i
-                    }
+                cursor.execute(
+                    """
+                    INSERT INTO \"Specification\" (id, \"productId\", key, value, \"order\", \"createdAt\")
+                    VALUES (gen_random_uuid()::text, %s, %s, %s, %s, NOW())
+                    """,
+                    (product_id, key, value, i)
                 )
     
-    async def _create_datasheets(self, product_id: str, datasheets: List[str]):
+    async def _create_datasheets(self, cursor, product_id: str, datasheets: List[str]):
         """Create product datasheets."""
         for url in datasheets:
             if url:
-                await self.db.datasheet.create(
-                    data={
-                        'productId': product_id,
-                        'title': 'Datasheet',
-                        'url': url
-                    }
+                cursor.execute(
+                    """
+                    INSERT INTO \"Datasheet\" (id, \"productId\", title, url, \"createdAt\")
+                    VALUES (gen_random_uuid()::text, %s, %s, %s, NOW())
+                    """,
+                    (product_id, 'Datasheet', url)
                 )
