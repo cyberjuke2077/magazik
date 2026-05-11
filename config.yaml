@@ -1,0 +1,39 @@
+sessions:
+  count: 10
+  work_duration: 7200
+  break_duration: 600
+  night_break: false
+
+delays:
+  chipdip: [15, 30]
+  google: [5, 10]
+  manufacturer: [10, 20]
+  distributor: [10, 15]
+
+retry:
+  max_attempts: 3
+  backoff: [60, 300, 900]
+
+sources:
+  - name: chipdip
+    enabled: true
+    priority: 1
+  - name: google
+    enabled: true
+    priority: 2
+  - name: manufacturer
+    enabled: true
+    priority: 3
+  - name: distributor
+    enabled: true
+    priority: 4
+
+database:
+  sqlite: ./data/progress.db
+  postgresql: ${DATABASE_URL}
+
+logging:
+  level: INFO
+  file: ./logs/collector-{date}.log
+  rotation: daily
+  retention: 30
