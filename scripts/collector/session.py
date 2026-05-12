@@ -11,6 +11,7 @@ from .config import CollectorConfig, DelayConfig
 from .extractors.base import BaseExtractor, ExtractResult
 from .extractors.chipdip import ChipDipExtractor
 from .extractors.google import GoogleExtractor
+from .extractors.nexar import NexarExtractor
 from .utils import get_random_user_agent, human_like_scroll, random_mouse_movement, get_random_delay
 
 
@@ -33,6 +34,7 @@ class BrowserSession:
         
         # Extractors
         self.extractors = {
+            "nexar": NexarExtractor(),
             "chipdip": ChipDipExtractor("chipdip"),
             "google": GoogleExtractor("google"),
         }
@@ -120,15 +122,19 @@ class BrowserSession:
         # Get delay config for this source
         delay_range = getattr(self.config.delays, source_name, (10, 20))
         
-        # Human-like behavior before request
-        await random_mouse_movement(self.page)
-        
-        # Extract data
-        result = await extractor.extract(self.page, part_number, manufacturer)
-        
-        # Human-like behavior after request
-        if result.success:
-            await human_like_scroll(self.page)
+        # Nexar doesn't need browser page (HTTP API)
+        if source_name == "nexar":
+            result = await extractor.extract(None, part_number, manufacturer)
+        else:
+            # Human-like behavior before request
+            await random_mouse_movement(self.page)
+            
+            # Extract data
+            result = await extractor.extract(self.page, part_number, manufacturer)
+            
+            # Human-like behavior after request
+            if result.success:
+                await human_like_scroll(self.page)
         
         # Delay before next request
         delay = get_random_delay(delay_range[0], delay_range[1])
