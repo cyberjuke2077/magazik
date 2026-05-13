@@ -18,6 +18,7 @@ class SessionConfig:
 @dataclass
 class DelayConfig:
     """Delay configuration for different sources."""
+    nexar: Tuple[int, int] = (2, 5)
     chipdip: Tuple[int, int] = (15, 30)
     google: Tuple[int, int] = (5, 10)
     manufacturer: Tuple[int, int] = (10, 20)

@@ -3,9 +3,11 @@
 import asyncio
 import signal
 import sys
+import os
 from pathlib import Path
 from typing import List
 from datetime import datetime
+from dotenv import load_dotenv
 
 from .config import CollectorConfig
 from .database import ProgressDB
@@ -162,6 +164,9 @@ class Collector:
 
 async def main():
     """Main entry point."""
+    # Load environment variables from .env
+    load_dotenv()
+    
     # Load config
     config_path = sys.argv[1] if len(sys.argv) > 1 else None
     
