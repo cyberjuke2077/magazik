@@ -33,7 +33,7 @@ sources:
     priority: 4
 
 database:
-  sqlite: ./data/progress.db
+  sqlite: /Users/lux/Desktop/projects/electromagaz/data/progress.db
   postgresql: ${DATABASE_URL}
 
 logging:
