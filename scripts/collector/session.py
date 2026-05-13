@@ -4,7 +4,8 @@ import asyncio
 import random
 from typing import Optional, Dict
 from datetime import datetime, timedelta
-from playwright.async_api import async_playwright, Browser, BrowserContext, Page
+from playwright.async_api import Browser, BrowserContext, Page
+from cloakbrowser import launch_async
 # from playwright_stealth import stealth_async  # Disabled - not compatible with Python 3.13
 
 from .config import CollectorConfig, DelayConfig
@@ -25,7 +26,6 @@ class BrowserSession:
         self.browser: Optional[Browser] = None
         self.context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
-        self.playwright = None
         
         # Session state
         self.start_time = datetime.now()
@@ -41,12 +41,9 @@ class BrowserSession:
     
     async def start(self):
         """Start browser session."""
-        self.playwright = await async_playwright().start()
-        
-        # Launch Chrome (not Chromium) to avoid macOS compatibility issues
-        self.browser = await self.playwright.chromium.launch(
-            headless=True,
-            executable_path="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        # Launch CloakBrowser with stealth features
+        self.browser = await launch_async(
+            headless=True
         )
         
         # Create context with random user agent
@@ -68,8 +65,6 @@ class BrowserSession:
             await self.context.close()
         if self.browser:
             await self.browser.close()
-        if self.playwright:
-            await self.playwright.stop()
     
     async def extract_product_data(
         self,
