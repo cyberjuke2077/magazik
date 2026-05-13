@@ -21,7 +21,7 @@ class ProgressDB:
         """Initialize database connection."""
         self.db_path = db_path
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
-        self.conn = sqlite3.connect(db_path, check_same_thread=False)
+        self.conn = sqlite3.connect(db_path, check_same_thread=False, timeout=30.0)
         self.conn.row_factory = sqlite3.Row
         self._init_schema()
     
@@ -83,22 +83,45 @@ class ProgressDB:
     
     def mark_completed(self, product_id: int):
         """Mark product as completed."""
-        self.conn.execute("""
-            UPDATE product_queue
-            SET status = 'completed', updated_at = CURRENT_TIMESTAMP
-            WHERE id = ?
-        """, (product_id,))
-        self.conn.commit()
+        try:
+            self.conn.execute("""
+                UPDATE product_queue
+                SET status = 'completed', updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            """, (product_id,))
+            self.conn.commit()
+        except sqlite3.ProgrammingError:
+            # Reconnect if connection was closed
+            self.conn = sqlite3.connect(self.db_path, check_same_thread=False, timeout=30.0)
+            self.conn.row_factory = sqlite3.Row
+            self.conn.execute("""
+                UPDATE product_queue
+                SET status = 'completed', updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            """, (product_id,))
+            self.conn.commit()
     
     def mark_failed(self, product_id: int, error: str):
         """Mark product as failed."""
-        self.conn.execute("""
-            UPDATE product_queue
-            SET status = 'failed', attempts = attempts + 1, 
-                last_error = ?, updated_at = CURRENT_TIMESTAMP
-            WHERE id = ?
-        """, (error, product_id))
-        self.conn.commit()
+        try:
+            self.conn.execute("""
+                UPDATE product_queue
+                SET status = 'failed', attempts = attempts + 1, 
+                    last_error = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            """, (error, product_id))
+            self.conn.commit()
+        except sqlite3.ProgrammingError:
+            # Reconnect if connection was closed
+            self.conn = sqlite3.connect(self.db_path, check_same_thread=False, timeout=30.0)
+            self.conn.row_factory = sqlite3.Row
+            self.conn.execute("""
+                UPDATE product_queue
+                SET status = 'failed', attempts = attempts + 1, 
+                    last_error = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            """, (error, product_id))
+            self.conn.commit()
     
     def get_stats(self) -> Dict:
         """Get collection statistics."""
