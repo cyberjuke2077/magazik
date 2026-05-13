@@ -20,17 +20,17 @@ sources:
     enabled: false
     priority: 5
   - name: octopart
-    enabled: true
+    enabled: false
     priority: 1
   - name: digikey
     enabled: true
-    priority: 2
+    priority: 1
   - name: mouser
-    enabled: true
+    enabled: false
     priority: 3
   - name: google
     enabled: true
-    priority: 4
+    priority: 2
 
 database:
   sqlite: /Users/lux/Desktop/projects/electromagaz/data/progress.db
