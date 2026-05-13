@@ -113,23 +113,16 @@ class ChipDipExtractor(BaseExtractor):
         specs = {}
         
         try:
-            # Try table format
-            rows = await page.query_selector_all(".specifications tr, .specs-table tr")
+            # ChipDip uses table.product__params
+            rows = await page.query_selector_all("table.product__params tr")
             for row in rows:
-                cells = await row.query_selector_all("td, th")
-                if len(cells) >= 2:
-                    key = await cells[0].inner_text()
-                    value = await cells[1].inner_text()
+                name_cell = await row.query_selector("td.product__param-name")
+                value_cell = await row.query_selector("td.product__param-value")
+                
+                if name_cell and value_cell:
+                    key = await name_cell.inner_text()
+                    value = await value_cell.inner_text()
                     specs[key.strip()] = value.strip()
-            
-            # Try list format
-            if not specs:
-                items = await page.query_selector_all(".spec-item, .specification")
-                for item in items:
-                    text = await item.inner_text()
-                    if ":" in text:
-                        key, value = text.split(":", 1)
-                        specs[key.strip()] = value.strip()
         
         except Exception as e:
             print(f"Error extracting specifications: {e}")
@@ -138,31 +131,17 @@ class ChipDipExtractor(BaseExtractor):
     
     async def _extract_images(self, page: Page) -> List[str]:
         """Extract product images."""
-        images = []
-        
-        try:
-            img_elements = await page.query_selector_all(".product-image img, .gallery img")
-            for img in img_elements:
-                src = await img.get_attribute("src")
-                if src and not src.endswith(".svg"):
-                    # Convert to absolute URL
-                    if src.startswith("//"):
-                        src = "https:" + src
-                    elif src.startswith("/"):
-                        src = self.base_url + src
-                    images.append(src)
-        
-        except Exception as e:
-            print(f"Error extracting images: {e}")
-        
-        return images
+        # ChipDip images have watermarks - skip extraction
+        # Images will be extracted from other sources (Octopart, Digi-Key, Mouser)
+        return []
     
     async def _extract_datasheets(self, page: Page) -> List[str]:
         """Extract datasheet links."""
         datasheets = []
         
         try:
-            links = await page.query_selector_all("a[href*='datasheet'], a[href$='.pdf']")
+            # ChipDip uses .download_pdf .download__link for datasheets
+            links = await page.query_selector_all(".download_pdf .download__link")
             for link in links:
                 href = await link.get_attribute("href")
                 if href:
