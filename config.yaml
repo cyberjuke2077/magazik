@@ -5,30 +5,30 @@ sessions:
   night_break: false
 
 delays:
-  nexar: [2, 5]
   chipdip: [15, 30]
+  octopart: [10, 20]
+  digikey: [10, 20]
+  mouser: [10, 20]
   google: [5, 10]
-  manufacturer: [10, 20]
-  distributor: [10, 15]
 
 retry:
   max_attempts: 3
   backoff: [60, 300, 900]
 
 sources:
-  - name: nexar
-    enabled: true
-    priority: 1
   - name: chipdip
     enabled: true
+    priority: 1
+  - name: octopart
+    enabled: true
     priority: 2
-  - name: google
+  - name: digikey
     enabled: true
     priority: 3
-  - name: manufacturer
+  - name: mouser
     enabled: true
     priority: 4
-  - name: distributor
+  - name: google
     enabled: true
     priority: 5
 
