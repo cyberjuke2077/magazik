@@ -1,8 +1,11 @@
 """Octopart data extractor."""
 
+import logging
 from typing import Optional, List, Dict, Any
-from playwright.async_api import Page
+from playwright.async_api import Page, TimeoutError as PlaywrightTimeout
 from .base import BaseExtractor, ExtractResult
+
+logger = logging.getLogger(__name__)
 
 
 class OctopartExtractor(BaseExtractor):
@@ -13,7 +16,7 @@ class OctopartExtractor(BaseExtractor):
         super().__init__(name)
         self.base_url = "https://octopart.com"
     
-    def get_url(self, part_number: str, manufacturer: Optional[str] = None) -> str:
+    def get_url(self, part_number: str, manufacturer: str) -> str:
         """Get Octopart search URL."""
         return f"{self.base_url}/search?q={part_number}"
     
@@ -31,7 +34,7 @@ class OctopartExtractor(BaseExtractor):
             # Wait for search results
             try:
                 await page.wait_for_selector(".search-results, .no-results", timeout=30000)
-            except:
+            except PlaywrightTimeout:
                 return ExtractResult.failure(f"Timeout waiting for search results")
             
             # Check if no results
@@ -90,7 +93,7 @@ class OctopartExtractor(BaseExtractor):
             }
             
         except Exception as e:
-            print(f"Error extracting product data: {e}")
+            logger.error(f"Error extracting product data: {e}")
             return None
     
     async def _extract_specifications(self, page: Page) -> Dict[str, str]:
@@ -118,7 +121,7 @@ class OctopartExtractor(BaseExtractor):
                         specs[key.strip()] = value.strip()
         
         except Exception as e:
-            print(f"Error extracting specifications: {e}")
+            logger.error(f"Error extracting specifications: {e}")
         
         return specs
     
@@ -134,7 +137,7 @@ class OctopartExtractor(BaseExtractor):
                     datasheets.append(href)
         
         except Exception as e:
-            print(f"Error extracting datasheets: {e}")
+            logger.error(f"Error extracting datasheets: {e}")
         
         return datasheets
     
@@ -150,6 +153,6 @@ class OctopartExtractor(BaseExtractor):
                     images.append(src)
         
         except Exception as e:
-            print(f"Error extracting images: {e}")
+            logger.error(f"Error extracting images: {e}")
         
         return images
