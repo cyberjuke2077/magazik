@@ -17,20 +17,20 @@ retry:
 
 sources:
   - name: chipdip
-    enabled: true
-    priority: 1
+    enabled: false
+    priority: 5
   - name: octopart
     enabled: true
-    priority: 2
+    priority: 1
   - name: digikey
     enabled: true
-    priority: 3
+    priority: 2
   - name: mouser
     enabled: true
-    priority: 4
+    priority: 3
   - name: google
     enabled: true
-    priority: 5
+    priority: 4
 
 database:
   sqlite: ./data/progress.db
