@@ -58,3 +58,11 @@ def test_digikey_get_url():
     extractor = DigiKeyExtractor()
     url = extractor.get_url("LM358", "Texas Instruments")
     assert url == "https://www.digikey.com/en/products/result?keywords=LM358"
+
+
+def test_mouser_get_url():
+    """Test Mouser URL generation."""
+    from scripts.collector.extractors.mouser import MouserExtractor
+    extractor = MouserExtractor()
+    url = extractor.get_url("LM358", "Texas Instruments")
+    assert url == "https://www.mouser.com/ProductDetail/LM358"
