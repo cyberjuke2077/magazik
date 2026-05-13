@@ -122,7 +122,8 @@ class BrowserSession:
         delay_range = getattr(self.config.delays, source_name, (10, 20))
         
         # Human-like behavior before request
-        await random_mouse_movement(self.page)
+        # Disabled: CloakBrowser has built-in human-like behavior
+        # await random_mouse_movement(self.page)
         
         # Extract data
         result = await extractor.extract(self.page, part_number, manufacturer)
