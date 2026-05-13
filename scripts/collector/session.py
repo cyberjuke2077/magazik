@@ -4,8 +4,7 @@ import asyncio
 import random
 from typing import Optional, Dict
 from datetime import datetime, timedelta
-from playwright.async_api import Browser, BrowserContext, Page
-from cloakbrowser import launch_async
+from playwright.async_api import Browser, BrowserContext, Page, async_playwright
 # from playwright_stealth import stealth_async  # Disabled - not compatible with Python 3.13
 
 from .config import CollectorConfig, DelayConfig
@@ -25,6 +24,7 @@ class BrowserSession:
         """Initialize browser session."""
         self.session_id = session_id
         self.config = config
+        self.playwright = None
         self.browser: Optional[Browser] = None
         self.context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
@@ -45,8 +45,10 @@ class BrowserSession:
     
     async def start(self):
         """Start browser session."""
-        # Launch CloakBrowser with stealth features
-        self.browser = await launch_async(
+        # Launch Playwright Chromium (CloakBrowser had issues with ChipDip blocking)
+        from playwright.async_api import async_playwright
+        self.playwright = await async_playwright().start()
+        self.browser = await self.playwright.chromium.launch(
             headless=True
         )
         
@@ -69,6 +71,8 @@ class BrowserSession:
             await self.context.close()
         if self.browser:
             await self.browser.close()
+        if hasattr(self, 'playwright') and self.playwright:
+            await self.playwright.stop()
     
     async def extract_product_data(
         self,
