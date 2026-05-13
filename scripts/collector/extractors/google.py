@@ -40,7 +40,7 @@ class GoogleExtractor(BaseExtractor):
             url = self.get_url(part_number, manufacturer)
             
             # Navigate to Google search
-            await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            await page.goto(url, wait_until="domcontentloaded", timeout=20000)
             
             # Wait for search results
             try:

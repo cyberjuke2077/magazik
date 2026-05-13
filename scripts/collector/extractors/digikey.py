@@ -29,11 +29,11 @@ class DigiKeyExtractor(BaseExtractor):
         """Extract product data from Digi-Key."""
         try:
             url = self.get_url(part_number, manufacturer)
-            await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            await page.goto(url, wait_until="domcontentloaded", timeout=20000)
             
-            # Wait for product details or no results
+            # Wait for search results
             try:
-                await page.wait_for_selector(".product-details, .no-results", timeout=30000)
+                await page.wait_for_selector(".product-details, .no-results", timeout=10000)
             except PlaywrightTimeout:
                 return ExtractResult.failure(f"Timeout waiting for product details")
             
