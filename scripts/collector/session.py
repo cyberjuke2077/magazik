@@ -12,7 +12,9 @@ from .config import CollectorConfig, DelayConfig
 from .extractors.base import BaseExtractor, ExtractResult
 from .extractors.chipdip import ChipDipExtractor
 from .extractors.google import GoogleExtractor
-from .extractors.nexar import NexarExtractor
+from .extractors.octopart import OctopartExtractor
+from .extractors.digikey import DigiKeyExtractor
+from .extractors.mouser import MouserExtractor
 from .utils import get_random_user_agent, human_like_scroll, random_mouse_movement, get_random_delay
 
 
@@ -34,8 +36,10 @@ class BrowserSession:
         
         # Extractors
         self.extractors = {
-            "nexar": NexarExtractor(),
             "chipdip": ChipDipExtractor("chipdip"),
+            "octopart": OctopartExtractor("octopart"),
+            "digikey": DigiKeyExtractor("digikey"),
+            "mouser": MouserExtractor("mouser"),
             "google": GoogleExtractor("google"),
         }
     
