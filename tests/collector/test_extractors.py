@@ -42,3 +42,11 @@ def test_google_get_url():
     assert "google.com" in url
     assert "AOZ1284PI" in url
     assert "AOS" in url or "datasheet" in url
+
+
+def test_octopart_get_url():
+    """Test Octopart URL generation."""
+    from scripts.collector.extractors.octopart import OctopartExtractor
+    extractor = OctopartExtractor()
+    url = extractor.get_url("LM358", "Texas Instruments")
+    assert url == "https://octopart.com/search?q=LM358"
