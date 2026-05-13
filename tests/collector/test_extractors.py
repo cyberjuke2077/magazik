@@ -50,3 +50,11 @@ def test_octopart_get_url():
     extractor = OctopartExtractor()
     url = extractor.get_url("LM358", "Texas Instruments")
     assert url == "https://octopart.com/search?q=LM358"
+
+
+def test_digikey_get_url():
+    """Test Digi-Key URL generation."""
+    from scripts.collector.extractors.digikey import DigiKeyExtractor
+    extractor = DigiKeyExtractor()
+    url = extractor.get_url("LM358", "Texas Instruments")
+    assert url == "https://www.digikey.com/en/products/result?keywords=LM358"
