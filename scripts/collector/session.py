@@ -121,19 +121,15 @@ class BrowserSession:
         # Get delay config for this source
         delay_range = getattr(self.config.delays, source_name, (10, 20))
         
-        # Nexar doesn't need browser page (HTTP API)
-        if source_name == "nexar":
-            result = await extractor.extract(None, part_number, manufacturer)
-        else:
-            # Human-like behavior before request
-            await random_mouse_movement(self.page)
-            
-            # Extract data
-            result = await extractor.extract(self.page, part_number, manufacturer)
-            
-            # Human-like behavior after request
-            if result.success:
-                await human_like_scroll(self.page)
+        # Human-like behavior before request
+        await random_mouse_movement(self.page)
+        
+        # Extract data
+        result = await extractor.extract(self.page, part_number, manufacturer)
+        
+        # Human-like behavior after request
+        if result.success:
+            await human_like_scroll(self.page)
         
         # Delay before next request
         delay = get_random_delay(delay_range[0], delay_range[1])
