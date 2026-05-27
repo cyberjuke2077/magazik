@@ -15,12 +15,18 @@ interface CaptchaTask {
 
 export class TwoCaptchaSolver {
   private apiKey: string
-  private baseUrl = 'https://2captcha.com'
+  private baseUrl: string
 
-  constructor(apiKey?: string) {
+  constructor(apiKey?: string, baseUrl?: string) {
     this.apiKey = apiKey || process.env.CAPTCHA_2CAPTCHA_API_KEY || ''
+    // Default to rucaptcha.com (works with same API as 2captcha, accessible from RU).
+    // Override via CAPTCHA_PROVIDER_URL env or 2nd constructor arg.
+    this.baseUrl =
+      baseUrl ||
+      process.env.CAPTCHA_PROVIDER_URL ||
+      'https://rucaptcha.com'
     if (!this.apiKey) {
-      throw new Error('2captcha API key not provided')
+      throw new Error('Captcha API key not provided (CAPTCHA_2CAPTCHA_API_KEY)')
     }
   }
 
@@ -212,5 +218,10 @@ export class TwoCaptchaSolver {
   }
 }
 
-// Export singleton instance
-export const captchaSolver = new TwoCaptchaSolver()
+// Lazy singleton — created only on first access so importing this file
+// does not fail when CAPTCHA_2CAPTCHA_API_KEY is missing.
+let _solver: TwoCaptchaSolver | null = null
+export function getCaptchaSolver(): TwoCaptchaSolver {
+  if (!_solver) _solver = new TwoCaptchaSolver()
+  return _solver
+}

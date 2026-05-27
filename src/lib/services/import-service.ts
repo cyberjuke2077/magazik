@@ -163,7 +163,7 @@ class ImportService {
       })
 
       // Create HTTP client with rate limiter for product pages
-      const rateLimiter = createRateLimiter({ maxRequests: 1, interval: 2000 })
+      const rateLimiter = createRateLimiter({ requestsPerSecond: 0.5 })
       const httpClient = createHttpClient(
         {
           ...DEFAULT_HTTP_CONFIG,

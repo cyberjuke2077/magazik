@@ -150,7 +150,7 @@ async function fetchAndParseProductWithBrowser(
  */
 async function findOrCreateManufacturer(
   name: string,
-  tx: typeof prisma
+  tx: any
 ): Promise<string> {
   if (!name || name.trim().length === 0) {
     throw new Error('Manufacturer name is required')
@@ -175,7 +175,7 @@ async function findOrCreateManufacturer(
  */
 async function findOrCreateCategory(
   name: string,
-  tx: typeof prisma
+  tx: any
 ): Promise<string> {
   if (!name || name.trim().length === 0) {
     throw new Error('Category name is required')

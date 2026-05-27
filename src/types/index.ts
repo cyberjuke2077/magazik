@@ -4,7 +4,7 @@ export interface Product {
   name: string
   partNumber: string
   category: string
-  categorySlug: string
+  categorySlug?: string
   manufacturer: string
   price: number
   priceWholesale?: number
@@ -17,6 +17,7 @@ export interface Product {
   specs: Record<string, string>
   tags: string[]
   featured?: boolean
+  createdAt?: string
 }
 
 export interface Category {

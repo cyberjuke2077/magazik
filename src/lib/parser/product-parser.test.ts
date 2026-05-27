@@ -5,10 +5,11 @@
  * Covers happy path, edge cases, and error handling.
  */
 
-import { describe, test, expect } from 'vitest'
+import { describe, test, it, expect } from 'vitest'
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import * as cheerio from 'cheerio'
+import fc from 'fast-check'
 import {
   parseProductPage,
   extractProductName,
@@ -836,5 +837,240 @@ describe('extractAnalogs', () => {
 
     // Assert
     expect(analogs).toEqual([])
+  })
+})
+
+/**
+ * Bug Condition tests — extractSpecifications on real chipdip.ru HTML.
+ *
+ * EXPECTED on UNFIXED code: ALL tests in this describe block FAIL.
+ * The failure proves the bug exists: extractSpecifications returns {} for
+ * real chipdip product pages because the current selectors
+ * (dl.specifications, table.specifications, .property, .spec-item) do not
+ * match the actual chipdip markup, which uses table.product__params with
+ * td.product__param-name / td.product__param-value cells under
+ * h2#tech_params "Технические параметры".
+ *
+ * RECORDED COUNTEREXAMPLE (observed on UNFIXED code):
+ *   - fc.assert: Property failed after 1 tests
+ *     { seed: 948381516, path: "0", endOnFailure: true }
+ *     Counterexample: ["stm32f103c8t6.html"]
+ *     Caused by: AssertionError: expected 0 to be greater than 0
+ *   - Expected keys for stm32f103c8t6.html: 'Серия', 'Ядро',
+ *     'Тактовая частота, МГц', 'Тип памяти программ'
+ *   - Expected keys for atmega328p-pu.html: 'Серия', 'Ядро',
+ *     'Тактовая частота, МГц', 'Тип памяти программ'
+ *   - Actual extractSpecifications($) returned: {} (empty record)
+ *   - Sanity check passed: h2#tech_params with text "Технические параметры"
+ *     and >0 td.product__param-name cells are present in BOTH fixtures
+ *     => fixtures are intact, failure root cause is in extractSpecifications
+ *     selectors not matching table.product__params markup.
+ */
+describe('extractSpecifications - chipdip real HTML', () => {
+  const fixturesDir = join(__dirname, '__fixtures__', 'chipdip')
+  const fixtures = ['stm32f103c8t6.html', 'atmega328p-pu.html'] as const
+  const expectedKeys = ['Серия', 'Ядро', 'Тактовая частота, МГц', 'Тип памяти программ']
+
+  test.each(fixtures)('sanity: %s contains "Технические параметры" with key/value pairs', (file) => {
+    // Arrange
+    const html = readFileSync(join(fixturesDir, file), 'utf-8')
+    const $ = cheerio.load(html)
+
+    // Act
+    const headings = $('h1, h2, h3').filter((_, el) => {
+      const text = $(el).text().trim()
+      return text.startsWith('Технические параметры')
+    })
+    const paramRows = $('td.product__param-name').length
+
+    // Assert — fixture must be intact, otherwise the failure below is meaningless
+    expect(headings.length).toBeGreaterThan(0)
+    expect(paramRows).toBeGreaterThan(0)
+  })
+
+  test('Property 1: Bug Condition — extractSpecifications извлекает специи из реального HTML chipdip.ru', () => {
+    // Validates: Requirements 2.1, 2.4
+    fc.assert(
+      fc.property(fc.constantFrom(...fixtures), (file) => {
+        const html = readFileSync(join(fixturesDir, file), 'utf-8')
+        const $ = cheerio.load(html)
+        const specs = extractSpecifications($)
+        expect(Object.keys(specs).length).toBeGreaterThan(0)
+      }),
+      { numRuns: 10 },
+    )
+  })
+
+  test('STM32F103C8T6 fixture exposes expected parameter keys', () => {
+    // Arrange
+    const html = readFileSync(join(fixturesDir, 'stm32f103c8t6.html'), 'utf-8')
+    const $ = cheerio.load(html)
+
+    // Act
+    const specs = extractSpecifications($)
+
+    // Assert
+    for (const key of expectedKeys) {
+      expect(specs).toHaveProperty(key)
+    }
+  })
+
+  test('ATMEGA328P-PU fixture exposes expected parameter keys', () => {
+    // Arrange
+    const html = readFileSync(join(fixturesDir, 'atmega328p-pu.html'), 'utf-8')
+    const $ = cheerio.load(html)
+
+    // Act
+    const specs = extractSpecifications($)
+
+    // Assert
+    for (const key of expectedKeys) {
+      expect(specs).toHaveProperty(key)
+    }
+  })
+})
+
+/**
+ * Preservation property tests — extractSpecifications on synthetic HTML.
+ *
+ * EXPECTED on UNFIXED code: all tests in this describe block PASS.
+ * They lock in the baseline behavior of the existing selector branches
+ * (`dl.specifications`, `table.specifications`, `.property`) and the empty
+ * fallback for HTML without any specifications block. After the fix in
+ * task 4.2 these tests must still pass — that is the preservation
+ * guarantee for inputs that do NOT satisfy the chipdip Bug Condition.
+ *
+ * Validates: Requirements 3.1, 3.2, 3.7
+ */
+describe('extractSpecifications - preservation', () => {
+  // Filter out reserved JS prototype names: assigning `specs['__proto__'] = v`
+  // mutates the prototype chain and `specs[k]` returns the inherited member,
+  // so the test invariant `specs[k] === v` cannot hold for these keys without
+  // `Object.create(null)`. This is an artifact of the test setup, not a parser
+  // regression — strip them from the property domain.
+  const RESERVED_KEYS = /^(__proto__|constructor|prototype)$/
+  const safeKey = (k: string): string => k.replace(/[<>&]/g, '')
+  const safeValue = (v: string): string => v.replace(/[<>&]/g, '')
+  const isUsablePair = ([k, v]: readonly [string, string]): boolean =>
+    k.trim().length > 0 && v.trim().length > 0 && !RESERVED_KEYS.test(k.trim())
+  it('Property 2: Preservation — synthetic dl returns expected key/value pairs', () => {
+    // Validates: Requirements 3.1, 3.2
+    fc.assert(
+      fc.property(
+        fc.array(
+          fc.tuple(
+            fc.string({ minLength: 1, maxLength: 30 }),
+            fc.string({ minLength: 1, maxLength: 50 }),
+          ),
+          { minLength: 1, maxLength: 5 },
+        ),
+        (pairs) => {
+          // Strip HTML special chars to avoid spurious tags / entity confusion
+          const safe = pairs.map(
+            ([k, v]) => [safeKey(k), safeValue(v)] as const,
+          )
+          const html =
+            `<dl class="specifications">` +
+            safe.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('') +
+            `</dl>`
+          const $ = cheerio.load(html)
+          const specs = extractSpecifications($)
+          for (const pair of safe) {
+            if (isUsablePair(pair)) {
+              expect(specs[pair[0].trim()]).toBe(pair[1].trim())
+            }
+          }
+        },
+      ),
+      { numRuns: 50 },
+    )
+  })
+
+  it('Property 2: Preservation — synthetic table returns expected key/value pairs', () => {
+    // Validates: Requirements 3.1, 3.2
+    fc.assert(
+      fc.property(
+        fc.array(
+          fc.tuple(
+            fc.string({ minLength: 1, maxLength: 30 }),
+            fc.string({ minLength: 1, maxLength: 50 }),
+          ),
+          { minLength: 1, maxLength: 5 },
+        ),
+        (pairs) => {
+          const safe = pairs.map(
+            ([k, v]) => [safeKey(k), safeValue(v)] as const,
+          )
+          const html =
+            `<table class="specifications">` +
+            safe.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('') +
+            `</table>`
+          const $ = cheerio.load(html)
+          const specs = extractSpecifications($)
+          for (const pair of safe) {
+            if (isUsablePair(pair)) {
+              expect(specs[pair[0].trim()]).toBe(pair[1].trim())
+            }
+          }
+        },
+      ),
+      { numRuns: 50 },
+    )
+  })
+
+  it('Property 2: Preservation — synthetic .property divs return expected key/value pairs', () => {
+    // Validates: Requirements 3.1, 3.2
+    fc.assert(
+      fc.property(
+        fc.array(
+          fc.tuple(
+            fc.string({ minLength: 1, maxLength: 30 }),
+            fc.string({ minLength: 1, maxLength: 50 }),
+          ),
+          { minLength: 1, maxLength: 5 },
+        ),
+        (pairs) => {
+          const safe = pairs.map(
+            ([k, v]) => [safeKey(k), safeValue(v)] as const,
+          )
+          const html = safe
+            .map(
+              ([k, v]) =>
+                `<div class="property">` +
+                `<span class="property-name">${k}</span>` +
+                `<span class="property-value">${v}</span>` +
+                `</div>`,
+            )
+            .join('')
+          const $ = cheerio.load(html)
+          const specs = extractSpecifications($)
+          for (const pair of safe) {
+            if (isUsablePair(pair)) {
+              expect(specs[pair[0].trim()]).toBe(pair[1].trim())
+            }
+          }
+        },
+      ),
+      { numRuns: 50 },
+    )
+  })
+
+  it('Property 2: Preservation — HTML без блока характеристик возвращает {}', () => {
+    // Validates: Requirements 3.7
+    fc.assert(
+      fc.property(
+        // Filter out any string that could accidentally re-introduce supported
+        // selectors (specs covers specifications/specs, property covers
+        // property/properties/additionalProperty, spec-item covers itself).
+        fc.string().filter((s) => !/specs|property|spec-item/i.test(s)),
+        (junk) => {
+          const html = `<html><body>${junk}</body></html>`
+          const $ = cheerio.load(html)
+          const specs = extractSpecifications($)
+          expect(Object.keys(specs).length).toBe(0)
+        },
+      ),
+      { numRuns: 100 },
+    )
   })
 })

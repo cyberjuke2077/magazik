@@ -233,24 +233,48 @@ export function extractDescription($: cheerio.CheerioAPI): string | null {
 }
 
 /**
+ * Normalizes specification text by collapsing whitespace and replacing
+ * non-breaking spaces with regular spaces. Trims surrounding whitespace.
+ */
+function normalizeSpecText(s: string): string {
+  return s.replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
+/**
  * Parses specifications table into key-value pairs
  * Handles various table structures (dt/dd, tr/td, etc.)
+ *
+ * Priority order (first writer wins for each key):
+ *   1. ChipDip-specific markup (table#productparams / table.product__params)
+ *   2. Definition lists (dl/dt/dd)
+ *   3. Generic specification tables
+ *   4. Generic property lists (.property / .spec-item)
  */
 export function extractSpecifications($: cheerio.CheerioAPI): Record<string, string> {
   const specs: Record<string, string> = {}
-  
+  const hasKey = (k: string): boolean => Object.prototype.hasOwnProperty.call(specs, k)
+
+  // ChipDip-specific markup: <table id="productparams"> or <table class="product__params">
+  $('table#productparams tr, table.product__params tr').each((_, tr) => {
+    const key = normalizeSpecText($(tr).find('td.product__param-name').text())
+    const value = normalizeSpecText($(tr).find('td.product__param-value').text())
+    if (key && value && !hasKey(key)) {
+      specs[key] = value
+    }
+  })
+
   // Try definition list (dt/dd)
   // Match both <dl class="specifications"> and <div class="specifications"><dl>
   $('dl.specifications, dl.specs, .specifications dl, .specs dl, [itemprop="additionalProperty"]').each((_, dl) => {
     $(dl).find('dt').each((_, dt) => {
       const key = $(dt).text().trim()
       const value = $(dt).next('dd').text().trim()
-      if (key && value) {
+      if (key && value && !hasKey(key)) {
         specs[key] = value
       }
     })
   })
-  
+
   // Try table rows (tr with th/td)
   // Match both <table class="specifications"> and <div class="specifications"><table>
   $('table.specifications tr, table.specs tr, .specifications table tr, .specs table tr, .properties table tr').each((_, tr) => {
@@ -258,21 +282,21 @@ export function extractSpecifications($: cheerio.CheerioAPI): Record<string, str
     if (cells.length >= 2) {
       const key = $(cells[0]).text().trim()
       const value = $(cells[1]).text().trim()
-      if (key && value) {
+      if (key && value && !hasKey(key)) {
         specs[key] = value
       }
     }
   })
-  
+
   // Try generic property lists
   $('.property, .spec-item').each((_, item) => {
     const key = $(item).find('.property-name, .spec-name, .label').text().trim()
     const value = $(item).find('.property-value, .spec-value, .value').text().trim()
-    if (key && value) {
+    if (key && value && !hasKey(key)) {
       specs[key] = value
     }
   })
-  
+
   return specs
 }
 
@@ -398,7 +422,8 @@ export function extractWeight($: cheerio.CheerioAPI): number | null {
   
   // Parse weight value - extract first number
   // Examples: "0.5", "1.2 г", "10", "0,5" (comma as decimal separator)
-  const match = weightText.replace(',', '.').match(/[\d.]+/)
+  const weightStr: string = weightText
+  const match = weightStr.replace(',', '.').match(/[\d.]+/)
   if (!match) return null
   
   const weight = parseFloat(match[0])
