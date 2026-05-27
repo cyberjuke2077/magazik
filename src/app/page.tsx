@@ -1,6 +1,7 @@
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { OrganizationJsonLd } from '@/components/seo/product-jsonld'
 import { HomeClient } from './home-client'
 import { getProducts } from '@/lib/queries/products'
 import { getCategoriesWithChildren, getTotalProductCount } from '@/lib/queries/categories'
@@ -20,6 +21,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      <OrganizationJsonLd />
       <Header />
       <StickyNav categories={categories} totalProducts={totalProducts} />
       <HomeClient 

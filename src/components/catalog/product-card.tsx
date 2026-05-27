@@ -1,12 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import { ShoppingCart, Plus, Minus, Check, Zap } from 'lucide-react'
+import { ShoppingCart, Plus, Minus, Check, Zap, Sparkles } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { type Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/hooks/use-cart'
 import { CategoryIcon } from '@/components/ui/component-icons'
+import { CompareToggleBtn } from './compare-toggle-btn'
+import { flyToCart } from '@/lib/fly-to-cart'
+
+const NEW_THRESHOLD_DAYS = 14
+const NEW_THRESHOLD_MS = NEW_THRESHOLD_DAYS * 24 * 60 * 60 * 1000
+
+function isNewProduct(createdAt?: string): boolean {
+  if (!createdAt) return false
+  const ts = Date.parse(createdAt)
+  if (Number.isNaN(ts)) return false
+  return Date.now() - ts < NEW_THRESHOLD_MS
+}
 
 interface ProductCardProps {
   product: Product
@@ -31,12 +43,14 @@ export function ProductCard({ product }: ProductCardProps) {
   const [localQty, setLocalQty] = useState(product.minOrder)
   const displayQty = inCart ? cartQty : localQty
   const btnRef = useRef<HTMLButtonElement>(null)
+  const isNew = isNewProduct(product.createdAt)
 
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault()
     addItem(product, localQty)
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1800)
+    flyToCart(btnRef.current)
   }
 
   function handleMinus(e: React.MouseEvent) {
@@ -64,7 +78,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Icon */}
         <div className="relative z-10 icon-svg">
           <CategoryIcon
-            slug={product.categorySlug}
+            slug={product.categorySlug || ''}
             size={72}
             className={`${cardTheme.iconColor} opacity-70`}
           />
@@ -75,6 +89,11 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.featured && (
             <span className="flex items-center gap-1 px-2 py-0.5 bg-[#0066cc] text-white text-[10px] font-bold rounded-sm shadow-sm">
               <Zap size={8} />ХИТ
+            </span>
+          )}
+          {isNew && (
+            <span className="flex items-center gap-1 px-2 py-0.5 bg-[#10b981] text-white text-[10px] font-bold rounded-sm shadow-sm">
+              <Sparkles size={8} />NEW
             </span>
           )}
           {discountPercent && (
@@ -92,6 +111,20 @@ export function ProductCard({ product }: ProductCardProps) {
             </span>
           </div>
         )}
+
+        {/* Compare button (bottom-right) */}
+        <div className="absolute bottom-2 right-2 z-20 bg-white/90 backdrop-blur-sm rounded">
+          <CompareToggleBtn
+            item={{
+              id: product.id,
+              slug: product.slug,
+              name: product.name,
+              partNumber: product.partNumber,
+              manufacturer: product.manufacturer,
+              categorySlug: product.categorySlug || '',
+            }}
+          />
+        </div>
       </div>
 
       {/* Body */}
@@ -173,11 +206,11 @@ export function ProductCard({ product }: ProductCardProps) {
               </>
             ) : inCart ? (
               <>
-                <Check size={13} />В списке
+                <Check size={13} />В корзине
               </>
             ) : (
               <>
-                <ShoppingCart size={13} />В запрос
+                <ShoppingCart size={13} />В корзину
               </>
             )}
           </button>

@@ -204,8 +204,8 @@ export function ProductClient({ product, related }: ProductClientProps) {
                   }`}
                 >
                   {addedToCart
-                    ? <><Check size={16} /> Добавлено в список!</>
-                    : <><ShoppingCart size={16} /> Добавить в запрос · {formatPrice(product.price * quantity)}</>
+                    ? <><Check size={16} /> Добавлено в корзину</>
+                    : <><ShoppingCart size={16} /> Добавить в корзину · {formatPrice(product.price * quantity)}</>
                   }
                 </button>
               </div>

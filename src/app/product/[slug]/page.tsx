@@ -1,5 +1,6 @@
 import { getProductBySlug, getProductsByCategory } from '@/lib/queries/products'
 import { ProductClientChipDip } from './product-client-chipdip'
+import { ProductJsonLd, BreadcrumbJsonLd } from '@/components/seo/product-jsonld'
 import { notFound } from 'next/navigation'
 import { type Metadata } from 'next'
 
@@ -41,5 +42,18 @@ export default async function ProductPage({ params }: PageProps) {
   const related = await getProductsByCategory(product.categorySlug)
   const relatedFiltered = related.filter(p => p.id !== product.id).slice(0, 4)
 
-  return <ProductClientChipDip product={product} related={relatedFiltered} />
+  const breadcrumbs = [
+    { name: 'Главная', url: '/' },
+    { name: 'Каталог', url: '/catalog' },
+    { name: product.category, url: `/catalog?category=${product.categorySlug}` },
+    { name: product.name, url: `/product/${product.slug}` },
+  ]
+
+  return (
+    <>
+      <ProductJsonLd product={product} />
+      <BreadcrumbJsonLd items={breadcrumbs} />
+      <ProductClientChipDip product={product} related={relatedFiltered} />
+    </>
+  )
 }

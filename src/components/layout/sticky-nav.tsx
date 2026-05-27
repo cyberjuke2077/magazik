@@ -2,18 +2,19 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
-import { ShoppingCart, Search, User, Package, Eye, EyeOff, Mail, Lock, Phone, Building2, Heart, Clock, Settings, Bell, CreditCard, MapPin, HelpCircle, LogOut } from 'lucide-react'
+import { ShoppingCart, User, Package, Eye, EyeOff, Mail, Lock, Phone, Building2, Heart, Clock, Settings, Bell, CreditCard, MapPin, HelpCircle, LogOut } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
 import { CategoryIcon } from '@/components/ui/component-icons'
+import { LiveSearchDropdown } from '@/components/ui/live-search-dropdown'
 
 interface CategoryWithChildren {
   id: string
   slug: string
   name: string
   icon: string | null
-  description: string | null
-  children: {
+  description?: string | null
+  children?: {
     id: string
     slug: string
     name: string
@@ -94,25 +95,8 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
             </button>
           </div>
 
-          {/* Search — с тремя точками справа */}
-          <div className="flex-1">
-            <div className="relative bg-white h-[68px]">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Поиск среди 500 000 товаров"
-                className="w-full h-full pl-12 pr-4 text-[16px] bg-transparent text-gray-900 placeholder-gray-400 outline-none"
-              />
-              {/* Три точки — декоративный элемент */}
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-[3px]">
-                <div className="w-1 h-1 rounded-full bg-gray-400" />
-                <div className="w-1 h-1 rounded-full bg-gray-400" />
-                <div className="w-1 h-1 rounded-full bg-gray-400" />
-              </div>
-            </div>
-          </div>
+          {/* Search — live autocomplete with full dropdown */}
+          <LiveSearchDropdown />
 
           {/* Right icons — постоянный серый фон */}
           <div className="hidden lg:flex items-stretch shrink-0 bg-gray-100 h-[68px] rounded-r">
@@ -276,6 +260,7 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
 
             <Link
               href="/cart"
+              data-cart-icon
               className="flex flex-col items-center justify-center gap-1.5 px-6 text-gray-600 hover:text-[#0066cc] transition-colors relative"
             >
               <div className="relative">
@@ -291,7 +276,7 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
           </div>
 
           {/* Mobile cart */}
-          <Link href="/cart" className="lg:hidden relative flex items-center justify-center size-9 text-gray-600">
+          <Link href="/cart" data-cart-icon className="lg:hidden relative flex items-center justify-center size-9 text-gray-600">
             <ShoppingCart size={20} />
             <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center size-4 rounded-full text-[9px] font-bold bg-[#f97316] text-white">
               {cartCount > 99 ? '99+' : cartCount}
@@ -337,11 +322,11 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
 
               {/* Right column - subcategories */}
               <div className="flex-1 bg-white p-4 overflow-y-auto">
-                {hoveredCategory && categories.find(c => c.slug === hoveredCategory)?.children.length > 0 ? (
+                {hoveredCategory && (categories.find(c => c.slug === hoveredCategory)?.children?.length ?? 0) > 0 ? (
                   <div className="grid grid-cols-3 gap-x-6 gap-y-1">
                     {categories
                       .find(c => c.slug === hoveredCategory)
-?.children.map((subcat) => (
+?.children?.map((subcat) => (
                             <Link
                               key={subcat.slug}
                               href={`/catalog/${subcat.slug}`}

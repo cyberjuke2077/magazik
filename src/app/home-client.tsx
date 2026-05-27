@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 
 import { ProductCard } from '@/components/catalog/product-card'
+import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 import { CategoryIcon } from '@/components/ui/component-icons'
 import { type Product } from '@/lib/queries/products'
 
@@ -438,6 +439,11 @@ export function HomeClient({ featuredProducts, popularProducts, bestProducts }: 
         ctaTitle="Выгодное предложение"
         ctaDesc="Узнайте о выгодных предложениях и специальных ценах. Только в этом месяце!"
       />
+
+      {/* ══════════════════════════════════
+          RECENTLY VIEWED (localStorage)
+      ══════════════════════════════════ */}
+      <RecentlyViewed variant="home" />
 
       {/* ══════════════════════════════════
           FEATURES

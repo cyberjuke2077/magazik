@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { ShoppingCart, ChevronUp, ChevronDown, Copy, Check, FileText } from 'lucide-react'
 import { Header } from '@/components/layout/header'
@@ -8,6 +8,11 @@ import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/hooks/use-cart'
+import { flyToCart } from '@/lib/fly-to-cart'
+import { TrackRecentlyViewed } from '@/components/catalog/track-recently-viewed'
+import { RecentlyViewed } from '@/components/catalog/recently-viewed'
+import { StickyAddBar } from '@/components/product/sticky-add-bar'
+import { CompareToggleBtn } from '@/components/catalog/compare-toggle-btn'
 import { type Product } from '@/lib/queries/products'
 
 interface ProductClientProps {
@@ -23,6 +28,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
   const [activePhoto, setActivePhoto] = useState(0)
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const { addItem } = useCart()
+  const addBtnRef = useRef<HTMLButtonElement>(null)
 
   // DISABLED: Images from ChipDip have watermarks and low quality
   // Show placeholder until images are added manually via admin
@@ -30,6 +36,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
   function handleAddToCart() {
     addItem(product, quantity)
+    flyToCart(addBtnRef.current)
   }
 
   function handleCopy(text: string, field: string) {
@@ -51,6 +58,14 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
       <StickyNav />
+      <TrackRecentlyViewed
+        slug={product.slug}
+        name={product.name}
+        partNumber={product.partNumber}
+        manufacturer={product.manufacturer}
+        categorySlug={product.categorySlug}
+        price={product.price}
+      />
       
       <main>
         {/* Breadcrumbs */}
@@ -239,7 +254,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Ordering Controls */}
-            <div className="flex-shrink-0 w-[400px]">
+            <div className="flex-shrink-0 w-[400px]" data-add-to-cart-block>
               <div className="border-l border-[#ececed] pl-12">
                 {/* Price */}
                 <div className="flex items-center gap-6 pt-4 pb-6">
@@ -287,14 +302,26 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
 
                 {/* Add to Cart Button */}
-                <div className="pt-4">
+                <div className="pt-4 space-y-2">
                   <button
+                    ref={addBtnRef}
                     onClick={handleAddToCart}
                     className="w-full py-3 px-6 bg-[#0066cc] text-white rounded-lg font-medium hover:bg-[#0052a3] transition-colors flex items-center justify-center gap-2"
                   >
                     <ShoppingCart size={20} />
                     <span>Добавить в корзину</span>
                   </button>
+                  <CompareToggleBtn
+                    item={{
+                      id: product.id,
+                      slug: product.slug,
+                      name: product.name,
+                      partNumber: product.partNumber,
+                      manufacturer: product.manufacturer,
+                      categorySlug: product.categorySlug,
+                    }}
+                    variant="full"
+                  />
                 </div>
 
                 {/* Additional Links */}
@@ -462,9 +489,27 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
               </div>
             </div>
           </div>
+
+          {/* Recently viewed */}
+          <div className="mb-10">
+            <RecentlyViewed excludeSlug={product.slug} variant="product" />
+          </div>
         </div>
       </main>
-      
+
+      <StickyAddBar
+        productName={product.name}
+        partNumber={product.partNumber}
+        manufacturer={product.manufacturer}
+        price={product.price}
+        unit={product.unit}
+        minOrder={product.minOrder}
+        inStock={product.inStock}
+        quantity={quantity}
+        onQuantityChange={setQuantity}
+        onAddToCart={handleAddToCart}
+      />
+
       <Footer />
     </div>
   )
