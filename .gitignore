@@ -24,11 +24,14 @@
 .DS_Store
 *.pem
 
-# debug
+# debug / logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
+logs/
+parser.pid
 
 # env files (can opt-in for committing if needed)
 .env*
@@ -42,3 +45,28 @@ next-env.d.ts
 
 # session files
 .tmp/
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+venv-test/
+.pytest_cache/
+
+# editors / IDE
+.vscode/
+.idea/
+
+# backups / one-shot artifacts
+*.bak
+*.orig
+
+# collector / parser runtime state
+data/progress.db
+data/progress.db-journal
+data/progress.db-wal
+data/progress.db-shm
+
+# storage (local artifacts)
+storage/
