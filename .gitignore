@@ -57,6 +57,10 @@ venv-test/
 # editors / IDE
 .vscode/
 .idea/
+.kiro/
+.opencode/
+.opencode-router/
+.agents/
 
 # backups / one-shot artifacts
 *.bak
