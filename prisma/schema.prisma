@@ -12,12 +12,13 @@ datasource db {
 
 // Category model with hierarchical structure (parent/child relationships)
 model Category {
-  id          String    @id @default(cuid())
-  slug        String    @unique
-  name        String
-  icon        String?
-  description String?
-  color       String?
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  name            String
+  icon            String?
+  description     String?
+  color           String?
+  nameNeedsReview Boolean   @default(false)
   
   // Hierarchy support
   parentId    String?
@@ -61,6 +62,17 @@ model Product {
   sku               String?   @unique
   description       String?   @db.Text
   
+  // Enrichment fields
+  mpnNormalized     String?
+  lifecycle         String?
+  package           String?
+  lastEnrichedAt    DateTime?
+  enrichmentStatus  String    @default("pending")
+  enrichmentMeta    Json?
+
+  // Full-text search (generated column, managed via raw SQL migration)
+  searchVector      Unsupported("tsvector")?
+  
   // Pricing (user-managed, not from parser)
   price             Decimal?  @db.Decimal(10, 2)
   priceWholesale    Decimal?  @db.Decimal(10, 2)
@@ -97,6 +109,7 @@ model Product {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   
+  @@unique([manufacturerId, mpnNormalized], name: "manufacturer_mpn_normalized")
   @@index([slug])
   @@index([partNumber])
   @@index([sku])
@@ -207,4 +220,70 @@ model ImportProgress {
   
   @@index([status])
   @@index([createdAt])
+}
+
+// EnrichmentJournal model - per-MPN status tracking for enrichment pipeline
+model EnrichmentJournal {
+  id             String   @id @default(cuid())
+  runId          String
+  canonicalBrand String
+  canonicalMpn   String
+  originalMpn    String
+  status         String   @default("pending")
+  errorMessage   String?
+  attempts       Int      @default(0)
+  mouserDay      String?
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@unique([runId, canonicalBrand, canonicalMpn])
+  @@index([runId, status])
+  @@index([canonicalMpn])
+  @@index([status])
+}
+
+// QuoteRequest model - запрос на коммерческое предложение
+model QuoteRequest {
+  id                  String              @id @default(cuid())
+  status              String              @default("new") // new, in_progress, quoted, rejected
+
+  // Контактные данные
+  companyName         String
+  inn                 String?
+  contactPerson       String
+  phone               String
+  email               String
+  comment             String?             @db.Text
+  deliveryAddress     String?
+  desiredDeliveryDate DateTime?
+
+  // Позиции
+  items               QuoteRequestItem[]
+
+  // Метаданные
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
+}
+
+// QuoteRequestItem model - позиция в запросе на КП
+model QuoteRequestItem {
+  id              String        @id @default(cuid())
+  quoteRequestId  String
+  quoteRequest    QuoteRequest  @relation(fields: [quoteRequestId], references: [id], onDelete: Cascade)
+
+  productId       String
+  partNumber      String
+  name            String
+  quantity        Int
+  requestedPrice  Decimal?      @db.Decimal(10, 2)
+
+  createdAt       DateTime      @default(now())
+
+  @@index([quoteRequestId])
+  @@index([productId])
 }
