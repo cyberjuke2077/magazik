@@ -15,6 +15,7 @@
  * most of these — confirmed at ~100% hit rate on Analog Devices smoke test.
  */
 
+import './_load-env'
 import { createLcscClient } from '../src/lib/enrichment/sources/lcsc-client'
 import { persistBatch } from '../src/lib/enrichment/persistence/persistence-service'
 import {

@@ -14,6 +14,7 @@
  *   pnpm tsx scripts/backfill-images-to-r2.ts --concurrency 4
  */
 
+import './_load-env'
 import { isR2Configured, uploadProductImage } from '../src/lib/storage/r2-client'
 import { prisma } from '../src/lib/prisma'
 

@@ -18,6 +18,7 @@ export interface Product {
   tags: string[]
   featured?: boolean
   createdAt?: string
+  images?: string[]
 }
 
 export interface Category {

@@ -23,11 +23,22 @@ const PUBLIC_URL = process.env.R2_PUBLIC_URL
 let cachedClient: S3Client | null = null
 
 /**
- * True when all required R2 env vars are present. Callers should treat
- * a false return as "storage disabled — fall back to upstream URLs".
+ * True when storage credentials are present. Public URL is a separate
+ * concern — see isR2PublicUrlConfigured(). Callers writing to storage
+ * only need this; readers building <img src=…> need the public URL too.
  */
 export function isR2Configured(): boolean {
-  return Boolean(ENDPOINT && ACCESS_KEY_ID && SECRET_ACCESS_KEY && BUCKET && PUBLIC_URL)
+  return Boolean(ENDPOINT && ACCESS_KEY_ID && SECRET_ACCESS_KEY && BUCKET)
+}
+
+/**
+ * True when a public URL base is set. Without it, uploaded objects can
+ * still be written, but their imageUrl in the DB is a placeholder
+ * (`r2://<bucket>/<key>`) until the operator enables Public Development
+ * URL or attaches a custom domain and reruns the rewrite step.
+ */
+export function isR2PublicUrlConfigured(): boolean {
+  return Boolean(PUBLIC_URL)
 }
 
 function requireConfig(): {
@@ -35,11 +46,10 @@ function requireConfig(): {
   accessKeyId: string
   secretAccessKey: string
   bucket: string
-  publicUrl: string
 } {
   if (!isR2Configured()) {
     throw new Error(
-      'R2 not configured. Set R2_ENDPOINT, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET, R2_PUBLIC_URL.',
+      'R2 not configured. Set R2_ENDPOINT, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET.',
     )
   }
   return {
@@ -47,7 +57,6 @@ function requireConfig(): {
     accessKeyId: ACCESS_KEY_ID!,
     secretAccessKey: SECRET_ACCESS_KEY!,
     bucket: BUCKET!,
-    publicUrl: PUBLIC_URL!.replace(/\/+$/, ''),
   }
 }
 
@@ -73,12 +82,14 @@ export function storageKey(sourceUrl: string, variant: 'main' | 'thumb' = 'main'
 }
 
 /**
- * Public URL for a stored object. Caller is responsible for using the
- * key returned from `uploadProductImage` so URLs round-trip correctly.
+ * Public URL for a stored object. Falls back to a `r2://` placeholder
+ * when no public base is configured — operator must run a rewrite pass
+ * after enabling Public Development URL or attaching a custom domain.
  */
 export function publicUrl(key: string): string {
-  const { publicUrl: base } = requireConfig()
-  return `${base}/${key}`
+  const { bucket } = requireConfig()
+  if (!PUBLIC_URL) return `r2://${bucket}/${key}`
+  return `${PUBLIC_URL.replace(/\/+$/, '')}/${key}`
 }
 
 export interface UploadedImage {

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ShoppingCart, Plus, Minus, Check, Zap, Sparkles } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { type Product } from '@/types'
@@ -75,14 +76,24 @@ export function ProductCard({ product }: ProductCardProps) {
         className={`relative flex items-center justify-center overflow-hidden ${cardTheme.bg}`}
         style={{ height: '180px' }}
       >
-        {/* Icon */}
-        <div className="relative z-10 icon-svg">
-          <CategoryIcon
-            slug={product.categorySlug || ''}
-            size={72}
-            className={`${cardTheme.iconColor} opacity-70`}
+        {/* Image when available, fallback to category icon */}
+        {product.images && product.images.length > 0 ? (
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
+            className="object-contain p-3 z-10"
           />
-        </div>
+        ) : (
+          <div className="relative z-10 icon-svg">
+            <CategoryIcon
+              slug={product.categorySlug || ''}
+              size={72}
+              className={`${cardTheme.iconColor} opacity-70`}
+            />
+          </div>
+        )}
 
         {/* Badges top-left */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-20">

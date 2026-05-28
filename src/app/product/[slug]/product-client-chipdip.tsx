@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingCart, ChevronUp, ChevronDown, Copy, Check, FileText } from 'lucide-react'
 import { Header } from '@/components/layout/header'
@@ -30,9 +31,9 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
   const { addItem } = useCart()
   const addBtnRef = useRef<HTMLButtonElement>(null)
 
-  // DISABLED: Images from ChipDip have watermarks and low quality
-  // Show placeholder until images are added manually via admin
-  const photos = ['/placeholder-product.jpg']
+  // Real product images from DB (R2-hosted after backfill), with a
+  // placeholder fallback so the UI is never blank.
+  const photos = product.images.length > 0 ? product.images : ['/placeholder-product.svg']
 
   function handleAddToCart() {
     addItem(product, quantity)
@@ -122,10 +123,13 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                               : 'border-[#e5e5e5] bg-white hover:border-[#5c5c5d]'
                           }`}
                         >
-                          <img 
-                            src={photos[photoIndex]} 
+                          <Image
+                            src={photos[photoIndex]}
                             alt={`${product.name} - фото ${photoIndex + 1}`}
+                            width={80}
+                            height={80}
                             className="w-full h-full object-contain"
+                            unoptimized={photos[photoIndex].startsWith('/')}
                           />
                         </button>
                       )
@@ -147,11 +151,15 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
                 {/* Main Photo */}
                 <div>
-                  <div className="w-[400px] h-[400px] border border-[#e5e5e5] flex items-center justify-center bg-white cursor-pointer mb-3">
-                    <img 
-                      src={photos[activePhoto]} 
+                  <div className="w-[400px] h-[400px] border border-[#e5e5e5] flex items-center justify-center bg-white cursor-pointer mb-3 relative">
+                    <Image
+                      src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}
+                      width={400}
+                      height={400}
+                      priority
                       className="w-full h-full object-contain p-4"
+                      unoptimized={photos[activePhoto].startsWith('/')}
                     />
                   </div>
                   <div className="text-center text-xs text-[#9d9d9f] leading-tight max-w-[400px]">
