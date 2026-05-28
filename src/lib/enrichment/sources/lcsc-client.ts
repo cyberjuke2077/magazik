@@ -28,6 +28,7 @@ export type LcscClientConfig = Record<string, never>
 
 export interface LcscClient {
   searchMpn(mpn: string, canonicalBrand: string): Promise<EnrichmentResult | null>
+  isBlocked(): boolean
   close(): Promise<void>
 }
 
@@ -289,5 +290,5 @@ export async function createLcscClient(): Promise<LcscClient> {
     unregisterBrowser(browser)
   }
 
-  return { searchMpn, close }
+  return { searchMpn, isBlocked: () => isBlocked, close }
 }

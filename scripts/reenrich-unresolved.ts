@@ -104,6 +104,8 @@ async function main() {
   let notFound = 0
   let errored = 0
   let blocked = false
+  let consecutiveNotFound = 0
+  const CONSECUTIVE_MISS_BREAK = 8
 
   try {
     for (let i = 0; i < candidates.length; i++) {
@@ -130,6 +132,7 @@ async function main() {
 
       if (result) {
         found++
+        consecutiveNotFound = 0
         const identity: PartIdentity = {
           canonicalBrand: brand,
           canonicalMpn: mpn,
@@ -144,12 +147,22 @@ async function main() {
         )
       } else {
         notFound++
+        consecutiveNotFound++
         console.log(`  [${i + 1}/${candidates.length}] ${mpn} → not found (${durationMs}ms)`)
       }
 
-      // Detect block: many consecutive nulls is suspicious
-      if (notFound > 20 && found === 0) {
-        console.warn(`\n⚠️  Possible block — 20+ consecutive misses with no hits. Stopping.`)
+      // Authoritative block signal from the client (403/429 in-session)
+      if (client.isBlocked()) {
+        console.warn(`\n⚠️  Client reports blocked state (HTTP 403/429). Stopping early.`)
+        blocked = true
+        break
+      }
+
+      // Heuristic: many consecutive misses likely means soft-block or network issue
+      if (consecutiveNotFound >= CONSECUTIVE_MISS_BREAK) {
+        console.warn(
+          `\n⚠️  ${CONSECUTIVE_MISS_BREAK} consecutive misses — likely soft-block. Stopping early.`,
+        )
         blocked = true
         break
       }
