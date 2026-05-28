@@ -13,6 +13,7 @@ export function SearchInput() {
 
   // Sync with URL when searchParams change externally
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValue(searchParams.get('q') || '')
   }, [searchParams])
 

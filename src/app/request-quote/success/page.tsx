@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { CheckCircle, ArrowRight, Phone, Mail } from 'lucide-react'
 import { Header } from '@/components/layout/header'
@@ -8,8 +9,15 @@ import { Footer } from '@/components/layout/footer'
 import { CONTACT_PHONE, CONTACT_EMAIL, REQUEST_PROCESSING_TIME } from '@/lib/constants'
 
 export default function RequestQuoteSuccessPage() {
-  // Генерируем номер запроса
-  const requestNumber = `REQ-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0')}`
+  const [requestNumber, setRequestNumber] = useState('')
+
+  useEffect(() => {
+    // Generate request number on client only — Math.random/Date are impure in render
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRequestNumber(
+      `REQ-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0')}`,
+    )
+  }, [])
   
   return (
     <div className="flex flex-col min-h-screen bg-white">

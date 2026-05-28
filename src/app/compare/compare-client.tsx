@@ -21,6 +21,7 @@ export function CompareClient() {
   useEffect(() => {
     if (!mounted) return
     if (compareItems.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProducts([])
       setLoading(false)
       return

@@ -37,7 +37,9 @@ export function AddToCartBtn({
   const [inCart, setInCart] = useState(false)
 
   useEffect(() => {
+    // hydration from localStorage — required after mount
     const exists = isInRequestList(productId)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInCart(exists)
     if (exists) {
       const item = getRequestList().find((i) => i.productId === productId)

@@ -24,6 +24,8 @@ export function CompareToggleBtn({ item, variant = 'icon' }: CompareToggleBtnPro
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // hydration from localStorage — required after mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
     setActive(isInCompare(item.id))
     function refresh() {

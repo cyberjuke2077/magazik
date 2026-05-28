@@ -8,6 +8,8 @@ export function useCompare() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // hydration from localStorage — required after mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
     setItems(getCompareList())
 

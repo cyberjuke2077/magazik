@@ -19,6 +19,8 @@ export function NavProgress() {
     let tick: ReturnType<typeof setTimeout> | null = null
     let finishTick: ReturnType<typeof setTimeout> | null = null
 
+    // route-change progress trigger — must update state synchronously after route deps change
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActive(true)
     setProgress(15)
 

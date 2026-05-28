@@ -48,6 +48,8 @@ export default function SubmitRequestPage() {
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   useEffect(() => {
+    // hydration from localStorage — required after mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(getRequestList())
     setMounted(true)
   }, [])

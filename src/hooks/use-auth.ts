@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import type { User, UserType, VerificationStatus } from '@/types'
+import type { User, UserType } from '@/types'
 
 const AUTH_KEY = 'electromagaz_user'
 
@@ -45,6 +45,8 @@ export function useAuth() {
   const [state, setState] = useState<AuthState>({ user: null, mounted: false })
 
   useEffect(() => {
+    // hydration from localStorage — required after mount
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState({ user: loadCurrentUser(), mounted: true })
   }, [])
 
