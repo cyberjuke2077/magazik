@@ -29,7 +29,6 @@ import {
   ShoppingCart,
   FolderTree,
   Factory,
-  Download,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
@@ -42,10 +41,9 @@ import { AdminUsers } from '@/components/admin/admin-users'
 import { AdminProducts } from '@/components/admin/admin-products'
 import { AdminCategories } from '@/components/admin/admin-categories'
 import { AdminManufacturers } from '@/components/admin/admin-manufacturers'
-import { AdminImport } from '@/components/admin/admin-import'
 
 type AuthTab = 'login' | 'register'
-type AdminTab = 'dashboard' | 'orders' | 'analytics' | 'users' | 'products' | 'categories' | 'manufacturers' | 'import'
+type AdminTab = 'dashboard' | 'orders' | 'analytics' | 'users' | 'products' | 'categories' | 'manufacturers'
 
 // Mock recent orders
 const recentOrders = [
@@ -409,19 +407,8 @@ export default function AccountPage() {
                       <Factory size={18} />
                       Производители
                     </button>
-                    <button
-                      onClick={() => setAdminTab('import')}
-                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                        adminTab === 'import'
-                          ? 'bg-[#0066cc] text-white'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Download size={18} />
-                      Импорт
-                    </button>
                   </div>
-                  
+
                   <button
                     onClick={() => {
                       logout()
@@ -444,7 +431,6 @@ export default function AccountPage() {
                 {adminTab === 'products' && <AdminProducts />}
                 {adminTab === 'categories' && <AdminCategories />}
                 {adminTab === 'manufacturers' && <AdminManufacturers />}
-                {adminTab === 'import' && <AdminImport />}
               </div>
             </div>
           </div>

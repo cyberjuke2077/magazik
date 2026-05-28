@@ -74,3 +74,8 @@ data/progress.db-shm
 
 # storage (local artifacts)
 storage/
+
+# ruflo runtime state (agentdb, ruvector)
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db

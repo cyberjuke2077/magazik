@@ -1,229 +1,140 @@
 # Electromagaz
 
-Интернет-магазин микроэлектроники и промышленной автоматики. Большой каталог электронных компонентов с поиском по маркировке, корзиной, заказами и личным кабинетом.
+Интернет-магазин микроэлектроники и промышленной автоматики. Каталог электронных компонентов с поиском по MPN, корзиной, заказами и enrichment-системой обогащения данных от поставщиков.
 
 ## Технологический стек
 
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 16 (App Router) + React 19
 - **Язык:** TypeScript (strict mode)
-- **Стили:** Tailwind CSS
-- **База данных:** PostgreSQL
-- **ORM:** Prisma
-- **Поиск:** Meilisearch
-- **Парсинг:** Cheerio
+- **Стили:** Tailwind CSS v4
+- **БД:** PostgreSQL 16 + Prisma 5
+- **Поиск:** Postgres FTS (tsvector, веса A/B/C) + Meilisearch
+- **Enrichment:** TS pipeline (Mouser API, LCSC, ChipDip)
+- **Браузерная автоматизация:** cloakbrowser + playwright-core
+- **Тесты:** Vitest + Playwright + fast-check
+- **TUI:** Ink (React for CLI)
 
 ## Быстрый старт
 
-### 1. Установка зависимостей
+### 1. Установка
 
 ```bash
 pnpm install
 ```
 
-### 2. Настройка базы данных
+### 2. БД
 
-Создайте файл `.env` на основе `.env.example`:
-
-```bash
-DATABASE_URL="postgresql://electromagaz:password@localhost:5432/electromagaz"
-```
-
-Запустите PostgreSQL через Docker:
+Скопируйте `.env.example` в `.env` и заполните `DATABASE_URL`, затем:
 
 ```bash
 docker-compose up -d postgres
-```
-
-Примените миграции:
-
-```bash
 pnpm prisma migrate dev
+pnpm prisma generate
 ```
 
-### 3. Импорт продуктов из ChipDip
-
-Импортируйте тестовую партию из 100 продуктов:
-
-```bash
-pnpm tsx src/scripts/import-chipdip.ts
-```
-
-Подробнее: [docs/import-guide.md](docs/import-guide.md)
-
-### 4. Запуск dev-сервера
+### 3. Dev-сервер
 
 ```bash
 pnpm dev
 ```
 
-Откройте [http://localhost:3000](http://localhost:3000)
+Откройте [http://localhost:3000](http://localhost:3000).
+
+## Enrichment-пайплайн
+
+Обогащение каталога из Excel-файлов поставщиков (.xlsx/.xls/.csv с китайскими заголовками 型号/品牌/封装/批号 или auto-detect MPN).
+
+```bash
+# Полный прогон
+pnpm enrichment:run
+
+# С опциями
+pnpm enrichment:run --input-dir /path/to/excels --batch-size 50
+pnpm enrichment:run --resume
+pnpm enrichment:run --dry-run         # без API-вызовов
+pnpm enrichment:run --skip-mouser     # отключить Mouser
+pnpm enrichment:run --mouser-only     # только Mouser
+pnpm enrichment:run --no-tui          # legacy-логи вместо Ink TUI
+
+# Статус
+pnpm enrichment:status
+pnpm enrichment:watch
+```
+
+Вход: `ENRICHMENT_INPUT_DIR` в `.env`. Источники по приоритету: Mouser (API) → LCSC (scraping) → ChipDip (stealth Chromium).
 
 ## Структура проекта
 
 ```
-/
-├── src/
-│   ├── app/              # Next.js App Router (страницы)
-│   ├── components/       # React компоненты
-│   ├── lib/
-│   │   ├── parser/       # ChipDip парсер (Cheerio)
-│   │   ├── queries/      # Prisma запросы
-│   │   └── prisma.ts     # Prisma клиент
-│   └── scripts/
-│       └── import-chipdip.ts  # Скрипт импорта
-├── prisma/
-│   ├── schema.prisma     # Схема БД
-│   └── migrations/       # Миграции
-├── docs/
-│   ├── database-schema.md      # Дизайн схемы БД
-│   ├── parser-architecture.md  # Архитектура парсера
-│   └── import-guide.md         # Руководство по импорту
-└── AGENTS.md             # Инструкции для AI-агентов
+src/
+├── app/                          # Next.js App Router
+├── components/
+│   └── enrichment-tui/           # Ink-дашборд для enrichment
+├── lib/
+│   ├── enrichment/
+│   │   ├── ingest/               # Excel-импортер, MPN-нормализатор, brand-mapper
+│   │   ├── sources/              # mouser-api, lcsc-client, chipdip-client
+│   │   ├── persistence/          # запись в Postgres (Product, EnrichmentJournal)
+│   │   ├── observability/        # event-bus, dashboard-state, logger
+│   │   ├── orchestrator.ts       # главный пайплайн
+│   │   └── browser-registry.ts   # учёт Chromium-процессов, graceful shutdown
+│   ├── proxy/                    # proxy-manager (Webshare residential)
+│   ├── queries/                  # Prisma-запросы для UI
+│   └── prisma.ts
+└── scripts/
+    ├── enrichment-run.ts         # CLI-runner
+    └── enrichment-status.ts      # отчёт прогресса
+
+prisma/
+├── schema.prisma                 # Product, Manufacturer, Category, EnrichmentJournal, QuoteRequest
+└── migrations/
+
+scripts/                          # утилиты диагностики БД
+docs/database-schema.md           # описание схемы
 ```
 
-## База данных
-
-### Схема
-
-Основные модели:
-- **Category** - Категории с иерархией (parent/child)
-- **Manufacturer** - Производители электроники
-- **Product** - Товары (название, артикул, описание)
-- **ProductImage** - Изображения (URL, без локального хранения)
-- **Specification** - Характеристики (key-value пары)
-- **Datasheet** - Ссылки на PDF даташиты
-- **ProductAnalog** - Аналоги/альтернативы (many-to-many)
-
-Подробнее: [docs/database-schema.md](docs/database-schema.md)
-
-### Prisma команды
+## Команды
 
 ```bash
-# Применить миграции
-pnpm prisma migrate dev
-
-# Открыть Prisma Studio (GUI для БД)
-pnpm prisma studio
-
-# Сгенерировать Prisma клиент
-pnpm prisma generate
-
-# Сбросить БД (удалить все данные)
-pnpm prisma migrate reset
-```
-
-## Импорт продуктов
-
-### Быстрый импорт (100 продуктов)
-
-```bash
-pnpm tsx src/scripts/import-chipdip.ts
-```
-
-Время: ~2 минуты
-
-### Настройка импорта
-
-Отредактируйте `src/scripts/import-chipdip.ts`:
-
-```typescript
-await importProducts({
-  maxProducts: 100,     // Количество продуктов
-  batchSize: 10,        // Размер батча
-  catalogUrl: 'https://www.chipdip.ru/catalog/microcontrollers',
-})
-```
-
-### Масштабирование до 2M продуктов
-
-Подробное руководство: [docs/import-guide.md](docs/import-guide.md)
-
-**Стратегии:**
-- Параллельный импорт (несколько категорий одновременно)
-- Увеличение rate limit (если ChipDip разрешает)
-- Оптимизация размера батчей
-- Ночной импорт (cron jobs)
-
-## Разработка
-
-### Команды
-
-```bash
-# Dev-сервер
+# Dev
 pnpm dev
-
-# Сборка
 pnpm build
-
-# Продакшн-сервер
 pnpm start
+
+# Тесты
+pnpm test                          # unit (Vitest)
+pnpm test:integration              # с реальными внешними системами
+pnpm test:coverage
 
 # Линтинг
 pnpm lint
 
-# Форматирование
-pnpm format
+# Prisma
+pnpm db:migrate
+pnpm db:studio
+pnpm db:generate
 
-# Тесты
-pnpm test
-
-# E2E тесты
-pnpm test:e2e
+# Enrichment
+pnpm enrichment:run [flags]
+pnpm enrichment:status
+pnpm enrichment:watch
 ```
 
-### Стиль кода
+## БД
 
-Следуйте инструкциям в [AGENTS.md](AGENTS.md):
-- TypeScript strict mode
-- Именование: camelCase (функции), PascalCase (компоненты), kebab-case (файлы)
-- Импорты: группировка по (1) внешние библиотеки, (2) @/ алиасы, (3) относительные пути
-- Обработка ошибок: всегда явная, с контекстом
-- Без `any` типов - используйте `unknown`
+Основные модели: `Category` (иерархия), `Manufacturer`, `Product` (с `mpnNormalized`, `lifecycle`, `package`, `searchVector` tsvector), `ProductImage`, `Specification`, `Datasheet`, `ProductAnalog`, `EnrichmentJournal`, `QuoteRequest`/`QuoteRequestItem`.
 
-## Документация
+Подробнее: [docs/database-schema.md](docs/database-schema.md).
 
-- **[docs/database-schema.md](docs/database-schema.md)** - Дизайн схемы БД, индексы, отношения
-- **[docs/parser-architecture.md](docs/parser-architecture.md)** - Архитектура парсера, модули, data flow
-- **[docs/import-guide.md](docs/import-guide.md)** - Импорт продуктов, troubleshooting, масштабирование
-- **[AGENTS.md](AGENTS.md)** - Инструкции для AI-агентов, конвенции проекта
+## Конвенции кода
 
-## Архитектура парсера
+- TypeScript strict, без `any` (используйте `unknown`).
+- Именование: `camelCase` функции, `PascalCase` компоненты, `kebab-case` файлы.
+- Импорты: внешние → `@/` → относительные.
+- Без преждевременных абстракций. Без silent fallbacks — ошибки явные, с контекстом.
 
-Модульная система на чистых функциях:
-
-- **product-parser.ts** - Извлечение данных из HTML страниц продуктов
-- **catalog-scraper.ts** - Извлечение URL продуктов из каталога
-- **http-client.ts** - HTTP запросы с retry логикой
-- **rate-limiter.ts** - Rate limiting (1 req/sec по умолчанию)
-
-Подробнее: [docs/parser-architecture.md](docs/parser-architecture.md)
-
-## Деплой
-
-### Docker
-
-```bash
-# Сборка образа
-docker build -t electromagaz .
-
-# Запуск контейнера
-docker-compose up -d
-```
-
-### VPS
-
-1. Клонировать репозиторий
-2. Настроить `.env` с production DATABASE_URL
-3. Запустить PostgreSQL
-4. Применить миграции: `pnpm prisma migrate deploy`
-5. Собрать проект: `pnpm build`
-6. Запустить: `pnpm start`
+См. [AGENTS.md](AGENTS.md).
 
 ## Лицензия
 
-MIT
-
-## Поддержка
-
-- GitHub Issues - баги и feature requests
-- Discussions - вопросы и обсуждения
+MIT.
