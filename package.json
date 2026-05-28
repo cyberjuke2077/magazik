@@ -18,9 +18,11 @@
     "enrichment:status": "tsx src/scripts/enrichment-status.ts",
     "enrichment:watch": "tsx src/scripts/enrichment-status.ts --watch",
     "enrichment:reenrich": "tsx scripts/reenrich-unresolved.ts",
-    "db:stats": "tsx scripts/check-db-stats.ts"
+    "db:stats": "tsx scripts/check-db-stats.ts",
+    "images:backfill": "tsx scripts/backfill-images-to-r2.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1055.0",
     "@prisma/client": "^5.22.0",
     "cheerio": "^1.2.0",
     "cloakbrowser": "^0.3.29",
@@ -32,6 +34,7 @@
     "playwright-core": "^1.60.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "^0.34.5",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

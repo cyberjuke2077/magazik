@@ -9,6 +9,7 @@
 import { type Prisma } from '@prisma/client'
 
 import { prisma } from '../../prisma'
+import { isR2Configured, uploadProductImage } from '../../storage/r2-client'
 import {
   type DataSource,
   type EnrichmentMeta,
@@ -114,6 +115,12 @@ export async function persistBatch(
   const errors: Array<{ mpn: string; error: string }> = []
   let persisted = 0
   let failed = 0
+
+  // Pre-transaction: upload images to R2 outside the DB transaction.
+  // Network I/O inside a Prisma transaction holds row locks for the
+  // entire fetch+transcode duration — guaranteed deadlocks at scale.
+  // Mutates each item's result.imageUrls in-place to the R2 public URLs.
+  await mirrorImagesToStorage(items)
 
   try {
     await prisma.$transaction(async (tx) => {
@@ -389,4 +396,72 @@ async function resolveCategory(
     update: {},
   })
   return category.id
+}
+
+const MAX_IMAGES_PER_PRODUCT = 10
+const IMAGE_UPLOAD_CONCURRENCY = 4
+
+/**
+ * Mirror upstream image URLs (LCSC/Mouser) into R2 BEFORE the persist
+ * transaction. Mutates each item.result.imageUrls in place so the
+ * downstream `persistItem` writes R2 public URLs instead of upstream
+ * CDN links — independence from upstream CDN availability + ToS.
+ *
+ * No-op when R2 is not configured; upstream URLs flow through unchanged
+ * so dev environments without credentials still work.
+ *
+ * Errors per-image are swallowed (logged) so a single 404 from LCSC
+ * doesn't tank an entire enrichment batch — we keep the URLs we got.
+ */
+async function mirrorImagesToStorage(
+  items: Array<{ identity: PartIdentity; result: EnrichmentResult | null }>,
+): Promise<void> {
+  if (!isR2Configured()) return
+
+  const tasks: Array<{
+    item: { identity: PartIdentity; result: EnrichmentResult | null }
+    sourceUrl: string
+    sourceIdx: number
+  }> = []
+
+  for (const item of items) {
+    const r = item.result
+    if (!r?.imageUrls?.length) continue
+    if (r.source !== 'lcsc' && r.source !== 'mouser') continue
+    const urls = r.imageUrls.slice(0, MAX_IMAGES_PER_PRODUCT)
+    urls.forEach((url, idx) => tasks.push({ item, sourceUrl: url, sourceIdx: idx }))
+  }
+
+  if (tasks.length === 0) return
+
+  const mirroredByItem = new Map<typeof items[number], Map<number, string>>()
+
+  for (let i = 0; i < tasks.length; i += IMAGE_UPLOAD_CONCURRENCY) {
+    const slice = tasks.slice(i, i + IMAGE_UPLOAD_CONCURRENCY)
+    await Promise.all(
+      slice.map(async ({ item, sourceUrl, sourceIdx }) => {
+        try {
+          const uploaded = await uploadProductImage(sourceUrl)
+          let bucket = mirroredByItem.get(item)
+          if (!bucket) {
+            bucket = new Map()
+            mirroredByItem.set(item, bucket)
+          }
+          bucket.set(sourceIdx, uploaded.url)
+        } catch (err) {
+          const msg = err instanceof Error ? err.message : String(err)
+          console.warn(
+            `[persistence] R2 upload failed for ${item.identity.canonicalMpn} (${sourceUrl}): ${msg}`,
+          )
+        }
+      }),
+    )
+  }
+
+  for (const [item, mapping] of mirroredByItem) {
+    if (!item.result?.imageUrls) continue
+    item.result.imageUrls = item.result.imageUrls.map(
+      (url, idx) => mapping.get(idx) ?? url,
+    )
+  }
 }

@@ -72,8 +72,9 @@ data/progress.db-journal
 data/progress.db-wal
 data/progress.db-shm
 
-# storage (local artifacts)
+# storage (local artifacts; whitelist source dir)
 storage/
+!src/lib/storage/
 
 # ruflo runtime state (agentdb, ruvector)
 agentdb.rvf
