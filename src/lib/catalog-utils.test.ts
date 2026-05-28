@@ -40,6 +40,8 @@ describe('parseCatalogParams', () => {
       query: null,
       categorySlug: null,
       manufacturerSlug: null,
+      sort: 'date',
+      view: 'list',
     })
   })
 

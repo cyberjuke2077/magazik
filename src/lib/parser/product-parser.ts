@@ -12,7 +12,7 @@
  */
 
 import * as cheerio from 'cheerio'
-import { type ParsedProduct, type ParseResult, type SpecificationRow } from './types'
+import { type ParsedProduct, type ParseResult } from './types'
 
 /**
  * Validates that input HTML is non-empty string
@@ -305,40 +305,26 @@ export function extractSpecifications($: cheerio.CheerioAPI): Record<string, str
  * Returns array of absolute URLs
  */
 export function extractImages($: cheerio.CheerioAPI): string[] {
-  // DISABLED: Images from ChipDip have watermarks and low quality
-  // Will be added manually via admin panel
-  return []
-  
-  /* Original implementation (disabled):
   const images = new Set<string>()
-  
-  // ChipDip specific: product__image-preview class
-  $('img.product__image-preview').each((_, img) => {
-    const src = $(img).attr('src')
-    if (src && src.includes('static.chipdip.ru')) {
-      images.add(src)
-    }
-  })
-  
-  // Fallback: data-image attribute
-  $('[data-image]').each((_, el) => {
-    const src = $(el).attr('data-image')
-    if (src && src.includes('static.chipdip.ru')) {
-      images.add(src)
-    }
-  })
-  
-  // Fallback: structured data
+
   $('[itemprop="image"]').each((_, el) => {
     const src = $(el).attr('src') || $(el).attr('content')
     if (src) images.add(src)
   })
-  
-  // Filter out invalid URLs and make absolute
+
+  $('.product-images img, .gallery img, img.product__image-preview').each((_, img) => {
+    const src = $(img).attr('src') || $(img).attr('data-src')
+    if (src) images.add(src)
+  })
+
+  $('[data-image]').each((_, el) => {
+    const src = $(el).attr('data-image')
+    if (src) images.add(src)
+  })
+
   return Array.from(images)
-    .filter(url => url.startsWith('http') || url.startsWith('//'))
-    .map(url => url.startsWith('//') ? `https:${url}` : url)
-  */
+    .filter((url) => url.startsWith('http') || url.startsWith('//'))
+    .map((url) => (url.startsWith('//') ? `https:${url}` : url))
 }
 
 /**

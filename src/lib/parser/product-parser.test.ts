@@ -74,7 +74,7 @@ describe('parseProductPage', () => {
 
   test('returns error for non-string input', () => {
     // Arrange
-    const html = null as any
+    const html = null as unknown as string
 
     // Act
     const result = parseProductPage(html)
@@ -97,13 +97,19 @@ describe('parseProductPage', () => {
   })
 
   test('handles malformed HTML gracefully', () => {
-    // Arrange
-    const html = '<html><body><h1>Product Name</h1><div unclosed'
+    // Arrange: malformed HTML with name AND required fields (mpn + manufacturer)
+    const html = `
+      <html><body>
+        <h1>Product Name</h1>
+        <span itemprop="mpn">ABC123</span>
+        <span itemprop="brand">TestCorp</span>
+        <div unclosed
+      `
 
     // Act
     const result = parseProductPage(html)
 
-    // Assert
+    // Assert: cheerio handles unclosed tags, parsing succeeds
     expect(result.success).toBe(true)
     expect(result.data?.name).toBe('Product Name')
   })
