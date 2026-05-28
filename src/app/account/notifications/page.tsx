@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Bell, Check, Trash2, Settings as SettingsIcon } from 'lucide-react'
+import { Bell, Check, Trash2 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'

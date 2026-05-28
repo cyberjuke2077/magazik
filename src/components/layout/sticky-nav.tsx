@@ -2,10 +2,9 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
-import { ShoppingCart, User, Package, Eye, EyeOff, Mail, Lock, Phone, Building2, Heart, Clock, Settings, Bell, CreditCard, MapPin, HelpCircle, LogOut } from 'lucide-react'
+import { ShoppingCart, User, Package, Eye, EyeOff, Heart, Clock, Settings, Bell, CreditCard, MapPin, HelpCircle, LogOut } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
-import { CategoryIcon } from '@/components/ui/component-icons'
 import { LiveSearchDropdown } from '@/components/ui/live-search-dropdown'
 
 interface CategoryWithChildren {

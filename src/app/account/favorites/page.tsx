@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { Heart, Trash2, ShoppingCart, X, Package } from 'lucide-react'
+import { Heart, Trash2, Package } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'

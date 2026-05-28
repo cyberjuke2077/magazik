@@ -5,12 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
   Building2,
-  User,
-  Phone,
-  Mail,
   FileText,
-  Calendar,
-  MapPin,
   CheckCircle,
   AlertCircle,
   ArrowLeft,

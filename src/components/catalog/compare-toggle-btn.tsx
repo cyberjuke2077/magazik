@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { GitCompareArrows, Check } from 'lucide-react'
 import {
   type CompareItem,
-  COMPARE_LIMIT,
   isInCompare,
   toggleCompare,
 } from '@/lib/compare-store'

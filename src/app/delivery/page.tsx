@@ -11,15 +11,12 @@ import {
   CheckCircle2,
   AlertCircle,
   Package,
-  Shield,
-  Award,
-  Mail,
   Calculator,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
-import { MIN_ORDER_AMOUNT, CONTACT_PHONE, CONTACT_EMAIL, REQUEST_PROCESSING_TIME } from '@/lib/constants'
+import { MIN_ORDER_AMOUNT, CONTACT_PHONE, REQUEST_PROCESSING_TIME } from '@/lib/constants'
 import { formatPrice } from '@/lib/utils'
 
 const workflowSteps = [

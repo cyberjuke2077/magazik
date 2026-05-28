@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+import { ArrowUpDown, ArrowUp } from 'lucide-react'
 import { formatPrice } from '@/lib/catalog-utils'
 import { BulkSelectCheckbox } from './bulk-select-panel'
 import { AddToCartBtn } from './add-to-cart-btn'

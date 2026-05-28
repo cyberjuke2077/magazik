@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import {
-  ShoppingCart, Plus, Minus, ArrowLeft,
+  ShoppingCart, Plus, Minus,
   Truck, Shield, Check, ChevronRight, Zap, RotateCcw, FileText, Download,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'

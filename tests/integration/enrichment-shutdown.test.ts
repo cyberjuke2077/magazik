@@ -329,7 +329,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
     const orphans = diffOrphans(before, after)
 
     if (orphans.length > 0) {
-      // eslint-disable-next-line no-console
+       
       console.error(
         `[Bug A counterexample] SIGINT scenario\n` +
           `  exitCode=${result.exitCode}, exitSignal=${result.exitSignal}, ` +
@@ -350,7 +350,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
     const orphans = diffOrphans(before, after)
 
     if (orphans.length > 0) {
-      // eslint-disable-next-line no-console
+       
       console.error(
         `[Bug A counterexample] SIGTERM scenario\n` +
           `  exitCode=${result.exitCode}, exitSignal=${result.exitSignal}, ` +
@@ -371,7 +371,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
     const orphans = diffOrphans(before, after)
 
     if (orphans.length > 0) {
-      // eslint-disable-next-line no-console
+       
       console.error(
         `[Bug A counterexample] double-SIGINT scenario\n` +
           `  exitCode=${result.exitCode}, exitSignal=${result.exitSignal}, ` +
@@ -400,7 +400,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
           const after = await snapshotChromiumPids()
           const orphans = diffOrphans(before, after)
           if (orphans.length > 0) {
-            // eslint-disable-next-line no-console
+             
             console.error(
               `[Bug A property counterexample] signal=${signal}\n` +
                 `  exitCode=${result.exitCode}, durationMs=${result.durationMs}\n` +
@@ -534,7 +534,7 @@ describe('happy-path shutdown', () => {
 
     if (orphans.length > 0) {
       const psOutput = await psFp(orphans)
-      // eslint-disable-next-line no-console
+       
       console.error(
         `[Bug A preservation counterexample] happy-path leaves orphans!\n` +
           `  exitCode=${result.exitCode}, durationMs=${result.durationMs}\n` +

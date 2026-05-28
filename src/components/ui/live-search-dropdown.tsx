@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Clock, ChevronRight, Package, Tag, Building2, Loader2 } from 'lucide-react'
+import { Search, Clock, ChevronRight, Package, Tag, Building2 } from 'lucide-react'
 
 interface SearchProduct {
   id: string

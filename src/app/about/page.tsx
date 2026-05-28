@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Building2, Award, Users, TrendingUp, Truck, Shield } from 'lucide-react'
+import { Users, TrendingUp, Truck, Shield, Award } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'

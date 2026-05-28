@@ -7,12 +7,7 @@ import {
   ChevronRight,
   ArrowLeft,
   Building2,
-  User,
-  Mail,
-  Phone,
   FileText,
-  Calendar,
-  MapPin,
   AlertCircle,
   CheckCircle,
 } from 'lucide-react'

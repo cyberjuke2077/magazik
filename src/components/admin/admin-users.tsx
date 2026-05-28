@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Check, X, Ban, UserCheck, Clock, AlertCircle } from 'lucide-react'
+import { Search, Check, X, Ban, UserCheck } from 'lucide-react'
 import type { User, VerificationStatus } from '@/types'
 import { mockUsers } from '@/lib/users-mock-data'
 
