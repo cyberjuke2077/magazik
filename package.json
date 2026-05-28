@@ -16,7 +16,9 @@
     "db:generate": "prisma generate",
     "enrichment:run": "tsx src/scripts/enrichment-run.ts",
     "enrichment:status": "tsx src/scripts/enrichment-status.ts",
-    "enrichment:watch": "tsx src/scripts/enrichment-status.ts --watch"
+    "enrichment:watch": "tsx src/scripts/enrichment-status.ts --watch",
+    "enrichment:reenrich": "tsx scripts/reenrich-unresolved.ts",
+    "db:stats": "tsx scripts/check-db-stats.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

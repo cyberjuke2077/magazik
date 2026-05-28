@@ -1,88 +1,228 @@
 /**
- * LCSC Client
+ * LCSC Client (CloakBrowser SPA + JSON-LD)
  *
- * Fetches product data from lcsc.com using CloakBrowser (stealth Chromium).
- * No proxy needed — LCSC is accessible directly.
+ * lcsc.com is a Nuxt SPA. The search route hydrates client-side, so we need
+ * a real browser. After the SPA resolves, the product detail page contains
+ * a stable JSON-LD Product block — that is the source of truth here.
  *
- * Features:
- * - Anti-detection: randomized viewport, resource blocking, locale 'en-US'
- * - Jitter: 5-10s between requests
- * - 403 handling: marks as blocked, returns null
- * - Single session (concurrency = 1)
+ * Pipeline:
+ *   1. goto /search?q={mpn} — Nuxt SPA may redirect to /category/...
+ *      when there is a single full-match.
+ *   2. waitForFunction: either a product-detail link appears, OR a
+ *      "no result" indicator is visible. No fixed sleeps.
+ *   3. Pick the link whose title best matches the canonical MPN
+ *      (exact > prefix > first).
+ *   4. goto product page, parse JSON-LD Product block.
+ *
+ * Why CloakBrowser:
+ *   Resource blocking (route.abort on images/fonts/stylesheets) breaks
+ *   Nuxt hydration on LCSC — leave everything enabled.
  */
 
+import type { Browser, BrowserContext, Page } from 'playwright-core'
+
 import { type EnrichmentResult } from '../types'
-import { parseLcscProductPage } from './lcsc-parser'
 import { registerBrowser, unregisterBrowser } from '../browser-registry'
 
-export interface LcscClientConfig {
-  /** No proxy needed — LCSC accessible without proxy */
-}
+export type LcscClientConfig = Record<string, never>
 
 export interface LcscClient {
   searchMpn(mpn: string, canonicalBrand: string): Promise<EnrichmentResult | null>
   close(): Promise<void>
 }
 
-/** Random integer in [min, max] inclusive */
+const SEARCH_TIMEOUT_MS = 40_000
+const PDP_HYDRATION_DELAY_MS = 1_200
+const MIN_DELAY_MS = 1_500
+const MAX_DELAY_MS = 3_500
+
+/** JSON-LD shape we care about. Optional fields cover both LCSC variants. */
+interface JsonLdBrand {
+  '@type'?: string
+  name?: string
+}
+interface JsonLdProperty {
+  '@type'?: string
+  name?: string
+  value?: string | number
+}
+interface JsonLdSubject {
+  '@type'?: string
+  name?: string
+  url?: string
+}
+interface JsonLdProduct {
+  '@type'?: string
+  name?: string
+  sku?: string
+  mpn?: string
+  brand?: JsonLdBrand | string
+  description?: string
+  image?: string[] | string
+  category?: string
+  additionalProperty?: JsonLdProperty[]
+  subjectOf?: JsonLdSubject | JsonLdSubject[]
+}
+
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-/** Random jitter delay between 5-10 seconds */
-function jitterDelay(): Promise<void> {
-  const ms = randomInt(5000, 10000)
-  return new Promise((resolve) => setTimeout(resolve, ms))
+function jitter(): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, randomInt(MIN_DELAY_MS, MAX_DELAY_MS)))
 }
 
-/** Generate a random viewport size for anti-detection */
-function randomViewport(): { width: number; height: number } {
-  const widths = [1280, 1366, 1440, 1536, 1600, 1920]
-  const heights = [720, 768, 900, 864, 1024, 1080]
+function brandToString(brand: JsonLdBrand | string | undefined): string | null {
+  if (!brand) return null
+  if (typeof brand === 'string') return brand.trim() || null
+  return brand.name?.trim() || null
+}
+
+function collectImages(image: string[] | string | undefined): string[] {
+  if (!image) return []
+  const arr = Array.isArray(image) ? image : [image]
+  return Array.from(new Set(arr.map((s) => s.trim()).filter(Boolean)))
+}
+
+function collectDatasheets(subjectOf: JsonLdSubject | JsonLdSubject[] | undefined): string[] {
+  if (!subjectOf) return []
+  const arr = Array.isArray(subjectOf) ? subjectOf : [subjectOf]
+  return arr
+    .filter((s) => s?.url && (s['@type'] === 'DigitalDocument' || /datasheet/i.test(s.name || '')))
+    .map((s) => s.url as string)
+}
+
+function collectSpecs(props: JsonLdProperty[] | undefined): Array<{ key: string; value: string }> {
+  if (!props || props.length === 0) return []
+  const out: Array<{ key: string; value: string }> = []
+  const seen = new Set<string>()
+  for (const p of props) {
+    const key = (p.name || '').trim()
+    const value = p.value === undefined || p.value === null ? '' : String(p.value).trim()
+    if (key && value && !seen.has(key)) {
+      seen.add(key)
+      out.push({ key, value })
+    }
+  }
+  return out
+}
+
+/**
+ * Extract the first JSON-LD block of the given @type from a page HTML.
+ * LCSC product pages embed multiple blocks (Product, ImageObject, BreadcrumbList);
+ * we want Product.
+ */
+function extractJsonLdProduct(html: string): JsonLdProduct | null {
+  const re = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(html)) !== null) {
+    const body = m[1].trim()
+    if (!body) continue
+    try {
+      const parsed = JSON.parse(body) as JsonLdProduct
+      if (parsed['@type'] === 'Product') return parsed
+    } catch {
+      // skip malformed block
+    }
+  }
+  return null
+}
+
+/**
+ * Wait for the LCSC SPA to either show product-detail links or signal
+ * "no results". Returns the outcome so the caller can branch cleanly.
+ */
+async function waitForSearchResolution(page: Page): Promise<'product' | 'empty' | 'timeout'> {
+  try {
+    await page.waitForFunction(
+      () => {
+        if (document.querySelector('a[href*="/product-detail/"]')) return 'product'
+        const text = document.body?.innerText || ''
+        if (/0\s*results|no result|no products|没有找到|未找到/i.test(text)) return 'empty'
+        return false
+      },
+      { timeout: SEARCH_TIMEOUT_MS },
+    )
+  } catch {
+    return 'timeout'
+  }
+  const hasProduct = await page.evaluate(
+    () => !!document.querySelector('a[href*="/product-detail/"]'),
+  )
+  return hasProduct ? 'product' : 'empty'
+}
+
+/**
+ * From all rendered product-detail links, pick the one whose title best
+ * matches the canonical MPN. Falls back to prefix match, then first link.
+ */
+async function pickBestLink(page: Page, mpn: string): Promise<string | null> {
+  const target = mpn.toUpperCase()
+  return page.evaluate((tgt: string) => {
+    const links = Array.from(document.querySelectorAll('a[href*="/product-detail/"]'))
+      .map((a) => ({
+        href: (a as HTMLAnchorElement).href,
+        title: (a.getAttribute('title') || a.textContent || '').trim(),
+      }))
+      .filter((l) => /\/product-detail\/C\d+\.html/.test(l.href))
+    if (links.length === 0) return null
+    const exact = links.find((l) => l.title.toUpperCase() === tgt)
+    if (exact) return exact.href
+    const prefix = links.find((l) => l.title.toUpperCase().startsWith(tgt))
+    if (prefix) return prefix.href
+    return links[0].href
+  }, target)
+}
+
+/**
+ * Map a parsed JSON-LD Product into the pipeline's EnrichmentResult.
+ * Caller supplies fallback brand/mpn for the rare case JSON-LD lacks them.
+ */
+function mapProductToResult(
+  product: JsonLdProduct,
+  fallbackMpn: string,
+  fallbackBrand: string,
+): EnrichmentResult {
+  const specs = collectSpecs(product.additionalProperty)
+  const images = collectImages(product.image)
+  const datasheets = collectDatasheets(product.subjectOf)
+  const pkg = specs.find((s) => /^package$/i.test(s.key))?.value
   return {
-    width: widths[randomInt(0, widths.length - 1)],
-    height: heights[randomInt(0, heights.length - 1)],
+    source: 'lcsc',
+    mpn: product.mpn?.trim() || fallbackMpn,
+    brand: brandToString(product.brand) || fallbackBrand,
+    name: product.name?.trim() || undefined,
+    description: product.description?.trim() || undefined,
+    descriptionLanguage: 'en',
+    categoryName: product.category?.trim() || undefined,
+    specs: specs.length > 0 ? specs : undefined,
+    imageUrls: images.length > 0 ? images : undefined,
+    datasheetUrls: datasheets.length > 0 ? datasheets : undefined,
+    package: pkg,
   }
 }
 
 /**
- * Creates an LCSC client with a CloakBrowser session.
- *
- * Uses dynamic import for ESM compatibility with cloakbrowser.
- * Launches browser WITHOUT proxy (confirmed accessible).
+ * Create an LCSC client backed by a single CloakBrowser session.
+ * The client is sequential — call sites must not invoke searchMpn in parallel.
  */
 export async function createLcscClient(): Promise<LcscClient> {
-  const { launch } = await import('cloakbrowser')
+  const { launch } = (await import('cloakbrowser')) as typeof import('cloakbrowser')
 
-  const viewport = randomViewport()
-
-  const browser = await launch({
+  const browser: Browser = await launch({
     headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      `--window-size=${viewport.width},${viewport.height}`,
-    ],
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1440,900'],
   })
   registerBrowser(browser)
 
-  const context = await browser.newContext({
-    viewport,
+  const context: BrowserContext = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
     locale: 'en-US',
     timezoneId: 'America/New_York',
   })
+  // No resource blocking — LCSC's Nuxt SPA fails to hydrate without CSS/JS.
 
-  // Block images, fonts, stylesheets to reduce fingerprint and speed up
-  await context.route('**/*', (route) => {
-    const resourceType = route.request().resourceType()
-    if (['image', 'font', 'stylesheet'].includes(resourceType)) {
-      return route.abort()
-    }
-    return route.continue()
-  })
-
-  const page = await context.newPage()
-
+  const page: Page = await context.newPage()
   let isBlocked = false
 
   async function searchMpn(
@@ -90,119 +230,64 @@ export async function createLcscClient(): Promise<LcscClient> {
     canonicalBrand: string,
   ): Promise<EnrichmentResult | null> {
     if (isBlocked) return null
+    if (!mpn || mpn.trim().length === 0) return null
 
-    // Jitter before request
-    await jitterDelay()
+    await jitter()
 
     const searchUrl = `https://www.lcsc.com/search?q=${encodeURIComponent(mpn)}`
-
+    let resp
     try {
-      const searchResponse = await page.goto(searchUrl, {
-        waitUntil: 'domcontentloaded',
-        timeout: 30000,
-      })
-
-      if (!searchResponse) return null
-
-      const status = searchResponse.status()
-
-      // Handle 403 — mark as blocked
-      if (status === 403) {
-        isBlocked = true
-        return null
-      }
-
-      // Wait a moment for dynamic content
-      await page.waitForTimeout(2000)
-
-      // Look for product links in search results
-      const productLink = await page.evaluate(() => {
-        // LCSC search results typically have links to product pages
-        const selectors = [
-          'a[href*="/product-detail/"]',
-          'a[href*="/product/"]',
-          '[class*="product"] a[href]',
-          '[class*="search-result"] a[href]',
-        ]
-
-        for (const selector of selectors) {
-          const link = document.querySelector(selector) as HTMLAnchorElement | null
-          if (link?.href) return link.href
-        }
-
-        return null
-      })
-
-      if (!productLink) return null
-
-      // Navigate to product page
-      await jitterDelay()
-
-      const productResponse = await page.goto(productLink, {
-        waitUntil: 'domcontentloaded',
-        timeout: 30000,
-      })
-
-      if (!productResponse) return null
-
-      if (productResponse.status() === 403) {
-        isBlocked = true
-        return null
-      }
-
-      // Wait for content to render
-      await page.waitForTimeout(2000)
-
-      // Get page HTML and parse
-      const html = await page.content()
-      const parsed = parseLcscProductPage(html)
-
-      if (!parsed) return null
-
-      // Map to EnrichmentResult
-      const result: EnrichmentResult = {
-        source: 'lcsc',
-        mpn,
-        brand: parsed.manufacturer || canonicalBrand,
-        name: parsed.name || undefined,
-        description: parsed.description || undefined,
-        descriptionLanguage: 'en',
-        specs: parsed.specs.length > 0 ? parsed.specs : undefined,
-        imageUrls: parsed.imageUrls.length > 0 ? parsed.imageUrls : undefined,
-        datasheetUrls: parsed.datasheetUrls.length > 0 ? parsed.datasheetUrls : undefined,
-        lifecycle: parsed.lifecycle || undefined,
-        package: parsed.package || undefined,
-      }
-
-      return result
-    } catch (error) {
-      // Network errors, timeouts — return null without blocking
-      if (
-        error instanceof Error &&
-        error.message.includes('net::ERR_')
-      ) {
-        return null
-      }
+      resp = await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 })
+    } catch {
       return null
     }
+    if (!resp) return null
+    if (resp.status() === 403 || resp.status() === 429) {
+      isBlocked = true
+      return null
+    }
+
+    const outcome = await waitForSearchResolution(page)
+    if (outcome !== 'product') return null
+
+    const link = await pickBestLink(page, mpn)
+    if (!link) return null
+
+    await jitter()
+
+    try {
+      const pdpResp = await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 30_000 })
+      if (!pdpResp) return null
+      if (pdpResp.status() === 403 || pdpResp.status() === 429) {
+        isBlocked = true
+        return null
+      }
+    } catch {
+      return null
+    }
+
+    await page.waitForTimeout(PDP_HYDRATION_DELAY_MS)
+
+    const html = await page.content()
+    const product = extractJsonLdProduct(html)
+    if (!product) return null
+
+    return mapProductToResult(product, mpn, canonicalBrand)
   }
 
   async function close(): Promise<void> {
     try {
       await context.close()
     } catch {
-      // Ignore close errors
+      // ignore
     }
     try {
       await browser.close()
     } catch {
-      // Ignore close errors
+      // ignore
     }
     unregisterBrowser(browser)
   }
 
-  return {
-    searchMpn,
-    close,
-  }
+  return { searchMpn, close }
 }
