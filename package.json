@@ -19,10 +19,13 @@
     "enrichment:watch": "tsx src/scripts/enrichment-status.ts --watch",
     "enrichment:reenrich": "tsx scripts/reenrich-unresolved.ts",
     "db:stats": "tsx scripts/check-db-stats.ts",
-    "images:backfill": "tsx scripts/backfill-images-to-r2.ts"
+    "images:backfill": "tsx scripts/backfill-images-to-r2.ts",
+    "images:clean": "tsx scripts/clean-images.ts",
+    "images:cleanup-r2": "tsx scripts/cleanup-r2-originals.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1055.0",
+    "@imgly/background-removal-node": "^1.4.5",
     "@prisma/client": "^5.22.0",
     "cheerio": "^1.2.0",
     "cloakbrowser": "^0.3.29",
@@ -56,5 +59,12 @@
     "tsx": "^4.7.0",
     "typescript": "^5",
     "vitest": "^2.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "onnxruntime-node",
+      "sharp",
+      "@imgly/background-removal-node"
+    ]
   }
 }
