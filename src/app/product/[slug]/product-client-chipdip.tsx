@@ -14,6 +14,7 @@ import { TrackRecentlyViewed } from '@/components/catalog/track-recently-viewed'
 import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 import { StickyAddBar } from '@/components/product/sticky-add-bar'
 import { CompareToggleBtn } from '@/components/catalog/compare-toggle-btn'
+import { fallbackImageForProduct } from '@/lib/enrichment/images/package-image'
 import { type Product } from '@/lib/queries/products'
 
 interface ProductClientProps {
@@ -31,9 +32,20 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
   const { addItem } = useCart()
   const addBtnRef = useRef<HTMLButtonElement>(null)
 
-  // Real product images from DB (R2-hosted after backfill), with a
-  // placeholder fallback so the UI is never blank.
-  const photos = product.images.length > 0 ? product.images : ['/placeholder-product.svg']
+  // Real product images from DB (R2-hosted, classified clean). When the
+  // product has no real photo, fall back to a generic SVG of its package
+  // family (or the neutral placeholder if the package is unknown), so the
+  // UI is never blank and stays on-brand.
+  const photos =
+    product.images.length > 0
+      ? product.images
+      : [
+          fallbackImageForProduct({
+            package: product.package,
+            partNumber: product.partNumber,
+            name: product.name,
+          }),
+        ]
 
   function handleAddToCart() {
     addItem(product, quantity)

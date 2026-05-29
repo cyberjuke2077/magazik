@@ -149,6 +149,18 @@ async function fetchImageBytes(sourceUrl: string, opts: FetchOptions = {}): Prom
   }
 }
 
+/**
+ * Public wrapper over the internal fetch — lets callers (the enrichment
+ * pipeline) download an image once, inspect/classify it, and then hand
+ * the same bytes to {@link uploadImageBuffer} without a second fetch.
+ */
+export async function downloadImageBytes(
+  sourceUrl: string,
+  opts: { signal?: AbortSignal } = {},
+): Promise<Buffer> {
+  return fetchImageBytes(sourceUrl, opts)
+}
+
 interface TranscodeOptions {
   width?: number
   quality?: number
@@ -181,6 +193,28 @@ export async function uploadProductImage(
   }
 
   const raw = await fetchImageBytes(sourceUrl, { signal: opts.signal })
+  return uploadImageBuffer(sourceUrl, raw, { variant })
+}
+
+/**
+ * Upload already-downloaded image bytes under the stable key derived
+ * from `sourceUrl`. Lets the pipeline fetch+classify once, then store
+ * the same buffer without re-fetching. Same idempotency guarantee as
+ * {@link uploadProductImage} — a HEAD check skips redundant puts.
+ */
+export async function uploadImageBuffer(
+  sourceUrl: string,
+  raw: Buffer,
+  opts: { variant?: 'main' | 'thumb' } = {},
+): Promise<UploadedImage> {
+  const { bucket } = requireConfig()
+  const variant = opts.variant ?? 'main'
+  const key = storageKey(sourceUrl, variant)
+
+  if (await objectExists(bucket, key)) {
+    return { key, url: publicUrl(key), bytes: 0, variant, alreadyExisted: true }
+  }
+
   const width = variant === 'thumb' ? 200 : 600
   const webp = await transcodeToWebp(raw, { width })
 

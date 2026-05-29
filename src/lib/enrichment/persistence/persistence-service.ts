@@ -9,7 +9,13 @@
 import { type Prisma } from '@prisma/client'
 
 import { prisma } from '../../prisma'
-import { isR2Configured, uploadProductImage } from '../../storage/r2-client'
+import {
+  downloadImageBytes,
+  isR2Configured,
+  uploadImageBuffer,
+} from '../../storage/r2-client'
+import { classifyImage } from '../images/image-classifier'
+import { extractPackageFamily } from '../images/package-extractor'
 import {
   type DataSource,
   type EnrichmentMeta,
@@ -222,6 +228,15 @@ async function persistItem(
     newMeta.category = buildProvenance(source)
   }
 
+  // Resolve package: prefer the source's raw package string (e.g. "SOIC-8").
+  // When absent, derive a package family from the MPN/name so the column
+  // is populated for catalog faceting and the generic-image fallback.
+  // The frontend extractor accepts both raw strings and family slugs.
+  const resolvedPackage =
+    result?.package ??
+    extractPackageFamily(null, identity.originalMpn, result?.name) ??
+    undefined
+
   // Build upsert data
   const productData = {
     slug,
@@ -233,7 +248,7 @@ async function persistItem(
     lastEnrichedAt: now,
     ...(writeCategory ? { categoryId } : {}),
     ...(result?.lifecycle ? { lifecycle: result.lifecycle } : {}),
-    ...(result?.package ? { package: result.package } : {}),
+    ...(resolvedPackage ? { package: resolvedPackage } : {}),
     ...(writeDescription && productDescription !== undefined
       ? { description: productDescription }
       : {}),
@@ -319,11 +334,13 @@ async function persistItem(
     })
   }
 
-  // 7. Replace ProductImages (LCSC/Mouser only, max 10, ordered)
+  // 7. Replace ProductImages (ChipDip/LCSC/Mouser, max 10, ordered).
+  // ChipDip фото качественнее LCSC, но с watermark www.chipdip.ru —
+  // он снимается отдельным batch-шагом (tools/watermark-removal).
   if (
     result?.imageUrls &&
     result.imageUrls.length > 0 &&
-    (source === 'lcsc' || source === 'mouser') &&
+    (source === 'chipdip' || source === 'lcsc' || source === 'mouser') &&
     shouldOverwrite(existingMeta, 'images', source)
   ) {
     const imagesToSave = result.imageUrls.slice(0, 10)
@@ -402,16 +419,29 @@ const MAX_IMAGES_PER_PRODUCT = 10
 const IMAGE_UPLOAD_CONCURRENCY = 4
 
 /**
- * Mirror upstream image URLs (LCSC/Mouser) into R2 BEFORE the persist
- * transaction. Mutates each item.result.imageUrls in place so the
- * downstream `persistItem` writes R2 public URLs instead of upstream
- * CDN links — independence from upstream CDN availability + ToS.
+ * Mirror upstream image URLs (ChipDip/LCSC/Mouser) into R2 BEFORE the
+ * persist transaction, keeping only images that pass classification.
+ *
+ * Per image: download once → classify (clean / watermark+junk). Only
+ * `clean` images are transcoded and uploaded to R2; watermarked photos
+ * and LCSC "no-image" boxes are dropped. The result's imageUrls is
+ * rewritten to the surviving R2 public URLs (in original order), or
+ * cleared if none survive — in which case the product falls back to a
+ * generic package SVG on the frontend (see images/package-image.ts).
+ *
+ * Note: the sharp classifier targets LCSC's blue watermark, so ChipDip
+ * photos (grey "www.chipdip.ru" mark) pass as `clean` and are uploaded
+ * as-is; their watermark is removed later by the offline Florence-2+LaMa
+ * batch step (tools/watermark-removal/clean_r2_watermarks.py).
+ *
+ * Downloading once and handing the same buffer to uploadImageBuffer
+ * avoids a second fetch per image.
  *
  * No-op when R2 is not configured; upstream URLs flow through unchanged
  * so dev environments without credentials still work.
  *
  * Errors per-image are swallowed (logged) so a single 404 from LCSC
- * doesn't tank an entire enrichment batch — we keep the URLs we got.
+ * doesn't tank an entire enrichment batch.
  */
 async function mirrorImagesToStorage(
   items: Array<{ identity: PartIdentity; result: EnrichmentResult | null }>,
@@ -427,41 +457,59 @@ async function mirrorImagesToStorage(
   for (const item of items) {
     const r = item.result
     if (!r?.imageUrls?.length) continue
-    if (r.source !== 'lcsc' && r.source !== 'mouser') continue
+    if (r.source !== 'chipdip' && r.source !== 'lcsc' && r.source !== 'mouser') continue
     const urls = r.imageUrls.slice(0, MAX_IMAGES_PER_PRODUCT)
     urls.forEach((url, idx) => tasks.push({ item, sourceUrl: url, sourceIdx: idx }))
   }
 
   if (tasks.length === 0) return
 
-  const mirroredByItem = new Map<typeof items[number], Map<number, string>>()
+  // sourceIdx → R2 url, per item, only for images that survived classification
+  const keptByItem = new Map<typeof items[number], Map<number, string>>()
 
   for (let i = 0; i < tasks.length; i += IMAGE_UPLOAD_CONCURRENCY) {
     const slice = tasks.slice(i, i + IMAGE_UPLOAD_CONCURRENCY)
     await Promise.all(
       slice.map(async ({ item, sourceUrl, sourceIdx }) => {
         try {
-          const uploaded = await uploadProductImage(sourceUrl)
-          let bucket = mirroredByItem.get(item)
+          const raw = await downloadImageBytes(sourceUrl)
+
+          const { verdict } = await classifyImage(raw)
+          if (verdict !== 'clean') {
+            // watermark / junk — отбрасываем; карточка уйдёт на generic
+            return
+          }
+
+          const uploaded = await uploadImageBuffer(sourceUrl, raw)
+          let bucket = keptByItem.get(item)
           if (!bucket) {
             bucket = new Map()
-            mirroredByItem.set(item, bucket)
+            keptByItem.set(item, bucket)
           }
           bucket.set(sourceIdx, uploaded.url)
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err)
           console.warn(
-            `[persistence] R2 upload failed for ${item.identity.canonicalMpn} (${sourceUrl}): ${msg}`,
+            `[persistence] image skipped for ${item.identity.canonicalMpn} (${sourceUrl}): ${msg}`,
           )
         }
       }),
     )
   }
 
-  for (const [item, mapping] of mirroredByItem) {
-    if (!item.result?.imageUrls) continue
-    item.result.imageUrls = item.result.imageUrls.map(
-      (url, idx) => mapping.get(idx) ?? url,
-    )
+  // Rewrite imageUrls to only the surviving R2 URLs, preserving order.
+  // If nothing survived, clear the array so persistItem writes no images.
+  for (const item of items) {
+    const r = item.result
+    if (!r?.imageUrls?.length) continue
+    if (r.source !== 'chipdip' && r.source !== 'lcsc' && r.source !== 'mouser') continue
+    const kept = keptByItem.get(item)
+    if (!kept || kept.size === 0) {
+      r.imageUrls = []
+      continue
+    }
+    r.imageUrls = r.imageUrls
+      .map((_, idx) => kept.get(idx))
+      .filter((u): u is string => Boolean(u))
   }
 }

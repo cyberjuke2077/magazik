@@ -1,0 +1,10 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+models/
+in/
+out/
+*.png
+*.jpg
+*.webp

@@ -8,6 +8,7 @@ import { type Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
 import { useCart } from '@/hooks/use-cart'
 import { CategoryIcon } from '@/components/ui/component-icons'
+import { packageSvgForProduct } from '@/lib/enrichment/images/package-image'
 import { CompareToggleBtn } from './compare-toggle-btn'
 import { flyToCart } from '@/lib/fly-to-cart'
 
@@ -46,6 +47,13 @@ export function ProductCard({ product }: ProductCardProps) {
   const btnRef = useRef<HTMLButtonElement>(null)
   const isNew = isNewProduct(product.createdAt)
 
+  // Каскад изображения: реальное фото → generic-SVG корпуса → иконка категории
+  const packageSvg = packageSvgForProduct({
+    package: product.package,
+    partNumber: product.partNumber,
+    name: product.name,
+  })
+
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault()
     addItem(product, localQty)
@@ -76,7 +84,7 @@ export function ProductCard({ product }: ProductCardProps) {
         className={`relative flex items-center justify-center overflow-hidden ${cardTheme.bg}`}
         style={{ height: '180px' }}
       >
-        {/* Image when available, fallback to category icon */}
+        {/* Image when available, fallback to package SVG, then category icon */}
         {product.images && product.images.length > 0 ? (
           <Image
             src={product.images[0]}
@@ -84,6 +92,14 @@ export function ProductCard({ product }: ProductCardProps) {
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
             className="object-contain p-3 z-10"
+          />
+        ) : packageSvg ? (
+          <Image
+            src={packageSvg}
+            alt={`${product.name} — корпус`}
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
+            className="object-contain p-5 z-10"
           />
         ) : (
           <div className="relative z-10 icon-svg">

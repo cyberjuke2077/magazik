@@ -20,7 +20,8 @@
     "enrichment:reenrich": "tsx scripts/reenrich-unresolved.ts",
     "db:stats": "tsx scripts/check-db-stats.ts",
     "images:backfill": "tsx scripts/backfill-images-to-r2.ts",
-    "images:clean": "tsx scripts/clean-images.ts",
+    "images:reclassify": "tsx scripts/reclassify-images.ts",
+    "images:gen-packages": "tsx scripts/gen-package-svgs.ts",
     "images:cleanup-r2": "tsx scripts/cleanup-r2-originals.ts"
   },
   "dependencies": {

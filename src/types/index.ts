@@ -19,6 +19,8 @@ export interface Product {
   featured?: boolean
   createdAt?: string
   images?: string[]
+  /** Корпус (например "SOIC-8" или семейство "soic") — для generic-картинки */
+  package?: string | null
 }
 
 export interface Category {

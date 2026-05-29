@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#e8f4ff"/>
+  <g>
+    <path d="M 120 150 A 80 80 0 1 1 280 150 Z" fill="#1a3a5c"/>
+    <rect x="120" y="146" width="160" height="8" fill="#1a3a5c" />
+    <rect x="155" y="150" width="10" height="90" fill="#7a8fa6" rx="2"/>
+    <rect x="195" y="150" width="10" height="90" fill="#7a8fa6" rx="2"/>
+    <rect x="235" y="150" width="10" height="90" fill="#7a8fa6" rx="2"/>
+  </g>
+  <text x="200" y="350" text-anchor="middle" fill="#0066cc" font-family="system-ui, sans-serif" font-size="26" font-weight="600">TO-92</text>
+</svg>
