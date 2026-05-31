@@ -72,42 +72,17 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
 
 /**
  * Get all level 1 categories with their children (level 2)
- * For catalog dropdown menu
+ * For catalog dropdown menu and category pages.
+ * Возвращает все разделы верхнего уровня (parentId === null) с подкатегориями.
  */
 export async function getCategoriesWithChildren(): Promise<CategoryWithChildren[]> {
-  // Find root category "Электронные компоненты"
-  const rootCategory = await prisma.category.findFirst({
-    where: {
-      slug: {
-        startsWith: 'category-',
-      },
-      parentId: null,
-    },
-  })
-
-  if (!rootCategory) {
-    return []
-  }
-
-  // Get all level 1 categories (children of root)
   const level1Categories = await prisma.category.findMany({
-    where: {
-      parentId: rootCategory.id,
-    },
-    orderBy: {
-      name: 'asc',
-    },
+    where: { parentId: null },
+    orderBy: { name: 'asc' },
     include: {
       children: {
-        orderBy: {
-          name: 'asc',
-        },
-        select: {
-          id: true,
-          slug: true,
-          name: true,
-          icon: true,
-        },
+        orderBy: { name: 'asc' },
+        select: { id: true, slug: true, name: true, icon: true },
       },
     },
   })
@@ -116,35 +91,72 @@ export async function getCategoriesWithChildren(): Promise<CategoryWithChildren[
 }
 
 /**
- * Get category tree for catalog page
- * Returns root category with all descendants
+ * Раздел каталога для витрины: верхнеуровневая категория с подкатегориями
+ * и счётчиками товаров (прямые + всё поддерево).
  */
-export async function getCategoryTree() {
-  const rootCategory = await prisma.category.findFirst({
-    where: {
-      slug: {
-        startsWith: 'category-',
-      },
-      parentId: null,
-    },
-    include: {
-      children: {
-        orderBy: {
-          name: 'asc',
-        },
-        include: {
-          children: {
-            orderBy: {
-              name: 'asc',
-            },
-          },
-        },
-      },
-    },
+export interface CatalogSectionView {
+  id: string
+  slug: string
+  name: string
+  icon: string | null
+  productCount: number
+  children: Array<{ id: string; slug: string; name: string; productCount: number }>
+}
+
+/**
+ * Возвращает разделы каталога для главной витрины: roots с подкатегориями
+ * и агрегированными счётчиками (товары раздела = прямые + во всех детях).
+ */
+export async function getCatalogSections(): Promise<CatalogSectionView[]> {
+  const categories = await prisma.category.findMany({
+    include: { _count: { select: { products: true } } },
+    orderBy: { name: 'asc' },
   })
 
-  return rootCategory
+  const roots = categories.filter((c) => c.parentId === null)
+
+  const sections: CatalogSectionView[] = roots.map((root) => {
+    const children = categories
+      .filter((c) => c.parentId === root.id)
+      .map((c) => ({ id: c.id, slug: c.slug, name: c.name, productCount: c._count.products }))
+      .sort((a, b) => b.productCount - a.productCount || a.name.localeCompare(b.name))
+
+    const childTotal = children.reduce((sum, c) => sum + c.productCount, 0)
+
+    return {
+      id: root.id,
+      slug: root.slug,
+      name: root.name,
+      icon: root.icon,
+      productCount: root._count.products + childTotal,
+      children,
+    }
+  })
+
+  return sections
+    .filter((s) => s.productCount > 0)
+    .sort((a, b) => b.productCount - a.productCount || a.name.localeCompare(b.name))
 }
+
+/**
+ * Возвращает slug категории и всех её потомков (для фильтрации товаров
+ * по разделу: клик по разделу показывает товары всех его подкатегорий).
+ */
+export async function getCategorySubtreeSlugs(slug: string): Promise<string[]> {
+  const root = await prisma.category.findUnique({
+    where: { slug },
+    select: { id: true, slug: true },
+  })
+  if (!root) return [slug]
+
+  const children = await prisma.category.findMany({
+    where: { parentId: root.id },
+    select: { slug: true },
+  })
+
+  return [root.slug, ...children.map((c) => c.slug)]
+}
+
 
 /**
  * Get total product count across all categories
@@ -227,6 +239,9 @@ export async function getManufacturersWithCounts(
   categorySlug?: string | null,
   query?: string | null,
 ): Promise<ManufacturerWithCount[]> {
+  // Раздел фильтрует по всему поддереву (раздел + подкатегории)
+  const categorySlugs = categorySlug ? await getCategorySubtreeSlugs(categorySlug) : null
+
   // When FTS query is provided, use raw SQL for search vector matching
   if (query) {
     const tsqueryStr = query
@@ -241,8 +256,8 @@ export async function getManufacturersWithCounts(
       Prisma.sql`p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})`,
     ]
 
-    if (categorySlug) {
-      conditions.push(Prisma.sql`c.slug = ${categorySlug}`)
+    if (categorySlugs) {
+      conditions.push(Prisma.sql`c.slug IN (${Prisma.join(categorySlugs)})`)
     }
 
     const whereClause = Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
@@ -269,8 +284,8 @@ export async function getManufacturersWithCounts(
   }
 
   // No FTS query — use Prisma
-  const where = categorySlug
-    ? { products: { some: { category: { slug: categorySlug } } } }
+  const where = categorySlugs
+    ? { products: { some: { category: { slug: { in: categorySlugs } } } } }
     : { products: { some: {} } }
 
   const manufacturers = await prisma.manufacturer.findMany({
@@ -278,8 +293,8 @@ export async function getManufacturersWithCounts(
     include: {
       _count: {
         select: {
-          products: categorySlug
-            ? { where: { category: { slug: categorySlug } } }
+          products: categorySlugs
+            ? { where: { category: { slug: { in: categorySlugs } } } }
             : true,
         },
       },

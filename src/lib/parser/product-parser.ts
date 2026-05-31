@@ -212,6 +212,30 @@ export function extractCategory($: cheerio.CheerioAPI): string | null {
 }
 
 /**
+ * Извлекает полный путь категории из хлебных крошек ChipDip
+ * (от общего к частному, без «Главная» и без имени самого товара).
+ */
+export function extractCategoryPath($: cheerio.CheerioAPI): string[] {
+  const breadcrumbs = $('[itemtype*="BreadcrumbList"] [itemprop="name"], .breadcrumb a, .breadcrumbs a')
+  let items = breadcrumbs
+    .map((_, el) => $(el).text().trim())
+    .get()
+    .filter((t) => t.length > 0)
+    .filter((t) => {
+      const x = t.toLowerCase()
+      return !x.includes('главная') && !x.includes('home') && x !== 'каталог'
+    })
+  const productName = (extractProductName($) || '').toLowerCase()
+  if (items.length > 1) {
+    const last = items[items.length - 1].toLowerCase()
+    if (productName && (last === productName || productName.startsWith(last) || last.startsWith(productName))) {
+      items = items.slice(0, -1)
+    }
+  }
+  return items.filter((v, i) => i === 0 || v !== items[i - 1])
+}
+
+/**
  * Extracts product description (HTML content)
  */
 export function extractDescription($: cheerio.CheerioAPI): string | null {
@@ -449,6 +473,7 @@ export function parseProductPage(html: string): ParseResult<ParsedProduct> {
       sku: extractSku($),
       manufacturer: extractManufacturer($),
       category: extractCategory($),
+      categoryPath: extractCategoryPath($),
       description: extractDescription($),
       weight: extractWeight($),
       specifications: extractSpecifications($),

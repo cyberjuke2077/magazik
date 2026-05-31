@@ -11,6 +11,8 @@ export interface ParsedProduct {
   sku: string | null
   manufacturer: string | null
   category: string | null
+  /** Полный путь категории из хлебных крошек (от общего к частному, без «Главная» и товара) */
+  categoryPath: string[]
   description: string | null
   weight: number | null
   specifications: Record<string, string>

@@ -185,18 +185,121 @@ export function ConnectorIcon({ className = '', size = 48 }: IconProps) {
   )
 }
 
+export function PowerIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <polygon points="26,4 12,26 22,26 20,44 36,20 26,20" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function AmplifierIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <polygon points="14,8 14,40 40,24" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinejoin="round" />
+      <line x1="4" y1="17" x2="14" y2="17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="4" y1="31" x2="14" y2="31" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="40" y1="24" x2="46" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function ConverterIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <path d="M4 16 Q10 6 16 16 T28 16" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+      <path d="M20 34 H26 V26 H32 V34 H38 V26 H44" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinejoin="round" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function InterfaceIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <path d="M8 18 H38 m-6 -6 l6 6 -6 6" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M40 30 H10 m6 -6 l-6 6 6 6" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function AntennaIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <line x1="24" y1="20" x2="24" y2="44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="24" cy="16" r="3" fill="currentColor" />
+      <path d="M16 16 Q16 8 24 8 Q32 8 32 16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.7" />
+      <path d="M11 18 Q11 4 24 4 Q37 4 37 18" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" opacity="0.4" />
+      <line x1="18" y1="44" x2="30" y2="44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function InductorIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <line x1="4" y1="24" x2="10" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M10 24 Q14 12 18 24 Q22 12 26 24 Q30 12 34 24 Q38 12 38 24" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+      <line x1="38" y1="24" x2="44" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function ShieldIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <path d="M24 5 L40 11 V24 C40 34 33 40 24 43 C15 40 8 34 8 24 V11 Z" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinejoin="round" />
+      <path d="M18 24 l4 4 8 -9" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.7" />
+    </svg>
+  )
+}
+
+export function CrystalIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <line x1="4" y1="24" x2="14" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="14" y1="14" x2="14" y2="34" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <rect x="18" y="12" width="12" height="24" rx="2" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      <line x1="34" y1="14" x2="34" y2="34" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="34" y1="24" x2="44" y2="24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function BoxIcon({ className = '', size = 48 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+      <path d="M24 6 L40 14 V32 L24 42 L8 32 V14 Z" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinejoin="round" />
+      <path d="M8 14 L24 22 L40 14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinejoin="round" opacity="0.6" />
+      <line x1="24" y1="22" x2="24" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+    </svg>
+  )
+}
+
 // Маппинг slug → компонент
 export const categoryIconMap: Record<string, React.FC<IconProps>> = {
-  rezistory:    ResistorIcon,
-  kondensatory: CapacitorIcon,
-  mikroskhemy:  ChipIcon,
-  tranzistory:  TransistorIcon,
-  rele:         RelayIcon,
-  datchiki:     SensorIcon,
-  kontrollery:  ControllerIcon,
-  diody:        DiodeIcon,
-  svetodiody:   LEDIcon,
-  razyomy:      ConnectorIcon,
+  rezistory:             ResistorIcon,
+  kondensatory:          CapacitorIcon,
+  mikroskhemy:           ChipIcon,
+  'mikroskhemy-prochie': ChipIcon,
+  tranzistory:           TransistorIcon,
+  rele:                  RelayIcon,
+  'rele-perekluchateli': RelayIcon,
+  datchiki:              SensorIcon,
+  kontrollery:           ControllerIcon,
+  mikrokontrollery:      ControllerIcon,
+  diody:                 DiodeIcon,
+  svetodiody:            LEDIcon,
+  optoelektronika:       LEDIcon,
+  razyomy:               ConnectorIcon,
+  pitanie:               PowerIcon,
+  usiliteli:             AmplifierIcon,
+  'atsp-tsap':           ConverterIcon,
+  interfeysy:            InterfaceIcon,
+  rch:                   AntennaIcon,
+  induktivnosti:         InductorIcon,
+  zashchita:             ShieldIcon,
+  rezonatory:            CrystalIcon,
+  prochee:               BoxIcon,
 }
 
 export function CategoryIcon({ slug, size = 48, className = '' }: { slug: string; size?: number; className?: string }) {

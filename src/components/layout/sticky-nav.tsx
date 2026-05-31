@@ -39,6 +39,25 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
   const catalogRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
 
+  // На страницах, где категории не переданы пропсом (контакты, доставка и т.д.),
+  // подгружаем дерево разделов клиентом, чтобы мега-меню работало везде.
+  const [fetchedCats, setFetchedCats] = useState<CategoryWithChildren[]>([])
+  const cats = categories.length > 0 ? categories : fetchedCats
+
+  useEffect(() => {
+    if (categories.length > 0) return
+    let active = true
+    fetch('/api/catalog/categories')
+      .then((r) => r.json())
+      .then((data) => {
+        if (active && Array.isArray(data)) setFetchedCats(data)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [categories.length])
+
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
       // Close catalog if click is outside both button and menu
@@ -292,15 +311,15 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
               {/* Left column - main categories */}
               <div className="w-[240px] bg-white border-r border-gray-200">
                 <ul className="py-1">
-                  {categories.length > 0 ? (
-                    categories.map((cat) => (
+                  {cats.length > 0 ? (
+                    cats.map((cat) => (
                       <li
                         key={cat.slug}
                         onMouseEnter={() => setHoveredCategory(cat.slug)}
                         onMouseLeave={() => setHoveredCategory(null)}
                       >
                         <Link
-                          href={`/catalog/${cat.slug}`}
+                          href={`/catalog?category=${cat.slug}`}
                           className={`block px-4 py-2 text-sm transition-colors cursor-pointer ${
                             hoveredCategory === cat.slug
                               ? 'bg-[#f5f5f5] text-[#0066cc]'
@@ -321,14 +340,14 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
 
               {/* Right column - subcategories */}
               <div className="flex-1 bg-white p-4 overflow-y-auto">
-                {hoveredCategory && (categories.find(c => c.slug === hoveredCategory)?.children?.length ?? 0) > 0 ? (
+                {hoveredCategory && (cats.find(c => c.slug === hoveredCategory)?.children?.length ?? 0) > 0 ? (
                   <div className="grid grid-cols-3 gap-x-6 gap-y-1">
-                    {categories
+                    {cats
                       .find(c => c.slug === hoveredCategory)
 ?.children?.map((subcat) => (
                             <Link
                               key={subcat.slug}
-                              href={`/catalog/${subcat.slug}`}
+                              href={`/catalog?category=${subcat.slug}`}
                               className="text-sm text-gray-700 hover:text-[#0066cc] hover:underline transition-colors py-1 block"
                             >
                               {subcat.name}

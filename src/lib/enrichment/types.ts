@@ -92,6 +92,8 @@ export interface EnrichmentResult {
   descriptionLanguage?: 'ru' | 'en'
   /** Category name from the source */
   categoryName?: string
+  /** Full category breadcrumb path (general → specific), для классификации в таксономию */
+  categoryPath?: string[]
   /** Technical specifications (key-value pairs) */
   specs?: Array<{ key: string; value: string }>
   /** URLs of product images */

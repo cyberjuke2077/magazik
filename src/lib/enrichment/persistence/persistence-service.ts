@@ -25,6 +25,13 @@ import {
 } from '../types'
 import { shouldOverwrite } from './provenance-merger'
 import { generateSlug } from './slug-generator'
+import {
+  classifyProduct,
+  isJunkLeafName,
+  normalizeLeafName,
+  sectionBySlug,
+  toSlug,
+} from '../../catalog/taxonomy'
 
 type JsonValue = Prisma.InputJsonValue
 
@@ -60,31 +67,6 @@ function manufacturerSlug(name: string): string {
   return name
     .toLowerCase()
     .replace(/[^a-z0-9а-яё]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
-/**
- * Generates a category slug from a category name.
- * Basic transliteration for Russian chars, then kebab-case.
- */
-function categorySlug(name: string): string {
-  const translitMap: Record<string, string> = {
-    а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'yo',
-    ж: 'zh', з: 'z', и: 'i', й: 'j', к: 'k', л: 'l', м: 'm',
-    н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u',
-    ф: 'f', х: 'kh', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'shch',
-    ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',
-  }
-
-  const transliterated = name
-    .toLowerCase()
-    .split('')
-    .map((ch) => translitMap[ch] ?? ch)
-    .join('')
-
-  return transliterated
-    .replace(/[^a-z0-9]/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
 }
@@ -181,7 +163,7 @@ async function persistItem(
   })
 
   // 2. Resolve Category
-  const categoryId = await resolveCategory(tx, result, source)
+  const categoryId = await resolveCategory(tx, identity, result, source)
 
   // 3. Upsert Product
   const slug = generateSlug(identity.canonicalBrand, identity.canonicalMpn)
@@ -366,53 +348,63 @@ async function persistItem(
  * - LCSC/Mouser: upsert with English name, nameNeedsReview = true
  * - No category: use seed "uncategorized" category
  */
+/**
+ * Определяет categoryId товара, выстраивая 2-уровневую иерархию каталога:
+ * РАЗДЕЛ (фикс. таксономия, parentId=null) → подкатегория (товарная).
+ * Новые товары с парсера автоматически попадают в то же чистое дерево.
+ */
 async function resolveCategory(
   tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  identity: PartIdentity,
   result: EnrichmentResult | null,
   source: DataSource,
 ): Promise<string> {
-  if (!result?.categoryName) {
-    // Use uncategorized seed category
-    const uncategorized = await tx.category.findUnique({
-      where: { slug: 'uncategorized' },
-    })
-    if (!uncategorized) {
-      // Create it if it doesn't exist (safety fallback)
-      const created = await tx.category.create({
-        data: { slug: 'uncategorized', name: 'Без категории' },
-      })
-      return created.id
-    }
-    return uncategorized.id
+  const sectionSlug = classifyProduct({
+    categoryPath: result?.categoryPath ?? null,
+    categoryName: result?.categoryName ?? null,
+    productName: result?.name ?? null,
+    mpn: identity.canonicalMpn,
+    package: result?.package ?? null,
+  })
+  const section = sectionBySlug(sectionSlug)
+  if (!section) {
+    throw new Error(`Unknown catalog section: ${sectionSlug}`)
   }
 
-  const slug = categorySlug(result.categoryName)
-
-  if (source === 'chipdip') {
-    // Russian name, slug from transliteration
-    const category = await tx.category.upsert({
-      where: { slug },
-      create: {
-        slug,
-        name: result.categoryName,
-        nameNeedsReview: false,
-      },
-      update: {},
-    })
-    return category.id
-  }
-
-  // LCSC or Mouser: English name, needs review
-  const category = await tx.category.upsert({
-    where: { slug },
+  const sectionCategory = await tx.category.upsert({
+    where: { slug: section.slug },
     create: {
-      slug,
-      name: result.categoryName,
-      nameNeedsReview: true,
+      slug: section.slug,
+      name: section.name,
+      icon: section.icon,
+      parentId: null,
+      nameNeedsReview: false,
     },
     update: {},
   })
-  return category.id
+
+  const leafNameRaw = result?.categoryName
+  if (!leafNameRaw || isJunkLeafName(leafNameRaw)) {
+    return sectionCategory.id
+  }
+
+  const leafName = normalizeLeafName(leafNameRaw)
+  const leafSlug = toSlug(leafName)
+  if (!leafSlug || leafSlug === section.slug) {
+    return sectionCategory.id
+  }
+
+  const leaf = await tx.category.upsert({
+    where: { slug: leafSlug },
+    create: {
+      slug: leafSlug,
+      name: leafName,
+      parentId: sectionCategory.id,
+      nameNeedsReview: source !== 'chipdip',
+    },
+    update: { parentId: sectionCategory.id },
+  })
+  return leaf.id
 }
 
 const MAX_IMAGES_PER_PRODUCT = 10

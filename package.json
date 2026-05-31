@@ -19,6 +19,8 @@
     "enrichment:watch": "tsx src/scripts/enrichment-status.ts --watch",
     "enrichment:reenrich": "tsx scripts/reenrich-unresolved.ts",
     "db:stats": "tsx scripts/check-db-stats.ts",
+    "catalog:rebuild-tree": "tsx scripts/rebuild-category-tree.ts",
+    "catalog:restore-tree": "tsx scripts/restore-category-backup.ts",
     "images:backfill": "tsx scripts/backfill-images-to-r2.ts",
     "images:reclassify": "tsx scripts/reclassify-images.ts",
     "images:gen-packages": "tsx scripts/gen-package-svgs.ts",

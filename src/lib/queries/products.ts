@@ -2,6 +2,7 @@ import { Prisma, type Product as PrismaProduct, type Category, type Manufacturer
 
 import { prisma } from '@/lib/prisma'
 import { type SortOption } from '@/lib/catalog-utils'
+import { getCategorySubtreeSlugs } from '@/lib/queries/categories'
 
 // Transform Prisma product to UI Product type
 type ProductWithRelations = PrismaProduct & {
@@ -235,6 +236,9 @@ export async function getProductsPaginated(params: {
   const { page, limit, query, categorySlug, manufacturerSlug, sort = 'date' } = params
   const offset = (page - 1) * limit
 
+  // Раздел каталога фильтрует товары всего поддерева (раздел + подкатегории).
+  const categorySlugs = categorySlug ? await getCategorySubtreeSlugs(categorySlug) : null
+
   // When a search query is provided, use raw SQL for FTS
   if (query) {
     // Build prefix-matching tsquery: "STM32" → "STM32:*", "100k resistor" → "100k:* & resistor:*"
@@ -253,8 +257,8 @@ export async function getProductsPaginated(params: {
       Prisma.sql`p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})`,
     ]
 
-    if (categorySlug) {
-      conditions.push(Prisma.sql`c.slug = ${categorySlug}`)
+    if (categorySlugs) {
+      conditions.push(Prisma.sql`c.slug IN (${Prisma.join(categorySlugs)})`)
     }
     if (manufacturerSlug) {
       conditions.push(Prisma.sql`m.slug = ${manufacturerSlug}`)
@@ -321,7 +325,7 @@ export async function getProductsPaginated(params: {
 
   // No search query — use Prisma findMany with filters
   const where: Prisma.ProductWhereInput = {
-    ...(categorySlug && { category: { slug: categorySlug } }),
+    ...(categorySlugs && { category: { slug: { in: categorySlugs } } }),
     ...(manufacturerSlug && { manufacturer: { slug: manufacturerSlug } }),
   }
 
@@ -363,6 +367,7 @@ export async function getProductsForExport(params: {
   sort?: SortOption
 }): Promise<Product[]> {
   const { query, categorySlug, manufacturerSlug, sort = 'date' } = params
+  const categorySlugs = categorySlug ? await getCategorySubtreeSlugs(categorySlug) : null
 
   if (query) {
     const tsqueryStr = query
@@ -376,7 +381,7 @@ export async function getProductsForExport(params: {
     const conditions: Prisma.Sql[] = [
       Prisma.sql`p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})`,
     ]
-    if (categorySlug) conditions.push(Prisma.sql`c.slug = ${categorySlug}`)
+    if (categorySlugs) conditions.push(Prisma.sql`c.slug IN (${Prisma.join(categorySlugs)})`)
     if (manufacturerSlug) conditions.push(Prisma.sql`m.slug = ${manufacturerSlug}`)
 
     const whereClause = Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
@@ -410,7 +415,7 @@ export async function getProductsForExport(params: {
   }
 
   const where: Prisma.ProductWhereInput = {
-    ...(categorySlug && { category: { slug: categorySlug } }),
+    ...(categorySlugs && { category: { slug: { in: categorySlugs } } }),
     ...(manufacturerSlug && { manufacturer: { slug: manufacturerSlug } }),
   }
 

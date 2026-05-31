@@ -588,6 +588,7 @@ export async function createChipDipClient(config: ChipDipClientConfig): Promise<
         description: parsed.description || undefined,
         descriptionLanguage: 'ru',
         categoryName: parsed.category || undefined,
+        categoryPath: parsed.categoryPath.length > 0 ? parsed.categoryPath : undefined,
         specs: Object.entries(parsed.specifications).map(([key, value]) => ({
           key,
           value,
