@@ -1,4 +1,7 @@
-export function formatPrice(price: number, currency = 'RUB'): string {
+export function formatPrice(price: number | null | undefined, currency = 'RUB'): string {
+  if (price === null || price === undefined || price <= 0) {
+    return 'Цена по запросу'
+  }
   return new Intl.NumberFormat('ru-RU', {
     style: 'currency',
     currency,

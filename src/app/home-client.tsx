@@ -5,13 +5,14 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import {
   Truck, Shield, Headphones, TrendingUp,
-  ChevronLeft, ChevronRight, Zap,
+  ChevronLeft, ChevronRight,
 } from 'lucide-react'
 
 import { ProductCard } from '@/components/catalog/product-card'
 import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 import { CategoryIcon } from '@/components/ui/component-icons'
 import { type Product } from '@/lib/queries/products'
+import { type CatalogSectionView } from '@/lib/queries/categories'
 
 /* ── Category theme ── */
 const catTheme = {
@@ -20,64 +21,56 @@ const catTheme = {
   border: 'border-[#0066cc]/10',
 }
 
-/* ── Slides — разное фото для каждого слайда ── */
+/* ── Slides — баннеры ведут на реальные разделы каталога ── */
 const slides = [
   {
     image: '/slider/slide-1.png',
-    tag: 'Новинки',
-    title: 'Микроконтроллеры\nSTM32 и ESP32',
-    desc: 'ARM Cortex-M, WiFi, Bluetooth — всё в наличии. Доставка 1–2 недели.',
+    tag: 'Каталог',
+    title: 'Микроконтроллеры\nи процессоры',
+    desc: 'MCU, DSP и отладочные платы. Подбор аналогов, поставка под заказ.',
     cta: 'Смотреть',
-    href: '/catalog?category=kontrollery',
+    href: '/catalog?category=mikrokontrollery',
   },
   {
     image: '/slider/slide-2.png',
     tag: 'Популярное',
-    title: 'Пассивные\nкомпоненты',
-    desc: 'Резисторы, конденсаторы Yageo и Murata. Широкий выбор, доставка 1–2 недели.',
+    title: 'Усилители\nи компараторы',
+    desc: 'ОУ, инструментальные, токовые, видео. Широкий выбор позиций.',
     cta: 'Смотреть',
-    href: '/catalog?category=rezistory',
+    href: '/catalog?category=usiliteli',
   },
   {
     image: '/slider/slide-3.png',
-    tag: 'Акция',
-    title: 'Датчики и сенсоры\nдля IoT-проектов',
-    desc: 'DS18B20, DHT22, BMP280, MPU6050. Широкий выбор, доставка 1–2 недели.',
+    tag: 'Каталог',
+    title: 'Датчики\nи сенсоры',
+    desc: 'Температура, ускорение, Холл, положение. Для промышленности и IoT.',
     cta: 'В каталог',
     href: '/catalog?category=datchiki',
   },
   {
     image: '/slider/slide-4.png',
-    tag: 'Хит',
-    title: 'Разъёмы и\nсоединители',
-    desc: 'USB Type-C, JST, Molex, XT60. Более 35 000 позиций в наличии.',
+    tag: 'Питание',
+    title: 'Управление\nпитанием',
+    desc: 'DC-DC, AC-DC, стабилизаторы, LDO, источники опорного напряжения.',
     cta: 'Выбрать',
-    href: '/catalog?category=razyomy',
+    href: '/catalog?category=pitanie',
   },
   {
     image: '/slider/slide-5.png',
-    tag: 'Скидки',
-    title: 'Диоды и\nтранзисторы',
-    desc: 'IRF540N, BC547, 1N4007, SS34. Оригинальные компоненты от ведущих брендов.',
+    tag: 'Каталог',
+    title: 'Интерфейсы\nи логика',
+    desc: 'RS-232/485, изоляторы, коммутаторы, тактирование, логика.',
     cta: 'Смотреть',
-    href: '/catalog?category=diody',
+    href: '/catalog?category=interfeysy',
   },
-]
-
-/* ── News ── */
-const news = [
-  { date: '28.03.2026', title: 'Новые микроконтроллеры STM32H7 — расширенный ассортимент', slug: 'stm32h7' },
-  { date: '25.03.2026', title: 'Поступление датчиков Sensirion SHT40 и SCD41', slug: 'sensirion' },
-  { date: '20.03.2026', title: 'Скидки до 30% на конденсаторы Murata серии GRM', slug: 'murata-sale' },
-  { date: '15.03.2026', title: 'Новые разъёмы Molex Micro-Fit 3.0 в наличии', slug: 'molex' },
 ]
 
 /* ── Features ── */
 const features = [
-  { icon: Truck,      title: 'Работаем под заказ',      desc: 'Минимальный заказ от 200 000 ₽', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
-  { icon: Shield,     title: 'Оригинальные компоненты',   desc: 'Только официальные дистрибьюторы',       color: 'text-[#f97316]', bg: 'bg-orange-50' },
-  { icon: TrendingUp, title: 'Для юр. лиц и ИП',              desc: 'Работаем с организациями по всей России',   color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
-  { icon: Headphones, title: 'Ответ за 24 часа',              desc: 'Быстрое формирование коммерческого предложения',     color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+  { icon: Truck,      title: 'Доставка по России',      desc: 'Со склада в Москве — ТК, почтой или самовывозом' },
+  { icon: Shield,     title: 'Оригинальные компоненты',  desc: 'Только официальные дистрибьюторы, сертификаты' },
+  { icon: TrendingUp, title: 'Опт и розница',            desc: 'Юр. лицам по безналу с НДС, физлицам — картой' },
+  { icon: Headphones, title: 'Ответ за 24 часа',         desc: 'Быстрое формирование коммерческого предложения' },
 ]
 
 /* ── ProductModule — chipdip "often-slider" style ── */
@@ -192,9 +185,10 @@ interface HomeClientProps {
   featuredProducts: Product[]
   popularProducts: Product[]
   bestProducts: Product[]
+  sections: CatalogSectionView[]
 }
 
-export function HomeClient({ featuredProducts, popularProducts, bestProducts }: HomeClientProps) {
+export function HomeClient({ featuredProducts, popularProducts, bestProducts, sections }: HomeClientProps) {
   const { current: slide, go, prev, next } = useAutoSlider(slides.length, 8000)
 
   return (
@@ -275,129 +269,33 @@ export function HomeClient({ featuredProducts, popularProducts, bestProducts }: 
       </section>
 
       {/* ══════════════════════════════════
-          NEWS (без партнёрского баннера)
+          КАТЕГОРИИ КАТАЛОГА — реальные разделы
       ══════════════════════════════════ */}
       <section className="py-16 bg-white">
         <div className="mx-auto max-w-[1400px] px-4">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Новости</h2>
-            <Link href="/brands" className="text-sm text-[#0066cc] hover:underline font-medium">
-              Все новости
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {news.map((item) => (
-              <Link
-                key={item.slug}
-                href="/brands"
-                className="flex items-start gap-3 p-4 bg-gray-50 hover:bg-gray-100 border border-gray-200"
-              >
-                <div className="flex size-10 items-center justify-center bg-white shrink-0">
-                  <Zap size={14} className="text-[#0066cc]" />
-                </div>
-                <div>
-                  <div className="text-[11px] text-gray-400 mb-1">{item.date}</div>
-                  <div className="text-xs font-semibold text-gray-800 leading-snug line-clamp-2">
-                    {item.title}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════
-          POPULAR CATEGORIES
-      ══════════════════════════════════ */}
-      <section className="py-16 bg-white">
-        <div className="mx-auto max-w-[1400px] px-4">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Популярные категории</h2>
+            <h2 className="text-lg font-bold text-gray-900">Категории каталога</h2>
             <Link href="/catalog" className="text-sm text-[#0066cc] hover:underline font-medium">
               Все категории
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {/* Large tile — Микросхемы */}
-            <Link
-              href="/catalog?category=mikroskhemy"
-              className="row-span-2 flex flex-col justify-between p-6 bg-[#e8f4ff] border border-gray-200 hover:border-[#0066cc] group min-h-[280px]"
-            >
-              <div>
-                <div className="text-lg font-bold text-gray-900 mb-1">Микросхемы</div>
-                <div className="text-xs text-gray-500">62 000 позиций</div>
-              </div>
-              <div className="flex justify-end">
-                <CategoryIcon slug="mikroskhemy" size={100} className="text-[#0066cc] opacity-50" />
-              </div>
-            </Link>
-
-            {[
-              { slug: 'rezistory',    label: 'Резисторы',    count: '48 200', size: 60 },
-              { slug: 'kondensatory', label: 'Конденсаторы', count: '31 500', size: 60 },
-            ].map((cat) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {sections.slice(0, 12).map((cat) => (
               <Link
-                key={cat.slug}
+                key={cat.id}
                 href={`/catalog?category=${cat.slug}`}
-                className={`flex items-center justify-between p-5 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
+                className={`flex items-center justify-between gap-2 p-5 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
               >
-                <div>
-                  <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
-                  <div className="text-xs text-gray-400">{cat.count}</div>
+                <div className="min-w-0">
+                  <div className="text-sm font-bold text-gray-900 mb-0.5 leading-tight group-hover:text-[#0066cc] transition-colors line-clamp-2">
+                    {cat.name}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {cat.productCount.toLocaleString('ru-RU')} позиций
+                  </div>
                 </div>
-                <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40`} />
-              </Link>
-            ))}
-
-            {/* Large tile — Контроллеры */}
-            <Link
-              href="/catalog?category=kontrollery"
-              className="row-span-2 flex flex-col justify-between p-6 bg-[#e8f4ff] border border-gray-200 hover:border-[#0066cc] group min-h-[280px]"
-            >
-              <div>
-                <div className="text-lg font-bold text-gray-900 mb-1">Контроллеры</div>
-                <div className="text-xs text-gray-500">9 400 позиций</div>
-              </div>
-              <div className="flex justify-end">
-                <CategoryIcon slug="kontrollery" size={100} className="text-[#0066cc] opacity-50" />
-              </div>
-            </Link>
-
-            {[
-              { slug: 'tranzistory', label: 'Транзисторы', count: '18 700', size: 60 },
-              { slug: 'datchiki',    label: 'Датчики',     count: '12 800', size: 60 },
-            ].map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/catalog?category=${cat.slug}`}
-                className={`flex items-center justify-between p-5 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
-              >
-                <div>
-                  <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
-                  <div className="text-xs text-gray-400">{cat.count}</div>
-                </div>
-                <CategoryIcon slug={cat.slug} size={cat.size} className={`${catTheme.text} opacity-40`} />
-              </Link>
-            ))}
-
-            {[
-              { slug: 'diody',      label: 'Диоды',      count: '22 300' },
-              { slug: 'svetodiody', label: 'Светодиоды', count: '8 900' },
-              { slug: 'rele',       label: 'Реле',       count: '4 200' },
-              { slug: 'razyomy',    label: 'Разъёмы',    count: '35 600' },
-            ].map((cat) => (
-              <Link
-                key={cat.slug}
-                href={`/catalog?category=${cat.slug}`}
-                className={`flex items-center justify-between p-4 ${catTheme.bg} border border-gray-200 hover:border-[#0066cc] group`}
-              >
-                <div>
-                  <div className="text-sm font-bold text-gray-900 mb-0.5">{cat.label}</div>
-                  <div className="text-xs text-gray-400">{cat.count}</div>
-                </div>
-                <CategoryIcon slug={cat.slug} size={44} className={`${catTheme.text} opacity-35`} />
+                <CategoryIcon slug={cat.icon ?? cat.slug} size={44} className={`${catTheme.text} opacity-40 shrink-0`} />
               </Link>
             ))}
           </div>
@@ -423,7 +321,7 @@ export function HomeClient({ featuredProducts, popularProducts, bestProducts }: 
         title="Набирают популярность"
         href="/popular"
         products={popularProducts.slice(0, 4)}
-        accent="bg-[#d6f5e8]"
+        accent="bg-[#eef2f6]"
         ctaTitle="Успейте купить первым"
         ctaDesc="Новинки, которые пользуются повышенным спросом"
       />
@@ -435,9 +333,9 @@ export function HomeClient({ featuredProducts, popularProducts, bestProducts }: 
         title="Лучшие предложения"
         href="/best"
         products={bestProducts.slice(0, 4)}
-        accent="bg-[#ede8ff]"
+        accent="bg-[#eef2f6]"
         ctaTitle="Выгодное предложение"
-        ctaDesc="Узнайте о выгодных предложениях и специальных ценах. Только в этом месяце!"
+        ctaDesc="Узнайте о выгодных предложениях и специальных ценах."
       />
 
       {/* ══════════════════════════════════
@@ -453,8 +351,8 @@ export function HomeClient({ featuredProducts, popularProducts, bestProducts }: 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {features.map((feat, i) => (
               <div key={i} className="flex items-start gap-3 p-4 bg-white border border-gray-200">
-                <div className={`flex size-10 items-center justify-center ${feat.bg} shrink-0`}>
-                  <feat.icon size={20} className={feat.color} />
+                <div className="flex size-10 items-center justify-center bg-[#e8f4ff] text-[#0066cc] shrink-0">
+                  <feat.icon size={20} />
                 </div>
                 <div>
                   <div className="text-sm font-bold text-gray-900 mb-1">{feat.title}</div>

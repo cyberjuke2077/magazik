@@ -130,15 +130,6 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {/* No stock badge */}
-        {!product.inStock && (
-          <div className="absolute top-2.5 right-2.5 z-20">
-            <span className="px-2 py-0.5 bg-white/95 text-red-500 text-[10px] font-semibold rounded-sm border border-red-200 shadow-sm">
-              Нет
-            </span>
-          </div>
-        )}
-
         {/* Compare button (bottom-right) */}
         <div className="absolute bottom-2 right-2 z-20 bg-white/90 backdrop-blur-sm rounded">
           <CompareToggleBtn
@@ -183,13 +174,16 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Price */}
         <div className="pt-0.5">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-xl font-extrabold text-gray-900 tracking-tight">
-              {formatPrice(product.price)}
-            </span>
-            <span className="text-xs text-gray-400">/ {product.unit}</span>
-          </div>
-
+          {product.price > 0 ? (
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-extrabold text-gray-900 tracking-tight">
+                {formatPrice(product.price)}
+              </span>
+              <span className="text-xs text-gray-400">/ {product.unit}</span>
+            </div>
+          ) : (
+            <div className="text-base font-bold text-[#0066cc]">Цена по запросу</div>
+          )}
         </div>
 
         {/* Stepper + Cart */}
@@ -216,15 +210,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <button
             ref={btnRef}
             onClick={handleAdd}
-            disabled={!product.inStock}
             className={`flex-1 flex items-center justify-center gap-1.5 h-9 text-xs font-bold rounded ${
               justAdded
                 ? 'bg-[#0052a3] text-white'
                 : inCart
                 ? 'bg-[#0066cc]/10 text-[#0066cc] border border-[#0066cc]/20'
-                : product.inStock
-                ? 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
             }`}
           >
             {justAdded ? (

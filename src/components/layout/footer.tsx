@@ -6,12 +6,12 @@ const footerLinks = {
   catalog: {
     title: 'Каталог',
     links: [
-      { label: 'Резисторы',    href: '/catalog?category=rezistory' },
-      { label: 'Конденсаторы', href: '/catalog?category=kondensatory' },
-      { label: 'Микросхемы',   href: '/catalog?category=mikroskhemy' },
-      { label: 'Транзисторы',  href: '/catalog?category=tranzistory' },
-      { label: 'Датчики',      href: '/catalog?category=datchiki' },
-      { label: 'Контроллеры',  href: '/catalog?category=kontrollery' },
+      { label: 'Усилители и компараторы',    href: '/catalog?category=usiliteli' },
+      { label: 'Управление питанием',         href: '/catalog?category=pitanie' },
+      { label: 'Интерфейсы и логика',         href: '/catalog?category=interfeysy' },
+      { label: 'АЦП, ЦАП и преобразователи',  href: '/catalog?category=atsp-tsap' },
+      { label: 'Датчики',                     href: '/catalog?category=datchiki' },
+      { label: 'Микроконтроллеры и DSP',      href: '/catalog?category=mikrokontrollery' },
     ],
   },
   company: {

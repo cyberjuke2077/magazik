@@ -4,30 +4,37 @@ import { Footer } from '@/components/layout/footer'
 import { OrganizationJsonLd } from '@/components/seo/product-jsonld'
 import { HomeClient } from './home-client'
 import { getProducts } from '@/lib/queries/products'
-import { getCategoriesWithChildren, getTotalProductCount } from '@/lib/queries/categories'
+import { getCatalogSections, getCategoriesWithChildren, getTotalProductCount } from '@/lib/queries/categories'
 
 export default async function HomePage() {
   // Fetch real products from PostgreSQL
   const allProducts = await getProducts()
-  
-  // Fetch categories for catalog menu
-  const categories = await getCategoriesWithChildren()
-  const totalProducts = await getTotalProductCount()
-  
-  // Split products into categories for different sections
-  const featuredProducts = allProducts.filter(p => p.featured)
-  const popularProducts = allProducts.filter(p => !p.featured)
-  const bestProducts = allProducts.filter(p => p.priceWholesale)
+
+  // Fetch categories for catalog menu + homepage section grid
+  const [categories, sections, totalProducts] = await Promise.all([
+    getCategoriesWithChildren(),
+    getCatalogSections(),
+    getTotalProductCount(),
+  ])
+
+  // Реальные товары в блоки: featured/priceWholesale в БД пусты, поэтому
+  // показываем реальные позиции вместо пустых заглушек.
+  const featured = allProducts.filter((p) => p.featured)
+  const best = allProducts.filter((p) => p.priceWholesale)
+  const featuredProducts = featured.length >= 4 ? featured : allProducts.slice(0, 4)
+  const popularProducts = allProducts.slice(4, 8).length >= 4 ? allProducts.slice(4, 8) : allProducts.slice(0, 4)
+  const bestProducts = best.length >= 4 ? best : allProducts.slice(8, 12)
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <OrganizationJsonLd />
       <Header />
       <StickyNav categories={categories} totalProducts={totalProducts} />
-      <HomeClient 
+      <HomeClient
         featuredProducts={featuredProducts}
         popularProducts={popularProducts}
         bestProducts={bestProducts}
+        sections={sections}
       />
       <Footer />
     </div>
