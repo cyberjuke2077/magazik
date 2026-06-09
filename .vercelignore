@@ -1,0 +1,27 @@
+# Парсер/enrichment-балласт — только КОРНЕВЫЕ папки (ведущий / = якорь к корню,
+# иначе паттерн матчит и вложенные src/lib/storage, src/scripts и т.п.)
+/venv
+/venv-test
+/data
+/logs
+/storage
+/tools
+/tests
+/docs
+/skills
+
+# Форсим npm на Vercel (локальный npm-билд рабочий, pnpm падает)
+/pnpm-lock.yaml
+/pnpm-workspace.yaml
+
+# Локальные артефакты
+/agentdb.rvf
+/agentdb.rvf.lock
+/ruvector.db
+/.env.proxies
+/tsconfig.tsbuildinfo
+/check-parser.sh
+/start_collector.sh
+/config.yaml
+/opencode.json
+/opencode.jsonc
