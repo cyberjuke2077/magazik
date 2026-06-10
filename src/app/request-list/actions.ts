@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
+import { notifyNewQuoteRequest } from '@/lib/notifications'
 
 export interface QuoteRequestInput {
   companyName: string
@@ -72,13 +73,16 @@ export async function submitQuoteRequest(
       return qr
     })
 
-    // Log for now (email integration can be added later)
-    console.log(
-      '[QuoteRequest] New request from:',
-      input.email,
-      'Items:',
-      input.items.length,
-    )
+    // Уведомление администратору (fail-safe: сбой не ломает заявку)
+    await notifyNewQuoteRequest({
+      requestId: quoteRequest.id,
+      companyName: input.companyName,
+      contactPerson: input.contactPerson,
+      phone: input.phone,
+      email: input.email,
+      itemsCount: input.items.length,
+      comment: input.comment,
+    })
 
     return { success: true, requestId: quoteRequest.id }
   } catch (error) {

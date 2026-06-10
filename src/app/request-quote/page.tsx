@@ -17,11 +17,11 @@ import { Footer } from '@/components/layout/footer'
 import { useCart } from '@/hooks/use-cart'
 import { useAuth } from '@/hooks/use-auth'
 import { formatPrice } from '@/lib/utils'
-import { MIN_ORDER_AMOUNT } from '@/lib/constants'
+import { submitQuoteRequest } from '@/app/request-list/actions'
 
 export default function RequestQuotePage() {
   const router = useRouter()
-  const { items, totalPrice, mounted } = useCart()
+  const { items, totalPrice, mounted, clearCart } = useCart()
   const { user } = useAuth()
   
   const [formData, setFormData] = useState({
@@ -37,6 +37,8 @@ export default function RequestQuotePage() {
   
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [consent, setConsent] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   function handleChange(field: string, value: string) {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -82,27 +84,43 @@ export default function RequestQuotePage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    
+    setSubmitError(null)
+
     const newErrors = validate()
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
       return
     }
-    
+    if (!consent) {
+      setSubmitError('Подтвердите согласие на обработку персональных данных')
+      return
+    }
+
     setIsSubmitting(true)
-    
-    // Имитация отправки запроса
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // TODO: Отправить на backend
-    console.log('Запрос на КП:', {
-      ...formData,
-      items,
-      totalPrice,
+    const result = await submitQuoteRequest({
+      companyName: formData.companyName,
+      inn: formData.inn || undefined,
+      contactPerson: formData.contactPerson,
+      phone: formData.phone,
+      email: formData.email,
+      comment: formData.comment || undefined,
+      deliveryAddress: formData.deliveryAddress || undefined,
+      desiredDeliveryDate: formData.desiredDeliveryDate || undefined,
+      items: items.map((item) => ({
+        productId: item.product.id,
+        partNumber: item.product.partNumber,
+        name: item.product.name,
+        quantity: item.quantity,
+      })),
     })
-    
-    // Перенаправить на страницу успеха
-    router.push('/request-quote/success')
+    setIsSubmitting(false)
+
+    if (result.success) {
+      clearCart()
+      router.push('/request-quote/success')
+    } else {
+      setSubmitError(result.error)
+    }
   }
 
   // Skeleton while hydrating
@@ -118,40 +136,6 @@ export default function RequestQuotePage() {
               {[1, 2, 3, 4].map(i => (
                 <div key={i} className="h-12 bg-gray-200 rounded animate-pulse" />
               ))}
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    )
-  }
-
-  // Проверка минимальной суммы
-  if (totalPrice < MIN_ORDER_AMOUNT) {
-    return (
-      <div className="flex flex-col min-h-screen bg-white">
-        <Header />
-        <StickyNav />
-        <main className="flex-1 bg-gray-50 py-20">
-          <div className="mx-auto max-w-md px-4 text-center">
-            <div className="bg-white rounded-lg p-8 border border-gray-200">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-50 mb-4">
-                <AlertCircle size={32} className="text-orange-500" />
-              </div>
-              <h1 className="text-xl font-bold text-gray-900 mb-2">
-                Минимальная сумма не достигнута
-              </h1>
-              <p className="text-sm text-gray-600 mb-6">
-                Минимальная сумма заказа — {formatPrice(MIN_ORDER_AMOUNT)}.
-                Добавьте товаров ещё на {formatPrice(MIN_ORDER_AMOUNT - totalPrice)}.
-              </p>
-              <Link
-                href="/cart"
-                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
-              >
-                <ArrowLeft size={14} />
-                Вернуться к списку
-              </Link>
             </div>
           </div>
         </main>
@@ -412,6 +396,29 @@ export default function RequestQuotePage() {
               </div>
             </div>
 
+            {/* Согласие на обработку ПДн (152-ФЗ) */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-[#0066cc]"
+              />
+              <span className="text-sm text-gray-600 leading-relaxed">
+                Я даю согласие на обработку моих персональных данных в соответствии с{' '}
+                <Link href="/privacy" target="_blank" className="text-[#0066cc] hover:underline">
+                  политикой конфиденциальности
+                </Link>
+              </span>
+            </label>
+
+            {submitError && (
+              <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+                <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+                <span>{submitError}</span>
+              </div>
+            )}
+
             {/* Кнопки */}
             <div className="flex items-center gap-4">
               <Link
@@ -441,12 +448,6 @@ export default function RequestQuotePage() {
               </button>
             </div>
 
-            <p className="text-xs text-gray-500 text-center">
-              Нажимая кнопку, вы соглашаетесь с{' '}
-              <Link href="/privacy" className="text-[#0066cc] hover:underline">
-                политикой конфиденциальности
-              </Link>
-            </p>
           </form>
         </div>
       </main>

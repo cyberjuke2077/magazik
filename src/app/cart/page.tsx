@@ -8,22 +8,17 @@ import {
   ChevronRight,
   Trash2,
   Package,
-  AlertCircle,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
-import { OrderProgress } from '@/components/ui/order-progress'
 import { useCart } from '@/hooks/use-cart'
-import { useAuth } from '@/hooks/use-auth'
 import { formatPrice } from '@/lib/utils'
-import { MIN_ORDER_AMOUNT } from '@/lib/constants'
 
 export default function CartPage() {
   const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
     useCart()
-  const { user, isVerified } = useAuth()
 
   const [selected, setSelected] = useState<Set<string>>(new Set())
 
@@ -239,12 +234,6 @@ export default function CartPage() {
                 </div>
 
                 <div className="px-4 py-4 space-y-3">
-                  {/* Order Progress */}
-                  <OrderProgress 
-                    currentAmount={totalPrice} 
-                    minAmount={MIN_ORDER_AMOUNT} 
-                  />
-
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Товаров в списке:</span>
                     <span className="font-medium text-gray-900">{totalItems} шт.</span>
@@ -260,64 +249,26 @@ export default function CartPage() {
                   <div className="border-t border-gray-100 pt-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">Сумма запроса:</span>
-                      <span className="text-lg font-bold text-gray-900">{formatPrice(totalPrice)}</span>
+                      <span className="text-lg font-bold text-gray-900">
+                        {totalPrice > 0 ? formatPrice(totalPrice) : 'По запросу'}
+                      </span>
                     </div>
+                    {totalPrice === 0 && (
+                      <p className="text-xs text-gray-400 mt-1">
+                        Цены будут указаны в коммерческом предложении
+                      </p>
+                    )}
                   </div>
-
-                  {totalPrice < MIN_ORDER_AMOUNT && (
-                    <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
-                      <p className="text-xs text-yellow-800 leading-relaxed">
-                        <strong>Минимальная сумма заказа:</strong> {formatPrice(MIN_ORDER_AMOUNT)}
-                      </p>
-                      <p className="text-xs text-yellow-700 mt-1">
-                        Мы работаем только с оптовыми заказами от 200 000 ₽
-                      </p>
-                    </div>
-                  )}
                 </div>
 
                 <div className="px-4 pb-4">
-                  {totalPrice < MIN_ORDER_AMOUNT ? (
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2 p-3 bg-orange-50 border border-orange-200 rounded text-sm text-orange-800">
-                        <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-                        <span>
-                          Добавьте товаров ещё на {formatPrice(MIN_ORDER_AMOUNT - totalPrice)} для отправки запроса
-                        </span>
-                      </div>
-                      <button
-                        disabled
-                        className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-gray-400 bg-gray-100 rounded cursor-not-allowed"
-                      >
-                        Отправить запрос на КП
-                        <ArrowRight size={14} />
-                      </button>
-                    </div>
-                  ) : user && !isVerified ? (
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2 p-3 bg-gray-50 border border-gray-200 rounded text-sm text-gray-700">
-                        <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-gray-500" />
-                        <span>
-                          Для отправки запроса необходимо подтверждение аккаунта
-                        </span>
-                      </div>
-                      <button
-                        disabled
-                        className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-gray-400 bg-gray-100 rounded cursor-not-allowed"
-                      >
-                        Отправить запрос на КП
-                        <ArrowRight size={14} />
-                      </button>
-                    </div>
-                  ) : (
-                    <Link
-                      href="/request-quote"
-                      className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
-                    >
-                      Отправить запрос на КП
-                      <ArrowRight size={14} />
-                    </Link>
-                  )}
+                  <Link
+                    href="/request-quote"
+                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+                  >
+                    Отправить запрос на КП
+                    <ArrowRight size={14} />
+                  </Link>
                 </div>
 
                 {/* Advantages */}

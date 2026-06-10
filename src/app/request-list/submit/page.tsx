@@ -41,6 +41,7 @@ export default function SubmitRequestPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [consent, setConsent] = useState(false)
 
   useEffect(() => {
     // hydration from localStorage — required after mount
@@ -90,6 +91,11 @@ export default function SubmitRequestPage() {
     const newErrors = validate()
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
+      return
+    }
+
+    if (!consent) {
+      setSubmitError('Подтвердите согласие на обработку персональных данных')
       return
     }
 
@@ -392,6 +398,22 @@ export default function SubmitRequestPage() {
                 ))}
               </div>
             </div>
+
+            {/* Согласие на обработку ПДн (152-ФЗ) */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 accent-[#0066cc]"
+              />
+              <span className="text-sm text-gray-600 leading-relaxed">
+                Я даю согласие на обработку моих персональных данных в соответствии с{' '}
+                <Link href="/privacy" target="_blank" className="text-[#0066cc] hover:underline">
+                  политикой конфиденциальности
+                </Link>
+              </span>
+            </label>
 
             {/* Actions */}
             <div className="flex items-center gap-4">

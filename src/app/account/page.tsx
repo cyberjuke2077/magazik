@@ -3,39 +3,24 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import {
-  User,
   Eye,
   EyeOff,
-  LogOut,
   Settings,
   AlertCircle,
-  LayoutDashboard,
   Package,
-  BarChart3,
   Heart,
   MapPin,
   Gift,
   CreditCard,
   Bell,
   Clock,
-  ShoppingCart,
-  FolderTree,
-  Factory,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { useAuth } from '@/hooks/use-auth'
-import { AdminDashboard } from '@/components/admin/admin-dashboard'
-import { AdminOrders } from '@/components/admin/admin-orders'
-import { AdminAnalytics } from '@/components/admin/admin-analytics'
-import { AdminUsers } from '@/components/admin/admin-users'
-import { AdminProducts } from '@/components/admin/admin-products'
-import { AdminCategories } from '@/components/admin/admin-categories'
-import { AdminManufacturers } from '@/components/admin/admin-manufacturers'
 
 type AuthTab = 'login' | 'register'
-type AdminTab = 'dashboard' | 'orders' | 'analytics' | 'users' | 'products' | 'categories' | 'manufacturers'
 
 // Mock recent orders
 const recentOrders = [
@@ -291,146 +276,8 @@ function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
 }
 
 export default function AccountPage() {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, logout } = useAuth()
   const [authTab, setAuthTab] = useState<AuthTab>('login')
-  const [adminTab, setAdminTab] = useState<AdminTab>('dashboard')
-
-  // Admin panel
-  if (user && isAdmin) {
-    return (
-      <>
-        <Header />
-        <StickyNav />
-        <main className="min-h-screen bg-gray-50 py-8">
-          <div className="mx-auto max-w-[1400px] px-4">
-            <div className="flex gap-6">
-              {/* Admin Sidebar */}
-              <div className="w-64 shrink-0">
-                <div className="bg-white border border-gray-200 rounded-lg p-4 mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#0066cc] rounded flex items-center justify-center">
-                      <User size={18} className="text-white" />
-                    </div>
-                    <div>
-                      <div className="font-medium text-gray-900">{user.name}</div>
-                      <div className="text-xs text-gray-500">Администратор</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => setAdminTab('dashboard')}
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                      adminTab === 'dashboard'
-                        ? 'bg-[#0066cc] text-white'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <LayoutDashboard size={18} />
-                    Дашборд
-                  </button>
-                  <button
-                    onClick={() => setAdminTab('orders')}
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                      adminTab === 'orders'
-                        ? 'bg-[#0066cc] text-white'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <Package size={18} />
-                    Заказы
-                  </button>
-                  <button
-                    onClick={() => setAdminTab('analytics')}
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                      adminTab === 'analytics'
-                        ? 'bg-[#0066cc] text-white'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <BarChart3 size={18} />
-                    Аналитика
-                  </button>
-                  <button
-                    onClick={() => setAdminTab('users')}
-                    className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                      adminTab === 'users'
-                        ? 'bg-[#0066cc] text-white'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <User size={18} />
-                    Пользователи
-                  </button>
-                  
-                  <div className="border-t border-gray-200 mt-2 pt-2">
-                    <div className="px-4 py-2 text-xs font-semibold text-gray-500">КАТАЛОГ</div>
-                    <button
-                      onClick={() => setAdminTab('products')}
-                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                        adminTab === 'products'
-                          ? 'bg-[#0066cc] text-white'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <ShoppingCart size={18} />
-                      Товары
-                    </button>
-                    <button
-                      onClick={() => setAdminTab('categories')}
-                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                        adminTab === 'categories'
-                          ? 'bg-[#0066cc] text-white'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <FolderTree size={18} />
-                      Категории
-                    </button>
-                    <button
-                      onClick={() => setAdminTab('manufacturers')}
-                      className={`flex items-center gap-3 w-full px-4 py-3 text-sm transition-colors ${
-                        adminTab === 'manufacturers'
-                          ? 'bg-[#0066cc] text-white'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Factory size={18} />
-                      Производители
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      logout()
-                      window.location.reload()
-                    }}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-200"
-                  >
-                    <LogOut size={18} />
-                    Выйти
-                  </button>
-                </div>
-              </div>
-
-              {/* Admin Content */}
-              <div className="flex-1">
-                {adminTab === 'dashboard' && <AdminDashboard />}
-                {adminTab === 'orders' && <AdminOrders />}
-                {adminTab === 'analytics' && <AdminAnalytics />}
-                {adminTab === 'users' && <AdminUsers />}
-                {adminTab === 'products' && <AdminProducts />}
-                {adminTab === 'categories' && <AdminCategories />}
-                {adminTab === 'manufacturers' && <AdminManufacturers />}
-              </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </>
-    )
-  }
 
   // User dashboard
   if (user) {
