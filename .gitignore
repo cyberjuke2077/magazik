@@ -33,8 +33,9 @@ yarn-error.log*
 logs/
 parser.pid
 
-# env files (can opt-in for committing if needed)
+# env files (шаблон .env.example — в репо)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -80,3 +81,6 @@ storage/
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
+
+# claude code local settings (permissions etc.)
+.claude/settings.local.json

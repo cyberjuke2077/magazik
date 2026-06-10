@@ -7,7 +7,8 @@
 - **Framework:** Next.js 16 (App Router) + React 19
 - **Язык:** TypeScript (strict mode)
 - **Стили:** Tailwind CSS v4
-- **БД:** PostgreSQL 16 + Prisma 5
+- **БД:** PostgreSQL 16 + Prisma 5 (локально — Docker, прод — Supabase)
+- **Хостинг:** Vercel (авто-деплой из `main`), картинки — Cloudflare R2
 - **Поиск:** Postgres FTS (tsvector, веса A/B/C) + Meilisearch
 - **Enrichment:** TS pipeline (Mouser API, LCSC, ChipDip)
 - **Браузерная автоматизация:** cloakbrowser + playwright-core
@@ -19,8 +20,10 @@
 ### 1. Установка
 
 ```bash
-pnpm install
+npm install
 ```
+
+> Пакетный менеджер проекта — **npm** (lock-файл: `package-lock.json`). Vercel собирает через npm (`vercel.json`).
 
 ### 2. БД
 
@@ -28,14 +31,14 @@ pnpm install
 
 ```bash
 docker-compose up -d postgres
-pnpm prisma migrate dev
-pnpm prisma generate
+npm run db:migrate
+npm run db:generate
 ```
 
 ### 3. Dev-сервер
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 Откройте [http://localhost:3000](http://localhost:3000).
@@ -46,19 +49,19 @@ pnpm dev
 
 ```bash
 # Полный прогон
-pnpm enrichment:run
+npm run enrichment:run
 
 # С опциями
-pnpm enrichment:run --input-dir /path/to/excels --batch-size 50
-pnpm enrichment:run --resume
-pnpm enrichment:run --dry-run         # без API-вызовов
-pnpm enrichment:run --skip-mouser     # отключить Mouser
-pnpm enrichment:run --mouser-only     # только Mouser
-pnpm enrichment:run --no-tui          # legacy-логи вместо Ink TUI
+npm run enrichment:run -- --input-dir /path/to/excels --batch-size 50
+npm run enrichment:run -- --resume
+npm run enrichment:run -- --dry-run         # без API-вызовов
+npm run enrichment:run -- --skip-mouser     # отключить Mouser
+npm run enrichment:run -- --mouser-only     # только Mouser
+npm run enrichment:run -- --no-tui          # legacy-логи вместо Ink TUI
 
 # Статус
-pnpm enrichment:status
-pnpm enrichment:watch
+npm run enrichment:status
+npm run enrichment:watch
 ```
 
 Вход: `ENRICHMENT_INPUT_DIR` в `.env`. Источники по приоритету: Mouser (API) → LCSC (scraping) → ChipDip (stealth Chromium).
@@ -89,7 +92,7 @@ prisma/
 ├── schema.prisma                 # Product, Manufacturer, Category, EnrichmentJournal, QuoteRequest
 └── migrations/
 
-scripts/                          # утилиты диагностики БД
+scripts/                          # утилиты: db-publish (каталог → прод), диагностика БД
 docs/database-schema.md           # описание схемы
 ```
 
@@ -97,28 +100,55 @@ docs/database-schema.md           # описание схемы
 
 ```bash
 # Dev
-pnpm dev
-pnpm build
-pnpm start
+npm run dev
+npm run build
+npm run start
 
 # Тесты
-pnpm test                          # unit (Vitest)
-pnpm test:integration              # с реальными внешними системами
-pnpm test:coverage
+npm test                           # unit (Vitest)
+npm run test:integration           # с реальными внешними системами
+npm run test:coverage
 
 # Линтинг
-pnpm lint
+npm run lint
 
 # Prisma
-pnpm db:migrate
-pnpm db:studio
-pnpm db:generate
+npm run db:migrate
+npm run db:studio
+npm run db:generate
 
 # Enrichment
-pnpm enrichment:run [flags]
-pnpm enrichment:status
-pnpm enrichment:watch
+npm run enrichment:run -- [flags]
+npm run enrichment:status
+npm run enrichment:watch
+
+# Публикация каталога в прод
+npm run db:publish -- --dry-run    # показать diff local ↔ prod
+npm run db:publish                 # опубликовать каталог в Supabase
 ```
+
+## Деплой и публикация данных
+
+Архитектура «две БД»:
+
+```
+┌──────────────────────────┐         ┌──────────────────────────────┐
+│  ЛОКАЛЬНО (Mac)          │         │  ПРОД                        │
+│                          │         │                              │
+│  Парсер / enrichment     │         │  Vercel (Next.js)            │
+│        ↓                 │ db:     │        ↓                     │
+│  PostgreSQL в Docker     │ publish │  Supabase PostgreSQL         │
+│  (источник правды        │ ──────► │  (каталог — копия local,     │
+│   по каталогу)           │         │   + заявки клиентов)         │
+└──────────────────────────┘         └──────────────────────────────┘
+```
+
+- **Код:** push в `main` → Vercel автоматически собирает и деплоит (env прописаны в Vercel для production/preview/development).
+- **Каталог:** парсер наполняет локальную БД → `npm run db:publish` зеркалирует каталожные таблицы в Supabase одной транзакцией (без блокировки читателей).
+- **Заявки клиентов** (`QuoteRequest`/`QuoteRequestItem`) живут только в проде и при публикации не трогаются.
+- **Картинки** хранятся в Cloudflare R2 — общие для local и prod, публикация не нужна.
+
+Прод: https://electromagaz.vercel.app
 
 ## БД
 

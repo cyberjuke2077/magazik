@@ -1,9 +1,0 @@
-{
-	"id": "svzB90KKOBHb2Ro",
-	"json": "{\"id\":\"svzB90KKOBHb2Ro\",\"url\":\"https://www.chipdip.ru/product/lm2576hvr-3.3-ponizhayuschiy-dc-dc-preobrazovatel-htc-9001087018\",\"loadedUrl\":\"https://www.chipdip.ru/product/lm2576hvr-3.3-ponizhayuschiy-dc-dc-preobrazovatel-htc-9001087018\",\"uniqueKey\":\"https://www.chipdip.ru/product/lm2576hvr-3.3-ponizhayuschiy-dc-dc-preobrazovatel-htc-9001087018\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":1,\"errorMessages\":[\"Error: Navigation timed out after 120 seconds.\\n    at handleRequestTimeout (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/crawlers/crawler_utils.ts:13:11)\\n    at PlaywrightCrawler._handleNavigationTimeout (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/browser-crawler.ts:695:33)\\n    at PlaywrightCrawler._handleNavigation (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/browser-crawler.ts:658:24)\\n    at async PlaywrightCrawler._runRequestHandler (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/browser-crawler.ts:553:13)\\n    at async PlaywrightCrawler._runRequestHandler (/Users/lux/Desktop/projects/electromagaz/node_modules/@crawlee/src/internals/playwright-crawler.ts:243:9)\\n    at async wrap (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:76:27)\"],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-05-01T22:20:55.060Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 1,
-	"uniqueKey": "https://www.chipdip.ru/product/lm2576hvr-3.3-ponizhayuschiy-dc-dc-preobrazovatel-htc-9001087018",
-	"url": "https://www.chipdip.ru/product/lm2576hvr-3.3-ponizhayuschiy-dc-dc-preobrazovatel-htc-9001087018"
-}

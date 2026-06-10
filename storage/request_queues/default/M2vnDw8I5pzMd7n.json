@@ -1,9 +1,0 @@
-{
-	"id": "M2vnDw8I5pzMd7n",
-	"json": "{\"id\":\"M2vnDw8I5pzMd7n\",\"url\":\"https://www.chipdip.ru/product/mp2307dn-lf-z-dc-dc-preobrazovatel-monolithic-9050001885\",\"loadedUrl\":\"https://www.chipdip.ru/product/mp2307dn-lf-z-dc-dc-preobrazovatel-monolithic-9050001885\",\"uniqueKey\":\"https://www.chipdip.ru/product/mp2307dn-lf-z-dc-dc-preobrazovatel-monolithic-9050001885\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":1,\"errorMessages\":[\"Error: requestHandler timed out after 60 seconds.\\n    at Timeout._onTimeout (/Users/lux/Desktop/projects/electromagaz/node_modules/@apify/src/index.ts:87:74)\\n    at listOnTimeout (node:internal/timers:605:17)\\n    at process.processTimers (node:internal/timers:541:7)\"],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-05-01T22:48:04.374Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 1,
-	"uniqueKey": "https://www.chipdip.ru/product/mp2307dn-lf-z-dc-dc-preobrazovatel-monolithic-9050001885",
-	"url": "https://www.chipdip.ru/product/mp2307dn-lf-z-dc-dc-preobrazovatel-monolithic-9050001885"
-}

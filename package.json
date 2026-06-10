@@ -20,6 +20,7 @@
     "enrichment:watch": "tsx src/scripts/enrichment-status.ts --watch",
     "enrichment:reenrich": "tsx scripts/reenrich-unresolved.ts",
     "db:stats": "tsx scripts/check-db-stats.ts",
+    "db:publish": "tsx scripts/db-publish.ts",
     "catalog:rebuild-tree": "tsx scripts/rebuild-category-tree.ts",
     "catalog:restore-tree": "tsx scripts/restore-category-backup.ts",
     "images:backfill": "tsx scripts/backfill-images-to-r2.ts",
@@ -63,12 +64,5 @@
     "tsx": "^4.7.0",
     "typescript": "^5",
     "vitest": "^2.0.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "onnxruntime-node",
-      "sharp",
-      "@imgly/background-removal-node"
-    ]
   }
 }
