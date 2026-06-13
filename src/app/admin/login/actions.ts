@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import {
   ADMIN_COOKIE,
   SESSION_TTL_HOURS,
-  checkAdminPassword,
+  checkAdminCredentials,
   createSessionToken,
 } from '@/lib/admin-auth'
 
@@ -13,9 +13,10 @@ export async function loginAdmin(
   _prev: { error: string } | null,
   formData: FormData,
 ): Promise<{ error: string } | null> {
+  const username = String(formData.get('username') ?? '')
   const password = String(formData.get('password') ?? '')
-  if (!checkAdminPassword(password)) {
-    return { error: 'Неверный пароль' }
+  if (!checkAdminCredentials(username, password)) {
+    return { error: 'Неверный логин или пароль' }
   }
   const store = await cookies()
   store.set(ADMIN_COOKIE, await createSessionToken(), {

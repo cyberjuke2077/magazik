@@ -5,6 +5,7 @@
  * Web Crypto API — работает и в edge-middleware, и в server actions.
  *
  * Env:
+ *   ADMIN_USERNAME        — логин входа в /admin (по умолчанию "admin")
  *   ADMIN_PASSWORD        — пароль входа в /admin
  *   ADMIN_SESSION_SECRET  — ключ подписи сессионных токенов (random 32+ байт)
  */
@@ -57,9 +58,10 @@ export async function verifySessionToken(token: string | undefined): Promise<boo
   return diff === 0
 }
 
-/** Проверка пароля админа. */
-export function checkAdminPassword(password: string): boolean {
-  const expected = process.env.ADMIN_PASSWORD
-  if (!expected) return false
-  return password === expected
+/** Проверка логина и пароля админа. */
+export function checkAdminCredentials(username: string, password: string): boolean {
+  const expectedPassword = process.env.ADMIN_PASSWORD
+  const expectedUsername = process.env.ADMIN_USERNAME ?? 'admin'
+  if (!expectedPassword) return false
+  return username === expectedUsername && password === expectedPassword
 }
