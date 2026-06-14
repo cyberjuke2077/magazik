@@ -151,11 +151,11 @@ export default function HelpPage() {
                 <FileText size={20} className="text-gray-400" />
                 <span className="text-gray-700">Оптовым покупателям</span>
               </Link>
-              <Link href="#" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
+              <Link href="/privacy" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
                 <FileText size={20} className="text-gray-400" />
                 <span className="text-gray-700">Политика конфиденциальности</span>
               </Link>
-              <Link href="#" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
+              <Link href="/terms" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
                 <FileText size={20} className="text-gray-400" />
                 <span className="text-gray-700">Пользовательское соглашение</span>
               </Link>
