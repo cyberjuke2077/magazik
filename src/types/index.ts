@@ -74,23 +74,3 @@ export interface AdminStats {
   ordersByStatus: Array<{ status: OrderStatus; count: number }>
   topProducts: Array<{ product: Product; soldCount: number; revenue: number }>
 }
-
-export type UserType = 'individual' | 'self-employed' | 'legal-entity'
-export type VerificationStatus = 'unverified' | 'pending' | 'verified' | 'rejected' | 'banned'
-
-export interface User {
-  id: string
-  email: string
-  name: string
-  phone?: string
-  role: 'user' | 'admin'
-  userType: UserType
-  companyName?: string
-  inn?: string
-  position?: string
-  verificationStatus: VerificationStatus
-  registeredAt: string
-  lastLogin?: string
-  ordersCount: number
-  totalSpent: number
-}

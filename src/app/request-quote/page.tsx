@@ -15,21 +15,19 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { useCart } from '@/hooks/use-cart'
-import { useAuth } from '@/hooks/use-auth'
 import { formatPrice } from '@/lib/utils'
 import { submitQuoteRequest } from '@/app/request-list/actions'
 
 export default function RequestQuotePage() {
   const router = useRouter()
   const { items, totalPrice, mounted, clearCart } = useCart()
-  const { user } = useAuth()
-  
+
   const [formData, setFormData] = useState({
-    companyName: user?.companyName || '',
-    inn: user?.inn || '',
-    contactPerson: user?.name || '',
-    phone: user?.phone || '',
-    email: user?.email || '',
+    companyName: '',
+    inn: '',
+    contactPerson: '',
+    phone: '',
+    email: '',
     comment: '',
     desiredDeliveryDate: '',
     deliveryAddress: '',
