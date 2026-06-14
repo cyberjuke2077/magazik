@@ -13,16 +13,18 @@
 export const ADMIN_COOKIE = 'emg_admin'
 export const SESSION_TTL_HOURS = 24 * 7 // неделя
 
-function getSecret(): string {
+function getSigningKey(): string {
   const s = process.env.ADMIN_SESSION_SECRET
   if (!s) throw new Error('ADMIN_SESSION_SECRET не задан')
-  return s
+  // Пароль в материале ключа: смена ADMIN_PASSWORD инвалидирует все
+  // активные сессии (старые подписи перестают сходиться).
+  return `${s}:${process.env.ADMIN_PASSWORD ?? ''}`
 }
 
 async function hmac(payload: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     'raw',
-    new TextEncoder().encode(getSecret()),
+    new TextEncoder().encode(getSigningKey()),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
     ['sign'],
@@ -33,6 +35,14 @@ async function hmac(payload: string): Promise<string> {
   let bin = ''
   for (const b of bytes) bin += String.fromCharCode(b)
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+/** Constant-time сравнение строк равной длины. */
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
 }
 
 /** Создать токен сессии: "exp.signature" */
@@ -50,18 +60,21 @@ export async function verifySessionToken(token: string | undefined): Promise<boo
   const exp = Number(token.slice(0, dot))
   if (!Number.isFinite(exp) || exp < Date.now()) return false
   const expected = await hmac(`admin.${exp}`)
-  const actual = token.slice(dot + 1)
-  if (expected.length !== actual.length) return false
-  // constant-time сравнение
-  let diff = 0
-  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ actual.charCodeAt(i)
-  return diff === 0
+  return timingSafeEqual(expected, token.slice(dot + 1))
 }
 
-/** Проверка логина и пароля админа. */
-export function checkAdminCredentials(username: string, password: string): boolean {
+/**
+ * Проверка логина и пароля админа. Хэшируем логин и пароль раздельно
+ * и сравниваем constant-time — без утечки длины и без short-circuit.
+ */
+export async function checkAdminCredentials(
+  username: string,
+  password: string,
+): Promise<boolean> {
   const expectedPassword = process.env.ADMIN_PASSWORD
   const expectedUsername = process.env.ADMIN_USERNAME ?? 'admin'
   if (!expectedPassword) return false
-  return username === expectedUsername && password === expectedPassword
+  const userOk = timingSafeEqual(await hmac(username), await hmac(expectedUsername))
+  const passOk = timingSafeEqual(await hmac(password), await hmac(expectedPassword))
+  return userOk && passOk
 }

@@ -15,7 +15,7 @@ export async function loginAdmin(
 ): Promise<{ error: string } | null> {
   const username = String(formData.get('username') ?? '')
   const password = String(formData.get('password') ?? '')
-  if (!checkAdminCredentials(username, password)) {
+  if (!(await checkAdminCredentials(username, password))) {
     return { error: 'Неверный логин или пароль' }
   }
   const store = await cookies()
