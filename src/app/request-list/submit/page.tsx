@@ -124,7 +124,7 @@ export default function SubmitRequestPage() {
 
     if (result.success) {
       clearRequestList()
-      router.push(`/request-list/submit/success?id=${result.requestId}`)
+      router.push(`/request-quote/status/${result.requestId}`)
     } else {
       setSubmitError(result.error)
     }
