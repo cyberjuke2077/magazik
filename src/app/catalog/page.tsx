@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { type Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight, Download } from 'lucide-react'
 import { getProductsPaginated } from '@/lib/queries/products'
@@ -31,6 +32,54 @@ import { CatalogShowcase } from './components/catalog-showcase'
 
 interface CatalogPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+function firstParam(v: string | string[] | undefined): string | null {
+  return Array.isArray(v) ? v[0] : v || null
+}
+
+export async function generateMetadata({ searchParams }: CatalogPageProps): Promise<Metadata> {
+  const params = await searchParams
+  const query = firstParam(params.q)
+  const categorySlug = firstParam(params.category)
+  const manufacturerSlug = firstParam(params.manufacturer)
+
+  // Канонический URL держит только осмысленные фильтры; sort/view/limit/page
+  // схлопываются — это один и тот же контент в другом порядке, дубли для робота.
+  const canonicalParams = new URLSearchParams()
+  if (categorySlug) canonicalParams.set('category', categorySlug)
+  if (manufacturerSlug) canonicalParams.set('manufacturer', manufacturerSlug)
+  const cq = canonicalParams.toString()
+  const canonical = cq ? `/catalog?${cq}` : '/catalog'
+
+  // Поисковую выдачу в индекс не пускаем: бесконечные запросы = мусорные страницы.
+  if (query) {
+    return {
+      title: `Поиск: ${query}`,
+      robots: { index: false, follow: true },
+      alternates: { canonical: '/catalog' },
+    }
+  }
+
+  if (categorySlug) {
+    const cat = await getCategoryBySlug(categorySlug)
+    if (cat) {
+      return {
+        title: `${cat.name} — купить оптом и в розницу`,
+        description:
+          cat.description ||
+          `${cat.name}: ${cat.count.toLocaleString('ru-RU')} позиций в наличии и под заказ. Отправка в день заказа, доставка по России. Купить в Electromagaz.`,
+        alternates: { canonical },
+      }
+    }
+  }
+
+  return {
+    title: 'Каталог электронных компонентов',
+    description:
+      'Полный каталог электронных компонентов: резисторы, конденсаторы, микросхемы, транзисторы, датчики. Оптом и в розницу, отправка в день заказа.',
+    alternates: { canonical },
+  }
 }
 
 export default async function CatalogPage({ searchParams }: CatalogPageProps) {

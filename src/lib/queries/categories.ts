@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
@@ -47,7 +48,9 @@ export async function getCategories(): Promise<Category[]> {
   }))
 }
 
-export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+// cache() дедуплицирует запрос в пределах одного рендера — generateMetadata
+// и тело страницы зовут его с тем же slug, в БД уходит один раз.
+export const getCategoryBySlug = cache(async (slug: string): Promise<Category | null> => {
   const category = await prisma.category.findUnique({
     where: { slug },
     include: {
@@ -68,7 +71,7 @@ export async function getCategoryBySlug(slug: string): Promise<Category | null> 
     description: category.description || '',
     color: category.color || 'from-gray-500/20 to-gray-600/5',
   }
-}
+})
 
 /**
  * Get all level 1 categories with their children (level 2)

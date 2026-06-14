@@ -34,8 +34,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { slug: true, updatedAt: true },
       orderBy: { name: 'asc' },
     })
+    // Каноничный URL категории — query-параметр (/catalog/<slug> отдаёт 301).
     categoryEntries = categories.map((c) => ({
-      url: `${SITE_URL}/catalog/${c.slug}`,
+      url: `${SITE_URL}/catalog?category=${c.slug}`,
       lastModified: c.updatedAt,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
