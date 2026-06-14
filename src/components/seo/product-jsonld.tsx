@@ -1,4 +1,5 @@
 import type { Product } from '@/lib/queries/products'
+import { COMPANY } from '@/lib/company'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 
@@ -91,12 +92,12 @@ export function OrganizationJsonLd({ url }: OrganizationJsonLdProps = {}) {
   const data = {
     '@context': 'https://schema.org/',
     '@type': 'Organization',
-    name: 'Electromagaz',
+    name: COMPANY.shortName,
     url: url || SITE_URL,
     logo: `${SITE_URL}/logo.png`,
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+7-800-555-35-35',
+      telephone: COMPANY.phone.raw,
       contactType: 'sales',
       areaServed: 'RU',
       availableLanguage: 'ru',

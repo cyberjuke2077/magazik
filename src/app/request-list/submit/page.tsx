@@ -256,7 +256,7 @@ export default function SubmitRequestPage() {
                     type="text"
                     value={formData.inn}
                     onChange={(e) => handleChange('inn', e.target.value)}
-                    placeholder="7707083893"
+                    placeholder="10 или 12 цифр"
                     maxLength={12}
                     className="w-full h-11 px-3 text-sm border border-gray-300 rounded text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 transition-all"
                   />

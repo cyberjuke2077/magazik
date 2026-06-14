@@ -5,6 +5,7 @@ import { HelpCircle, Search, Phone, Mail, MessageCircle, FileText, Package, Cred
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 const faqCategories = [
   {
@@ -78,21 +79,21 @@ export default function HelpPage() {
 
           {/* Contact Cards */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <a href="tel:+78005553535" className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
+            <a href={`tel:${COMPANY.phone.raw}`} className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Phone size={24} className="text-[#0066cc]" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Позвонить</h3>
-              <p className="text-sm text-gray-600">8 (800) 555-35-35</p>
+              <p className="text-sm text-gray-600">{COMPANY.phone.display}</p>
               <p className="text-xs text-gray-400 mt-1">Пн-Пт 9:00-18:00</p>
             </a>
 
-            <a href="mailto:support@electromagaz.ru" className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
+            <a href={`mailto:${COMPANY.supportEmail}`} className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Mail size={24} className="text-[#0066cc]" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">Написать</h3>
-              <p className="text-sm text-gray-600">support@electromagaz.ru</p>
+              <p className="text-sm text-gray-600">{COMPANY.supportEmail}</p>
               <p className="text-xs text-gray-400 mt-1">Ответим в течение 24 часов</p>
             </a>
 

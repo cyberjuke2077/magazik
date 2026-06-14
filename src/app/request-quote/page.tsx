@@ -237,7 +237,7 @@ export default function RequestQuotePage() {
                     type="text"
                     value={formData.inn}
                     onChange={(e) => handleChange('inn', e.target.value)}
-                    placeholder="7707083893"
+                    placeholder="10 или 12 цифр"
                     maxLength={12}
                     className={`w-full h-11 px-3 text-sm border rounded ${
                       errors.inn ? 'border-red-300 bg-red-50' : 'border-gray-300'

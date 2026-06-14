@@ -20,6 +20,7 @@ import {
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 const priceTiers = [
   { from: 1, to: 99, label: 'Розница', discount: 0, color: 'text-[#78716c]', bg: 'bg-[#e8f4ff]' },
@@ -213,11 +214,11 @@ export default function WholesalePage() {
                   Позвоните нам — обсудим условия и сроки в течение 15 минут.
                 </p>
                 <a
-                  href="tel:+78005553535"
+                  href={`tel:${COMPANY.phone.raw}`}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-[#0066cc] hover:underline"
                 >
                   <Phone size={14} />
-                  +7 (800) 555-35-35
+                  {COMPANY.phone.display}
                 </a>
               </div>
             </section>

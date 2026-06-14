@@ -4,6 +4,7 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Send } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 export const metadata: Metadata = {
   title: 'Контакты',
@@ -15,19 +16,19 @@ const departments = [
   {
     title: 'Отдел продаж',
     desc: 'Запросы КП, оформление заказов, работа с BOM',
-    phone: '+7 (800) 555-35-35',
+    phone: COMPANY.phone.display,
     email: 'sales@electromagaz.ru',
   },
   {
     title: 'Техническая поддержка',
     desc: 'Подбор аналогов, технические вопросы, datasheets',
-    phone: '+7 (800) 555-35-36',
-    email: 'support@electromagaz.ru',
+    phone: COMPANY.phone.display,
+    email: COMPANY.supportEmail,
   },
   {
     title: 'Бухгалтерия',
     desc: 'Документы, акты сверки, оплата',
-    phone: '+7 (800) 555-35-37',
+    phone: COMPANY.phone.display,
     email: 'accounting@electromagaz.ru',
   },
 ]
@@ -63,10 +64,10 @@ export default function ContactsPage() {
               </div>
               <div className="text-xs text-gray-500 mb-1">Телефон</div>
               <a
-                href="tel:+78005553535"
+                href={`tel:${COMPANY.phone.raw}`}
                 className="block text-lg font-bold text-gray-900 hover:text-[#0066cc] mb-1 transition-colors"
               >
-                8 (800) 555-35-35
+                {COMPANY.phone.display}
               </a>
               <p className="text-xs text-gray-500">Звонок по России бесплатный</p>
             </div>
@@ -78,10 +79,10 @@ export default function ContactsPage() {
               </div>
               <div className="text-xs text-gray-500 mb-1">Email</div>
               <a
-                href="mailto:info@electromagaz.ru"
+                href={`mailto:${COMPANY.email}`}
                 className="block text-lg font-bold text-gray-900 hover:text-[#0066cc] mb-1 transition-colors"
               >
-                info@electromagaz.ru
+                {COMPANY.email}
               </a>
               <p className="text-xs text-gray-500">Ответим в течение 24 часов</p>
             </div>
@@ -136,7 +137,7 @@ export default function ContactsPage() {
                   </div>
                 </a>
                 <a
-                  href="https://wa.me/78005553535"
+                  href={`https://wa.me/${COMPANY.phone.raw.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-3 p-3 bg-white rounded hover:shadow-sm transition-all"
@@ -144,7 +145,7 @@ export default function ContactsPage() {
                   <MessageCircle size={16} className="text-[#25D366]" />
                   <div>
                     <div className="font-semibold text-gray-900">WhatsApp</div>
-                    <div className="text-xs text-gray-500">+7 (800) 555-35-35</div>
+                    <div className="text-xs text-gray-500">{COMPANY.phone.display}</div>
                   </div>
                 </a>
               </div>

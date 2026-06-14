@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, Phone, MapPin, Send, ShieldCheck } from 'lucide-react'
+import { COMPANY } from '@/lib/company'
 
 const footerLinks = {
   catalog: {
@@ -70,20 +71,20 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-gray-500 leading-relaxed mb-4">
-              Профессиональный поставщик электронных компонентов с 2012 года. Более 500 000 позиций в наличии.
+              Профессиональный поставщик электронных компонентов с {COMPANY.foundedYear} года. Более 500 000 позиций в наличии.
             </p>
             <div className="space-y-2">
-              <a href="tel:+78005553535" className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#0066cc] transition-colors">
+              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#0066cc] transition-colors">
                 <Phone size={13} className="text-[#0066cc] shrink-0" />
-                +7 (800) 555-35-35
+                {COMPANY.phone.display}
               </a>
-              <a href="mailto:info@electromagaz.ru" className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#0066cc] transition-colors">
+              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#0066cc] transition-colors">
                 <Mail size={13} className="text-[#0066cc] shrink-0" />
-                info@electromagaz.ru
+                {COMPANY.email}
               </a>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <MapPin size={13} className="text-[#0066cc] shrink-0" />
-                Москва
+                {COMPANY.city}
               </div>
             </div>
           </div>
@@ -151,12 +152,15 @@ export function Footer() {
       <div className="border-t border-gray-100">
         <div className="mx-auto max-w-[1400px] px-4 py-5">
           <div className="flex flex-col items-center justify-center gap-2 text-center">
-            <span className="text-xs text-gray-400">© 2024 Electromagaz. Все права защищены.</span>
+            <span className="text-xs text-gray-500">
+              {COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')} · ИНН {COMPANY.inn} · ОГРН {COMPANY.ogrn}
+            </span>
+            <span className="text-xs text-gray-400">© {new Date().getFullYear()} {COMPANY.brand}. Все права защищены.</span>
             <div className="text-sm text-gray-600">
               Разработано в{' '}
-              <a 
-                href="https://sharashka.onrender.com" 
-                target="_blank" 
+              <a
+                href="https://sharashka.onrender.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#0066cc] font-semibold hover:text-[#0052a3] transition-colors"
               >
@@ -165,8 +169,10 @@ export function Footer() {
               {' '}© 2026
             </div>
             <div className="flex items-center gap-4 text-xs text-gray-400 mt-1">
-              <Link href="/privacy" className="hover:text-gray-600 transition-colors">Конфиденциальность</Link>
+              <Link href="/offer" className="hover:text-gray-600 transition-colors">Публичная оферта</Link>
+              <Link href="/privacy" className="hover:text-gray-600 transition-colors">Политика ПДн</Link>
               <Link href="/terms"   className="hover:text-gray-600 transition-colors">Условия</Link>
+              <Link href="/legal"   className="hover:text-gray-600 transition-colors">Реквизиты</Link>
             </div>
           </div>
         </div>

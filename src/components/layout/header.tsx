@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Mail, MapPin, Phone, Menu, X, Search, Check } from 'lucide-react'
+import { COMPANY } from '@/lib/company'
 
 const cities = [
   { name: 'Москва', region: 'Московская область' },
@@ -110,12 +111,12 @@ export function Header() {
 
             {/* Phone */}
             <div className="hidden lg:flex flex-col leading-snug gap-1">
-              <a href="tel:+78005553535" className="flex items-center gap-1.5 text-[15px] font-extrabold text-gray-900 hover:text-[#0066cc] transition-colors">
+              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-1.5 text-[15px] font-extrabold text-gray-900 hover:text-[#0066cc] transition-colors">
                 <Phone size={15} className="text-[#0066cc]" />
-                8 (800) 555-35-35
+                {COMPANY.phone.display}
               </a>
-              <a href="mailto:info@electromagaz.ru" className="text-[12px] text-gray-400 pl-[22px] hover:text-[#0066cc] transition-colors">
-                info@electromagaz.ru
+              <a href={`mailto:${COMPANY.email}`} className="text-[12px] text-gray-400 pl-[22px] hover:text-[#0066cc] transition-colors">
+                {COMPANY.email}
               </a>
             </div>
 

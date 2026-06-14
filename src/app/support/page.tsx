@@ -4,6 +4,7 @@ import { LifeBuoy, BookOpen, MessageCircle, ChevronRight, Phone, Mail } from 'lu
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 export const metadata: Metadata = {
   title: 'Техподдержка',
@@ -101,18 +102,18 @@ export default function SupportPage() {
               </div>
               <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
                 <a
-                  href="tel:+78005553536"
+                  href={`tel:${COMPANY.phone.raw}`}
                   className="flex items-center gap-2 h-11 px-5 text-sm font-semibold text-[#0066cc] bg-white hover:bg-gray-50 rounded transition-all"
                 >
                   <Phone size={14} />
-                  8 (800) 555-35-36
+                  {COMPANY.phone.display}
                 </a>
                 <a
-                  href="mailto:support@electromagaz.ru"
+                  href={`mailto:${COMPANY.supportEmail}`}
                   className="flex items-center gap-2 h-11 px-5 text-sm font-semibold text-white border border-white/30 hover:bg-white/10 rounded transition-all"
                 >
                   <Mail size={14} />
-                  support@electromagaz.ru
+                  {COMPANY.supportEmail}
                 </a>
               </div>
             </div>

@@ -4,6 +4,7 @@ import { Users, TrendingUp, Truck, Shield, Award } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 export const metadata: Metadata = {
   title: 'О компании',
@@ -129,24 +130,24 @@ export default function AboutPage() {
               <h2 className="text-xl font-bold text-gray-900 mb-4">Реквизиты и документы</h2>
               <div className="p-5 bg-gray-50 border border-gray-200 rounded space-y-2.5 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">ООО</span>
-                  <span className="text-gray-900 font-medium">Электромагаз</span>
+                  <span className="text-gray-500">Наименование</span>
+                  <span className="text-gray-900 font-medium text-right">{COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">ИНН</span>
-                  <span className="text-gray-900 font-medium font-mono">7700000000</span>
+                  <span className="text-gray-900 font-medium font-mono">{COMPANY.inn}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">КПП</span>
-                  <span className="text-gray-900 font-medium font-mono">770001001</span>
+                  <span className="text-gray-900 font-medium font-mono">{COMPANY.kpp}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">ОГРН</span>
-                  <span className="text-gray-900 font-medium font-mono">1127700000000</span>
+                  <span className="text-gray-900 font-medium font-mono">{COMPANY.ogrn}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Юр. адрес</span>
-                  <span className="text-gray-900 font-medium text-right">Москва</span>
+                  <span className="text-gray-900 font-medium text-right">{COMPANY.legalAddress.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}</span>
                 </div>
                 <div className="pt-2 border-t border-gray-200 text-xs text-gray-500">
                   Полный пакет документов и сертификатов предоставляется по запросу при заключении договора.
