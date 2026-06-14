@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma'
 import { notifyNewQuoteRequest } from '@/lib/notifications'
+import { validateQuoteInput } from '@/lib/validate-quote-input'
 
 export interface QuoteRequestInput {
   companyName: string
@@ -12,6 +13,7 @@ export interface QuoteRequestInput {
   comment?: string
   deliveryAddress?: string
   desiredDeliveryDate?: string
+  consent: boolean
   items: Array<{
     productId: string
     partNumber: string
@@ -28,21 +30,10 @@ export async function submitQuoteRequest(
   input: QuoteRequestInput,
 ): Promise<QuoteRequestResult> {
   try {
-    // Validate required fields
-    if (!input.companyName.trim()) {
-      return { success: false, error: 'Укажите название компании' }
-    }
-    if (!input.contactPerson.trim()) {
-      return { success: false, error: 'Укажите контактное лицо' }
-    }
-    if (!input.phone.trim()) {
-      return { success: false, error: 'Укажите телефон' }
-    }
-    if (!input.email.trim()) {
-      return { success: false, error: 'Укажите email' }
-    }
-    if (!input.items || input.items.length < 1) {
-      return { success: false, error: 'Добавьте хотя бы один товар в запрос' }
+    // Единая серверная валидация (согласие ПДн, форматы, лимиты).
+    const validation = validateQuoteInput(input)
+    if (!validation.valid) {
+      return { success: false, error: validation.error ?? 'Некорректные данные' }
     }
 
     // Create QuoteRequest + QuoteRequestItems in a single transaction
@@ -60,6 +51,7 @@ export async function submitQuoteRequest(
           desiredDeliveryDate: input.desiredDeliveryDate
             ? new Date(input.desiredDeliveryDate)
             : null,
+          consentAt: new Date(),
           items: {
             create: input.items.map((item) => ({
               productId: item.productId,

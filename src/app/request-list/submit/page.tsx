@@ -111,6 +111,7 @@ export default function SubmitRequestPage() {
       comment: formData.comment.trim() || undefined,
       deliveryAddress: formData.deliveryAddress.trim() || undefined,
       desiredDeliveryDate: formData.desiredDeliveryDate || undefined,
+      consent,
       items: items.map((item) => ({
         productId: item.productId,
         partNumber: item.partNumber,

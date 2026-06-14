@@ -106,6 +106,7 @@ export default function RequestQuotePage() {
       comment: formData.comment || undefined,
       deliveryAddress: formData.deliveryAddress || undefined,
       desiredDeliveryDate: formData.desiredDeliveryDate || undefined,
+      consent,
       items: items.map((item) => ({
         productId: item.product.id,
         partNumber: item.product.partNumber,

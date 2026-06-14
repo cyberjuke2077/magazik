@@ -262,6 +262,9 @@ model QuoteRequest {
   // Позиции
   items               QuoteRequestItem[]
 
+  // Согласие на обработку ПДн (ФЗ-152): фиксируем момент как доказательство
+  consentAt           DateTime?
+
   // Метаданные
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt

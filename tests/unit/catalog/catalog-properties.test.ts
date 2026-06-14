@@ -253,90 +253,94 @@ describe('Property 5: minOrder invariant', () => {
  * Validates: Requirements 6.3, 7.2
  */
 describe('Property 6: QuoteRequest validation', () => {
-  it('input with empty required fields returns invalid', () => {
+  const validItemArb = fc.record({
+    productId: fc.uuid(),
+    partNumber: fc.string({ minLength: 1, maxLength: 20 }),
+    name: fc.string({ minLength: 1, maxLength: 30 }),
+    quantity: fc.integer({ min: 1, max: 100 }),
+  })
+
+  // База: гарантированно валидный инпут (корректный email/телефон, согласие).
+  // Инвалидные кейсы получаем точечной мутацией одного поля.
+  const validInputArb = fc.record({
+    companyName: fc.constant('ООО Ромашка'),
+    contactPerson: fc.constant('Иван Петров'),
+    phone: fc.constant('+7 900 123-45-67'),
+    email: fc.constant('buyer@example.com'),
+    inn: fc.constant('7707083893'),
+    consent: fc.constant(true),
+    items: fc.array(validItemArb, { minLength: 1, maxLength: 3 }),
+  })
+
+  it('valid input passes', () => {
+    fc.assert(
+      fc.property(validInputArb, (input) => {
+        expect(validateQuoteInput(input).valid).toBe(true)
+      }),
+      { numRuns: 50 },
+    )
+  })
+
+  it('missing consent is rejected (ФЗ-152)', () => {
+    fc.assert(
+      fc.property(validInputArb, (base) => {
+        const result = validateQuoteInput({ ...base, consent: false })
+        expect(result.valid).toBe(false)
+        expect(result.error).toBeDefined()
+      }),
+      { numRuns: 30 },
+    )
+  })
+
+  it('empty required field is rejected', () => {
     fc.assert(
       fc.property(
-        fc.oneof(
-          // Empty companyName
-          fc.record({
-            companyName: fc.constant(''),
-            contactPerson: fc.string({ minLength: 1, maxLength: 30 }),
-            phone: fc.string({ minLength: 1, maxLength: 15 }),
-            email: fc.string({ minLength: 1, maxLength: 30 }),
-            items: fc.array(
-              fc.record({
-                productId: fc.uuid(),
-                partNumber: fc.string({ minLength: 1, maxLength: 20 }),
-                name: fc.string({ minLength: 1, maxLength: 30 }),
-                quantity: fc.integer({ min: 1, max: 100 }),
-              }),
-              { minLength: 1, maxLength: 3 },
-            ),
-          }),
-          // Empty contactPerson
-          fc.record({
-            companyName: fc.string({ minLength: 1, maxLength: 30 }),
-            contactPerson: fc.constant(''),
-            phone: fc.string({ minLength: 1, maxLength: 15 }),
-            email: fc.string({ minLength: 1, maxLength: 30 }),
-            items: fc.array(
-              fc.record({
-                productId: fc.uuid(),
-                partNumber: fc.string({ minLength: 1, maxLength: 20 }),
-                name: fc.string({ minLength: 1, maxLength: 30 }),
-                quantity: fc.integer({ min: 1, max: 100 }),
-              }),
-              { minLength: 1, maxLength: 3 },
-            ),
-          }),
-          // Empty phone
-          fc.record({
-            companyName: fc.string({ minLength: 1, maxLength: 30 }),
-            contactPerson: fc.string({ minLength: 1, maxLength: 30 }),
-            phone: fc.constant(''),
-            email: fc.string({ minLength: 1, maxLength: 30 }),
-            items: fc.array(
-              fc.record({
-                productId: fc.uuid(),
-                partNumber: fc.string({ minLength: 1, maxLength: 20 }),
-                name: fc.string({ minLength: 1, maxLength: 30 }),
-                quantity: fc.integer({ min: 1, max: 100 }),
-              }),
-              { minLength: 1, maxLength: 3 },
-            ),
-          }),
-          // Empty email
-          fc.record({
-            companyName: fc.string({ minLength: 1, maxLength: 30 }),
-            contactPerson: fc.string({ minLength: 1, maxLength: 30 }),
-            phone: fc.string({ minLength: 1, maxLength: 15 }),
-            email: fc.constant(''),
-            items: fc.array(
-              fc.record({
-                productId: fc.uuid(),
-                partNumber: fc.string({ minLength: 1, maxLength: 20 }),
-                name: fc.string({ minLength: 1, maxLength: 30 }),
-                quantity: fc.integer({ min: 1, max: 100 }),
-              }),
-              { minLength: 1, maxLength: 3 },
-            ),
-          }),
-          // Empty items
-          fc.record({
-            companyName: fc.string({ minLength: 1, maxLength: 30 }),
-            contactPerson: fc.string({ minLength: 1, maxLength: 30 }),
-            phone: fc.string({ minLength: 1, maxLength: 15 }),
-            email: fc.string({ minLength: 1, maxLength: 30 }),
-            items: fc.constant([] as Array<{ productId: string; partNumber: string; name: string; quantity: number }>),
-          }),
-        ),
-        (input) => {
-          const result = validateQuoteInput(input)
+        validInputArb,
+        fc.constantFrom('companyName', 'contactPerson', 'phone', 'email'),
+        (base, field) => {
+          const result = validateQuoteInput({ ...base, [field]: '' })
           expect(result.valid).toBe(false)
           expect(result.error).toBeDefined()
         },
       ),
       { numRuns: 50 },
+    )
+  })
+
+  it('malformed email is rejected', () => {
+    fc.assert(
+      fc.property(
+        validInputArb,
+        fc.constantFrom('plainstring', 'no@domain', '@nolocal.com', 'spaces in@mail.ru'),
+        (base, badEmail) => {
+          expect(validateQuoteInput({ ...base, email: badEmail }).valid).toBe(false)
+        },
+      ),
+      { numRuns: 30 },
+    )
+  })
+
+  it('phone with too few digits is rejected', () => {
+    fc.assert(
+      fc.property(
+        validInputArb,
+        fc.string({ minLength: 0, maxLength: 9 }).map((s) => s.replace(/\D/g, '')),
+        (base, shortDigits) => {
+          expect(validateQuoteInput({ ...base, phone: shortDigits }).valid).toBe(false)
+        },
+      ),
+      { numRuns: 30 },
+    )
+  })
+
+  it('empty and oversized item lists are rejected', () => {
+    fc.assert(
+      fc.property(validInputArb, (base) => {
+        expect(validateQuoteInput({ ...base, items: [] }).valid).toBe(false)
+        const many = Array.from({ length: 501 }, () => base.items[0])
+        expect(validateQuoteInput({ ...base, items: many }).valid).toBe(false)
+      }),
+      { numRuns: 10 },
     )
   })
 
