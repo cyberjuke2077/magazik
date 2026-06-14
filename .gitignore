@@ -105,3 +105,8 @@ skills-lock.json
 /config.yaml
 tests/collector/
 data/parsed/
+
+# Локальные заметки (второй мозг) - вне гита, как CLAUDE.md/.claude/docs/business
+CLAUDE.local.md
+ai-clone/
+live-metrics.md
