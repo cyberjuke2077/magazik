@@ -82,5 +82,12 @@ agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
 
-# claude code local settings (permissions etc.)
-.claude/settings.local.json
+# claude code - весь локальный мозг (скиллы, настройки, память)
+.claude/
+
+# локальные документы - не для публичного репо
+CLAUDE.md
+docs/business/
+docs/superpowers/
+plans/
+retrospectives/
