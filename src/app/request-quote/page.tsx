@@ -116,7 +116,7 @@ export default function RequestQuotePage() {
 
     if (result.success) {
       clearCart()
-      router.push('/request-quote/success')
+      router.push(`/request-quote/status/${result.requestId}`)
     } else {
       setSubmitError(result.error)
     }
