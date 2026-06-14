@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Phone, MapPin, Send, ShieldCheck } from 'lucide-react'
+import { Mail, Phone, MapPin, ShieldCheck } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const footerLinks = {
@@ -37,29 +37,6 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-gray-100 bg-white">
-      {/* Newsletter */}
-      <div className="border-b border-gray-100 bg-gray-50">
-        <div className="mx-auto max-w-[1400px] px-4 py-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h3 className="text-sm font-bold text-gray-900">Новинки и спецпредложения</h3>
-              <p className="text-xs text-gray-500 mt-0.5">Узнавайте первыми о поступлениях и скидках</p>
-            </div>
-            <div className="flex w-full sm:w-auto gap-2">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 sm:w-60 h-10 px-3 text-sm bg-white border border-gray-200 rounded text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] focus:ring-2 focus:ring-[#0066cc]/10 focus:shadow-[0_0_0_3px_rgba(0,102,204,0.08)] transition-all"
-              />
-              <button className="flex items-center gap-1.5 h-10 px-4 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all shrink-0 shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]">
-                <Send size={13} />
-                Подписаться
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main */}
       <div className="mx-auto max-w-[1400px] px-4 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
