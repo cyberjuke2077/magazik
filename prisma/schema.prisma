@@ -291,3 +291,28 @@ model QuoteRequestItem {
   @@index([quoteRequestId])
   @@index([productId])
 }
+
+// WholesaleLead — заявка с оптовой страницы (/wholesale). Без товарных позиций:
+// это лид «свяжитесь со мной», в отличие от QuoteRequest (запрос КП по корзине).
+model WholesaleLead {
+  id        String    @id @default(cuid())
+  status    String    @default("new") // new, in_progress, closed
+
+  // Контактные данные
+  name      String
+  company   String?
+  phone     String
+  email     String
+  message   String?   @db.Text
+
+  // Согласие на обработку ПДн (ФЗ-152): фиксируем момент как доказательство
+  consentAt DateTime?
+
+  // Метаданные
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
+}

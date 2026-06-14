@@ -21,6 +21,7 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { COMPANY } from '@/lib/company'
+import { submitWholesaleLead } from './actions'
 
 const priceTiers = [
   { from: 1, to: 99, label: 'Розница', discount: 0, color: 'text-[#78716c]', bg: 'bg-[#e8f4ff]' },
@@ -77,6 +78,7 @@ export default function WholesalePage() {
     phone: '',
     message: '',
   })
+  const [consent, setConsent] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -85,18 +87,32 @@ export default function WholesalePage() {
     setForm((f) => ({ ...f, [field]: value }))
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     if (!form.name || !form.email || !form.phone) {
       setError('Заполните обязательные поля')
       return
     }
+    if (!consent) {
+      setError('Необходимо согласие на обработку персональных данных')
+      return
+    }
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+    const result = await submitWholesaleLead({
+      name: form.name,
+      company: form.company,
+      phone: form.phone,
+      email: form.email,
+      message: form.message,
+      consent,
+    })
+    setLoading(false)
+    if (result.success) {
       setSubmitted(true)
-    }, 800)
+    } else {
+      setError(result.error)
+    }
   }
 
   return (
@@ -309,6 +325,25 @@ export default function WholesalePage() {
                         />
                       </div>
                     </div>
+
+                    <label className="flex items-start gap-2.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        className="mt-0.5 size-4 shrink-0 accent-[#0066cc]"
+                      />
+                      <span className="text-xs text-[#78716c] leading-relaxed">
+                        Я соглашаюсь на обработку персональных данных в соответствии с{' '}
+                        <Link href="/privacy" className="text-[#0066cc] hover:underline">
+                          политикой конфиденциальности
+                        </Link>{' '}
+                        и{' '}
+                        <Link href="/offer" className="text-[#0066cc] hover:underline">
+                          условиями оферты
+                        </Link>.
+                      </span>
+                    </label>
 
                     {error && (
                       <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-600">

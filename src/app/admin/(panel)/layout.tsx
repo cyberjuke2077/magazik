@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { LayoutDashboard, Inbox, Package, LogOut, ExternalLink } from 'lucide-react'
+import { LayoutDashboard, Inbox, Building2, Package, LogOut, ExternalLink } from 'lucide-react'
 import { logoutAdmin } from '../login/actions'
 
 export const metadata = { title: 'Админ-панель — Electromagaz' }
@@ -8,6 +8,7 @@ export const metadata = { title: 'Админ-панель — Electromagaz' }
 const NAV = [
   { href: '/admin', label: 'Дашборд', icon: LayoutDashboard },
   { href: '/admin/requests', label: 'Заявки', icon: Inbox },
+  { href: '/admin/wholesale', label: 'Оптовые заявки', icon: Building2 },
   { href: '/admin/products', label: 'Товары и цены', icon: Package },
 ]
 
