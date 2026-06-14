@@ -91,3 +91,17 @@ docs/business/
 docs/superpowers/
 plans/
 retrospectives/
+
+# dev-инструменты (opencode, agents, skills) - не для публичного репо
+AGENTS.md
+opencode.json
+opencode.jsonc
+skills/
+skills-lock.json
+
+# парсер/коллектор - живёт локально вне репо (правило 11 в CLAUDE.md)
+/check-parser.sh
+/start_collector.sh
+/config.yaml
+tests/collector/
+data/parsed/
