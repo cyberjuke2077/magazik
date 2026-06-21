@@ -59,7 +59,7 @@ export function StickyAddBar({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-gray-200 shadow-[0_-8px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${
+      className={`fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-[var(--border)] shadow-[0_-8px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${
         visible ? 'translate-y-0' : 'translate-y-full'
       }`}
       aria-hidden={!visible}
@@ -68,43 +68,43 @@ export function StickyAddBar({
         <div className="flex items-center gap-4">
           {/* Product info */}
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+            <div className="text-[10px] font-semibold text-ink-4 uppercase tracking-wide">
               {manufacturer}
             </div>
-            <div className="text-sm font-bold text-gray-900 truncate">{productName}</div>
-            <div className="font-mono text-[10px] text-gray-400">{partNumber}</div>
+            <div className="text-sm font-bold text-ink truncate">{productName}</div>
+            <div className="font-mono text-[10px] text-ink-4">{partNumber}</div>
           </div>
 
           {/* Price */}
           <div className="hidden sm:block shrink-0 text-right">
             {price > 0 ? (
               <>
-                <div className="text-lg font-extrabold text-gray-900 leading-none">
+                <div className="price text-lg leading-none">
                   {formatPrice(price)}
                 </div>
-                <div className="text-[10px] text-gray-400 mt-0.5">/ {unit}</div>
+                <div className="text-[10px] text-ink-4 mt-0.5">/ {unit}</div>
               </>
             ) : (
-              <span className="text-xs text-gray-400">по запросу</span>
+              <span className="text-xs text-ink-4">по запросу</span>
             )}
           </div>
 
           {/* Quantity */}
-          <div className="shrink-0 flex items-center bg-gray-50 border border-gray-200 rounded overflow-hidden">
+          <div className="shrink-0 flex items-center bg-[#f8fafc] border border-[var(--border)] rounded overflow-hidden">
             <button
               onClick={() => onQuantityChange(Math.max(minOrder, quantity - 1))}
               disabled={quantity <= minOrder}
-              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100 disabled:opacity-25 disabled:cursor-not-allowed"
+              className="flex items-center justify-center w-8 h-9 text-ink-3 hover:bg-gray-100 disabled:opacity-25 disabled:cursor-not-allowed"
               aria-label="Уменьшить"
             >
               <Minus size={12} />
             </button>
-            <span className="w-10 text-center text-sm font-bold text-gray-900 border-x border-gray-200 select-none">
+            <span className="w-10 text-center text-sm font-bold text-ink border-x border-[var(--border)] select-none">
               {quantity}
             </span>
             <button
               onClick={() => onQuantityChange(quantity + 1)}
-              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100"
+              className="flex items-center justify-center w-8 h-9 text-ink-3 hover:bg-gray-100"
               aria-label="Увеличить"
             >
               <Plus size={12} />
@@ -115,7 +115,7 @@ export function StickyAddBar({
           <button
             onClick={onAddToCart}
             disabled={!inStock && false}
-            className="shrink-0 flex items-center gap-1.5 h-9 px-4 sm:px-6 text-xs sm:text-sm font-bold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+            className="shrink-0 flex items-center gap-1.5 h-9 px-4 sm:px-6 text-xs sm:text-sm font-bold text-white bg-azure hover:bg-azure-hover rounded transition-all"
           >
             <ShoppingCart size={14} />
             <span className="hidden sm:inline">В корзину</span>

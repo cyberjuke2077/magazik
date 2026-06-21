@@ -5,9 +5,9 @@ export default function ProductLoading() {
   return (
     <>
       <Header />
-      <main className="flex-1 bg-[#fffaf7]">
+      <main className="flex-1 bg-white">
         {/* Breadcrumb skeleton */}
-        <div className="border-b border-black/8 bg-white">
+        <div className="border-b border-[var(--border)] bg-white">
           <div className="mx-auto max-w-7xl px-4 py-3">
             <div className="h-3 w-56 skeleton rounded" />
           </div>
@@ -50,11 +50,11 @@ export default function ProductLoading() {
           {/* Specs skeleton */}
           <div className="mb-12">
             <div className="h-5 w-48 skeleton rounded mb-4" />
-            <div className="bg-white border border-black/8 rounded overflow-hidden shadow-sm">
+            <div className="bg-white border border-[var(--border)] rounded overflow-hidden shadow-sm">
               {Array.from({ length: 7 }).map((_, i) => (
                 <div
                   key={i}
-                  className={`flex justify-between px-5 py-3 ${i !== 0 ? 'border-t border-black/5' : ''} ${i % 2 !== 0 ? 'bg-[#e8f4ff]/40' : ''}`}
+                  className={`flex justify-between px-5 py-3 ${i !== 0 ? 'border-t border-[var(--border)]' : ''} ${i % 2 !== 0 ? 'bg-azure-light/40' : ''}`}
                 >
                   <div className="h-4 w-28 skeleton rounded" />
                   <div className="h-4 w-24 skeleton rounded" />
