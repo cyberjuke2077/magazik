@@ -68,9 +68,9 @@ export default function CartPage() {
         <main>
           <div className="mx-auto max-w-[1400px] px-4 py-6">
             <div className="h-5 w-40 skeleton rounded mb-5" />
-            <div className="border border-gray-200 rounded">
+            <div className="border border-[var(--border)] rounded">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-[72px] border-b border-gray-100 skeleton" />
+                <div key={i} className="h-[72px] border-b border-[var(--border)] skeleton" />
               ))}
             </div>
           </div>
@@ -88,28 +88,28 @@ export default function CartPage() {
         <StickyNav />
         <main>
           {/* Breadcrumb */}
-          <div className="border-b border-gray-100">
+          <div className="border-b border-[var(--border)]">
             <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-              <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-                <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+              <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+                <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
                 <ChevronRight size={10} />
-                <span className="text-gray-600">Список запроса</span>
+                <span className="text-ink-3">Список запроса</span>
               </nav>
             </div>
           </div>
 
           <div className="mx-auto max-w-[1400px] px-4 py-20 text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded border border-gray-200 bg-gray-50 mb-6">
-              <ShoppingCart size={36} className="text-gray-300" />
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded border border-[var(--border)] bg-[#f8fafc] mb-6">
+              <ShoppingCart size={36} className="text-ink-4" />
             </div>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Список запроса пуст</h1>
-            <p className="text-sm text-gray-500 mb-8 max-w-xs mx-auto leading-relaxed">
+            <h1 className="text-xl font-bold text-ink mb-2">Список запроса пуст</h1>
+            <p className="text-sm text-ink-3 mb-8 max-w-xs mx-auto leading-relaxed">
               Добавьте товары в список для формирования запроса на коммерческое предложение.
               Минимальная сумма заказа — 200 000 ₽.
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
             >
               Перейти в каталог
               <ArrowRight size={14} />
@@ -128,12 +128,12 @@ export default function CartPage() {
 
       <main className="flex-1">
         {/* Breadcrumb */}
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-gray-600">Список запроса</span>
+              <span className="text-ink-3">Список запроса</span>
             </nav>
           </div>
         </div>
@@ -141,15 +141,15 @@ export default function CartPage() {
         <div className="mx-auto max-w-[1400px] px-4 py-6">
           {/* Page title */}
           <div className="flex items-center justify-between mb-5">
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1 className="text-xl font-bold text-ink">
               Список запроса
-              <span className="ml-2 text-base font-normal text-gray-400">
+              <span className="ml-2 text-base font-normal text-ink-4">
                 ({totalItems} {totalItems === 1 ? 'товар' : totalItems < 5 ? 'товара' : 'товаров'})
               </span>
             </h1>
             <button
               onClick={clearCart}
-              className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-500 transition-colors"
+              className="flex items-center gap-2 text-sm text-ink-4 hover:text-red-500 transition-colors"
             >
               <Trash2 size={15} />
               Очистить список
@@ -160,13 +160,13 @@ export default function CartPage() {
             {/* Left: items list */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="flex items-center gap-5 px-5 py-3 bg-gray-50 border border-gray-200 rounded-t text-base">
-                <label className="flex items-center gap-3 cursor-pointer select-none text-gray-600 hover:text-gray-900 transition-colors">
+              <div className="flex items-center gap-5 px-5 py-3 bg-[#f8fafc] border border-[var(--border)] rounded-t text-base">
+                <label className="flex items-center gap-3 cursor-pointer select-none text-ink-3 hover:text-ink transition-colors">
                   <input
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleSelectAll}
-                    className="w-5 h-5 rounded border-gray-300 accent-[#0066cc]"
+                    className="w-5 h-5 rounded border-[var(--border-2)] accent-azure"
                   />
                   Выбрать все
                 </label>
@@ -182,7 +182,7 @@ export default function CartPage() {
                 )}
 
                 {/* Column headers */}
-                <div className="ml-auto hidden md:flex items-center text-sm text-gray-500 font-medium gap-4">
+                <div className="ml-auto hidden md:flex items-center text-sm text-ink-3 font-medium gap-4">
                   <span className="w-5" />
                   <span className="w-20" />
                   <span className="flex-1" />
@@ -194,7 +194,7 @@ export default function CartPage() {
               </div>
 
               {/* Items */}
-              <div className="border-x border-b border-gray-200 rounded-b overflow-hidden">
+              <div className="border-x border-b border-[var(--border)] rounded-b overflow-hidden">
                 {items.map((item) => (
                   <CartItemRow
                     key={item.product.id}
@@ -218,7 +218,7 @@ export default function CartPage() {
               <div className="mt-4">
                 <Link
                   href="/catalog"
-                  className="inline-flex items-center gap-1.5 text-sm text-[#0066cc] hover:text-[#0066cc] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm text-azure hover:text-azure transition-colors"
                 >
                   ← Продолжить выбор товаров
                 </Link>
@@ -227,34 +227,34 @@ export default function CartPage() {
 
             {/* Right: summary */}
             <div className="w-72 flex-shrink-0 sticky top-24">
-              <div className="border border-gray-200 rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
+              <div className="border border-[var(--border)] rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
                 {/* Header */}
-                <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                  <span className="text-sm font-semibold text-gray-900">Итого</span>
+                <div className="px-4 py-3 bg-[#f8fafc] border-b border-[var(--border)]">
+                  <span className="text-sm font-semibold text-ink">Итого</span>
                 </div>
 
                 <div className="px-4 py-4 space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Товаров в списке:</span>
-                    <span className="font-medium text-gray-900">{totalItems} шт.</span>
+                    <span className="text-ink-3">Товаров в списке:</span>
+                    <span className="font-medium text-ink">{totalItems} шт.</span>
                   </div>
 
                   {selected.size > 0 && (
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">Выбрано:</span>
-                      <span className="font-medium text-gray-900">{formatPrice(selectedTotal)}</span>
+                      <span className="text-ink-3">Выбрано:</span>
+                      <span className="font-medium text-ink">{formatPrice(selectedTotal)}</span>
                     </div>
                   )}
 
-                  <div className="border-t border-gray-100 pt-2.5">
+                  <div className="border-t border-[var(--border)] pt-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">Сумма запроса:</span>
-                      <span className="text-lg font-bold text-gray-900">
+                      <span className="text-sm text-ink-3">Сумма запроса:</span>
+                      <span className={totalPrice > 0 ? 'price text-lg' : 'text-lg font-bold text-ink'}>
                         {totalPrice > 0 ? formatPrice(totalPrice) : 'По запросу'}
                       </span>
                     </div>
                     {totalPrice === 0 && (
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-ink-4 mt-1">
                         Цены будут указаны в коммерческом предложении
                       </p>
                     )}
@@ -264,7 +264,7 @@ export default function CartPage() {
                 <div className="px-4 pb-4">
                   <Link
                     href="/request-quote"
-                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
                   >
                     Отправить запрос на КП
                     <ArrowRight size={14} />
@@ -272,17 +272,17 @@ export default function CartPage() {
                 </div>
 
                 {/* Advantages */}
-                <div className="border-t border-gray-100 px-4 py-3 space-y-2">
-                  <div className="flex items-start gap-2 text-xs text-gray-500">
-                    <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
+                <div className="border-t border-[var(--border)] px-4 py-3 space-y-2">
+                  <div className="flex items-start gap-2 text-xs text-ink-3">
+                    <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
                     <span>Работаем с юридическими лицами и ИП</span>
                   </div>
-                  <div className="flex items-start gap-2 text-xs text-gray-500">
-                    <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
+                  <div className="flex items-start gap-2 text-xs text-ink-3">
+                    <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
                     <span>Минимальный заказ от 200 000 ₽</span>
                   </div>
-                  <div className="flex items-start gap-2 text-xs text-gray-500">
-                    <Package size={13} className="mt-0.5 flex-shrink-0 text-[#0066cc]" />
+                  <div className="flex items-start gap-2 text-xs text-ink-3">
+                    <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
                     <span>Ответ на запрос в течение 24 часов</span>
                   </div>
                 </div>
