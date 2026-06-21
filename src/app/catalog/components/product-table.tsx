@@ -42,13 +42,13 @@ function SortableHeader({
   return (
     <button
       onClick={() => onSort(sortKey)}
-      className={`flex items-center gap-1 text-xs font-semibold text-gray-500 uppercase tracking-wide hover:text-gray-700 transition-colors ${className || ''}`}
+      className={`flex items-center gap-1 text-xs font-semibold text-ink-3 uppercase tracking-wide hover:text-ink-2 transition-colors ${className || ''}`}
     >
       {label}
       {isActive ? (
-        <ArrowUp size={10} className="text-[#0066cc]" />
+        <ArrowUp size={10} className="text-azure" />
       ) : (
-        <ArrowUpDown size={10} className="text-gray-300" />
+        <ArrowUpDown size={10} className="text-ink-4" />
       )}
     </button>
   )
@@ -76,7 +76,7 @@ export function ProductTable({ products }: ProductTableProps) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
+          <tr className="bg-gray-50 border-b border-[var(--border)]">
             <th className="w-[36px] px-2 py-2" />
             <th className="text-left px-2 py-2 w-[130px]">
               <SortableHeader
@@ -103,17 +103,17 @@ export function ProductTable({ products }: ProductTableProps) {
               />
             </th>
             <th className="text-left px-2 py-2 w-[90px] hidden lg:table-cell">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <span className="text-xs font-semibold text-ink-3 uppercase tracking-wide">
                 Корпус
               </span>
             </th>
             <th className="text-right px-2 py-2 w-[110px]">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <span className="text-xs font-semibold text-ink-3 uppercase tracking-wide">
                 Цена
               </span>
             </th>
             <th className="px-2 py-2 w-[200px]">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <span className="text-xs font-semibold text-ink-3 uppercase tracking-wide">
                 Действие
               </span>
             </th>
@@ -126,7 +126,7 @@ export function ProductTable({ products }: ProductTableProps) {
             return (
               <tr
                 key={product.id}
-                className="border-b border-gray-100 hover:bg-gray-50 transition-colors h-[40px]"
+                className="border-b border-[var(--border)] hover:bg-[#fafafa] transition-colors h-[40px]"
               >
                 {/* Checkbox */}
                 <td className="px-2">
@@ -137,7 +137,7 @@ export function ProductTable({ products }: ProductTableProps) {
                 <td className="px-2">
                   <Link
                     href={`/product/${product.slug}`}
-                    className="text-sm font-bold text-[#0066cc] hover:underline truncate block"
+                    className="mpn block truncate text-sm font-bold text-azure hover:underline"
                   >
                     {product.partNumber}
                   </Link>
@@ -147,7 +147,7 @@ export function ProductTable({ products }: ProductTableProps) {
                 <td className="px-2">
                   <Link
                     href={`/product/${product.slug}`}
-                    className="text-sm text-gray-800 truncate block hover:text-[#0066cc] transition-colors"
+                    className="text-sm text-ink-2 truncate block hover:text-azure transition-colors"
                   >
                     {product.name}
                   </Link>
@@ -155,21 +155,21 @@ export function ProductTable({ products }: ProductTableProps) {
 
                 {/* Manufacturer */}
                 <td className="px-2 hidden md:table-cell">
-                  <span className="text-xs text-gray-500 truncate block">
+                  <span className="text-xs text-ink-3 truncate block">
                     {product.manufacturer}
                   </span>
                 </td>
 
                 {/* Package */}
                 <td className="px-2 hidden lg:table-cell">
-                  <span className="text-xs text-gray-400 truncate block">
-                    {product.package || '—'}
+                  <span className="text-xs text-ink-4 truncate block">
+                    {product.package || '-'}
                   </span>
                 </td>
 
                 {/* Price */}
                 <td className="px-2 text-right">
-                  <span className={`text-sm font-bold ${displayPrice ? 'text-gray-900' : 'text-gray-400 text-xs font-medium'}`}>
+                  <span className={displayPrice ? 'price text-sm' : 'text-xs font-medium text-ink-4'}>
                     {formatPrice(displayPrice)}
                   </span>
                 </td>

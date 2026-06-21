@@ -4,7 +4,7 @@ import { Footer } from '@/components/layout/footer'
 
 function SkeletonRow() {
   return (
-    <div className="flex items-center gap-4 h-[60px] px-4 border-b border-gray-100">
+    <div className="flex items-center gap-4 h-[60px] px-4 border-b border-[var(--border)]">
       <div className="w-[140px] shrink-0 h-4 skeleton rounded" />
       <div className="flex-1 h-4 skeleton rounded" />
       <div className="w-[120px] shrink-0 h-3 skeleton rounded hidden md:block" />
@@ -22,7 +22,7 @@ export default function CatalogLoading() {
       <StickyNav />
 
       {/* Breadcrumbs skeleton */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-[var(--border)] bg-white">
         <div className="mx-auto max-w-[1400px] px-4 py-2">
           <div className="h-4 w-40 skeleton rounded" />
         </div>
@@ -48,13 +48,13 @@ export default function CatalogLoading() {
             {/* Content skeleton */}
             <div className="flex-1 min-w-0">
               {/* Toolbar skeleton */}
-              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-200">
+              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-[var(--border)]">
                 <div className="h-9 w-64 skeleton rounded" />
               </div>
 
               {/* Table skeleton */}
-              <div className="border border-gray-200 rounded overflow-hidden">
-                <div className="flex items-center gap-4 h-[40px] px-4 bg-gray-50 border-b border-gray-200">
+              <div className="border border-[var(--border)] rounded overflow-hidden">
+                <div className="flex items-center gap-4 h-[40px] px-4 bg-gray-50 border-b border-[var(--border)]">
                   <div className="h-3 w-16 skeleton rounded" />
                   <div className="flex-1 h-3 skeleton rounded" />
                   <div className="h-3 w-20 skeleton rounded" />

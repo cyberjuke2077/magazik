@@ -76,10 +76,10 @@ export function AddToCartBtn({
       />
       <button
         onClick={handleAdd}
-        className={`flex items-center gap-1.5 h-8 px-3 text-xs font-bold transition-all whitespace-nowrap ${
+        className={`flex items-center gap-1.5 h-8 px-3 text-xs font-bold rounded-[var(--radius-control)] transition-colors whitespace-nowrap ${
           inCart
-            ? 'bg-[#e8f4ff] text-[#0066cc] border border-[#0066cc]/30'
-            : 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
+            ? 'bg-azure-light text-azure border border-azure/30'
+            : 'bg-azure text-white hover:bg-azure-hover'
         }`}
       >
         {inCart ? (

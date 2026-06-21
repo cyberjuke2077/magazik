@@ -20,13 +20,13 @@ export function ViewToggle() {
   }
 
   return (
-    <div className="flex items-center h-8 border border-gray-200 rounded overflow-hidden">
+    <div className="flex items-center h-8 border border-[var(--border)] rounded overflow-hidden">
       <button
         onClick={() => handleChange('list')}
         className={`flex items-center justify-center w-8 h-full transition-colors ${
           currentView === 'list'
-            ? 'bg-[#0066cc] text-white'
-            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            ? 'bg-azure text-white'
+            : 'text-ink-3 hover:text-ink-2 hover:bg-[#fafafa]'
         }`}
         title="Список"
       >
@@ -34,10 +34,10 @@ export function ViewToggle() {
       </button>
       <button
         onClick={() => handleChange('table')}
-        className={`flex items-center justify-center w-8 h-full border-l border-gray-200 transition-colors ${
+        className={`flex items-center justify-center w-8 h-full border-l border-[var(--border)] transition-colors ${
           currentView === 'table'
-            ? 'bg-[#0066cc] text-white'
-            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+            ? 'bg-azure text-white'
+            : 'text-ink-3 hover:text-ink-2 hover:bg-[#fafafa]'
         }`}
         title="Таблица"
       >

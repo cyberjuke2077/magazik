@@ -15,7 +15,7 @@ export function MobileFilterDrawer({ children }: MobileFilterDrawerProps) {
       {/* Trigger button — visible only on mobile */}
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 h-9 px-4 text-sm font-medium text-gray-700 border border-gray-200 rounded hover:border-gray-300 transition-colors lg:hidden"
+        className="flex items-center gap-2 h-9 px-4 text-sm font-medium text-ink-2 border border-[var(--border)] rounded hover:border-azure/40 transition-colors lg:hidden"
       >
         <SlidersHorizontal size={14} />
         Фильтры
@@ -36,11 +36,11 @@ export function MobileFilterDrawer({ children }: MobileFilterDrawerProps) {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between h-12 px-4 border-b border-gray-200">
-          <span className="text-sm font-bold text-gray-900">Фильтры</span>
+        <div className="flex items-center justify-between h-12 px-4 border-b border-[var(--border)]">
+          <span className="text-sm font-bold text-ink">Фильтры</span>
           <button
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 transition-colors"
+            className="flex items-center justify-center w-8 h-8 text-ink-4 hover:text-ink-3 transition-colors"
           >
             <X size={18} />
           </button>

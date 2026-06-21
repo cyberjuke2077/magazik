@@ -16,20 +16,20 @@ export function CategoryCard({ category, size = 'default' }: CategoryCardProps) 
       }`}
     >
       {/* Hover background */}
-      <div className="absolute inset-0 bg-[#0066cc]/0 group-hover:bg-[#0066cc]/4 transition-all duration-300" />
+      <div className="absolute inset-0 bg-azure/0 group-hover:bg-azure/4 transition-all duration-300" />
 
       {/* Top accent line on hover */}
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#0066cc] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-azure scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
 
       {/* Icon */}
-      <div className={`relative font-mono text-[#0066cc] opacity-40 group-hover:opacity-80 transition-all duration-300 group-hover:scale-110 ${
+      <div className={`relative font-mono text-azure opacity-40 group-hover:opacity-80 transition-all duration-300 group-hover:scale-110 ${
         size === 'large' ? 'text-4xl' : 'text-2xl'
       }`}>
         {category.icon}
       </div>
 
       {/* Name */}
-      <div className={`relative font-semibold text-[#1c1917] group-hover:text-[#0066cc] transition-colors ${
+      <div className={`relative font-semibold text-[#1c1917] group-hover:text-azure transition-colors ${
         size === 'large' ? 'text-base' : 'text-sm'
       }`}>
         {category.name}

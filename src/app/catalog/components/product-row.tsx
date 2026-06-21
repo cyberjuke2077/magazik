@@ -28,7 +28,7 @@ function LifecycleBadge({ lifecycle }: { lifecycle: string }) {
     EOL: 'bg-red-50 text-red-700 border-red-200',
     NRND: 'bg-yellow-50 text-yellow-700 border-yellow-200',
   }
-  const style = styles[lifecycle] || 'bg-gray-50 text-gray-600 border-gray-200'
+  const style = styles[lifecycle] || 'bg-gray-50 text-ink-3 border-[var(--border)]'
 
   return (
     <span className={`inline-flex items-center h-4 px-1.5 text-[10px] font-medium border rounded ${style}`}>
@@ -47,17 +47,17 @@ export function ProductRow({ product }: ProductRowProps) {
     : null
 
   return (
-    <div className="flex items-center gap-4 min-h-[60px] px-4 py-2 border-b border-gray-100 hover:bg-gray-50 transition-colors group">
+    <div className="flex items-center gap-4 min-h-[60px] px-4 py-2 border-b border-[var(--border)] hover:bg-[#fafafa] transition-colors group">
       {/* MPN */}
       <div className="w-[140px] shrink-0">
         <Link
           href={`/product/${product.slug}`}
-          className="text-sm font-bold text-[#0066cc] hover:underline truncate block"
+          className="mpn block truncate text-sm font-bold text-azure hover:underline"
         >
           {product.partNumber}
         </Link>
         {truncatedDesc && (
-          <p className="text-[11px] text-gray-400 truncate mt-0.5 leading-tight">
+          <p className="text-[11px] text-ink-4 truncate mt-0.5 leading-tight">
             {truncatedDesc}
           </p>
         )}
@@ -68,12 +68,12 @@ export function ProductRow({ product }: ProductRowProps) {
         <div className="flex items-center gap-1.5">
           <Link
             href={`/product/${product.slug}`}
-            className="text-sm text-gray-800 truncate hover:text-[#0066cc] transition-colors"
+            className="text-sm text-ink-2 truncate hover:text-azure transition-colors"
           >
             {product.name}
           </Link>
           {isNew && (
-            <span className="inline-flex items-center gap-0.5 h-4 px-1.5 text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded shrink-0">
+            <span className="inline-flex items-center gap-0.5 h-4 px-1.5 text-[10px] font-semibold text-stock bg-stock-bg border border-stock/20 rounded shrink-0">
               <Sparkles size={9} />
               NEW
             </span>
@@ -88,9 +88,9 @@ export function ProductRow({ product }: ProductRowProps) {
 
       {/* Manufacturer + package */}
       <div className="w-[140px] shrink-0 hidden md:block">
-        <div className="text-xs text-gray-500 truncate">{product.manufacturer}</div>
+        <div className="text-xs text-ink-3 truncate">{product.manufacturer}</div>
         {product.package && (
-          <div className="text-[10px] text-gray-400 truncate mt-0.5">
+          <div className="text-[10px] text-ink-4 truncate mt-0.5">
             {product.package}
           </div>
         )}
@@ -104,7 +104,7 @@ export function ProductRow({ product }: ProductRowProps) {
             target="_blank"
             rel="noopener noreferrer"
             title={product.datasheets[0].title || 'Datasheet'}
-            className="text-gray-400 hover:text-[#0066cc] transition-colors"
+            className="text-ink-4 hover:text-azure transition-colors"
           >
             <FileText size={14} />
           </a>
@@ -112,13 +112,13 @@ export function ProductRow({ product }: ProductRowProps) {
       </div>
 
       {/* Delivery */}
-      <div className="w-[70px] shrink-0 text-xs text-gray-400 hidden lg:block">
-        2–4 нед.
+      <div className="w-[70px] shrink-0 text-xs text-ink-4 hidden lg:block">
+        2-4 нед.
       </div>
 
       {/* Price */}
       <div className="w-[130px] shrink-0 text-right">
-        <span className={`text-sm font-bold ${displayPrice ? 'text-gray-900' : 'text-gray-400 text-xs font-medium'}`}>
+        <span className={displayPrice ? 'price text-sm' : 'text-xs font-medium text-ink-4'}>
           {formatPrice(displayPrice)}
         </span>
       </div>

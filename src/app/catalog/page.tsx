@@ -107,12 +107,12 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         <Header />
         <StickyNav categories={navCategories} totalProducts={totalProductsAll} />
 
-        <div className="border-b border-gray-200 bg-white">
+        <div className="border-b border-[var(--border)] bg-white">
           <div className="mx-auto max-w-[1400px] px-4 py-2">
-            <nav className="flex items-center gap-1 text-sm text-gray-500">
-              <Link href="/" className="hover:text-[#0066cc] transition-colors">Главная</Link>
-              <ChevronRight size={12} className="text-gray-300" />
-              <span className="text-gray-700">Каталог</span>
+            <nav className="flex items-center gap-1 text-sm text-ink-3">
+              <Link href="/" className="hover:text-azure transition-colors">Главная</Link>
+              <ChevronRight size={12} className="text-ink-4" />
+              <span className="text-ink-2">Каталог</span>
             </nav>
           </div>
         </div>
@@ -120,8 +120,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         <main className="flex-1">
           <div className="mx-auto max-w-[1400px] px-4 py-4">
             <div className="flex items-baseline gap-3 mb-1">
-              <h1 className="text-2xl font-bold text-gray-900">Каталог</h1>
-              <span className="text-sm text-gray-400">
+              <h1 className="text-2xl font-bold text-ink">Каталог</h1>
+              <span className="text-sm text-ink-4">
                 {totalProductsAll.toLocaleString('ru-RU')} позиций
               </span>
             </div>
@@ -197,23 +197,23 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       <StickyNav categories={navCategories} totalProducts={totalProductsAll} />
 
       {/* Breadcrumbs */}
-      <div className="border-b border-gray-200 bg-white">
+      <div className="border-b border-[var(--border)] bg-white">
         <div className="mx-auto max-w-[1400px] px-4 py-2">
-          <nav className="flex items-center gap-1 text-sm text-gray-500">
-            <Link href="/" className="hover:text-[#0066cc] transition-colors">
+          <nav className="flex items-center gap-1 text-sm text-ink-3">
+            <Link href="/" className="hover:text-azure transition-colors">
               Главная
             </Link>
-            <ChevronRight size={12} className="text-gray-300" />
+            <ChevronRight size={12} className="text-ink-4" />
             {activeCategoryName ? (
               <>
-                <Link href="/catalog" className="hover:text-[#0066cc] transition-colors">
+                <Link href="/catalog" className="hover:text-azure transition-colors">
                   Каталог
                 </Link>
-                <ChevronRight size={12} className="text-gray-300" />
-                <span className="text-gray-900 font-medium">{activeCategoryName}</span>
+                <ChevronRight size={12} className="text-ink-4" />
+                <span className="text-ink font-medium">{activeCategoryName}</span>
               </>
             ) : (
-              <span className="text-gray-700">Каталог</span>
+              <span className="text-ink-2">Каталог</span>
             )}
           </nav>
         </div>
@@ -223,10 +223,10 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         <div className="mx-auto max-w-[1400px] px-4 py-4">
           {/* Page title */}
           <div className="flex items-baseline gap-3 mb-1">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-ink">
               {activeCategoryName || 'Каталог'}
             </h1>
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-ink-4">
               {result.total.toLocaleString('ru-RU')} позиций
             </span>
           </div>
@@ -268,17 +268,17 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             {/* Main content */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-200">
+              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-[var(--border)]">
                 {parsed.query && (
-                  <span className="text-sm text-gray-500">
-                    Результаты для «<span className="font-medium text-gray-700">{parsed.query}</span>»
+                  <span className="text-sm text-ink-3">
+                    Результаты для «<span className="font-medium text-ink-2">{parsed.query}</span>»
                   </span>
                 )}
                 <div className="ml-auto flex items-center gap-2">
                   <CopyLinkBtn />
                   <a
                     href={`/api/catalog/export${baseParams ? `?${baseParams}` : ''}`}
-                    className="flex items-center gap-1.5 h-8 px-3 text-sm text-gray-600 border border-gray-200 rounded hover:border-gray-300 hover:text-gray-800 transition-colors"
+                    className="flex items-center gap-1.5 h-8 px-3 text-sm text-ink-3 border border-[var(--border)] rounded-[var(--radius-control)] hover:border-azure/40 hover:text-ink transition-colors"
                     title="Экспорт CSV"
                   >
                     <Download size={14} />
@@ -307,19 +307,16 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               {result.items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-center">
                   <div className="text-5xl mb-4 opacity-20">◆</div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">Ничего не найдено</h3>
-                  <p className="text-sm text-gray-500 mb-5">
+                  <h3 className="text-lg font-bold text-ink mb-2">Ничего не найдено</h3>
+                  <p className="text-sm text-ink-3 mb-5">
                     Попробуйте изменить фильтры или поисковый запрос
                   </p>
-                  <Link
-                    href="/catalog"
-                    className="h-9 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] transition-all inline-flex items-center"
-                  >
+                  <Link href="/catalog" className="ui-btn ui-btn-primary ui-btn-sm">
                     Сбросить фильтры
                   </Link>
                 </div>
               ) : parsed.view === 'table' ? (
-                <div className="border border-gray-200 rounded overflow-hidden">
+                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
                   <BulkSelectWrapper
                     products={result.items.map((p) => ({
                       id: p.id,
@@ -347,7 +344,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   </BulkSelectWrapper>
                 </div>
               ) : (
-                <div className="border border-gray-200 rounded overflow-hidden">
+                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
                   <BulkSelectWrapper
                     products={result.items.map((p) => ({
                       id: p.id,

@@ -64,7 +64,7 @@ export function ActiveFilters(props: ActiveFiltersProps) {
       )}
       <Link
         href="/catalog"
-        className="text-xs text-gray-400 hover:text-[#0066cc] transition-colors ml-1"
+        className="text-xs text-ink-4 hover:text-azure transition-colors ml-1"
       >
         Сбросить всё
       </Link>
@@ -76,7 +76,7 @@ function Tag({ label, href }: { label: string; href: string }) {
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-1 h-6 px-2 text-xs text-[#0066cc] bg-[#e8f4ff] rounded hover:bg-[#d0e8ff] transition-colors"
+      className="inline-flex items-center gap-1 h-6 px-2 text-xs text-azure bg-azure-light rounded hover:bg-[#d0e8ff] transition-colors"
     >
       <span className="max-w-[160px] truncate">{label}</span>
       <X size={12} className="shrink-0 opacity-60" />

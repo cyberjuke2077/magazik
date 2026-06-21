@@ -26,25 +26,25 @@ export function CatalogShowcase({ sections }: CatalogShowcaseProps) {
         return (
           <div
             key={section.id}
-            className="group flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white hover:border-[#0066cc]/40 hover:shadow-sm transition-all"
+            className="group flex flex-col border border-[var(--border)] rounded-lg overflow-hidden bg-white hover:border-azure/40 hover:shadow-sm transition-all"
           >
             {/* Header — иконка + название + счётчик */}
             <Link
               href={`/catalog?category=${section.slug}`}
-              className="flex items-center gap-3 px-4 py-3.5 border-b border-gray-100 bg-gray-50/60 group-hover:bg-[#e8f4ff]/50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--border)] bg-gray-50/60 group-hover:bg-azure-light/50 transition-colors"
             >
-              <span className="flex items-center justify-center size-11 shrink-0 rounded-md bg-white border border-gray-200 text-[#0066cc]">
+              <span className="flex items-center justify-center size-11 shrink-0 rounded-md bg-white border border-[var(--border)] text-azure">
                 <CategoryIcon slug={section.icon ?? section.slug} size={26} />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-[15px] font-bold text-gray-900 group-hover:text-[#0066cc] transition-colors leading-tight">
+                <span className="block text-[15px] font-bold text-ink group-hover:text-azure transition-colors leading-tight">
                   {section.name}
                 </span>
-                <span className="block text-xs text-gray-400 mt-0.5">
+                <span className="block text-xs text-ink-4 mt-0.5">
                   {formatCount(section.productCount)} позиций
                 </span>
               </span>
-              <ChevronRight size={16} className="text-gray-300 group-hover:text-[#0066cc] shrink-0 transition-colors" />
+              <ChevronRight size={16} className="text-ink-4 group-hover:text-azure shrink-0 transition-colors" />
             </Link>
 
             {/* Подкатегории */}
@@ -54,10 +54,10 @@ export function CatalogShowcase({ sections }: CatalogShowcaseProps) {
                   <li key={child.id}>
                     <Link
                       href={`/catalog?category=${child.slug}`}
-                      className="flex items-center justify-between gap-2 px-2 py-1.5 text-sm text-gray-600 rounded hover:bg-gray-50 hover:text-[#0066cc] transition-colors"
+                      className="flex items-center justify-between gap-2 px-2 py-1.5 text-sm text-ink-3 rounded hover:bg-[#fafafa] hover:text-azure transition-colors"
                     >
                       <span className="truncate">{child.name}</span>
-                      <span className="text-xs text-gray-400 shrink-0">{formatCount(child.productCount)}</span>
+                      <span className="text-xs text-ink-4 shrink-0">{formatCount(child.productCount)}</span>
                     </Link>
                   </li>
                 ))}
@@ -65,7 +65,7 @@ export function CatalogShowcase({ sections }: CatalogShowcaseProps) {
                   <li>
                     <Link
                       href={`/catalog?category=${section.slug}`}
-                      className="block px-2 py-1.5 text-sm font-medium text-[#0066cc] hover:underline"
+                      className="block px-2 py-1.5 text-sm font-medium text-azure hover:underline"
                     >
                       Ещё {restChildren}…
                     </Link>

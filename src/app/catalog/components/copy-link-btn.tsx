@@ -28,7 +28,7 @@ export function CopyLinkBtn() {
     <div className="relative">
       <button
         onClick={handleCopy}
-        className="flex items-center justify-center h-8 w-8 text-gray-400 hover:text-gray-600 border border-gray-200 rounded hover:border-gray-300 transition-colors"
+        className="flex items-center justify-center h-8 w-8 text-ink-4 hover:text-ink-3 border border-[var(--border)] rounded hover:border-azure/40 transition-colors"
         title="Скопировать ссылку"
       >
         <Link2 size={14} />

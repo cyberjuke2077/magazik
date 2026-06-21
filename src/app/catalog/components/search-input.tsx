@@ -54,18 +54,18 @@ export function SearchInput() {
 
   return (
     <div className="relative">
-      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+      <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4 pointer-events-none" />
       <input
         type="text"
         value={value}
         onChange={handleChange}
         placeholder="Поиск по каталогу..."
-        className="h-9 w-64 pl-9 pr-8 text-sm border border-gray-300 text-gray-900 placeholder-gray-400 outline-none focus:border-[#0066cc] transition-colors"
+        className="h-9 w-64 pl-9 pr-8 text-sm rounded-[var(--radius-control)] border border-[var(--border-2)] text-ink placeholder:text-ink-4 outline-none focus:border-azure transition-colors"
       />
       {value && (
         <button
           onClick={handleClear}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-ink-4 hover:text-ink-2"
         >
           <X size={12} />
         </button>

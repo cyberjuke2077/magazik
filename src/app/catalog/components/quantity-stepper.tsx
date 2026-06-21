@@ -21,20 +21,20 @@ export function QuantityStepper({ value, minOrder, onChange }: QuantityStepperPr
   }
 
   return (
-    <div className="flex items-center border border-gray-300 bg-white">
+    <div className="flex items-center overflow-hidden rounded-[var(--radius-control)] border border-[var(--border-2)] bg-white">
       <button
         onClick={handleMinus}
         disabled={value <= minOrder}
-        className="flex items-center justify-center w-7 h-8 text-gray-500 hover:bg-gray-100 disabled:opacity-25 disabled:cursor-not-allowed transition-colors border-r border-gray-300"
+        className="flex items-center justify-center w-7 h-8 text-ink-3 hover:bg-gray-100 disabled:opacity-25 disabled:cursor-not-allowed transition-colors border-r border-[var(--border-2)]"
       >
         <Minus size={11} />
       </button>
-      <span className="w-9 text-center text-sm font-bold text-gray-900 select-none">
+      <span className="w-9 text-center text-sm font-bold text-ink select-none">
         {value}
       </span>
       <button
         onClick={handlePlus}
-        className="flex items-center justify-center w-7 h-8 text-gray-500 hover:bg-gray-100 transition-colors border-l border-gray-300"
+        className="flex items-center justify-center w-7 h-8 text-ink-3 hover:bg-gray-100 transition-colors border-l border-[var(--border-2)]"
       >
         <Plus size={11} />
       </button>

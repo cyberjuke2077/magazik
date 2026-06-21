@@ -44,7 +44,7 @@ export function RecentlyViewed({ excludeSlug, variant = 'home' }: RecentlyViewed
       <div className={variant === 'home' ? 'mx-auto max-w-[1400px] px-4' : ''}>
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
-            <Clock size={16} className="text-[#0066cc]" />
+            <Clock size={16} className="text-azure" />
             <h2 className="text-base font-bold text-gray-900">Недавно просмотренные</h2>
             <span className="text-xs text-gray-400">({items.length})</span>
           </div>
@@ -68,14 +68,14 @@ export function RecentlyViewed({ excludeSlug, variant = 'home' }: RecentlyViewed
             <Link
               key={p.slug}
               href={`/product/${p.slug}`}
-              className="group flex flex-col bg-white border border-gray-200 rounded overflow-hidden hover:border-[#0066cc] transition-colors"
+              className="group flex flex-col bg-white border border-gray-200 rounded overflow-hidden hover:border-azure transition-colors"
             >
-              <div className="relative bg-[#e8f4ff] h-[120px] flex items-center justify-center overflow-hidden">
+              <div className="relative bg-azure-light h-[120px] flex items-center justify-center overflow-hidden">
                 <div className="icon-svg">
                   <CategoryIcon
                     slug={p.categorySlug}
                     size={48}
-                    className="text-[#0066cc] opacity-60"
+                    className="text-azure opacity-60"
                   />
                 </div>
               </div>

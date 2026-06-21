@@ -28,9 +28,8 @@ interface ProductCardProps {
 
 // Единая тема — azure (30% палитра)
 const cardTheme = {
-  bg:        'bg-[#e8f4ff]',
-  iconColor: 'text-[#0066cc]',
-  glow:      'hover:shadow-[#0066cc]/10',
+  bg:        'bg-azure-light',
+  iconColor: 'text-azure',
 }
 
 export function ProductCard({ product }: ProductCardProps) {
@@ -77,7 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group flex flex-col bg-white border border-gray-200 rounded overflow-hidden hover:border-gray-300"
+      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-all hover:border-azure/30 hover:shadow-[var(--shadow-md)]"
     >
       {/* Image zone */}
       <div
@@ -114,17 +113,17 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Badges top-left */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-20">
           {product.featured && (
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-[#0066cc] text-white text-[10px] font-bold rounded-sm shadow-sm">
+            <span className="flex items-center gap-1 rounded-sm bg-azure px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
               <Zap size={8} />ХИТ
             </span>
           )}
           {isNew && (
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-[#10b981] text-white text-[10px] font-bold rounded-sm shadow-sm">
+            <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
               <Sparkles size={8} />NEW
             </span>
           )}
           {discountPercent && (
-            <span className="px-2 py-0.5 bg-[#f97316] text-white text-[10px] font-bold rounded-sm shadow-sm">
+            <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
               −{discountPercent}%
             </span>
           )}
@@ -146,62 +145,62 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Body */}
-      <div className="flex flex-col flex-1 p-4 gap-2">
-        <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-ink-4">
           {product.manufacturer}
         </div>
 
-        <h3 className="text-sm font-semibold text-gray-800 leading-snug line-clamp-2 flex-1">
+        <h3 className="line-clamp-2 flex-1 text-sm font-semibold leading-snug text-ink-2">
           {product.name}
         </h3>
 
-        <div className="font-mono text-[11px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded-md w-fit">
+        <div className="mpn w-fit rounded-[var(--radius-control)] bg-[#f8fafc] px-2 py-0.5 text-[11px] text-ink-3">
           {product.partNumber}
         </div>
 
         {/* Stock + delivery */}
         <div className="flex items-center gap-2 text-[11px]">
           {product.inStock ? (
-            <span className="text-[#0066cc] font-semibold">
+            <span className="font-semibold text-stock">
               {product.stockCount.toLocaleString('ru-RU')} шт
             </span>
           ) : (
-            <span className="text-[#f97316] font-semibold">Под заказ</span>
+            <span className="font-semibold text-accent">Под заказ</span>
           )}
-          <span className="text-gray-300">·</span>
-          <span className="text-gray-400">1–2 недели</span>
+          <span className="text-ink-4">·</span>
+          <span className="text-ink-4">1-2 недели</span>
         </div>
 
         {/* Price */}
         <div className="pt-0.5">
           {product.price > 0 ? (
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl font-extrabold text-gray-900 tracking-tight">
-                {formatPrice(product.price)}
-              </span>
-              <span className="text-xs text-gray-400">/ {product.unit}</span>
+              <span className="price text-xl">{formatPrice(product.price)}</span>
+              <span className="text-xs text-ink-4">/ {product.unit}</span>
             </div>
           ) : (
-            <div className="text-base font-bold text-[#0066cc]">Цена по запросу</div>
+            <div className="text-base font-bold text-azure">Цена по запросу</div>
           )}
         </div>
 
         {/* Stepper + Cart */}
         <div className="flex items-center gap-2 pt-1" onClick={(e) => e.preventDefault()}>
-          <div className="flex items-center bg-gray-50 border border-gray-200 rounded overflow-hidden shrink-0">
+          <div className="flex shrink-0 items-center overflow-hidden rounded-[var(--radius-control)] border border-[var(--border)] bg-[#f8fafc]">
             <button
               onClick={handleMinus}
               disabled={displayQty <= product.minOrder}
-              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100 disabled:opacity-25 disabled:cursor-not-allowed"
+              aria-label="Уменьшить количество"
+              className="flex h-9 w-8 items-center justify-center text-ink-3 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-25"
             >
               <Minus size={12} />
             </button>
-            <span className="w-9 text-center text-sm font-bold text-gray-900 border-x border-gray-200 select-none">
+            <span className="w-9 select-none border-x border-[var(--border)] text-center text-sm font-bold text-ink tnum">
               {displayQty}
             </span>
             <button
               onClick={handlePlus}
-              className="flex items-center justify-center w-8 h-9 text-gray-500 hover:bg-gray-100"
+              aria-label="Увеличить количество"
+              className="flex h-9 w-8 items-center justify-center text-ink-3 hover:bg-gray-100"
             >
               <Plus size={12} />
             </button>
@@ -210,12 +209,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <button
             ref={btnRef}
             onClick={handleAdd}
-            className={`flex-1 flex items-center justify-center gap-1.5 h-9 text-xs font-bold rounded ${
+            className={`flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] text-xs font-bold transition-colors ${
               justAdded
-                ? 'bg-[#0052a3] text-white'
+                ? 'bg-azure-hover text-white'
                 : inCart
-                ? 'bg-[#0066cc]/10 text-[#0066cc] border border-[#0066cc]/20'
-                : 'bg-[#0066cc] text-white hover:bg-[#0052a3]'
+                ? 'border border-azure/20 bg-azure/10 text-azure'
+                : 'bg-azure text-white hover:bg-azure-hover'
             }`}
           >
             {justAdded ? (

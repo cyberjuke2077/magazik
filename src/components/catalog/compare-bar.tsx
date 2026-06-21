@@ -16,7 +16,7 @@ export function CompareBar() {
 
   return (
     <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:bottom-20 z-[140] max-w-md sm:w-[380px] bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 bg-[#0066cc] text-white">
+      <div className="flex items-center justify-between px-4 py-3 bg-azure text-white">
         <div className="flex items-center gap-2">
           <GitCompareArrows size={16} />
           <span className="text-sm font-bold">Сравнение ({count}/4)</span>
@@ -52,7 +52,7 @@ export function CompareBar() {
       <div className="p-3 border-t border-gray-100 bg-gray-50">
         <Link
           href="/compare"
-          className="flex items-center justify-center gap-2 w-full h-10 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+          className="flex items-center justify-center gap-2 w-full h-10 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
         >
           <GitCompareArrows size={14} />
           Открыть сравнение

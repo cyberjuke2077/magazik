@@ -54,25 +54,25 @@ export function Pagination({ page, totalPages, total, limit, baseParams }: Pagin
   const pages = getPageNumbers(page, totalPages)
 
   return (
-    <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
+    <div className="flex items-center justify-between mt-6 pt-4 border-t border-[var(--border)]">
       {/* Range display */}
-      <div className="text-sm text-gray-500">
-        {start.toLocaleString('ru-RU')}–{end.toLocaleString('ru-RU')} из{' '}
+      <div className="text-sm text-ink-3 tnum">
+        {start.toLocaleString('ru-RU')}-{end.toLocaleString('ru-RU')} из{' '}
         {total.toLocaleString('ru-RU')}
       </div>
 
       {/* Page buttons */}
-      <div className="flex items-center gap-0 border border-gray-200">
+      <div className="flex items-center gap-0 border border-[var(--border)]">
         {/* Prev */}
         {page > 1 ? (
           <Link
             href={buildHref(baseParams, page - 1)}
-            className="flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-50 border-r border-gray-200 transition-colors"
+            className="flex items-center justify-center w-9 h-9 text-ink-3 hover:bg-[#fafafa] border-r border-[var(--border)] transition-colors"
           >
             <ChevronLeft size={14} />
           </Link>
         ) : (
-          <span className="flex items-center justify-center w-9 h-9 text-gray-300 border-r border-gray-200">
+          <span className="flex items-center justify-center w-9 h-9 text-ink-4 border-r border-[var(--border)]">
             <ChevronLeft size={14} />
           </span>
         )}
@@ -82,7 +82,7 @@ export function Pagination({ page, totalPages, total, limit, baseParams }: Pagin
           p === '...' ? (
             <span
               key={`dots-${idx}`}
-              className="flex items-center justify-center w-9 h-9 text-sm text-gray-400 border-r border-gray-200"
+              className="flex items-center justify-center w-9 h-9 text-sm text-ink-4 border-r border-[var(--border)]"
             >
               …
             </span>
@@ -90,10 +90,10 @@ export function Pagination({ page, totalPages, total, limit, baseParams }: Pagin
             <Link
               key={p}
               href={buildHref(baseParams, p)}
-              className={`flex items-center justify-center w-9 h-9 text-sm font-medium border-r border-gray-200 transition-colors ${
+              className={`flex items-center justify-center w-9 h-9 text-sm font-medium border-r border-[var(--border)] transition-colors ${
                 p === page
-                  ? 'bg-[#0066cc] text-white'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-azure text-white'
+                  : 'text-ink-3 hover:bg-[#fafafa] hover:text-ink'
               }`}
             >
               {p}
@@ -105,12 +105,12 @@ export function Pagination({ page, totalPages, total, limit, baseParams }: Pagin
         {page < totalPages ? (
           <Link
             href={buildHref(baseParams, page + 1)}
-            className="flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-center w-9 h-9 text-ink-3 hover:bg-[#fafafa] transition-colors"
           >
             <ChevronRight size={14} />
           </Link>
         ) : (
-          <span className="flex items-center justify-center w-9 h-9 text-gray-300">
+          <span className="flex items-center justify-center w-9 h-9 text-ink-4">
             <ChevronRight size={14} />
           </span>
         )}

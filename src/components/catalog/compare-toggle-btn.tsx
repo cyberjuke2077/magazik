@@ -50,8 +50,8 @@ export function CompareToggleBtn({ item, variant = 'icon' }: CompareToggleBtnPro
         onClick={handleClick}
         className={`flex items-center justify-center gap-2 h-10 px-4 text-sm font-semibold rounded transition-all w-full ${
           active
-            ? 'bg-[#e8f4ff] text-[#0066cc] border border-[#0066cc]/30'
-            : 'bg-white text-gray-700 border border-gray-200 hover:border-[#0066cc] hover:text-[#0066cc]'
+            ? 'bg-azure-light text-azure border border-azure/30'
+            : 'bg-white text-gray-700 border border-gray-200 hover:border-azure hover:text-azure'
         }`}
         title={active ? 'Убрать из сравнения' : 'Добавить в сравнение'}
         aria-pressed={active}
@@ -68,8 +68,8 @@ export function CompareToggleBtn({ item, variant = 'icon' }: CompareToggleBtnPro
       onClick={handleClick}
       className={`flex items-center justify-center w-7 h-7 rounded transition-all ${
         active
-          ? 'bg-[#e8f4ff] text-[#0066cc]'
-          : 'text-gray-400 hover:bg-gray-100 hover:text-[#0066cc]'
+          ? 'bg-azure-light text-azure'
+          : 'text-gray-400 hover:bg-gray-100 hover:text-azure'
       }`}
       title={active ? 'Убрать из сравнения' : 'Добавить в сравнение'}
       aria-pressed={active}

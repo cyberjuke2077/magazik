@@ -47,8 +47,8 @@ function CategoryNode({
       <div
         className={`flex items-center gap-1 py-1.5 px-2 cursor-pointer text-sm transition-colors rounded ${
           isActive
-            ? 'bg-[#e8f4ff] text-[#0066cc] font-semibold'
-            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+            ? 'bg-azure-light text-azure font-semibold'
+            : 'text-ink-2 hover:bg-[#fafafa] hover:text-ink'
         }`}
         style={{ paddingLeft: `${depth * 12 + 8}px` }}
         onClick={handleClick}
@@ -56,7 +56,7 @@ function CategoryNode({
         {hasChildren ? (
           <button
             onClick={handleToggle}
-            className="flex items-center justify-center w-4 h-4 shrink-0 text-gray-400"
+            className="flex items-center justify-center w-4 h-4 shrink-0 text-ink-4"
           >
             {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
           </button>
@@ -65,7 +65,7 @@ function CategoryNode({
         )}
         <span className="flex-1 truncate">{category.name}</span>
         {category.productCount > 0 && (
-          <span className="text-xs text-gray-400 shrink-0">
+          <span className="text-xs text-ink-4 shrink-0">
             {category.productCount}
           </span>
         )}
@@ -105,14 +105,14 @@ export function CategoryTree({ categories, activeSlug }: CategoryTreeProps) {
 
   return (
     <div className="space-y-0.5">
-      <div className="text-xs font-bold text-gray-500 uppercase tracking-wide px-2 mb-2">
+      <div className="text-xs font-bold text-ink-3 uppercase tracking-wide px-2 mb-2">
         Категории
       </div>
       <div
         className={`flex items-center gap-1 py-1.5 px-2 cursor-pointer text-sm transition-colors rounded ${
           !activeSlug
-            ? 'bg-[#e8f4ff] text-[#0066cc] font-semibold'
-            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+            ? 'bg-azure-light text-azure font-semibold'
+            : 'text-ink-2 hover:bg-[#fafafa] hover:text-ink'
         }`}
         onClick={() => handleSelect(null)}
       >

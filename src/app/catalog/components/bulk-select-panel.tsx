@@ -79,14 +79,14 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
     <BulkSelectContext.Provider value={{ selectedIds, toggle }}>
       <div className="relative">
         {/* Select all header row */}
-        <div className="flex items-center gap-4 h-[40px] px-4 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+        <div className="flex items-center gap-4 h-[40px] px-4 bg-gray-50 border-b border-[var(--border)] text-xs font-semibold text-ink-3 uppercase tracking-wide">
           <button
             onClick={toggleAll}
-            className="shrink-0 text-gray-400 hover:text-[#0066cc] transition-colors"
+            className="shrink-0 text-ink-4 hover:text-azure transition-colors"
             title={allSelected ? 'Снять выделение' : 'Выбрать все на странице'}
           >
             {allSelected ? (
-              <CheckSquare size={16} className="text-[#0066cc]" />
+              <CheckSquare size={16} className="text-azure" />
             ) : (
               <Square size={16} />
             )}
@@ -105,19 +105,19 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
 
         {/* Floating bottom panel */}
         {selectedIds.size > 0 && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-4 px-6 py-3 bg-white border border-gray-200 rounded-lg shadow-lg">
-            <span className="text-sm font-medium text-gray-700">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-4 px-6 py-3 bg-white border border-[var(--border)] rounded-lg shadow-lg">
+            <span className="text-sm font-medium text-ink-2">
               Выбрано {selectedIds.size} товаров
             </span>
             <button
               onClick={addAllToRequest}
-              className="h-8 px-4 text-sm font-bold text-white bg-[#0066cc] hover:bg-[#0052a3] transition-colors rounded"
+              className="h-8 px-4 text-sm font-bold text-white bg-azure hover:bg-azure-hover transition-colors rounded"
             >
               Добавить в корзину
             </button>
             <button
               onClick={clearSelection}
-              className="flex items-center gap-1 h-8 px-3 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="flex items-center gap-1 h-8 px-3 text-sm text-ink-3 hover:text-ink-2 transition-colors"
             >
               <X size={14} />
               Снять выделение
@@ -147,10 +147,10 @@ export function BulkSelectCheckbox({ productId }: { productId: string }) {
         e.stopPropagation()
         toggle(productId)
       }}
-      className="shrink-0 text-gray-400 hover:text-[#0066cc] transition-colors"
+      className="shrink-0 text-ink-4 hover:text-azure transition-colors"
     >
       {isSelected ? (
-        <CheckSquare size={16} className="text-[#0066cc]" />
+        <CheckSquare size={16} className="text-azure" />
       ) : (
         <Square size={16} />
       )}

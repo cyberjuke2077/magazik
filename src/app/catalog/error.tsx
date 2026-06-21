@@ -21,24 +21,18 @@ export default function CatalogError({ error, reset }: ErrorProps) {
           <div className="inline-flex items-center justify-center size-16 rounded bg-red-50 border border-red-100 mb-5">
             <AlertTriangle size={28} className="text-red-400" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 mb-2">
+          <h1 className="text-xl font-bold text-ink mb-2">
             Ошибка загрузки каталога
           </h1>
-          <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+          <p className="text-sm text-ink-3 mb-6 leading-relaxed">
             {error.message || 'Что-то пошло не так. Попробуйте обновить страницу.'}
           </p>
           <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={reset}
-              className="flex items-center gap-2 h-10 px-5 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all shadow-sm"
-            >
+            <button onClick={reset} className="ui-btn ui-btn-primary">
               <RefreshCw size={14} />
               Попробовать снова
             </button>
-            <Link
-              href="/"
-              className="flex items-center h-10 px-5 text-sm font-medium text-gray-600 bg-white border border-gray-300 hover:border-gray-400 rounded transition-all"
-            >
+            <Link href="/" className="ui-btn ui-btn-secondary">
               На главную
             </Link>
           </div>
