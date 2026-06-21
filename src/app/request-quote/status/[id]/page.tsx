@@ -42,7 +42,7 @@ const STATUS_META: Record<
     label: 'Отклонена',
     desc: 'К сожалению, заявка отклонена. По вопросам свяжитесь с нами любым удобным способом.',
     icon: XCircle,
-    cls: 'bg-gray-50 text-gray-600 border-gray-200',
+    cls: 'bg-[#f8fafc] text-ink-3 border-[var(--border)]',
   },
 }
 
@@ -66,24 +66,24 @@ export default async function QuoteStatusPage({
       <Header />
       <StickyNav />
 
-      <main className="flex-1 bg-gray-50 py-10">
+      <main className="flex-1 bg-[#f8fafc] py-10">
         <div className="mx-auto max-w-2xl px-4">
           {/* Статус */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-4">
+          <div className="bg-white rounded-lg border border-[var(--border)] p-6 mb-4">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Заявка на КП</h1>
-                <p className="text-xs text-gray-500 mt-1">
+                <h1 className="text-xl font-bold text-ink">Заявка на КП</h1>
+                <p className="text-xs text-ink-3 mt-1">
                   Создана {request.createdAt.toLocaleDateString('ru-RU')} · позиций: {request.items.length}
                 </p>
-                <p className="text-xs text-gray-400 mt-1 font-mono break-all">№ {request.id}</p>
+                <p className="text-xs text-ink-4 mt-1 font-mono break-all">№ {request.id}</p>
               </div>
               <span className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border ${meta.cls}`}>
                 <StatusIcon size={15} />
                 {meta.label}
               </span>
             </div>
-            <p className="text-sm text-gray-600 leading-relaxed">{meta.desc}</p>
+            <p className="text-sm text-ink-3 leading-relaxed">{meta.desc}</p>
           </div>
 
           {/* Сохраните ссылку */}
@@ -95,8 +95,8 @@ export default async function QuoteStatusPage({
           </div>
 
           {/* Ваши данные */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-4">
-            <h2 className="text-sm font-bold text-gray-900 mb-3">Ваши данные</h2>
+          <div className="bg-white rounded-lg border border-[var(--border)] p-6 mb-4">
+            <h2 className="text-sm font-bold text-ink mb-3">Ваши данные</h2>
             <dl className="space-y-2 text-sm">
               {([
                 ['Компания', request.companyName],
@@ -109,52 +109,52 @@ export default async function QuoteStatusPage({
                 .filter(([, v]) => v)
                 .map(([label, value]) => (
                   <div key={label} className="flex justify-between gap-4">
-                    <dt className="text-gray-500 shrink-0">{label}</dt>
-                    <dd className="text-gray-900 text-right">{value}</dd>
+                    <dt className="text-ink-3 shrink-0">{label}</dt>
+                    <dd className="text-ink text-right">{value}</dd>
                   </div>
                 ))}
             </dl>
           </div>
 
           {/* Позиции */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-4">
-            <h2 className="text-sm font-bold text-gray-900 mb-3">Позиции в заявке</h2>
+          <div className="bg-white rounded-lg border border-[var(--border)] p-6 mb-4">
+            <h2 className="text-sm font-bold text-ink mb-3">Позиции в заявке</h2>
             <div className="space-y-3">
               {request.items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+                <div key={item.id} className="flex items-center justify-between py-2 border-b border-[var(--border)] last:border-0">
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-900 truncate">{item.name}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{item.partNumber}</div>
+                    <div className="text-sm font-medium text-ink truncate">{item.name}</div>
+                    <div className="text-xs text-ink-3 mt-0.5">{item.partNumber}</div>
                   </div>
-                  <div className="text-sm font-semibold text-gray-900 ml-4 shrink-0">{item.quantity} шт.</div>
+                  <div className="text-sm font-semibold text-ink ml-4 shrink-0">{item.quantity} шт.</div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Контакты */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-sm font-bold text-gray-900 mb-3">Остались вопросы?</h2>
+          <div className="bg-white rounded-lg border border-[var(--border)] p-6">
+            <h2 className="text-sm font-bold text-ink mb-3">Остались вопросы?</h2>
             <div className="space-y-2">
-              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-[#0066cc] transition-colors">
-                <Phone size={16} className="text-[#0066cc]" />
+              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2 text-sm text-ink-2 hover:text-azure transition-colors">
+                <Phone size={16} className="text-azure" />
                 {COMPANY.phone.display}
               </a>
-              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-[#0066cc] transition-colors">
-                <Mail size={16} className="text-[#0066cc]" />
+              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2 text-sm text-ink-2 hover:text-azure transition-colors">
+                <Mail size={16} className="text-azure" />
                 {COMPANY.email}
               </a>
             </div>
             <div className="mt-5 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/catalog"
-                className="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded transition-colors"
+                className="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-ink-2 bg-white border border-[var(--border-2)] hover:bg-[#fafafa] rounded transition-colors"
               >
                 Продолжить выбор товаров
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-colors"
+                className="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
               >
                 На главную
               </Link>
