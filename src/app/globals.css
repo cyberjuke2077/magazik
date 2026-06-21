@@ -5,6 +5,43 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ───────────────────────────────────────────
+   DESIGN SYSTEM TOKENS (Tailwind v4 @theme)
+   Один источник правды. Генерирует утилиты:
+   bg-azure / text-azure / border-azure / bg-azure-light /
+   text-ink / text-ink-3 / bg-accent / text-stock …
+   Дефолтные радиусы Tailwind НЕ трогаем (Shape Lock — явными
+   токенами radius-* при переверстке секций).
+─────────────────────────────────────────── */
+@theme {
+  /* Brand / primary — azure. Бренд уже синий (LILA override). */
+  --color-azure:       #0066cc;
+  --color-azure-hover: #0052a3;
+  --color-azure-light: #e8f4ff;
+  --color-azure-dim:   #f2f8ff;
+
+  /* Единичный action/alert pop — orange. Только корзина / hot-цена / CTA-акцент.
+     НЕ расползаться: на странице azure = основной, accent — точечный. */
+  --color-accent:       #f97316;
+  --color-accent-hover: #ea6c0a;
+  --color-accent-light: #fff7ed;
+
+  /* Текст — холодные slate. Cool-gray Lock. */
+  --color-ink:   #0f172a;
+  --color-ink-2: #334155;
+  --color-ink-3: #64748b;
+  --color-ink-4: #94a3b8;
+
+  /* Статусы */
+  --color-stock:     #16a34a;
+  --color-stock-bg:  #f0fdf4;
+
+  /* Shape Lock — индустриальный острый. Применять явно: rounded-[var(--r-…)] */
+  --radius-control: 6px;  /* кнопки, инпуты, чипы */
+  --radius-card:    8px;  /* карточки, панели */
+  --radius-panel:   12px; /* крупные блоки, hero */
+}
+
 /* ── Design tokens ── */
 :root {
   /* 30% — Lazur (text & blocks) */
@@ -351,4 +388,108 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+/* ─────────────────────────────────────────
+   TYPOGRAPHY SCALE
+───────────────────────────────────────── */
+.text-display {
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.text-lead {
+  font-size: clamp(15px, 1.6vw, 18px);
+  line-height: 1.6;
+  color: var(--color-ink-3);
+}
+/* Числа/цены/MPN — табличный моноширинный (плотность 6). */
+.tnum { font-variant-numeric: tabular-nums; }
+.price {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.mpn {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  letter-spacing: -0.01em;
+}
+
+/* ─────────────────────────────────────────
+   BUTTONS (самодостаточные, prefix ui-)
+   Один radius (control), один accent на странице.
+───────────────────────────────────────── */
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: var(--radius-control);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+}
+.ui-btn:active { transform: scale(0.98); }
+.ui-btn-sm { height: 38px; padding: 0 14px; font-size: 13px; }
+.ui-btn-lg { height: 52px; padding: 0 28px; font-size: 15px; }
+
+.ui-btn-primary {
+  background: var(--color-azure);
+  color: #fff;
+}
+.ui-btn-primary:hover {
+  background: var(--color-azure-hover);
+  box-shadow: 0 6px 20px var(--azure-glow);
+}
+.ui-btn-secondary {
+  background: #fff;
+  color: var(--color-ink);
+  border: 1.5px solid var(--border-2);
+}
+.ui-btn-secondary:hover {
+  border-color: var(--color-azure);
+  color: var(--color-azure);
+}
+.ui-btn-accent {
+  background: var(--color-accent);
+  color: #fff;
+}
+.ui-btn-accent:hover { background: var(--color-accent-hover); }
+
+/* Stock badge — статусный, pill-исключение (задокументировано в Shape Lock) */
+.stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 99px;
+  color: var(--color-stock);
+  background: var(--color-stock-bg);
+}
+.stock-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-stock);
+}
+
+/* Reduced motion — гасим инфинит-лупы и reveal */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-spin-slow, .animate-marquee,
+  .animate-pulse-dot, .scan-line, .delivery-dot, .skeleton {
+    animation: none !important;
+  }
+  html { scroll-behavior: auto; }
 }
