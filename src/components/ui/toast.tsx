@@ -45,7 +45,7 @@ const variantStyles: Record<ToastVariant, { bg: string; icon: React.ReactNode }>
   },
   info: {
     bg: 'border-blue-200 bg-blue-50',
-    icon: <Info size={16} className="text-[#0066cc]" />,
+    icon: <Info size={16} className="text-azure" />,
   },
 }
 
@@ -105,7 +105,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
         {toast.action && (
           <a
             href={toast.action.href}
-            className="inline-block mt-2 text-xs font-semibold text-[#0066cc] hover:text-[#0052a3] underline"
+            className="inline-block mt-2 text-xs font-semibold text-azure hover:text-azure-hover underline"
           >
             {toast.action.label}
           </a>

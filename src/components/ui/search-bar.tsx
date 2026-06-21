@@ -32,13 +32,13 @@ export function SearchBar() {
         <div
           className={`relative flex items-center rounded border transition-all duration-300 ${
             focused
-              ? 'border-[#0066cc]/40 shadow-[0_0_0_4px_rgba(0,102,204,0.08)] bg-white'
+              ? 'border-azure/40 shadow-[0_0_0_4px_rgba(0,102,204,0.08)] bg-white'
               : 'border-black/10 bg-white hover:border-black/15 shadow-sm'
           }`}
         >
           <Search
             size={18}
-            className={`absolute left-4 transition-colors ${focused ? 'text-[#0066cc]' : 'text-[#a8a29e]'}`}
+            className={`absolute left-4 transition-colors ${focused ? 'text-azure' : 'text-[#a8a29e]'}`}
           />
           <input
             ref={inputRef}
@@ -53,7 +53,7 @@ export function SearchBar() {
           />
           <button
             type="submit"
-            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all shadow-sm"
+            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-azure hover:bg-azure-hover rounded transition-all shadow-sm"
           >
             Найти
             <ArrowRight size={14} />
@@ -66,7 +66,7 @@ export function SearchBar() {
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-black/8 rounded shadow-xl shadow-black/10 overflow-hidden z-50">
           <div className="px-4 pt-4 pb-2">
             <div className="flex items-center gap-2 text-xs text-[#a8a29e] uppercase tracking-wider mb-3">
-              <Zap size={10} className="text-[#0066cc]" />
+              <Zap size={10} className="text-azure" />
               Популярные запросы
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -75,7 +75,7 @@ export function SearchBar() {
                   key={term}
                   type="button"
                   onMouseDown={() => handlePopular(term)}
-                  className="flex items-center gap-1 px-2.5 py-1 text-xs text-[#44403c] bg-[#e8f4ff] hover:bg-[#e0f2fe] hover:text-[#0066cc] rounded border border-black/6 hover:border-[#0066cc]/20 transition-all"
+                  className="flex items-center gap-1 px-2.5 py-1 text-xs text-[#44403c] bg-azure-light hover:bg-[#e0f2fe] hover:text-azure rounded border border-black/6 hover:border-azure/20 transition-all"
                 >
                   <Clock size={9} className="opacity-50" />
                   {term}

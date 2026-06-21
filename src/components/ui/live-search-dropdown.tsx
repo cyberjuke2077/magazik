@@ -69,7 +69,7 @@ function HighlightMatch({ text, query }: { text: string; query: string }) {
     <>
       {parts.map((part, i) =>
         regex.test(part) ? (
-          <span key={i} className="font-bold text-[#0066cc]">{part}</span>
+          <span key={i} className="font-bold text-azure">{part}</span>
         ) : (
           <span key={i}>{part}</span>
         ),
@@ -249,7 +249,7 @@ export function LiveSearchDropdown() {
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 -translate-y-1/2 h-9 px-4 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] transition-colors rounded-sm"
+          className="absolute right-3 top-1/2 -translate-y-1/2 h-9 px-4 text-sm font-semibold text-white bg-azure hover:bg-azure-hover transition-colors rounded-sm"
         >
           Найти
         </button>
@@ -285,7 +285,7 @@ export function LiveSearchDropdown() {
                 <button
                   key={term}
                   onMouseDown={() => handleHistoryClick(term)}
-                  className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 hover:bg-[#e8f4ff] rounded transition-colors"
+                  className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 hover:bg-azure-light rounded transition-colors"
                 >
                   <Clock size={14} className="text-gray-400 shrink-0" />
                   <span>{term}</span>
@@ -311,11 +311,11 @@ export function LiveSearchDropdown() {
                         key={product.id}
                         onMouseDown={() => handleItemClick(`/product/${product.slug}`, product.partNumber)}
                         className={`flex items-center gap-3 w-full px-4 py-2.5 text-left transition-colors ${
-                          activeIndex === idx ? 'bg-[#e8f4ff]' : 'hover:bg-gray-50'
+                          activeIndex === idx ? 'bg-azure-light' : 'hover:bg-gray-50'
                         }`}
                       >
-                        <div className="flex items-center justify-center w-8 h-8 rounded bg-[#e8f4ff] shrink-0">
-                          <Package size={14} className="text-[#0066cc]" />
+                        <div className="flex items-center justify-center w-8 h-8 rounded bg-azure-light shrink-0">
+                          <Package size={14} className="text-azure" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-sm font-medium text-gray-900 truncate">
@@ -349,7 +349,7 @@ export function LiveSearchDropdown() {
                         key={cat.id}
                         onMouseDown={() => handleItemClick(`/catalog?category=${cat.slug}`)}
                         className={`flex items-center gap-3 w-full px-4 py-2 text-left transition-colors ${
-                          activeIndex === idx ? 'bg-[#e8f4ff]' : 'hover:bg-gray-50'
+                          activeIndex === idx ? 'bg-azure-light' : 'hover:bg-gray-50'
                         }`}
                       >
                         <Tag size={14} className="text-gray-400 shrink-0" />
@@ -378,7 +378,7 @@ export function LiveSearchDropdown() {
                         key={mfr.id}
                         onMouseDown={() => handleItemClick(`/catalog?manufacturer=${mfr.slug}`)}
                         className={`flex items-center gap-3 w-full px-4 py-2 text-left transition-colors ${
-                          activeIndex === idx ? 'bg-[#e8f4ff]' : 'hover:bg-gray-50'
+                          activeIndex === idx ? 'bg-azure-light' : 'hover:bg-gray-50'
                         }`}
                       >
                         <Building2 size={14} className="text-gray-400 shrink-0" />
@@ -400,8 +400,8 @@ export function LiveSearchDropdown() {
                     addToSearchHistory(query.trim())
                     handleItemClick(`/catalog?q=${encodeURIComponent(query.trim())}`)
                   }}
-                  className={`flex items-center justify-center gap-2 w-full py-3 text-sm font-medium text-[#0066cc] hover:bg-[#e8f4ff] border-t border-gray-200 transition-colors ${
-                    activeIndex === currentNavIndex ? 'bg-[#e8f4ff]' : ''
+                  className={`flex items-center justify-center gap-2 w-full py-3 text-sm font-medium text-azure hover:bg-azure-light border-t border-gray-200 transition-colors ${
+                    activeIndex === currentNavIndex ? 'bg-azure-light' : ''
                   }`}
                 >
                   Все результаты по запросу «{query.trim()}»

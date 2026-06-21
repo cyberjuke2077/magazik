@@ -27,7 +27,7 @@ export function OrderProgress({ currentAmount, minAmount }: OrderProgressProps) 
       <div className="h-2.5 bg-gray-200 rounded-full overflow-hidden mb-2">
         <div 
           className={`h-full transition-all duration-500 ${
-            isComplete ? 'bg-green-500' : 'bg-[#0066cc]'
+            isComplete ? 'bg-green-500' : 'bg-azure'
           }`}
           style={{ width: `${progress}%` }}
         />

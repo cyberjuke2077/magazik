@@ -61,7 +61,7 @@ export function NavProgress() {
       className="fixed top-0 left-0 right-0 z-[300] h-[2px] pointer-events-none"
     >
       <div
-        className="h-full bg-gradient-to-r from-[#0066cc] via-[#0ea5e9] to-[#0066cc] transition-[width] duration-200 ease-out shadow-[0_0_8px_rgba(0,102,204,0.6)]"
+        className="h-full bg-gradient-to-r from-azure via-[#0ea5e9] to-azure transition-[width] duration-200 ease-out shadow-[0_0_8px_rgba(0,102,204,0.6)]"
         style={{ width: `${progress}%` }}
       />
     </div>
