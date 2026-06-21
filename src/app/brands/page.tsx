@@ -7,222 +7,9 @@ import { ChevronRight, Search } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { BRANDS, type Brand } from '@/lib/brands'
 
-interface Brand {
-  id: string
-  name: string
-  country: string
-  flag: string
-  logo: string | null
-  categories: string[]
-  productCount: number
-  featured: boolean
-  /** размер карточки в топе: 'large' | 'medium' | 'small' */
-  size?: 'large' | 'medium' | 'small'
-}
-
-const brands: Brand[] = [
-  // ── Китай ──────────────────────────────────────────────
-  {
-    id: 'espressif',
-    name: 'Espressif',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/espressi.png',
-    categories: ['Контроллеры', 'WiFi-модули', 'Bluetooth'],
-    productCount: 4200,
-    featured: true,
-    size: 'large',
-  },
-  {
-    id: 'worldsemi',
-    name: 'WorldSemi',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/worldsemi.png',
-    categories: ['Светодиоды', 'RGB', 'LED-матрицы'],
-    productCount: 28000,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'wch',
-    name: 'WCH',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/wch.png',
-    categories: ['USB-мосты', 'Микроконтроллеры', 'RISC-V'],
-    productCount: 1800,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'hilink',
-    name: 'Hi-Link',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/hilink.png',
-    categories: ['Блоки питания', 'AC-DC', 'Модули'],
-    productCount: 3400,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'gigadevice',
-    name: 'GigaDevice',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/gigadevice.png',
-    categories: ['Flash-память', 'Микроконтроллеры'],
-    productCount: 6100,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'winbond',
-    name: 'Winbond',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/winbond.png',
-    categories: ['Flash-память', 'DRAM'],
-    productCount: 9200,
-    featured: true,
-    size: 'small',
-  },
-  {
-    id: 'holtek',
-    name: 'Holtek',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: '/brands/holtek.png',
-    categories: ['Микроконтроллеры', 'Микросхемы'],
-    productCount: 5600,
-    featured: false,
-    size: 'small',
-  },
-  {
-    id: 'songle',
-    name: 'Songle',
-    country: 'Китай',
-    flag: '🇨🇳',
-    logo: null,
-    categories: ['Реле', 'Автоматика'],
-    productCount: 4200,
-    featured: false,
-    size: 'small',
-  },
-  // ── Тайвань / Япония / Европа / США ───────────────────
-  {
-    id: 'yageo',
-    name: 'Yageo',
-    country: 'Тайвань',
-    flag: '🇹🇼',
-    logo: '/brands/yageo.png',
-    categories: ['Резисторы', 'Конденсаторы', 'Индуктивности'],
-    productCount: 48200,
-    featured: true,
-    size: 'large',
-  },
-  {
-    id: 'murata',
-    name: 'Murata',
-    country: 'Япония',
-    flag: '🇯🇵',
-    logo: '/brands/murata.png',
-    categories: ['Конденсаторы', 'Фильтры', 'Модули'],
-    productCount: 31500,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'stmicroelectronics',
-    name: 'STMicroelectronics',
-    country: 'Швейцария',
-    flag: '🇨🇭',
-    logo: '/brands/stmicroelectronics.svg',
-    categories: ['Микроконтроллеры', 'Силовые устройства', 'Датчики'],
-    productCount: 12400,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'infineon',
-    name: 'Infineon',
-    country: 'Германия',
-    flag: '🇩🇪',
-    logo: '/brands/infineon.png',
-    categories: ['Транзисторы', 'Диоды', 'Микросхемы'],
-    productCount: 18700,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'texas-instruments',
-    name: 'Texas Instruments',
-    country: 'США',
-    flag: '🇺🇸',
-    logo: '/brands/texas-instruments.png',
-    categories: ['Микросхемы', 'АЦП/ЦАП', 'Усилители'],
-    productCount: 24600,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'vishay',
-    name: 'Vishay',
-    country: 'США',
-    flag: '🇺🇸',
-    logo: '/brands/vishay.png',
-    categories: ['Диоды', 'Резисторы', 'Конденсаторы'],
-    productCount: 45000,
-    featured: false,
-    size: 'small',
-  },
-  {
-    id: 'analog-devices',
-    name: 'Analog Devices',
-    country: 'США',
-    flag: '🇺🇸',
-    logo: '/brands/analog-devices.png',
-    categories: ['Датчики', 'АЦП/ЦАП', 'Усилители'],
-    productCount: 6700,
-    featured: false,
-    size: 'small',
-  },
-  {
-    id: 'xilinx',
-    name: 'Xilinx',
-    country: 'США',
-    flag: '🇺🇸',
-    logo: '/brands/Xilinx-Logo.png',
-    categories: ['FPGA', 'Программируемая логика', 'SoC'],
-    productCount: 3200,
-    featured: true,
-    size: 'medium',
-  },
-  {
-    id: 'sharp',
-    name: 'Sharp',
-    country: 'Япония',
-    flag: '🇯🇵',
-    logo: '/brands/Sharp.png',
-    categories: ['Оптопары', 'Фотодиоды', 'Датчики'],
-    productCount: 34000,
-    featured: false,
-    size: 'small',
-  },
-  {
-    id: 'gct',
-    name: 'GCT',
-    country: 'США',
-    flag: '🇺🇸',
-    logo: '/brands/gct.png',
-    categories: ['Разъёмы', 'USB', 'Клеммы'],
-    productCount: 12300,
-    featured: false,
-    size: 'small',
-  },
-]
+const brands = BRANDS
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
@@ -236,7 +23,7 @@ function LogoCard({
   return (
     <Link
       href={`/catalog?brand=${brand.id}`}
-      className={`group relative flex items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg overflow-hidden transition-all duration-200 hover:border-[#0066cc]/30 hover:shadow-md hover:-translate-y-0.5 ${className}`}
+      className={`group relative flex items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg overflow-hidden transition-all duration-200 hover:border-azure/30 hover:shadow-md hover:-translate-y-0.5 ${className}`}
     >
       {brand.logo ? (
         <div className="relative w-full h-full flex items-center justify-center p-6">
@@ -249,7 +36,7 @@ function LogoCard({
           />
         </div>
       ) : (
-        <span className="text-lg font-black text-[#1c1917] group-hover:text-[#0066cc] transition-colors px-4 text-center">
+        <span className="text-lg font-black text-[#1c1917] group-hover:text-azure transition-colors px-4 text-center">
           {brand.name}
         </span>
       )}
@@ -401,7 +188,7 @@ export default function BrandsPage() {
                   placeholder="Поиск по бренду"
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setActiveLetter(null) }}
-                  className="w-full h-9 pl-8 pr-3 text-sm border border-black/12 rounded focus:outline-none focus:border-[#0066cc] transition-colors"
+                  className="w-full h-9 pl-8 pr-3 text-sm border border-black/12 rounded focus:outline-none focus:border-azure transition-colors"
                 />
               </div>
 
@@ -415,8 +202,8 @@ export default function BrandsPage() {
                     }}
                     className={`w-7 h-7 text-xs font-medium rounded transition-colors ${
                       activeLetter === letter
-                        ? 'bg-[#0066cc] text-white'
-                        : 'text-[#78716c] hover:bg-[#e8f4ff] hover:text-[#0066cc]'
+                        ? 'bg-azure text-white'
+                        : 'text-[#78716c] hover:bg-azure-light hover:text-azure'
                     }`}
                   >
                     {letter}
@@ -432,7 +219,7 @@ export default function BrandsPage() {
                   <Link
                     key={brand.id}
                     href={`/catalog?brand=${brand.id}`}
-                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-5 h-28 overflow-hidden transition-all duration-300 hover:border-[#0066cc]/30 hover:shadow-lg hover:-translate-y-1"
+                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-5 h-28 overflow-hidden transition-all duration-300 hover:border-azure/30 hover:shadow-lg hover:-translate-y-1"
                   >
                     {brand.logo ? (
                       <div className="relative w-full h-full">
@@ -445,7 +232,7 @@ export default function BrandsPage() {
                         />
                       </div>
                     ) : (
-                      <span className="text-sm font-bold text-[#1c1917] group-hover:text-[#0066cc] transition-colors text-center leading-tight">
+                      <span className="text-sm font-bold text-[#1c1917] group-hover:text-azure transition-colors text-center leading-tight">
                         {brand.name}
                       </span>
                     )}
@@ -460,7 +247,7 @@ export default function BrandsPage() {
           </section>
 
           {/* CTA */}
-          <section className="bg-[#0066cc] rounded p-8 text-center relative overflow-hidden">
+          <section className="bg-azure rounded p-8 text-center relative overflow-hidden">
             <div
               className="absolute inset-0 opacity-10"
               style={{
@@ -475,7 +262,7 @@ export default function BrandsPage() {
               </p>
               <a
                 href="mailto:info@electromagaz.ru"
-                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-[#0066cc] bg-white hover:bg-white rounded transition-all btn-primary shadow-sm"
+                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-azure bg-white hover:bg-white rounded transition-all btn-primary shadow-sm"
               >
                 Написать запрос
               </a>

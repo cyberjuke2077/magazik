@@ -22,8 +22,9 @@ export default async function HomePage() {
   const featured = allProducts.filter((p) => p.featured)
   const best = allProducts.filter((p) => p.priceWholesale)
   const featuredProducts = featured.length >= 4 ? featured : allProducts.slice(0, 4)
-  const popularProducts = allProducts.slice(4, 8).length >= 4 ? allProducts.slice(4, 8) : allProducts.slice(0, 4)
-  const bestProducts = best.length >= 4 ? best : allProducts.slice(8, 12)
+  // Для горизонтального rail нужно больше позиций (до 10)
+  const popularProducts = allProducts.slice(4, 14).length >= 4 ? allProducts.slice(4, 14) : allProducts.slice(0, 8)
+  const bestProducts = best.length >= 4 ? best : allProducts.slice(14, 18)
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -35,6 +36,7 @@ export default async function HomePage() {
         popularProducts={popularProducts}
         bestProducts={bestProducts}
         sections={sections}
+        totalProducts={totalProducts}
       />
       <Footer />
     </div>
