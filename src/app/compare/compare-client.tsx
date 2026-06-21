@@ -65,7 +65,7 @@ export function CompareClient() {
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
             >
               <Package size={14} />
               Перейти в каталог
@@ -116,7 +116,7 @@ export function CompareClient() {
             type="checkbox"
             checked={onlyDifferences}
             onChange={(e) => setOnlyDifferences(e.target.checked)}
-            className="size-4 accent-[#0066cc]"
+            className="size-4 accent-azure"
           />
           <span className="text-sm text-gray-700">Показывать только различия</span>
         </label>
@@ -142,17 +142,17 @@ export function CompareClient() {
                       <X size={14} />
                     </button>
                     <Link href={`/product/${p.slug}`} className="block group">
-                      <div className="relative bg-[#e8f4ff] h-[120px] flex items-center justify-center rounded mb-3 overflow-hidden">
+                      <div className="relative bg-azure-light h-[120px] flex items-center justify-center rounded mb-3 overflow-hidden">
                         <CategoryIcon
                           slug={p.categorySlug}
                           size={56}
-                          className="text-[#0066cc] opacity-60 icon-svg"
+                          className="text-azure opacity-60 icon-svg"
                         />
                       </div>
                       <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1">
                         {p.manufacturer}
                       </div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-[#0066cc] transition-colors">
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:text-azure transition-colors">
                         {p.name}
                       </h3>
                       <div className="font-mono text-[11px] text-gray-400 mt-1">{p.partNumber}</div>
@@ -188,12 +188,12 @@ export function CompareClient() {
                 {products.map((p) => (
                   <td key={p.id} className="border-b border-r border-gray-200 last:border-r-0 px-4 py-3">
                     {p.inStock ? (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#0066cc]">
-                        <span className="size-1.5 rounded-full bg-[#0066cc] animate-pulse-dot" />
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-azure">
+                        <span className="size-1.5 rounded-full bg-azure animate-pulse-dot" />
                         {p.stockCount.toLocaleString('ru-RU')} {p.unit}
                       </span>
                     ) : (
-                      <span className="text-xs text-[#f97316] font-semibold">Под заказ</span>
+                      <span className="text-xs text-accent font-semibold">Под заказ</span>
                     )}
                   </td>
                 ))}
@@ -264,7 +264,7 @@ export function CompareClient() {
                     <button
                       onClick={() => handleAddToCart(p)}
                       disabled={!p.inStock && false}
-                      className="flex items-center justify-center gap-1.5 w-full h-9 text-xs font-bold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+                      className="flex items-center justify-center gap-1.5 w-full h-9 text-xs font-bold text-white bg-azure hover:bg-azure-hover rounded transition-all"
                     >
                       <ShoppingCart size={12} />В корзину
                     </button>

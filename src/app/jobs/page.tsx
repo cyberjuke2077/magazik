@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 const benefits = [
   { icon: TrendingUp, title: 'Понятный рост', desc: 'Прозрачная система KPI и регулярные пересмотры зарплат' },
   { icon: Users, title: 'Дружная команда', desc: 'Работаем без токсичности, помогаем друг другу с задачами' },
-  { icon: Award, title: 'Обучение за счёт компании', desc: 'Конференции, курсы, литература — оплачиваем по запросу' },
+  { icon: Award, title: 'Обучение за счёт компании', desc: 'Конференции, курсы, литература - оплачиваем по запросу' },
   { icon: Clock, title: 'Гибкий график', desc: 'Возможность гибридного формата и индивидуального графика' },
 ]
 
@@ -60,19 +60,19 @@ export default function JobsPage() {
       <StickyNav />
 
       <main className="flex-1">
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
-              <span className="text-gray-600">Вакансии</span>
+              <span className="text-ink-3">Вакансии</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Вакансии</h1>
-          <p className="text-sm text-gray-500 mb-8 max-w-3xl">
+          <h1 className="text-3xl font-bold text-ink mb-2">Вакансии</h1>
+          <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Растём в области B2B-поставок электронных компонентов и ищем людей, которые помогут
             сделать процессы быстрее и удобнее для клиентов.
           </p>
@@ -80,56 +80,56 @@ export default function JobsPage() {
           {/* Benefits */}
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
             {benefits.map((b) => (
-              <div key={b.title} className="p-5 border border-gray-200 rounded bg-white">
-                <div className="flex size-9 items-center justify-center bg-[#e8f4ff] mb-3 rounded">
-                  <b.icon size={16} className="text-[#0066cc]" />
+              <div key={b.title} className="p-5 border border-[var(--border)] rounded bg-white">
+                <div className="flex size-9 items-center justify-center bg-azure-light mb-3 rounded">
+                  <b.icon size={16} className="text-azure" />
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">{b.title}</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">{b.desc}</p>
+                <h3 className="text-sm font-bold text-ink mb-1">{b.title}</h3>
+                <p className="text-xs text-ink-3 leading-relaxed">{b.desc}</p>
               </div>
             ))}
           </section>
 
           {/* Positions */}
           <section className="mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-5">Открытые позиции</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Открытые позиции</h2>
             <div className="space-y-3">
               {positions.map((p) => (
                 <div
                   key={p.title}
-                  className="p-6 border border-gray-200 rounded bg-white hover:border-[#0066cc] hover:shadow-sm transition-all"
+                  className="p-6 border border-[var(--border)] rounded bg-white hover:border-azure hover:shadow-sm transition-all"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <Briefcase size={14} className="text-[#0066cc]" />
-                        <h3 className="text-base font-bold text-gray-900">{p.title}</h3>
+                        <Briefcase size={14} className="text-azure" />
+                        <h3 className="text-base font-bold text-ink">{p.title}</h3>
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed mb-3">{p.desc}</p>
+                      <p className="text-sm text-ink-3 leading-relaxed mb-3">{p.desc}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {p.skills.map((s) => (
                           <span
                             key={s}
-                            className="px-2.5 py-1 text-xs bg-gray-100 text-gray-700 rounded"
+                            className="px-2.5 py-1 text-xs bg-gray-100 text-ink-2 rounded"
                           >
                             {s}
                           </span>
                         ))}
                       </div>
                     </div>
-                    <div className="lg:w-56 lg:shrink-0 lg:pl-6 lg:border-l border-gray-100">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1.5">
+                    <div className="lg:w-56 lg:shrink-0 lg:pl-6 lg:border-l border-[var(--border)]">
+                      <div className="flex items-center gap-1.5 text-xs text-ink-3 mb-1.5">
                         <MapPin size={12} />
                         {p.location}
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-3">
+                      <div className="flex items-center gap-1.5 text-xs text-ink-3 mb-3">
                         <Clock size={12} />
                         {p.type}
                       </div>
-                      <div className="text-sm font-bold text-gray-900 mb-3">{p.salary}</div>
+                      <div className="text-sm font-bold text-ink mb-3">{p.salary}</div>
                       <a
                         href={`mailto:hr@electromagaz.ru?subject=Вакансия: ${p.title}`}
-                        className="flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+                        className="flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
                       >
                         Откликнуться
                         <ChevronRight size={12} />
@@ -142,14 +142,14 @@ export default function JobsPage() {
           </section>
 
           {/* Generic CTA */}
-          <section className="p-8 bg-[#e8f4ff] border border-blue-200 rounded text-center">
-            <h2 className="text-lg font-bold text-gray-900 mb-2">Не нашли подходящую вакансию?</h2>
-            <p className="text-sm text-gray-600 mb-5 max-w-xl mx-auto leading-relaxed">
-              Пришлите резюме на hr@electromagaz.ru — рассмотрим и свяжемся, когда появится релевантная позиция.
+          <section className="p-8 bg-azure-light border border-blue-200 rounded text-center">
+            <h2 className="text-lg font-bold text-ink mb-2">Не нашли подходящую вакансию?</h2>
+            <p className="text-sm text-ink-3 mb-5 max-w-xl mx-auto leading-relaxed">
+              Пришлите резюме на hr@electromagaz.ru - рассмотрим и свяжемся, когда появится релевантная позиция.
             </p>
             <a
               href="mailto:hr@electromagaz.ru"
-              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
             >
               <Mail size={14} />
               Отправить резюме

@@ -33,15 +33,15 @@ const services = [
 const faq = [
   {
     q: 'Как быстро вы отвечаете на технический запрос?',
-    a: 'Стандартное время ответа — до 24 часов в рабочие дни. Сложные запросы (подбор аналогов, поиск редких позиций) могут потребовать 1–3 рабочих дня.',
+    a: 'Стандартное время ответа - до 24 часов в рабочие дни. Сложные запросы (подбор аналогов, поиск редких позиций) могут потребовать 1-3 рабочих дня.',
   },
   {
     q: 'Можно ли получить образец компонента для тестирования?',
-    a: 'Да, по образцам работаем индивидуально. Минимальная партия для образца обычно 1–10 шт. в зависимости от компонента. Стоимость и сроки уточняйте у менеджера.',
+    a: 'Да, по образцам работаем индивидуально. Минимальная партия для образца обычно 1-10 шт. в зависимости от компонента. Стоимость и сроки уточняйте у менеджера.',
   },
   {
     q: 'Предоставляете ли вы datasheets на нестандартные компоненты?',
-    a: 'У нас есть база datasheet на большинство позиций каталога. На редкие компоненты можем запросить документацию у производителя — обычно занимает 1–2 рабочих дня.',
+    a: 'У нас есть база datasheet на большинство позиций каталога. На редкие компоненты можем запросить документацию у производителя - обычно занимает 1-2 рабочих дня.',
   },
   {
     q: 'Помогаете ли с подбором по техническому заданию (ТЗ)?',
@@ -60,19 +60,19 @@ export default function SupportPage() {
       <StickyNav />
 
       <main className="flex-1">
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
-              <span className="text-gray-600">Техподдержка</span>
+              <span className="text-ink-3">Техподдержка</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Техническая поддержка</h1>
-          <p className="text-sm text-gray-500 mb-8 max-w-3xl">
+          <h1 className="text-3xl font-bold text-ink mb-2">Техническая поддержка</h1>
+          <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Команда инженеров с опытом в схемотехнике, embedded-разработке и силовой электронике
             поможет решить технические вопросы по компонентам.
           </p>
@@ -80,30 +80,30 @@ export default function SupportPage() {
           {/* Services */}
           <section className="grid md:grid-cols-3 gap-3 mb-12">
             {services.map((s) => (
-              <div key={s.title} className="p-6 border border-gray-200 rounded bg-white">
-                <div className="flex size-10 items-center justify-center bg-[#e8f4ff] mb-4 rounded">
-                  <s.icon size={18} className="text-[#0066cc]" />
+              <div key={s.title} className="p-6 border border-[var(--border)] rounded bg-white">
+                <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
+                  <s.icon size={18} className="text-azure" />
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-2">{s.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+                <h3 className="text-sm font-bold text-ink mb-2">{s.title}</h3>
+                <p className="text-sm text-ink-3 leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </section>
 
           {/* Contact */}
-          <section className="mb-12 p-8 bg-gradient-to-r from-[#0066cc] to-[#0052a3] rounded">
+          <section className="mb-12 p-8 bg-gradient-to-r from-azure to-azure-hover rounded">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">Связаться с инженерами</h2>
                 <p className="text-sm text-white/80 max-w-xl leading-relaxed">
-                  Опишите задачу — постараемся помочь. Чем подробнее запрос, тем быстрее
+                  Опишите задачу - постараемся помочь. Чем подробнее запрос, тем быстрее
                   получите ответ.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
                 <a
                   href={`tel:${COMPANY.phone.raw}`}
-                  className="flex items-center gap-2 h-11 px-5 text-sm font-semibold text-[#0066cc] bg-white hover:bg-gray-50 rounded transition-all"
+                  className="flex items-center gap-2 h-11 px-5 text-sm font-semibold text-azure bg-white hover:bg-[#fafafa] rounded transition-all"
                 >
                   <Phone size={14} />
                   {COMPANY.phone.display}
@@ -121,21 +121,21 @@ export default function SupportPage() {
 
           {/* FAQ */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-5">Частые вопросы</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Частые вопросы</h2>
             <div className="space-y-2">
               {faq.map((f, i) => (
                 <details
                   key={i}
-                  className="group p-5 border border-gray-200 rounded bg-white open:bg-gray-50 transition-colors"
+                  className="group p-5 border border-[var(--border)] rounded bg-white open:bg-[#f8fafc] transition-colors"
                 >
                   <summary className="flex items-center justify-between cursor-pointer list-none">
-                    <span className="text-sm font-bold text-gray-900 pr-4">{f.q}</span>
+                    <span className="text-sm font-bold text-ink pr-4">{f.q}</span>
                     <ChevronRight
                       size={16}
-                      className="text-gray-400 transition-transform group-open:rotate-90 shrink-0"
+                      className="text-ink-4 transition-transform group-open:rotate-90 shrink-0"
                     />
                   </summary>
-                  <p className="mt-3 text-sm text-gray-600 leading-relaxed">{f.a}</p>
+                  <p className="mt-3 text-sm text-ink-3 leading-relaxed">{f.a}</p>
                 </details>
               ))}
             </div>

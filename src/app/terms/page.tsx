@@ -14,7 +14,7 @@ const sections = [
   {
     title: '1. Предмет соглашения',
     content: [
-      'Настоящее соглашение регулирует отношения между ООО «Электромагаз» (далее — Компания) и пользователями сайта electromagaz.ru (далее — Сайт) при использовании сервисов Сайта.',
+      'Настоящее соглашение регулирует отношения между ООО «Электромагаз» (далее - Компания) и пользователями сайта electromagaz.ru (далее - Сайт) при использовании сервисов Сайта.',
       'Сайт предоставляет информацию о товарах, инструменты для формирования запросов на коммерческое предложение и оформления оптовых заказов электронных компонентов.',
     ],
   },
@@ -30,7 +30,7 @@ const sections = [
     title: '3. Оформление заказа',
     content: [
       'Сайт работает по модели B2B: заказы оформляются юридическими лицами и индивидуальными предпринимателями.',
-      'Минимальная сумма заказа — 200 000 ₽. Заказы на меньшую сумму не принимаются.',
+      'Минимальная сумма заказа - 200 000 ₽. Заказы на меньшую сумму не принимаются.',
       'Цены на Сайте являются ориентировочными. Финальная стоимость, сроки поставки и условия оплаты согласовываются менеджером в коммерческом предложении.',
       'Коммерческое предложение действительно в течение срока, указанного в КП (как правило, 5 рабочих дней).',
     ],
@@ -78,7 +78,7 @@ const sections = [
   {
     title: '9. Заключительные положения',
     content: [
-      'Все споры разрешаются путём переговоров. В случае невозможности — в Арбитражном суде г. Москвы.',
+      'Все споры разрешаются путём переговоров. В случае невозможности - в Арбитражном суде г. Москвы.',
       'К настоящему соглашению применяется законодательство Российской Федерации.',
       'Если какое-либо положение признано недействительным, остальные сохраняют силу.',
     ],
@@ -92,27 +92,27 @@ export default function TermsPage() {
       <StickyNav />
 
       <main className="flex-1">
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
-              <span className="text-gray-600">Пользовательское соглашение</span>
+              <span className="text-ink-3">Пользовательское соглашение</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[900px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Пользовательское соглашение</h1>
-          <p className="text-sm text-gray-500 mb-8">
+          <h1 className="text-3xl font-bold text-ink mb-2">Пользовательское соглашение</h1>
+          <p className="text-sm text-ink-3 mb-8">
             Редакция от 14 июня 2026 года
           </p>
 
           <div className="space-y-8">
             {sections.map((s) => (
               <section key={s.title}>
-                <h2 className="text-lg font-bold text-gray-900 mb-3">{s.title}</h2>
-                <div className="space-y-3 text-sm text-gray-600 leading-relaxed">
+                <h2 className="text-lg font-bold text-ink mb-3">{s.title}</h2>
+                <div className="space-y-3 text-sm text-ink-3 leading-relaxed">
                   {s.content.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}

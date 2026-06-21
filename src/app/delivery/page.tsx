@@ -69,7 +69,7 @@ const paymentMethods = [
     name: 'Безналичный расчёт',
     description: 'Основной способ оплаты для юридических лиц и ИП. Работаем по договору поставки.',
     badge: 'Рекомендуем',
-    badgeColor: 'text-[#0066cc] bg-[#0066cc]/8 border-[#0066cc]/15',
+    badgeColor: 'text-azure bg-azure/8 border-azure/15',
     features: [
       'Оплата по счёту',
       'Полный пакет документов (счёт, УПД, счёт-фактура)',
@@ -82,7 +82,7 @@ const paymentMethods = [
     name: 'Предоплата 100%',
     description: 'Для новых клиентов требуется полная предоплата. После оплаты начинаем закупку товара.',
     badge: 'Для новых клиентов',
-    badgeColor: 'text-[#f97316] bg-[#f97316]/8 border-[#f97316]/15',
+    badgeColor: 'text-accent bg-accent/8 border-accent/15',
     features: [
       'Оплата после согласования КП',
       'Закупка начинается после поступления средств',
@@ -103,7 +103,7 @@ const documents = [
 const faq = [
   {
     q: 'Какая минимальная сумма заказа?',
-    a: `Минимальная сумма заказа — ${formatPrice(MIN_ORDER_AMOUNT)}. Мы работаем только с оптовыми заказами для юридических лиц и ИП.`,
+    a: `Минимальная сумма заказа - ${formatPrice(MIN_ORDER_AMOUNT)}. Мы работаем только с оптовыми заказами для юридических лиц и ИП.`,
   },
   {
     q: 'Как быстро вы отвечаете на запрос?',
@@ -145,10 +145,10 @@ export default function DeliveryPage() {
         {/* Breadcrumb */}
         <div className="bg-white">
           <div className="mx-auto max-w-[1400px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-gray-600">Условия работы</span>
+              <span className="text-ink-3">Условия работы</span>
             </nav>
           </div>
         </div>
@@ -156,9 +156,9 @@ export default function DeliveryPage() {
         {/* Hero */}
         <div className="bg-white py-12">
           <div className="mx-auto max-w-[1400px] px-4">
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">Условия работы и доставка</h1>
-            <p className="text-gray-600 max-w-2xl text-lg">
-              Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа — {formatPrice(MIN_ORDER_AMOUNT)}.
+            <h1 className="text-3xl font-bold text-ink mb-3">Условия работы и доставка</h1>
+            <p className="text-ink-3 max-w-2xl text-lg">
+              Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа - {formatPrice(MIN_ORDER_AMOUNT)}.
               Ответ на запрос в течение {REQUEST_PROCESSING_TIME}.
             </p>
           </div>
@@ -169,17 +169,17 @@ export default function DeliveryPage() {
           {/* Key info banner */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
-              { icon: Building, label: 'Только для бизнеса', sub: 'Юр. лица и ИП', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
-              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-[#f97316]', bg: 'bg-orange-50' },
-              { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-[#0066cc]', bg: 'bg-[#e8f4ff]' },
+              { icon: Building, label: 'Только для бизнеса', sub: 'Юр. лица и ИП', color: 'text-azure', bg: 'bg-azure-light' },
+              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-accent', bg: 'bg-orange-50' },
+              { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-azure', bg: 'bg-azure-light' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-4 p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
                 <div className={`flex size-12 items-center justify-center rounded-lg ${item.bg} shrink-0`}>
                   <item.icon size={22} className={item.color} />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-gray-900">{item.label}</div>
-                  <div className="text-xs text-gray-500 mt-1">{item.sub}</div>
+                  <div className="text-sm font-bold text-ink">{item.label}</div>
+                  <div className="text-xs text-ink-3 mt-1">{item.sub}</div>
                 </div>
               </div>
             ))}
@@ -187,19 +187,19 @@ export default function DeliveryPage() {
 
           {/* Workflow */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Как мы работаем</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6">Как мы работаем</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {workflowSteps.map((step, i) => (
                 <div key={i} className="relative">
                   <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow h-full">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="flex size-12 items-center justify-center rounded-lg bg-[#e8f4ff]">
-                        <step.icon size={22} className="text-[#0066cc]" />
+                      <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
+                        <step.icon size={22} className="text-azure" />
                       </div>
                       <span className="text-2xl font-bold text-gray-200">{i + 1}</span>
                     </div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-2">{step.title}</h3>
-                    <p className="text-xs text-gray-600 leading-relaxed">{step.desc}</p>
+                    <h3 className="text-sm font-bold text-ink mb-2">{step.title}</h3>
+                    <p className="text-xs text-ink-3 leading-relaxed">{step.desc}</p>
                   </div>
                   {i < workflowSteps.length - 1 && (
                     <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gray-200 -translate-y-1/2" />
@@ -211,20 +211,20 @@ export default function DeliveryPage() {
 
           {/* Delivery options */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Варианты доставки</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6">Варианты доставки</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {deliveryOptions.map((option) => (
                 <div key={option.name} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="flex size-12 items-center justify-center rounded-lg bg-[#e8f4ff]">
-                      <option.icon size={22} className="text-[#0066cc]" />
+                    <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
+                      <option.icon size={22} className="text-azure" />
                     </div>
-                    <h3 className="text-base font-bold text-gray-900">{option.name}</h3>
+                    <h3 className="text-base font-bold text-ink">{option.name}</h3>
                   </div>
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{option.description}</p>
+                  <p className="text-sm text-ink-3 leading-relaxed mb-4">{option.description}</p>
                   <ul className="space-y-2">
                     {option.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2 text-xs text-gray-700">
+                      <li key={feature} className="flex items-start gap-2 text-xs text-ink-2">
                         <CheckCircle2 size={14} className="text-green-600 shrink-0 mt-0.5" />
                         {feature}
                       </li>
@@ -243,23 +243,23 @@ export default function DeliveryPage() {
 
           {/* Payment methods */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Способы оплаты</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6">Способы оплаты</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {paymentMethods.map((method) => (
                 <div key={method.name} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="flex size-12 items-center justify-center rounded-lg bg-[#e8f4ff]">
-                      <method.icon size={20} className="text-[#0066cc]" />
+                    <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
+                      <method.icon size={20} className="text-azure" />
                     </div>
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${method.badgeColor}`}>
                       {method.badge}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-gray-900 mb-2">{method.name}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed mb-4">{method.description}</p>
+                  <h3 className="text-base font-bold text-ink mb-2">{method.name}</h3>
+                  <p className="text-sm text-ink-3 leading-relaxed mb-4">{method.description}</p>
                   <ul className="space-y-2">
                     {method.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2 text-xs text-gray-700">
+                      <li key={feature} className="flex items-start gap-2 text-xs text-ink-2">
                         <CheckCircle2 size={14} className="text-green-600 shrink-0 mt-0.5" />
                         {feature}
                       </li>
@@ -272,16 +272,16 @@ export default function DeliveryPage() {
 
           {/* Documents */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Документы</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6">Документы</h2>
             <div className="bg-white rounded-lg shadow-sm p-8">
-              <p className="text-sm text-gray-600 mb-6">
+              <p className="text-sm text-ink-3 mb-6">
                 Мы предоставляем полный пакет документов для бухгалтерии. Все документы оформляются в соответствии с требованиями законодательства РФ.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {documents.map((doc) => (
-                  <div key={doc} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
-                    <FileText size={18} className="text-[#0066cc] shrink-0 mt-0.5" />
-                    <span className="text-sm text-gray-900">{doc}</span>
+                  <div key={doc} className="flex items-start gap-3 p-4 bg-[#f8fafc] rounded-lg">
+                    <FileText size={18} className="text-azure shrink-0 mt-0.5" />
+                    <span className="text-sm text-ink">{doc}</span>
                   </div>
                 ))}
               </div>
@@ -290,11 +290,11 @@ export default function DeliveryPage() {
 
           {/* Return policy */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Возврат и обмен</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6">Возврат и обмен</h2>
             <div className="bg-white rounded-lg shadow-sm p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
                     <CheckCircle2 size={20} className="text-green-600" />
                     Принимаем возврат
                   </h3>
@@ -305,7 +305,7 @@ export default function DeliveryPage() {
                       'Брак или дефект компонента',
                       'Повреждение при транспортировке',
                     ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-gray-700">
+                      <li key={item} className="flex items-start gap-3 text-sm text-ink-2">
                         <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />
                         {item}
                       </li>
@@ -313,8 +313,8 @@ export default function DeliveryPage() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <AlertCircle size={20} className="text-[#f97316]" />
+                  <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
+                    <AlertCircle size={20} className="text-accent" />
                     Не принимаем возврат
                   </h3>
                   <ul className="space-y-3">
@@ -324,15 +324,15 @@ export default function DeliveryPage() {
                       'Нарушена заводская упаковка',
                       'Прошло более 14 дней с момента получения',
                     ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-gray-700">
-                        <AlertCircle size={16} className="text-[#f97316] shrink-0 mt-0.5" />
+                      <li key={item} className="flex items-start gap-3 text-sm text-ink-2">
+                        <AlertCircle size={16} className="text-accent shrink-0 mt-0.5" />
                         {item}
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
-              <div className="mt-6 pt-6 border-t border-gray-100 text-sm text-gray-600">
+              <div className="mt-6 pt-6 border-t border-[var(--border)] text-sm text-ink-3">
                 Для оформления возврата свяжитесь с нами в течение 14 дней с момента получения заказа.
                 Возврат денежных средств осуществляется в течение 10 рабочих дней после получения товара.
               </div>
@@ -341,37 +341,37 @@ export default function DeliveryPage() {
 
           {/* FAQ */}
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Частые вопросы</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6">Частые вопросы</h2>
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               {faq.map((item, i) => (
                 <div
                   key={i}
-                  className={`px-8 py-6 ${i !== 0 ? 'border-t border-gray-100' : ''} hover:bg-gray-50 transition-colors`}
+                  className={`px-8 py-6 ${i !== 0 ? 'border-t border-[var(--border)]' : ''} hover:bg-[#fafafa] transition-colors`}
                 >
-                  <h3 className="text-sm font-bold text-gray-900 mb-2">{item.q}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{item.a}</p>
+                  <h3 className="text-sm font-bold text-ink mb-2">{item.q}</h3>
+                  <p className="text-sm text-ink-3 leading-relaxed">{item.a}</p>
                 </div>
               ))}
             </div>
           </section>
 
           {/* Contact */}
-          <section className="bg-gradient-to-br from-[#e8f4ff] to-[#f0f9ff] rounded-lg p-8 shadow-sm">
+          <section className="bg-gradient-to-br from-azure-light to-[#f0f9ff] rounded-lg p-8 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Готовы начать работу?</h2>
-                <p className="text-sm text-gray-600">Отправьте запрос на коммерческое предложение или свяжитесь с нами напрямую</p>
+                <h2 className="text-xl font-bold text-ink mb-2">Готовы начать работу?</h2>
+                <p className="text-sm text-ink-3">Отправьте запрос на коммерческое предложение или свяжитесь с нами напрямую</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-bold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded-lg transition-all shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]"
+                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-bold text-white bg-azure hover:bg-azure-hover rounded-lg transition-all shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]"
                 >
                   Выбрать товары
                 </Link>
                 <a
                   href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
-                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-lg transition-all shadow-sm"
+                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-ink-2 bg-white hover:bg-[#fafafa] rounded-lg transition-all shadow-sm"
                 >
                   <Phone size={16} />
                   Позвонить

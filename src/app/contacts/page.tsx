@@ -40,88 +40,88 @@ export default function ContactsPage() {
       <StickyNav />
 
       <main className="flex-1">
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
-              <span className="text-gray-600">Контакты</span>
+              <span className="text-ink-3">Контакты</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Контакты</h1>
-          <p className="text-sm text-gray-500 mb-8">
-            Свяжитесь с нами удобным способом — ответим в течение 24 часов в рабочие дни
+          <h1 className="text-3xl font-bold text-ink mb-2">Контакты</h1>
+          <p className="text-sm text-ink-3 mb-8">
+            Свяжитесь с нами удобным способом - ответим в течение 24 часов в рабочие дни
           </p>
 
           <div className="grid lg:grid-cols-3 gap-3 mb-10">
             {/* Phone */}
-            <div className="p-6 border border-gray-200 rounded bg-white">
-              <div className="flex size-10 items-center justify-center bg-[#e8f4ff] mb-4 rounded">
-                <Phone size={18} className="text-[#0066cc]" />
+            <div className="p-6 border border-[var(--border)] rounded bg-white">
+              <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
+                <Phone size={18} className="text-azure" />
               </div>
-              <div className="text-xs text-gray-500 mb-1">Телефон</div>
+              <div className="text-xs text-ink-3 mb-1">Телефон</div>
               <a
                 href={`tel:${COMPANY.phone.raw}`}
-                className="block text-lg font-bold text-gray-900 hover:text-[#0066cc] mb-1 transition-colors"
+                className="block text-lg font-bold text-ink hover:text-azure mb-1 transition-colors"
               >
                 {COMPANY.phone.display}
               </a>
-              <p className="text-xs text-gray-500">Звонок по России бесплатный</p>
+              <p className="text-xs text-ink-3">Звонок по России бесплатный</p>
             </div>
 
             {/* Email */}
-            <div className="p-6 border border-gray-200 rounded bg-white">
-              <div className="flex size-10 items-center justify-center bg-[#e8f4ff] mb-4 rounded">
-                <Mail size={18} className="text-[#0066cc]" />
+            <div className="p-6 border border-[var(--border)] rounded bg-white">
+              <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
+                <Mail size={18} className="text-azure" />
               </div>
-              <div className="text-xs text-gray-500 mb-1">Email</div>
+              <div className="text-xs text-ink-3 mb-1">Email</div>
               <a
                 href={`mailto:${COMPANY.email}`}
-                className="block text-lg font-bold text-gray-900 hover:text-[#0066cc] mb-1 transition-colors"
+                className="block text-lg font-bold text-ink hover:text-azure mb-1 transition-colors"
               >
                 {COMPANY.email}
               </a>
-              <p className="text-xs text-gray-500">Ответим в течение 24 часов</p>
+              <p className="text-xs text-ink-3">Ответим в течение 24 часов</p>
             </div>
 
             {/* Schedule */}
-            <div className="p-6 border border-gray-200 rounded bg-white">
-              <div className="flex size-10 items-center justify-center bg-[#e8f4ff] mb-4 rounded">
-                <Clock size={18} className="text-[#0066cc]" />
+            <div className="p-6 border border-[var(--border)] rounded bg-white">
+              <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
+                <Clock size={18} className="text-azure" />
               </div>
-              <div className="text-xs text-gray-500 mb-1">Режим работы</div>
-              <div className="text-lg font-bold text-gray-900 mb-1">Пн–Пт 9:00–18:00</div>
-              <p className="text-xs text-gray-500">Сб, Вс — выходные</p>
+              <div className="text-xs text-ink-3 mb-1">Режим работы</div>
+              <div className="text-lg font-bold text-ink mb-1">Пн-Пт 9:00-18:00</div>
+              <p className="text-xs text-ink-3">Сб, Вс - выходные</p>
             </div>
           </div>
 
           {/* Address */}
           <section className="mb-10 grid lg:grid-cols-2 gap-6">
-            <div className="p-6 border border-gray-200 rounded bg-white">
+            <div className="p-6 border border-[var(--border)] rounded bg-white">
               <div className="flex items-center gap-2 mb-4">
-                <MapPin size={18} className="text-[#0066cc]" />
-                <h2 className="text-base font-bold text-gray-900">Офис и склад</h2>
+                <MapPin size={18} className="text-azure" />
+                <h2 className="text-base font-bold text-ink">Офис и склад</h2>
               </div>
-              <div className="text-sm text-gray-600 leading-relaxed mb-4">
-                <div className="font-semibold text-gray-900 mb-1">г. Москва</div>
+              <div className="text-sm text-ink-3 leading-relaxed mb-4">
+                <div className="font-semibold text-ink mb-1">г. Москва</div>
                 <div>ул. Электронная, д. 12, БЦ «Микрочип», офис 405</div>
-                <div className="text-xs text-gray-500 mt-2">
+                <div className="text-xs text-ink-3 mt-2">
                   м. Электрозаводская, 5 минут пешком
                 </div>
               </div>
-              <div className="text-xs text-gray-500 leading-relaxed pt-3 border-t border-gray-100">
+              <div className="text-xs text-ink-3 leading-relaxed pt-3 border-t border-[var(--border)]">
                 Самовывоз доступен по предварительной заявке. Согласовывайте время с менеджером
                 заранее, чтобы заказ был готов к выдаче.
               </div>
             </div>
 
-            <div className="p-6 border border-gray-200 rounded bg-[#e8f4ff]">
+            <div className="p-6 border border-[var(--border)] rounded bg-azure-light">
               <div className="flex items-center gap-2 mb-4">
-                <MessageCircle size={18} className="text-[#0066cc]" />
-                <h2 className="text-base font-bold text-gray-900">Мессенджеры</h2>
+                <MessageCircle size={18} className="text-azure" />
+                <h2 className="text-base font-bold text-ink">Мессенджеры</h2>
               </div>
               <div className="space-y-2.5 text-sm">
                 <a
@@ -132,8 +132,8 @@ export default function ContactsPage() {
                 >
                   <Send size={16} className="text-[#0088cc]" />
                   <div>
-                    <div className="font-semibold text-gray-900">Telegram</div>
-                    <div className="text-xs text-gray-500">@electromagaz</div>
+                    <div className="font-semibold text-ink">Telegram</div>
+                    <div className="text-xs text-ink-3">@electromagaz</div>
                   </div>
                 </a>
                 <a
@@ -144,8 +144,8 @@ export default function ContactsPage() {
                 >
                   <MessageCircle size={16} className="text-[#25D366]" />
                   <div>
-                    <div className="font-semibold text-gray-900">WhatsApp</div>
-                    <div className="text-xs text-gray-500">{COMPANY.phone.display}</div>
+                    <div className="font-semibold text-ink">WhatsApp</div>
+                    <div className="text-xs text-ink-3">{COMPANY.phone.display}</div>
                   </div>
                 </a>
               </div>
@@ -154,25 +154,25 @@ export default function ContactsPage() {
 
           {/* Departments */}
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-5">Отделы</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Отделы</h2>
             <div className="grid md:grid-cols-3 gap-3">
               {departments.map((d) => (
-                <div key={d.title} className="p-5 border border-gray-200 rounded bg-white">
-                  <h3 className="text-sm font-bold text-gray-900 mb-1">{d.title}</h3>
-                  <p className="text-xs text-gray-500 mb-4 leading-relaxed">{d.desc}</p>
+                <div key={d.title} className="p-5 border border-[var(--border)] rounded bg-white">
+                  <h3 className="text-sm font-bold text-ink mb-1">{d.title}</h3>
+                  <p className="text-xs text-ink-3 mb-4 leading-relaxed">{d.desc}</p>
                   <div className="space-y-1.5 text-xs">
                     <a
                       href={`tel:${d.phone.replace(/\D/g, '')}`}
-                      className="flex items-center gap-1.5 text-gray-700 hover:text-[#0066cc] transition-colors"
+                      className="flex items-center gap-1.5 text-ink-2 hover:text-azure transition-colors"
                     >
-                      <Phone size={11} className="text-[#0066cc]" />
+                      <Phone size={11} className="text-azure" />
                       {d.phone}
                     </a>
                     <a
                       href={`mailto:${d.email}`}
-                      className="flex items-center gap-1.5 text-gray-700 hover:text-[#0066cc] transition-colors"
+                      className="flex items-center gap-1.5 text-ink-2 hover:text-azure transition-colors"
                     >
-                      <Mail size={11} className="text-[#0066cc]" />
+                      <Mail size={11} className="text-azure" />
                       {d.email}
                     </a>
                   </div>

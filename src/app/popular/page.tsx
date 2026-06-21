@@ -15,18 +15,18 @@ export default async function PopularPage() {
       <StickyNav />
       <main>
         {/* Breadcrumb */}
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-sm text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
-              <ChevronRight size={13} className="text-gray-300" />
-              <span className="text-gray-700 font-medium">Набирают популярность</span>
+            <nav className="flex items-center gap-1.5 text-sm text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
+              <ChevronRight size={13} className="text-ink-4" />
+              <span className="text-ink-2 font-medium">Набирают популярность</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[1400px] px-4 py-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Набирают популярность</h1>
+          <h1 className="text-2xl font-bold text-ink mb-6">Набирают популярность</h1>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {popularProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

@@ -51,28 +51,28 @@ export default function HelpPage() {
     <>
       <Header />
       <StickyNav />
-      <main className="min-h-screen bg-gray-50 py-8">
+      <main className="min-h-screen bg-[#f8fafc] py-8">
         <div className="mx-auto max-w-[1400px] px-4">
           {/* Breadcrumbs */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-            <Link href="/" className="hover:text-[#0066cc]">Главная</Link>
+          <div className="flex items-center gap-2 text-sm text-ink-3 mb-6">
+            <Link href="/" className="hover:text-azure">Главная</Link>
             <span>/</span>
-            <span className="text-gray-900">Помощь</span>
+            <span className="text-ink">Помощь</span>
           </div>
 
           <div className="flex items-center gap-3 mb-6">
-            <HelpCircle size={28} className="text-[#0066cc]" />
-            <h1 className="text-2xl font-bold text-gray-900">Центр помощи</h1>
+            <HelpCircle size={28} className="text-azure" />
+            <h1 className="text-2xl font-bold text-ink">Центр помощи</h1>
           </div>
 
           {/* Search */}
           <div className="bg-white rounded-lg p-6 mb-8">
             <div className="relative max-w-2xl mx-auto">
-              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-4" />
               <input
                 type="text"
                 placeholder="Поиск по вопросам..."
-                className="w-full h-12 pl-12 pr-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#0066cc]"
+                className="w-full h-12 pl-12 pr-4 text-sm border border-[var(--border-2)] rounded-lg focus:outline-none focus:border-azure"
               />
             </div>
           </div>
@@ -81,29 +81,29 @@ export default function HelpPage() {
           <div className="grid md:grid-cols-3 gap-4 mb-8">
             <a href={`tel:${COMPANY.phone.raw}`} className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                <Phone size={24} className="text-[#0066cc]" />
+                <Phone size={24} className="text-azure" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Позвонить</h3>
-              <p className="text-sm text-gray-600">{COMPANY.phone.display}</p>
-              <p className="text-xs text-gray-400 mt-1">Пн-Пт 9:00-18:00</p>
+              <h3 className="font-semibold text-ink mb-2">Позвонить</h3>
+              <p className="text-sm text-ink-3">{COMPANY.phone.display}</p>
+              <p className="text-xs text-ink-4 mt-1">Пн-Пт 9:00-18:00</p>
             </a>
 
             <a href={`mailto:${COMPANY.supportEmail}`} className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                <Mail size={24} className="text-[#0066cc]" />
+                <Mail size={24} className="text-azure" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Написать</h3>
-              <p className="text-sm text-gray-600">{COMPANY.supportEmail}</p>
-              <p className="text-xs text-gray-400 mt-1">Ответим в течение 24 часов</p>
+              <h3 className="font-semibold text-ink mb-2">Написать</h3>
+              <p className="text-sm text-ink-3">{COMPANY.supportEmail}</p>
+              <p className="text-xs text-ink-4 mt-1">Ответим в течение 24 часов</p>
             </a>
 
             <button className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow text-left">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                <MessageCircle size={24} className="text-[#0066cc]" />
+                <MessageCircle size={24} className="text-azure" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Онлайн-чат</h3>
-              <p className="text-sm text-gray-600">Задать вопрос</p>
-              <p className="text-xs text-gray-400 mt-1">Обычно отвечаем за 5 минут</p>
+              <h3 className="font-semibold text-ink mb-2">Онлайн-чат</h3>
+              <p className="text-sm text-ink-3">Задать вопрос</p>
+              <p className="text-xs text-ink-4 mt-1">Обычно отвечаем за 5 минут</p>
             </button>
           </div>
 
@@ -112,16 +112,16 @@ export default function HelpPage() {
             {faqCategories.map((category, idx) => (
               <div key={idx} className="bg-white rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <category.icon size={24} className="text-[#0066cc]" />
-                  <h2 className="text-xl font-semibold text-gray-900">{category.title}</h2>
+                  <category.icon size={24} className="text-azure" />
+                  <h2 className="text-xl font-semibold text-ink">{category.title}</h2>
                 </div>
                 <div className="space-y-4">
                   {category.questions.map((item, qIdx) => (
                     <details key={qIdx} className="group">
-                      <summary className="flex items-center justify-between cursor-pointer list-none p-4 hover:bg-gray-50 rounded transition-colors">
-                        <span className="font-medium text-gray-900">{item.q}</span>
+                      <summary className="flex items-center justify-between cursor-pointer list-none p-4 hover:bg-[#fafafa] rounded transition-colors">
+                        <span className="font-medium text-ink">{item.q}</span>
                         <svg
-                          className="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180"
+                          className="w-5 h-5 text-ink-4 transition-transform group-open:rotate-180"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -129,7 +129,7 @@ export default function HelpPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </summary>
-                      <div className="px-4 pb-4 text-sm text-gray-600">
+                      <div className="px-4 pb-4 text-sm text-ink-3">
                         {item.a}
                       </div>
                     </details>
@@ -141,23 +141,23 @@ export default function HelpPage() {
 
           {/* Additional Resources */}
           <div className="bg-white rounded-lg p-6 mt-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Полезные ссылки</h2>
+            <h2 className="text-xl font-semibold text-ink mb-4">Полезные ссылки</h2>
             <div className="grid md:grid-cols-2 gap-4">
-              <Link href="/delivery" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
-                <FileText size={20} className="text-gray-400" />
-                <span className="text-gray-700">Условия доставки</span>
+              <Link href="/delivery" className="flex items-center gap-3 p-4 hover:bg-[#fafafa] rounded transition-colors">
+                <FileText size={20} className="text-ink-4" />
+                <span className="text-ink-2">Условия доставки</span>
               </Link>
-              <Link href="/wholesale" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
-                <FileText size={20} className="text-gray-400" />
-                <span className="text-gray-700">Оптовым покупателям</span>
+              <Link href="/wholesale" className="flex items-center gap-3 p-4 hover:bg-[#fafafa] rounded transition-colors">
+                <FileText size={20} className="text-ink-4" />
+                <span className="text-ink-2">Оптовым покупателям</span>
               </Link>
-              <Link href="/privacy" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
-                <FileText size={20} className="text-gray-400" />
-                <span className="text-gray-700">Политика конфиденциальности</span>
+              <Link href="/privacy" className="flex items-center gap-3 p-4 hover:bg-[#fafafa] rounded transition-colors">
+                <FileText size={20} className="text-ink-4" />
+                <span className="text-ink-2">Политика конфиденциальности</span>
               </Link>
-              <Link href="/terms" className="flex items-center gap-3 p-4 hover:bg-gray-50 rounded transition-colors">
-                <FileText size={20} className="text-gray-400" />
-                <span className="text-gray-700">Пользовательское соглашение</span>
+              <Link href="/terms" className="flex items-center gap-3 p-4 hover:bg-[#fafafa] rounded transition-colors">
+                <FileText size={20} className="text-ink-4" />
+                <span className="text-ink-2">Пользовательское соглашение</span>
               </Link>
             </div>
           </div>

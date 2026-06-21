@@ -15,7 +15,7 @@ const sections = [
   {
     title: '1. Общие положения',
     content: [
-      `Настоящая политика определяет порядок обработки и защиты ${COMPANY.legalName} (далее — Оператор) персональных данных пользователей сайта electromagaz.ru (далее — Сайт).`,
+      `Настоящая политика определяет порядок обработки и защиты ${COMPANY.legalName} (далее - Оператор) персональных данных пользователей сайта electromagaz.ru (далее - Сайт).`,
       `Реквизиты Оператора: ${COMPANY.legalName}, ИНН ${COMPANY.inn}, ОГРН ${COMPANY.ogrn}, юридический адрес: ${COMPANY.legalAddress}.`,
       'Политика разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».',
       'Использование Сайта означает безоговорочное согласие пользователя с настоящей Политикой и условиями обработки его персональных данных.',
@@ -43,7 +43,7 @@ const sections = [
       'Персональные данные хранятся на серверах, расположенных на территории Российской Федерации.',
       'Доступ к данным имеют только уполномоченные сотрудники Оператора, подписавшие соглашение о неразглашении.',
       'Применяются организационные и технические меры защиты: шифрование при передаче (SSL/TLS), хеширование паролей, контроль доступа, журналирование.',
-      'Срок хранения данных — до отзыва согласия пользователем или до достижения целей обработки, после чего данные удаляются или обезличиваются.',
+      'Срок хранения данных - до отзыва согласия пользователем или до достижения целей обработки, после чего данные удаляются или обезличиваются.',
     ],
   },
   {
@@ -95,27 +95,27 @@ export default function PrivacyPage() {
       <StickyNav />
 
       <main className="flex-1">
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
-              <span className="text-gray-600">Политика конфиденциальности</span>
+              <span className="text-ink-3">Политика конфиденциальности</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[900px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Политика конфиденциальности</h1>
-          <p className="text-sm text-gray-500 mb-8">
+          <h1 className="text-3xl font-bold text-ink mb-2">Политика конфиденциальности</h1>
+          <p className="text-sm text-ink-3 mb-8">
             Редакция от 14 июня 2026 года
           </p>
 
           <div className="space-y-8">
             {sections.map((s) => (
               <section key={s.title}>
-                <h2 className="text-lg font-bold text-gray-900 mb-3">{s.title}</h2>
-                <div className="space-y-3 text-sm text-gray-600 leading-relaxed">
+                <h2 className="text-lg font-bold text-ink mb-3">{s.title}</h2>
+                <div className="space-y-3 text-sm text-ink-3 leading-relaxed">
                   {s.content.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}

@@ -25,7 +25,7 @@ const conditions = [
   {
     icon: ArrowLeftRight,
     title: 'Все документы',
-    desc: 'УПД, накладная, акт о выявленных недостатках — обязательны',
+    desc: 'УПД, накладная, акт о выявленных недостатках - обязательны',
   },
   {
     icon: AlertTriangle,
@@ -48,12 +48,12 @@ const steps = [
   {
     n: 3,
     title: 'Отправьте товар',
-    desc: 'После согласования направьте товар по адресу склада в оригинальной упаковке. Отправку оплачивает покупатель, при подтверждённом браке — компенсируем.',
+    desc: 'После согласования направьте товар по адресу склада в оригинальной упаковке. Отправку оплачивает покупатель, при подтверждённом браке - компенсируем.',
   },
   {
     n: 4,
     title: 'Экспертиза',
-    desc: 'Проводим входной контроль и экспертизу. Срок — до 10 рабочих дней.',
+    desc: 'Проводим входной контроль и экспертизу. Срок - до 10 рабочих дней.',
   },
   {
     n: 5,
@@ -69,49 +69,49 @@ export default function ReturnsPage() {
       <StickyNav />
 
       <main className="flex-1">
-        <div className="border-b border-gray-100">
+        <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-2.5">
-            <nav className="flex items-center gap-1.5 text-xs text-gray-400">
-              <Link href="/" className="hover:text-gray-600 transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
-              <span className="text-gray-600">Возврат товара</span>
+              <span className="text-ink-3">Возврат товара</span>
             </nav>
           </div>
         </div>
 
         <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Возврат товара</h1>
-          <p className="text-sm text-gray-500 mb-8 max-w-3xl">
+          <h1 className="text-3xl font-bold text-ink mb-2">Возврат товара</h1>
+          <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Работаем с юридическими лицами в B2B-режиме. Возврат осуществляется в соответствии с
             условиями договора поставки и Гражданским кодексом РФ.
           </p>
 
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
             {conditions.map((c) => (
-              <div key={c.title} className="p-5 border border-gray-200 rounded bg-white">
-                <div className="flex size-9 items-center justify-center bg-[#e8f4ff] mb-3 rounded">
-                  <c.icon size={16} className="text-[#0066cc]" />
+              <div key={c.title} className="p-5 border border-[var(--border)] rounded bg-white">
+                <div className="flex size-9 items-center justify-center bg-azure-light mb-3 rounded">
+                  <c.icon size={16} className="text-azure" />
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">{c.title}</h3>
-                <p className="text-xs text-gray-500 leading-relaxed">{c.desc}</p>
+                <h3 className="text-sm font-bold text-ink mb-1">{c.title}</h3>
+                <p className="text-xs text-ink-3 leading-relaxed">{c.desc}</p>
               </div>
             ))}
           </section>
 
           <section className="mb-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-5">Порядок возврата</h2>
+            <h2 className="text-xl font-bold text-ink mb-5">Порядок возврата</h2>
             <div className="space-y-3">
               {steps.map((s) => (
                 <div
                   key={s.n}
-                  className="flex gap-4 p-5 border border-gray-200 rounded bg-white"
+                  className="flex gap-4 p-5 border border-[var(--border)] rounded bg-white"
                 >
-                  <div className="flex size-9 items-center justify-center bg-[#0066cc] text-white text-sm font-bold rounded shrink-0">
+                  <div className="flex size-9 items-center justify-center bg-azure text-white text-sm font-bold rounded shrink-0">
                     {s.n}
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-gray-900 mb-1">{s.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+                    <h3 className="text-sm font-bold text-ink mb-1">{s.title}</h3>
+                    <p className="text-sm text-ink-3 leading-relaxed">{s.desc}</p>
                   </div>
                 </div>
               ))}
@@ -121,26 +121,26 @@ export default function ReturnsPage() {
           <section className="mb-10 grid lg:grid-cols-2 gap-3">
             <div className="p-6 bg-[#fff7ed] border border-orange-200 rounded">
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle size={16} className="text-[#f97316]" />
-                <h3 className="text-sm font-bold text-gray-900">Возврату не подлежат</h3>
+                <AlertTriangle size={16} className="text-accent" />
+                <h3 className="text-sm font-bold text-ink">Возврату не подлежат</h3>
               </div>
-              <ul className="space-y-1.5 text-sm text-gray-600 leading-relaxed">
-                <li>— Товары без видимых дефектов, соответствующие заказу</li>
-                <li>— Изделия со следами монтажа, пайки, эксплуатации</li>
-                <li>— Компоненты, заказанные под индивидуальный проект (custom-orders)</li>
-                <li>— Товары с истёкшим сроком уведомления (более 14 дней)</li>
+              <ul className="space-y-1.5 text-sm text-ink-3 leading-relaxed">
+                <li>- Товары без видимых дефектов, соответствующие заказу</li>
+                <li>- Изделия со следами монтажа, пайки, эксплуатации</li>
+                <li>- Компоненты, заказанные под индивидуальный проект (custom-orders)</li>
+                <li>- Товары с истёкшим сроком уведомления (более 14 дней)</li>
               </ul>
             </div>
-            <div className="p-6 bg-[#e8f4ff] border border-blue-200 rounded">
+            <div className="p-6 bg-azure-light border border-blue-200 rounded">
               <div className="flex items-center gap-2 mb-3">
-                <FileCheck size={16} className="text-[#0066cc]" />
-                <h3 className="text-sm font-bold text-gray-900">Гарантия</h3>
+                <FileCheck size={16} className="text-azure" />
+                <h3 className="text-sm font-bold text-ink">Гарантия</h3>
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed mb-2">
-                Гарантия на электронные компоненты — 12 месяцев с даты поставки, если иное не
+              <p className="text-sm text-ink-3 leading-relaxed mb-2">
+                Гарантия на электронные компоненты - 12 месяцев с даты поставки, если иное не
                 указано в спецификации производителя.
               </p>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-ink-3 leading-relaxed">
                 Гарантийные случаи рассматриваются в индивидуальном порядке после экспертизы.
               </p>
             </div>
@@ -148,7 +148,7 @@ export default function ReturnsPage() {
 
           <Link
             href="/contacts"
-            className="inline-flex items-center gap-1.5 h-11 px-6 text-sm font-semibold text-white bg-[#0066cc] hover:bg-[#0052a3] rounded transition-all"
+            className="inline-flex items-center gap-1.5 h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
           >
             Связаться с отделом возвратов
             <ChevronRight size={14} />
