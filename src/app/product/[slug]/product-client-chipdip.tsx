@@ -84,14 +84,14 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
         {/* Breadcrumbs */}
         <div className="border-b border-[var(--border)]">
           <div className="mx-auto max-w-[1400px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-ink-3">
+            <nav className="flex items-center gap-1.5 text-xs text-ink-3 whitespace-nowrap overflow-hidden">
               <Link href="/" className="hover:text-ink">Главная</Link>
               <span>›</span>
               <Link href="/catalog" className="hover:text-ink">Каталог</Link>
               <span>›</span>
               <Link href={`/catalog?category=${product.categorySlug}`} className="hover:text-ink">{product.category}</Link>
-              <span>›</span>
-              <span className="text-ink font-semibold">{product.name}</span>
+              <span className="hidden sm:inline">›</span>
+              <span className="hidden sm:inline text-ink font-semibold truncate">{product.name}</span>
             </nav>
           </div>
         </div>
@@ -107,12 +107,12 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           </div>
 
           {/* Product Main Section */}
-          <div className="flex gap-12 mb-10">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-10">
             {/* Photo Gallery */}
             <div className="flex-shrink-0">
               <div className="flex gap-6">
                 {/* Thumbnails with scroll buttons */}
-                <div className="flex flex-col gap-2 w-[80px]">
+                <div className="hidden sm:flex flex-col gap-2 w-[80px]">
                   <button
                     onClick={() => setActivePhoto(Math.max(0, activePhoto - 1))}
                     disabled={activePhoto === 0}
@@ -167,7 +167,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
                 {/* Main Photo */}
                 <div>
-                  <div className="w-[400px] h-[400px] rounded-[var(--radius-card)] border border-[var(--border)] flex items-center justify-center bg-[#fafbfc] cursor-pointer mb-3 relative overflow-hidden">
+                  <div className="w-full max-w-[400px] h-[340px] sm:h-[400px] rounded-[var(--radius-card)] border border-[var(--border)] flex items-center justify-center bg-[#fafbfc] cursor-pointer mb-3 relative overflow-hidden">
                     <Image
                       src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}
@@ -187,7 +187,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Product IDs */}
-            <div className="flex-grow min-w-[300px]">
+            <div className="flex-grow min-w-0">
               <div className="space-y-4 text-sm">
                 <div className="flex items-baseline gap-3">
                   <span className="text-ink-4 text-xs block max-w-[62%]">Артикул</span>
@@ -278,7 +278,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Ordering Controls */}
-            <div className="flex-shrink-0 w-[372px]" data-add-to-cart-block>
+            <div className="w-full lg:w-[372px] flex-shrink-0" data-add-to-cart-block>
               <div className="rounded-[var(--radius-panel)] border border-[var(--border)] bg-white p-7 shadow-[var(--shadow-lg)]">
                 {/* Price */}
                 <div className="pb-6">
