@@ -127,8 +127,8 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
 
       {/* Mega menu - ChipDip style - positioned absolutely relative to parent */}
       {catalogOpen && (
-        <div ref={catalogMenuRef} className="absolute top-[68px] left-0 right-0 mx-auto max-w-[1400px] px-4 z-[60]">
-          <div className="bg-white border border-[var(--border)] shadow-xl max-h-[500px] overflow-y-auto">
+        <div ref={catalogMenuRef} className="absolute top-[76px] left-0 right-0 mx-auto max-w-[1400px] px-4 z-[60]">
+          <div className="bg-white border border-[var(--border)] rounded-[var(--radius-card)] shadow-[var(--shadow-xl)] max-h-[500px] overflow-hidden overflow-y-auto">
             <div className="flex">
               {/* Left column - main categories */}
               <div className="w-[240px] bg-white border-r border-[var(--border)]">

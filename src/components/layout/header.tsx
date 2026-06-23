@@ -133,7 +133,7 @@ export function Header() {
             {/* Mobile burger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden ml-auto flex items-center justify-center size-9 text-ink-3 hover:bg-gray-100 transition-all"
+              className="lg:hidden ml-auto flex items-center justify-center size-10 rounded-[var(--radius-control)] text-ink-3 hover:bg-gray-100 transition-all"
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -144,9 +144,9 @@ export function Header() {
       {mobileOpen && (
         <div className="lg:hidden border-b border-[var(--border)] bg-white animate-slide-down">
           <div className="mx-auto max-w-[1400px] px-4 py-3 space-y-1">
-            <Link href="/catalog"  onClick={() => setMobileOpen(false)} className="flex items-center px-3 py-2.5 text-sm text-ink-2 hover:bg-[#fafafa]">Каталог</Link>
-            <Link href="/brands"   onClick={() => setMobileOpen(false)} className="flex items-center px-3 py-2.5 text-sm text-ink-2 hover:bg-[#fafafa]">Бренды</Link>
-            <Link href="/delivery" onClick={() => setMobileOpen(false)} className="flex items-center px-3 py-2.5 text-sm text-ink-2 hover:bg-[#fafafa]">Доставка</Link>
+            <Link href="/catalog"  onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Каталог</Link>
+            <Link href="/brands"   onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Бренды</Link>
+            <Link href="/delivery" onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Доставка</Link>
           </div>
         </div>
       )}

@@ -1,25 +1,25 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Phone, MapPin, ShieldCheck } from 'lucide-react'
+import { Mail, Phone, MapPin, ShieldCheck, ArrowRight } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const footerLinks = {
   catalog: {
     title: 'Каталог',
     links: [
-      { label: 'Усилители и компараторы',    href: '/catalog?category=usiliteli' },
-      { label: 'Управление питанием',         href: '/catalog?category=pitanie' },
-      { label: 'Интерфейсы и логика',         href: '/catalog?category=interfeysy' },
-      { label: 'АЦП, ЦАП и преобразователи',  href: '/catalog?category=atsp-tsap' },
-      { label: 'Датчики',                     href: '/catalog?category=datchiki' },
-      { label: 'Микроконтроллеры и DSP',      href: '/catalog?category=mikrokontrollery' },
+      { label: 'Усилители и компараторы', href: '/catalog?category=usiliteli' },
+      { label: 'Управление питанием', href: '/catalog?category=pitanie' },
+      { label: 'Интерфейсы и логика', href: '/catalog?category=interfeysy' },
+      { label: 'АЦП, ЦАП и преобразователи', href: '/catalog?category=atsp-tsap' },
+      { label: 'Датчики', href: '/catalog?category=datchiki' },
+      { label: 'Микроконтроллеры и DSP', href: '/catalog?category=mikrokontrollery' },
     ],
   },
   company: {
     title: 'Компания',
     links: [
-      { label: 'О нас',    href: '/about' },
-      { label: 'Бренды',   href: '/brands' },
+      { label: 'О нас', href: '/about' },
+      { label: 'Бренды', href: '/brands' },
       { label: 'Вакансии', href: '/jobs' },
     ],
   },
@@ -27,40 +27,55 @@ const footerLinks = {
     title: 'Поддержка',
     links: [
       { label: 'Доставка и оплата', href: '/delivery' },
-      { label: 'Возврат товара',    href: '/returns' },
-      { label: 'Техподдержка',      href: '/support' },
-      { label: 'Контакты',          href: '/contacts' },
+      { label: 'Возврат товара', href: '/returns' },
+      { label: 'Техподдержка', href: '/support' },
+      { label: 'Контакты', href: '/contacts' },
     ],
   },
 }
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-[var(--border)] bg-white">
+    <footer className="mt-auto bg-ink text-white">
+      {/* CTA-полоса */}
+      <div className="border-b border-white/10">
+        <div className="mx-auto flex max-w-[1400px] flex-col items-start justify-between gap-6 px-4 py-12 md:flex-row md:items-center">
+          <div>
+            <h3 className="text-2xl font-bold text-white md:text-3xl">Нужен расчёт по спецификации?</h3>
+            <p className="mt-2 text-white/65">Пришлите список позиций — подберём, посчитаем и привезём.</p>
+          </div>
+          <Link href="/request-quote" className="ui-btn ui-btn-lg shrink-0 bg-white text-ink hover:bg-white/90 group">
+            Запросить КП
+            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </div>
+
       {/* Main */}
-      <div className="mx-auto max-w-[1400px] px-4 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="mx-auto max-w-[1400px] px-4 py-14">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <Link href="/" className="block mb-4">
-              <span className="text-xl font-bold text-ink tracking-wide">
-                ELECTRO<span className="text-azure">MAGAZ</span>
+            <Link href="/" className="mb-4 block">
+              <span className="text-2xl font-extrabold tracking-tight text-white">
+                electro<span className="text-azure-light">magaz</span>
               </span>
             </Link>
-            <p className="text-sm text-ink-3 leading-relaxed mb-4">
-              Профессиональный поставщик электронных компонентов с {COMPANY.foundedYear} года. Более 500 000 позиций в наличии.
+            <p className="mb-5 text-sm leading-relaxed text-white/60">
+              Поставщик электронных компонентов для инженеров и производства. Подбор аналогов,
+              поставка юрлицам по безналу с документами.
             </p>
-            <div className="space-y-2">
-              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2 text-sm text-ink-3 hover:text-azure transition-colors">
-                <Phone size={13} className="text-azure shrink-0" />
+            <div className="space-y-2.5">
+              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2.5 text-sm text-white/80 transition-colors hover:text-white">
+                <Phone size={14} className="shrink-0 text-azure-light" />
                 {COMPANY.phone.display}
               </a>
-              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2 text-sm text-ink-3 hover:text-azure transition-colors">
-                <Mail size={13} className="text-azure shrink-0" />
+              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2.5 text-sm text-white/80 transition-colors hover:text-white">
+                <Mail size={14} className="shrink-0 text-azure-light" />
                 {COMPANY.email}
               </a>
-              <div className="flex items-center gap-2 text-sm text-ink-3">
-                <MapPin size={13} className="text-azure shrink-0" />
+              <div className="flex items-center gap-2.5 text-sm text-white/80">
+                <MapPin size={14} className="shrink-0 text-azure-light" />
                 {COMPANY.city}
               </div>
             </div>
@@ -69,13 +84,13 @@ export function Footer() {
           {/* Links */}
           {Object.values(footerLinks).map((section) => (
             <div key={section.title}>
-              <h4 className="text-xs font-bold text-ink uppercase tracking-wider mb-4">
+              <h4 className="mb-5 text-xs font-bold uppercase tracking-[0.1em] text-white/45">
                 {section.title}
               </h4>
-              <ul className="space-y-2.5">
+              <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-sm text-ink-3 hover:text-azure transition-colors">
+                    <Link href={link.href} className="text-sm text-white/70 transition-colors hover:text-white">
                       {link.label}
                     </Link>
                   </li>
@@ -86,70 +101,52 @@ export function Footer() {
         </div>
       </div>
 
-      {/* РСТ — Знак качества */}
-      <div className="border-t border-[var(--border)] bg-[#f8fafc]">
-        <div className="mx-auto max-w-[1400px] px-4 py-6">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            {/* Знак */}
-            <div className="flex items-center gap-4 shrink-0">
-              <div className="relative">
-                {/* Жёлтое свечение вокруг знака */}
-                <div className="absolute inset-0 rounded bg-[#EAE60E]/20 blur-md scale-110 pointer-events-none" />
-                <div className="relative bg-white border-2 border-[#EAE60E]/60 rounded p-2 shadow-[0_4px_12px_rgba(234,230,14,0.15)]">
-                  <Image
-                    src="/rst-quality.svg"
-                    alt="Знак качества РСТ — Российский стандарт"
-                    width={160}
-                    height={38}
-                    className="h-9 w-auto"
-                  />
-                </div>
-              </div>
+      {/* Сертификация */}
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-[1400px] px-4 py-7">
+          <div className="flex flex-col items-center gap-5 sm:flex-row">
+            <div className="shrink-0 rounded-[var(--radius-control)] border border-[#EAE60E]/40 bg-white p-2.5">
+              <Image
+                src="/rst-quality.svg"
+                alt="Знак качества РСТ — Российский стандарт"
+                width={160}
+                height={38}
+                className="h-9 w-auto"
+              />
             </div>
-
-            {/* Текст */}
             <div className="flex-1 text-center sm:text-left">
-              <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-1">
-                <ShieldCheck size={14} className="text-azure shrink-0" />
-                <span className="text-sm font-bold text-ink">Сертифицированная продукция</span>
+              <div className="mb-1 flex items-center justify-center gap-1.5 sm:justify-start">
+                <ShieldCheck size={15} className="shrink-0 text-azure-light" />
+                <span className="text-sm font-bold text-white">Сертифицированная продукция</span>
               </div>
-              <p className="text-xs text-ink-3 leading-relaxed max-w-xl">
-                Все компоненты соответствуют требованиям российского законодательства.
-                Работаем в соответствии с ГОСТ и техническими регламентами Таможенного союза.
+              <p className="mx-auto max-w-2xl text-xs leading-relaxed text-white/55 sm:mx-0">
                 Сертификаты и декларации соответствия предоставляются по запросу.
               </p>
             </div>
-
-
           </div>
         </div>
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-[var(--border)]">
-        <div className="mx-auto max-w-[1400px] px-4 py-5">
-          <div className="flex flex-col items-center justify-center gap-2 text-center">
-            <span className="text-xs text-ink-3">
-              {COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')} · ИНН {COMPANY.inn} · ОГРН {COMPANY.ogrn}
-            </span>
-            <span className="text-xs text-ink-4">© {new Date().getFullYear()} {COMPANY.brand}. Все права защищены.</span>
-            <div className="text-sm text-ink-3">
-              Разработано в{' '}
-              <a
-                href="https://sharashka.onrender.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-azure font-semibold hover:text-azure-hover transition-colors"
-              >
-                SHK Dev
-              </a>
-              {' '}© 2026
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-[1400px] px-4 py-6">
+          <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
+            <div className="space-y-1">
+              <div className="text-xs text-white/55">
+                {COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')} · ИНН {COMPANY.inn} · ОГРН {COMPANY.ogrn}
+              </div>
+              <div className="text-xs text-white/40">
+                © {new Date().getFullYear()} {COMPANY.brand}. Все права защищены. · Разработано в{' '}
+                <a href="https://sharashka.onrender.com" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white">
+                  SHK Dev
+                </a>
+              </div>
             </div>
-            <div className="flex items-center gap-4 text-xs text-ink-4 mt-1">
-              <Link href="/offer" className="hover:text-ink-3 transition-colors">Публичная оферта</Link>
-              <Link href="/privacy" className="hover:text-ink-3 transition-colors">Политика ПДн</Link>
-              <Link href="/terms"   className="hover:text-ink-3 transition-colors">Условия</Link>
-              <Link href="/legal"   className="hover:text-ink-3 transition-colors">Реквизиты</Link>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/55">
+              <Link href="/offer" className="transition-colors hover:text-white">Публичная оферта</Link>
+              <Link href="/privacy" className="transition-colors hover:text-white">Политика ПДн</Link>
+              <Link href="/terms" className="transition-colors hover:text-white">Условия</Link>
+              <Link href="/legal" className="transition-colors hover:text-white">Реквизиты</Link>
             </div>
           </div>
         </div>
