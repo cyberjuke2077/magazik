@@ -76,7 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-all hover:border-azure/30 hover:shadow-[var(--shadow-md)]"
+      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-azure/30 hover:shadow-[var(--shadow-lg)]"
     >
       {/* Image zone */}
       <div

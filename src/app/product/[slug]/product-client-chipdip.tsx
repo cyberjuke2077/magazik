@@ -98,8 +98,12 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
         <div className="mx-auto max-w-[1400px] px-4">
           {/* Title */}
-          <div className="py-6">
-            <h1 className="text-[28px] font-bold text-ink leading-tight">{product.name}</h1>
+          <div className="pt-7 pb-8">
+            <div className="ui-eyebrow mb-3">
+              <Link href={`/catalog?manufacturer=${product.manufacturer}`} className="transition-opacity hover:opacity-70">{product.manufacturer}</Link>
+              <span className="font-normal normal-case tracking-normal text-ink-4">/ {product.category}</span>
+            </div>
+            <h1 className="text-3xl font-bold leading-[1.12] tracking-tight text-ink md:text-[38px]">{product.name}</h1>
           </div>
 
           {/* Product Main Section */}
@@ -129,9 +133,9 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                         <button
                           key={photoIndex}
                           onClick={() => setActivePhoto(photoIndex)}
-                          className={`w-[80px] h-[80px] border flex items-center justify-center overflow-hidden transition-all ${
+                          className={`w-[80px] h-[80px] rounded-[var(--radius-control)] border flex items-center justify-center overflow-hidden transition-all ${
                             activePhoto === photoIndex
-                              ? 'border-[var(--border-2)] bg-white'
+                              ? 'border-azure ring-1 ring-azure/30 bg-white'
                               : 'border-[var(--border)] bg-white hover:border-[var(--border-2)]'
                           }`}
                         >
@@ -163,7 +167,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
                 {/* Main Photo */}
                 <div>
-                  <div className="w-[400px] h-[400px] border border-[var(--border)] flex items-center justify-center bg-white cursor-pointer mb-3 relative">
+                  <div className="w-[400px] h-[400px] rounded-[var(--radius-card)] border border-[var(--border)] flex items-center justify-center bg-[#fafbfc] cursor-pointer mb-3 relative overflow-hidden">
                     <Image
                       src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}
@@ -238,7 +242,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
 
                 {product.datasheets.length > 0 && (
-                  <div className="border border-[var(--border)] rounded-sm p-4 mt-6 inline-block bg-white">
+                  <div className="border border-[var(--border)] rounded-[var(--radius-card)] p-4 mt-6 inline-block bg-white">
                     <div className="text-xs text-ink-4 mb-3">Техническая документация:</div>
                     {product.datasheets.slice(0, 2).map((ds) => (
                       <a
@@ -274,22 +278,25 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Ordering Controls */}
-            <div className="flex-shrink-0 w-[400px]" data-add-to-cart-block>
-              <div className="border-l border-[var(--border)] pl-12">
+            <div className="flex-shrink-0 w-[372px]" data-add-to-cart-block>
+              <div className="rounded-[var(--radius-panel)] border border-[var(--border)] bg-white p-7 shadow-[var(--shadow-lg)]">
                 {/* Price */}
-                <div className="flex items-center gap-6 pt-4 pb-6">
-                  <div className="price text-[32px]">
+                <div className="pb-6">
+                  <div className="price text-[34px] leading-none">
                     {formatPrice(product.price)}
                   </div>
+                  {product.price > 0 && (
+                    <div className="mt-2 text-xs text-ink-4">за {product.unit}</div>
+                  )}
                 </div>
 
                 {/* Quantity */}
-                <div className="flex items-center gap-6 py-6">
-                  <div className="flex items-center text-lg">
+                <div className="flex items-center gap-5 pb-6">
+                  <div className="flex items-center overflow-hidden rounded-[var(--radius-control)] border border-[var(--border-2)] text-lg">
                     <button
                       onClick={() => setQuantity(Math.max(product.minOrder, quantity - 1))}
                       disabled={quantity <= product.minOrder}
-                      className={`w-9 h-9 flex items-center justify-center border border-[var(--border-2)] text-ink-2 font-bold ${
+                      className={`w-10 h-10 flex items-center justify-center text-ink-2 font-bold transition-colors ${
                         quantity <= product.minOrder
                           ? 'bg-[#fafafa] text-ink-4 cursor-default'
                           : 'bg-[#f8fafc] hover:bg-white hover:text-black'
@@ -301,11 +308,11 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                       type="number"
                       value={quantity}
                       onChange={(e) => setQuantity(Math.max(product.minOrder, parseInt(e.target.value) || product.minOrder))}
-                      className="w-[72px] h-9 text-center border-t border-b border-[var(--border-2)] font-bold text-lg outline-none"
+                      className="w-[64px] h-10 text-center border-x border-[var(--border-2)] font-bold text-lg outline-none"
                     />
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-9 h-9 flex items-center justify-center bg-[#f8fafc] border border-[var(--border-2)] text-ink-2 hover:bg-white hover:text-black font-bold"
+                      className="w-10 h-10 flex items-center justify-center bg-[#f8fafc] text-ink-2 hover:bg-white hover:text-black font-bold transition-colors"
                     >
                       +
                     </button>
@@ -322,11 +329,11 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
 
                 {/* Add to Cart Button */}
-                <div className="pt-4 space-y-2">
+                <div className="space-y-2">
                   <button
                     ref={addBtnRef}
                     onClick={handleAddToCart}
-                    className="w-full py-3 px-6 bg-azure text-white rounded-lg font-medium hover:bg-azure-hover transition-colors flex items-center justify-center gap-2"
+                    className="ui-btn ui-btn-primary ui-btn-lg w-full"
                   >
                     <ShoppingCart size={20} />
                     <span>Добавить в корзину</span>
@@ -345,7 +352,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
 
                 {/* Additional Links */}
-                <div className="pt-6 space-y-3 text-sm">
+                <div className="mt-6 border-t border-[var(--border)] pt-6 space-y-3 text-sm">
                   <div>
                     <a href="#other-offers" className="text-ink font-bold hover:underline">Другие предложения</a>
                     <div className="text-xs text-ink-4">Этот же товар с другими ценами и сроками поставки</div>
@@ -391,7 +398,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                         <div className="text-xs text-ink-4 mb-2">Теги:</div>
                         <div className="flex flex-wrap gap-2">
                           {product.tags.map((tag) => (
-                            <span key={tag} className="px-3 py-1 text-xs bg-[#f8fafc] text-ink-3 rounded">
+                            <span key={tag} className="px-3 py-1 text-xs bg-[#f8fafc] text-ink-3 rounded-full border border-[var(--border)]">
                               {tag}
                             </span>
                           ))}
@@ -456,7 +463,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
               {/* Other Offers */}
               <div className="mb-6" id="other-offers">
                 <h3 className="text-base font-bold text-ink mb-4">Другие предложения</h3>
-                <div className="border border-[var(--border)] rounded">
+                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
                   <div className="p-4 text-center text-sm text-ink-4">
                     Другие предложения для этого товара отсутствуют
                   </div>
@@ -466,7 +473,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
               {/* Analogs */}
               <div className="mb-6" id="analogs">
                 <h3 className="text-base font-bold text-ink mb-4">Аналоги</h3>
-                <div className="border border-[var(--border)] rounded">
+                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
                   {related.length > 0 ? (
                     <div className="divide-y divide-[var(--border)]">
                       {related.slice(0, 3).map((analog) => (
@@ -494,7 +501,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
               </div>
 
               {/* Additional Info */}
-              <div className="bg-[#f8fafc] p-4 rounded">
+              <div className="bg-[#f8fafc] p-5 rounded-[var(--radius-card)]">
                 <h3 className="text-sm font-bold text-ink mb-3">Информация о товаре</h3>
                 <div className="text-xs text-ink-3 space-y-2">
                   <div className="flex justify-between py-1 border-b border-[var(--border)]">
