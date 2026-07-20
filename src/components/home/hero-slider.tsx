@@ -38,15 +38,39 @@ const slides = [
 const quickLinks = [
   {
     image: '/storefront/category-mcu.jpg',
-    title: 'Микроконтроллеры и DSP',
-    description: 'MCU, процессоры, отладочные платы',
+    title: 'MCU и DSP',
+    description: 'MCU и DSP',
     href: '/catalog?category=mikrokontrollery',
   },
   {
     image: '/storefront/category-power.jpg',
-    title: 'Управление питанием',
-    description: 'DC-DC, LDO, PMIC, драйверы',
+    title: 'Питание',
+    description: 'DC-DC и PMIC',
     href: '/catalog?category=pitanie',
+  },
+  {
+    image: '/storefront/category-converters.jpg',
+    title: 'АЦП и ЦАП',
+    description: 'Преобразователи',
+    href: '/catalog?category=atsp-tsap',
+  },
+  {
+    image: '/storefront/category-interfaces.jpg',
+    title: 'Интерфейсы',
+    description: 'Логика и драйверы',
+    href: '/catalog?category=interfeysy',
+  },
+  {
+    image: '/storefront/category-rf.jpg',
+    title: 'RF-модули',
+    description: 'RF и беспроводная связь',
+    href: '/catalog?category=rch',
+  },
+  {
+    image: '/storefront/category-sensors.jpg',
+    title: 'Датчики',
+    description: 'Сенсоры и измерения',
+    href: '/catalog?category=datchiki',
   },
 ]
 
@@ -68,10 +92,10 @@ export function HeroSlider() {
   }, [paused])
 
   return (
-    <section className="bg-canvas pb-3 pt-4">
-      <div className="mx-auto grid max-w-[1440px] gap-3 px-3 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6">
+      <div className="mx-auto max-w-[1380px] overflow-hidden px-4 lg:flex lg:gap-4 lg:px-0">
         <div
-          className="relative min-h-[230px] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-[#0c2340] sm:min-h-[246px]"
+          className="relative h-[146px] w-full shrink-0 overflow-hidden rounded-xl bg-[#0c2340] lg:h-[206px] lg:w-[282px]"
           role="region"
           aria-roledescription="карусель"
           aria-label="Подборки компонентов"
@@ -110,28 +134,28 @@ export function HeroSlider() {
                   }`}
                 />
                 <div
-                  className={`relative flex h-full max-w-[650px] flex-col justify-center p-5 text-white sm:p-8 ${
+                  className={`relative flex h-full flex-col justify-center p-4 text-white lg:p-5 ${
                     contentOnRight ? 'ml-auto items-start' : ''
                   }`}
                 >
                   {slide.logo && (
-                    <span className="mb-3 flex h-9 w-[136px] items-center rounded-[5px] bg-white px-3">
+                    <span className="mb-2 flex h-7 w-[108px] items-center rounded-md bg-white px-2.5">
                       <Image
                         src={slide.logo}
                         alt="Xilinx"
-                        width={112}
-                        height={34}
-                        className="h-5 w-auto object-contain"
+                        width={92}
+                        height={28}
+                        className="h-4 w-auto object-contain"
                       />
                     </span>
                   )}
-                  <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/66">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/72">
                     {slide.eyebrow}
                   </span>
-                  <h1 className="mt-2 max-w-[22ch] text-[27px] font-bold leading-[1.06] tracking-[-0.025em] sm:text-[36px]">
+                  <h1 className="mt-1.5 max-w-[20ch] text-[21px] font-bold leading-[1.05] tracking-[-0.025em] lg:text-[22px]">
                     {slide.title}
                   </h1>
-                  <p className="mt-3 max-w-[52ch] text-[13px] leading-relaxed text-white/76 sm:text-sm">
+                  <p className="mt-2 max-w-[30ch] text-[12px] leading-[1.35] text-white/78 lg:text-[13px]">
                     {slide.description}
                   </p>
                 </div>
@@ -140,24 +164,24 @@ export function HeroSlider() {
           })}
         </div>
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
+        <div className="no-scrollbar mt-4 flex gap-2.5 overflow-x-auto lg:mt-0 lg:gap-4 lg:overflow-visible">
           {quickLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group relative min-h-[132px] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white lg:min-h-0"
+              className="group relative h-[111px] w-[100px] shrink-0 overflow-hidden rounded-xl bg-white lg:h-[206px] lg:w-[183px]"
             >
               <Image
                 src={item.image}
                 alt={item.title}
                 fill
                 className="object-cover transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.025]"
-                sizes="(max-width: 1024px) 50vw, 340px"
+                sizes="(max-width: 1024px) 100px, 183px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#101722]/92 via-[#101722]/14 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-3.5 text-white">
-                <div className="font-display text-base font-bold leading-tight">{item.title}</div>
-                <div className="mt-1 text-xs text-white/72">{item.description}</div>
+              <div className="absolute inset-0 bg-gradient-to-b from-white via-white/84 to-white/5" />
+              <div className="absolute inset-x-0 top-0 p-3 text-ink lg:p-5">
+                <div className="font-display text-[12px] font-bold leading-[1.08] lg:text-[17px]">{item.title}</div>
+                <div className="mt-1 hidden text-[13px] leading-tight text-ink-2 lg:block">{item.description}</div>
               </div>
             </Link>
           ))}

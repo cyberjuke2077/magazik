@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { GitCompareArrows, X, ShoppingCart, Trash2, Package } from 'lucide-react'
+import { X, ShoppingCart, Trash2 } from 'lucide-react'
 import { useCompare } from '@/hooks/use-compare'
 import { clearCompare, removeFromCompare } from '@/lib/compare-store'
 import { useCart } from '@/hooks/use-cart'
@@ -10,6 +11,7 @@ import { CategoryIcon } from '@/components/ui/component-icons'
 import { formatPrice } from '@/lib/utils'
 import { type Product } from '@/lib/queries/products'
 import { fetchCompareProducts } from './actions'
+import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 
 export function CompareClient() {
   const { items: compareItems, mounted } = useCompare()
@@ -52,26 +54,38 @@ export function CompareClient() {
   if (products.length === 0) {
     return (
       <main className="flex-1">
-        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Сравнение товаров</h1>
-          <p className="text-sm text-gray-500 mb-8">Сравнивайте характеристики компонентов бок о бок</p>
-
-          <div className="flex flex-col items-center justify-center border border-gray-200 bg-white px-4 py-14 text-center">
-            <GitCompareArrows size={40} className="mb-4 text-gray-300" />
-            <h2 className="text-lg font-bold text-gray-900 mb-2">Список сравнения пуст</h2>
-            <p className="text-sm text-gray-500 mb-6 max-w-md">
-              Добавляйте товары из каталога - на каждой карточке есть иконка сравнения.
-              Максимум 4 товара за раз.
-            </p>
-            <Link
-              href="/catalog"
-              className="inline-flex h-10 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
-            >
-              <Package size={14} />
-              Перейти в каталог
-            </Link>
+        <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-6 lg:px-0">
+          <div className="grid min-h-[266px] items-center rounded-xl border border-[var(--border)] bg-white px-6 py-5 sm:grid-cols-[380px_minmax(0,1fr)] sm:px-10">
+            <Image
+              src="/storefront/empty-compare.png"
+              alt=""
+              width={350}
+              height={230}
+              className="mx-auto h-[210px] w-[350px] object-contain"
+            />
+            <div className="max-w-xl">
+              <h1 className="mb-3 text-[24px] font-bold leading-tight text-ink">Список сравнения пуст</h1>
+              <p className="mb-6 text-sm text-ink-2">
+                Добавьте до четырех компонентов из каталога, чтобы сопоставить характеристики, корпуса и условия поставки.
+              </p>
+              <div className="flex gap-3">
+                <Link
+                  href="/"
+                  className="inline-flex h-11 min-w-[138px] items-center justify-center rounded-lg border border-[var(--border-2)] px-5 text-sm font-semibold text-ink transition-colors hover:bg-surface-muted"
+                >
+                  На главную
+                </Link>
+                <Link
+                  href="/catalog"
+                  className="inline-flex h-11 min-w-[138px] items-center justify-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+                >
+                  В каталог
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
+        <RecentlyViewed variant="cart" />
       </main>
     )
   }

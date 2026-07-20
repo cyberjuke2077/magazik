@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import {
-  ShoppingCart,
   ArrowRight,
   ChevronRight,
   Trash2,
@@ -15,6 +15,7 @@ import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
 import { useCart } from '@/hooks/use-cart'
 import { formatPrice } from '@/lib/utils'
+import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 
 export default function CartPage() {
   const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
@@ -86,37 +87,25 @@ export default function CartPage() {
       <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
-        <main>
-          {/* Breadcrumb */}
-          <div className="border-b border-[var(--border)]">
-            <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
-              <nav className="flex items-center gap-1.5 text-xs text-ink-4">
-                <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
-                <ChevronRight size={10} />
-                <span className="text-ink-3">Список запроса</span>
-              </nav>
+        <main className="flex-1">
+          <div className="mx-auto max-w-[1380px] px-4 pb-7 pt-7 lg:px-0">
+            <h1 className="mb-3 text-[30px] font-bold leading-tight text-ink">Список запроса</h1>
+            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-xl border border-[var(--border)] bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]">
+              <Image
+                src="/storefront/empty-request-list.png"
+                alt=""
+                width={320}
+                height={210}
+                className="mb-2 h-[210px] w-[320px] object-contain"
+              />
+              <h2 className="mb-2 text-xl font-bold text-ink">Пока пусто</h2>
+              <p className="max-w-md text-sm leading-relaxed text-ink-3">
+                Выберите компоненты в <Link href="/catalog" className="text-azure hover:underline">каталоге</Link> или найдите их по точному MPN.
+                Мы подготовим коммерческое предложение по вашему списку.
+              </p>
             </div>
           </div>
-
-          <div className="mx-auto max-w-[1440px] px-3 py-8 sm:px-6 sm:py-12">
-            <div className="border border-[var(--border)] bg-white px-5 py-10 text-center shadow-[var(--shadow-xs)] sm:py-14">
-            <div className="mb-5 inline-flex size-16 items-center justify-center rounded bg-surface-muted">
-              <ShoppingCart size={30} className="text-ink-4" />
-            </div>
-            <h1 className="text-xl font-bold text-ink mb-2">Список запроса пуст</h1>
-            <p className="text-sm text-ink-3 mb-8 max-w-xs mx-auto leading-relaxed">
-              Добавьте товары в список для формирования запроса на коммерческое предложение.
-              Минимальная сумма заказа - 200 000 ₽.
-            </p>
-            <Link
-              href="/catalog"
-              className="inline-flex h-10 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
-            >
-              Перейти в каталог
-              <ArrowRight size={14} />
-            </Link>
-            </div>
-          </div>
+          <RecentlyViewed variant="cart" />
         </main>
         <Footer />
       </div>

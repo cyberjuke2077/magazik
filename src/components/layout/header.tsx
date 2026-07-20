@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Check, Mail, MapPin, Menu, Phone, Search, X } from 'lucide-react'
+import { Check, Mail, MapPin, Phone, Search } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const cities = [
@@ -58,7 +58,6 @@ const cities = [
 ]
 
 export function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false)
   const [cityModalOpen, setCityModalOpen] = useState(false)
   const [selectedCity, setSelectedCity] = useState('Москва')
   const [searchQuery, setSearchQuery] = useState('')
@@ -86,70 +85,53 @@ export function Header() {
   }
 
   return (
-    <header className="w-full border-b border-[var(--border)] bg-white">
-      <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
-          <div className="flex h-[52px] items-center gap-5 lg:h-10">
-
-            {/* Logo */}
-            <Link href="/" className="shrink-0 lg:hidden">
-              <div className="text-[22px] font-extrabold leading-none tracking-tight text-ink">
-                electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
-              </div>
-            </Link>
-
-            {/* Address */}
-            <div className="hidden items-center lg:flex">
+    <header className="w-full bg-white">
+      <div className="hidden h-[49px] lg:block">
+        <div className="mx-auto flex h-full max-w-[1380px] items-center">
+          <div className="flex w-[280px] shrink-0 items-center gap-5">
+            <span className="text-xs font-semibold text-ink-3">RU</span>
+            <div className="flex items-center">
               <button 
                 onClick={() => setCityModalOpen(true)}
-                className="flex items-center gap-1.5 text-xs font-semibold text-ink-2 transition-colors hover:text-azure"
+                className="flex items-center gap-1.5 text-sm font-medium text-ink-2 transition-colors hover:text-azure"
               >
-                <MapPin size={14} className="text-azure" />
+                <MapPin size={14} />
                 {selectedCity}
               </button>
             </div>
-
-            {/* Phone */}
-            <div className="hidden items-center lg:flex">
-              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-1.5 text-xs font-semibold text-ink-2 transition-colors hover:text-azure">
-                <Phone size={14} className="text-azure" />
-                {COMPANY.phone.display}
-              </a>
-            </div>
-
-            {/* Nav links */}
-            <nav className="ml-auto hidden items-center gap-6 text-xs font-medium text-ink-3 lg:flex">
-              <Link href="/wholesale" className="transition-colors hover:text-azure">Оптовым клиентам</Link>
-              <Link href="/delivery" className="hover:text-azure transition-colors">Доставка</Link>
-              <Link href="/brands"   className="hover:text-azure transition-colors">Бренды</Link>
-              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-1.5 hover:text-azure transition-colors">
-                <Mail size={14} />
-                Написать
-              </a>
-            </nav>
-
-            {/* Mobile burger */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="ml-auto flex size-9 items-center justify-center rounded-[var(--radius-control)] text-ink-3 transition-colors hover:bg-surface-muted lg:hidden"
-              aria-label={mobileOpen ? 'Закрыть меню' : 'Открыть меню'}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
           </div>
+          <nav className="flex items-center gap-6 text-sm font-medium text-ink-2">
+            <Link href="/catalog" className="transition-colors hover:text-azure">Каталог компонентов</Link>
+            <Link href="/delivery" className="transition-colors hover:text-azure">Доставка</Link>
+            <Link href="/brands" className="transition-colors hover:text-azure">Бренды</Link>
+            <Link href="/contacts" className="transition-colors hover:text-azure">Контакты</Link>
+            <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-1.5 transition-colors hover:text-azure">
+              <Mail size={14} />
+              Написать
+            </a>
+          </nav>
+          <a
+            href={`tel:${COMPANY.phone.raw}`}
+            className="ml-auto flex items-center gap-1.5 text-sm font-medium text-ink-2 transition-colors hover:text-azure"
+          >
+            <Phone size={14} />
+            {COMPANY.phone.display}
+          </a>
         </div>
+      </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="border-b border-[var(--border)] bg-white lg:hidden">
-          <div className="mx-auto max-w-[1440px] space-y-1 px-3 py-3">
-            <Link href="/catalog"  onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Каталог</Link>
-            <Link href="/wholesale" onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Оптовым клиентам</Link>
-            <Link href="/brands"   onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Бренды</Link>
-            <Link href="/delivery" onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Доставка</Link>
-          </div>
-        </div>
-      )}
+      <div className="flex h-11 items-center justify-between px-4 lg:hidden">
+        <Link href="/" className="text-[21px] font-extrabold leading-none tracking-[-0.045em] text-ink">
+          electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
+        </Link>
+        <button
+          onClick={() => setCityModalOpen(true)}
+          className="flex items-center gap-1.5 text-xs font-semibold text-ink-2"
+        >
+          <MapPin size={13} />
+          {selectedCity}
+        </button>
+      </div>
 
       {/* City Modal */}
       {cityModalOpen && (

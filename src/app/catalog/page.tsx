@@ -28,6 +28,7 @@ import { BulkSelectWrapper } from './components/bulk-select-panel'
 import { MobileFilterDrawer } from './components/mobile-filter-drawer'
 import { CatalogStats } from './components/catalog-stats'
 import { CatalogShowcase } from './components/catalog-showcase'
+import { CatalogGuideStrip } from './components/catalog-guide-strip'
 
 interface CatalogPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -197,7 +198,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
       {/* Breadcrumbs */}
       <div className="bg-canvas">
-        <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+        <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-[29px] lg:px-0">
           <nav className="flex items-center gap-1 overflow-hidden whitespace-nowrap text-xs text-ink-3">
             <Link href="/" className="hover:text-azure transition-colors">
               Главная
@@ -219,7 +220,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       </div>
 
       <main className="flex-1">
-        <div className="mx-auto max-w-[1440px] px-3 pb-8 pt-3 sm:px-6">
+        <div className="mx-auto max-w-[1380px] px-4 pb-8 pt-3 lg:px-0">
           {/* Page title */}
           <div className="mb-1 flex items-baseline gap-3">
             <h1 className="text-[28px] font-bold tracking-tight text-ink">
@@ -230,16 +231,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             </span>
           </div>
 
-          {/* Stats */}
-          <CatalogStats
-            totalProducts={result.total}
-            totalManufacturers={totalManufacturers}
-            totalCategories={totalCategories}
-          />
-
           <div className="mt-4 flex gap-4">
             {/* Sidebar */}
-            <aside className="sticky top-[76px] hidden h-fit w-[252px] shrink-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-3 lg:block">
+            <aside className="sticky top-[112px] hidden h-fit w-[280px] shrink-0 rounded-xl border border-[var(--border)] bg-white p-4 lg:block">
               <Suspense fallback={<div className="h-40 skeleton rounded" />}>
                 <CategoryTree
                   categories={categories}
@@ -299,6 +293,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                 query={parsed.query}
                 sort={parsed.sort}
               />
+
+              {parsed.categorySlug && <CatalogGuideStrip />}
 
               {/* Product list */}
               {result.items.length === 0 ? (

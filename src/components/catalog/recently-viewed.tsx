@@ -15,7 +15,7 @@ interface RecentlyViewedProps {
   /** Slug to exclude (e.g., the current product page) */
   excludeSlug?: string
   /** Visual variant for layout adaptation */
-  variant?: 'home' | 'product'
+  variant?: 'home' | 'product' | 'cart'
 }
 
 export function RecentlyViewed({ excludeSlug, variant = 'home' }: RecentlyViewedProps) {
@@ -40,8 +40,8 @@ export function RecentlyViewed({ excludeSlug, variant = 'home' }: RecentlyViewed
   const displayItems = variant === 'product' ? items.slice(0, 4) : items.slice(0, 6)
 
   return (
-    <section className={variant === 'home' ? 'py-10 bg-white' : 'py-8'}>
-      <div className={variant === 'home' ? 'mx-auto max-w-[1400px] px-4' : ''}>
+    <section className={variant === 'home' ? 'bg-white py-10' : variant === 'cart' ? 'bg-white py-6' : 'py-8'}>
+      <div className={variant === 'home' ? 'mx-auto max-w-[1400px] px-4' : variant === 'cart' ? 'mx-auto max-w-[1380px]' : ''}>
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <Clock size={16} className="text-azure" />

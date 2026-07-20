@@ -25,7 +25,7 @@ export default async function HomePage() {
   const newArrivals = allProducts.slice(5, 10).length >= 4 ? allProducts.slice(5, 10) : allProducts.slice(0, 5)
 
   return (
-    <div className="flex min-h-screen flex-col bg-canvas">
+    <div className="flex min-h-screen flex-col bg-white">
       <OrganizationJsonLd />
       <Header />
       <StickyNav categories={categories} totalProducts={totalProducts} />

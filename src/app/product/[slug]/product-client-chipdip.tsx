@@ -83,7 +83,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
       <main>
         {/* Breadcrumbs */}
         <div>
-          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+          <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-[29px] lg:px-0">
             <nav className="flex items-center gap-1.5 text-xs text-ink-3 whitespace-nowrap overflow-hidden">
               <Link href="/" className="hover:text-ink">Главная</Link>
               <span>›</span>
@@ -96,21 +96,17 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
+        <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
           {/* Title */}
-          <div className="pb-5 pt-3">
-            <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-ink-3">
-              <Link href={`/catalog?manufacturer=${product.manufacturerSlug}`} className="font-semibold text-azure hover:underline">{product.manufacturer}</Link>
-              <span className="font-normal normal-case tracking-normal text-ink-4">/ {product.category}</span>
-            </div>
+          <div className="pb-5 pt-0">
             <h1 className="max-w-5xl text-2xl font-bold leading-[1.15] tracking-tight text-ink md:text-[32px]">{product.name}</h1>
           </div>
 
           {/* Product Main Section */}
-          <div className="mb-8 grid gap-5 lg:grid-cols-[minmax(360px,440px)_minmax(260px,1fr)_330px]">
+          <div className="mb-8 grid gap-5 rounded-xl border border-[var(--border)] bg-white p-4 sm:p-6 lg:min-h-[687px] lg:grid-cols-[640px_minmax(0,1fr)]">
             {/* Photo Gallery */}
-            <div className="flex-shrink-0">
-              <div className="flex gap-3">
+            <div className="flex-shrink-0 lg:row-span-2">
+              <div className="flex gap-3 lg:gap-6">
                 {/* Thumbnails with scroll buttons */}
                 <div className="hidden sm:flex flex-col gap-2 w-[80px]">
                   <button
@@ -167,7 +163,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
                 {/* Main Photo */}
                 <div className="min-w-0 flex-1">
-                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white sm:h-[420px]">
+                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden bg-white sm:h-[420px] lg:h-[548px] lg:max-w-[484px]">
                     <Image
                       src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}
@@ -187,7 +183,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Product IDs */}
-            <div className="min-w-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-4">
+            <div className="min-w-0 lg:px-6">
               <div className="space-y-3 text-sm">
                 <div className="flex items-baseline gap-3">
                   <span className="text-ink-4 text-xs block max-w-[62%]">Артикул</span>
@@ -278,8 +274,8 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Ordering Controls */}
-            <div className="w-full" data-add-to-cart-block>
-              <div className="sticky top-[76px] rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-5">
+            <div className="w-full lg:px-6" data-add-to-cart-block>
+              <div className="sticky top-[112px]">
                 {/* Price */}
                 <div className="pb-4">
                   <div className="price text-[30px] leading-none">

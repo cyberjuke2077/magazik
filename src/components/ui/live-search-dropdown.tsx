@@ -226,8 +226,7 @@ export function LiveSearchDropdown() {
 
   return (
     <div className="flex-1 relative">
-      <form onSubmit={handleSubmit} className="relative h-11 rounded-[var(--radius-control)] bg-surface-muted">
-        <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
+      <form onSubmit={handleSubmit} className="relative h-9 rounded-xl bg-[#f7f7f7] lg:h-16 lg:rounded-2xl">
         <input
           ref={inputRef}
           type="text"
@@ -244,14 +243,15 @@ export function LiveSearchDropdown() {
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onKeyDown={handleKeyDown}
           placeholder="Поиск по артикулу, названию или производителю"
-          className="h-full w-full rounded-[var(--radius-control)] border border-transparent bg-transparent pl-10 pr-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 sm:pr-24"
+          className="h-full w-full rounded-xl border border-transparent bg-transparent pl-4 pr-14 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 lg:rounded-2xl lg:pl-5 lg:text-base"
           autoComplete="off"
         />
         <button
           type="submit"
-          className="absolute right-1 top-1/2 hidden h-9 -translate-y-1/2 rounded-[7px] bg-azure px-4 text-sm font-semibold text-white transition-colors hover:bg-azure-hover sm:block"
+          className="absolute right-1 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-white hover:text-azure lg:right-3 lg:size-11"
+          aria-label="Найти"
         >
-          Найти
+          <Search size={21} strokeWidth={1.7} />
         </button>
       </form>
 
@@ -259,7 +259,7 @@ export function LiveSearchDropdown() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white shadow-[var(--shadow-xl)]"
+          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] lg:top-[72px]"
         >
           {/* Loading skeleton */}
           {isLoading && <SkeletonResults />}

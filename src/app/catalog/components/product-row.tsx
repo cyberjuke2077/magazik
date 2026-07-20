@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { FileText, Package, Sparkles } from 'lucide-react'
+import { FileText, Sparkles } from 'lucide-react'
 import { formatPrice, isNewProduct } from '@/lib/catalog-utils'
+import { fallbackImageForProduct } from '@/lib/enrichment/images/package-image'
 import { CompareToggleBtn } from '@/components/catalog/compare-toggle-btn'
 import { AddToCartBtn } from './add-to-cart-btn'
 
@@ -28,7 +29,7 @@ interface ProductRowData {
 
 export function ProductRow({ product }: { product: ProductRowData }) {
   return (
-    <article className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-3 transition-colors hover:border-[var(--border-2)] sm:grid-cols-[104px_minmax(0,1fr)_190px] sm:gap-4 sm:p-4">
+    <article className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 rounded-xl border border-[var(--border)] bg-white p-3 transition-colors hover:border-[var(--border-2)] sm:min-h-[240px] sm:grid-cols-[192px_minmax(0,1fr)_190px] sm:gap-6 sm:p-6">
       <ProductImage product={product} />
       <ProductDetails product={product} />
       <ProductCommerce product={product} />
@@ -37,22 +38,24 @@ export function ProductRow({ product }: { product: ProductRowData }) {
 }
 
 function ProductImage({ product }: { product: ProductRowData }) {
+  const image = product.images[0] ?? fallbackImageForProduct({
+    package: product.package,
+    partNumber: product.partNumber,
+    name: product.name,
+  })
+
   return (
     <Link
       href={`/product/${product.slug}`}
       className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[var(--radius-control)] border border-[var(--border)] bg-surface-muted"
     >
-      {product.images[0] ? (
-        <Image
-          src={product.images[0]}
-          alt={product.name}
-          fill
-          className="object-contain p-2"
-          sizes="(max-width: 640px) 76px, 104px"
-        />
-      ) : (
-        <Package size={30} strokeWidth={1.4} className="text-ink-4" />
-      )}
+      <Image
+        src={image}
+        alt={product.name}
+        fill
+        className="object-contain p-2"
+        sizes="(max-width: 640px) 76px, 192px"
+      />
     </Link>
   )
 }

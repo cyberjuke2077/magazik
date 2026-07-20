@@ -24,7 +24,7 @@ export function ProductShowcase({
 }: ProductShowcaseProps) {
   if (products.length === 0) return null
   return (
-    <section className={`py-5 ${muted ? 'bg-surface-muted' : 'bg-canvas'}`}>
+    <section className={`py-5 ${muted ? 'bg-surface-muted' : 'bg-white'}`}>
       <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
         <SectionHeader
           eyebrow={eyebrow}
