@@ -79,7 +79,7 @@ export function AddToCartBtn({
         className={`flex items-center gap-1.5 h-8 px-3 text-xs font-bold rounded-[var(--radius-control)] transition-colors whitespace-nowrap ${
           inCart
             ? 'bg-azure-light text-azure border border-azure/30'
-            : 'bg-azure text-white hover:bg-azure-hover'
+            : 'bg-accent text-white hover:bg-accent-hover'
         }`}
       >
         {inCart ? (

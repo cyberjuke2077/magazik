@@ -20,7 +20,7 @@ export function ViewToggle() {
   }
 
   return (
-    <div className="flex items-center h-8 border border-[var(--border)] rounded overflow-hidden">
+    <div className="flex h-8 items-center overflow-hidden rounded-[var(--radius-control)] border border-[var(--border)]">
       <button
         onClick={() => handleChange('list')}
         className={`flex items-center justify-center w-8 h-full transition-colors ${

@@ -54,7 +54,7 @@ export function Pagination({ page, totalPages, total, limit, baseParams }: Pagin
   const pages = getPageNumbers(page, totalPages)
 
   return (
-    <div className="flex items-center justify-between mt-6 pt-4 border-t border-[var(--border)]">
+    <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-[var(--border)] pt-4 sm:flex-row">
       {/* Range display */}
       <div className="text-sm text-ink-3 tnum">
         {start.toLocaleString('ru-RU')}-{end.toLocaleString('ru-RU')} из{' '}
@@ -62,7 +62,7 @@ export function Pagination({ page, totalPages, total, limit, baseParams }: Pagin
       </div>
 
       {/* Page buttons */}
-      <div className="flex items-center gap-0 border border-[var(--border)]">
+      <div className="flex items-center gap-0 overflow-hidden rounded-[var(--radius-control)] border border-[var(--border)] bg-white">
         {/* Prev */}
         {page > 1 ? (
           <Link

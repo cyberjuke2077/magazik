@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { type Metadata } from 'next'
 import Link from 'next/link'
-import { ChevronRight, Download } from 'lucide-react'
+import { ChevronRight, Download, PackageSearch } from 'lucide-react'
 import { getProductsPaginated } from '@/lib/queries/products'
 import {
   getCatalogSections,
@@ -25,7 +25,6 @@ import { ViewToggle } from './components/view-toggle'
 import { ActiveFilters } from './components/active-filters'
 import { CopyLinkBtn } from './components/copy-link-btn'
 import { BulkSelectWrapper } from './components/bulk-select-panel'
-import { HoverPreview } from './components/hover-preview'
 import { MobileFilterDrawer } from './components/mobile-filter-drawer'
 import { CatalogStats } from './components/catalog-stats'
 import { CatalogShowcase } from './components/catalog-showcase'
@@ -103,13 +102,13 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
     const sections = await getCatalogSections()
 
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav categories={navCategories} totalProducts={totalProductsAll} />
 
-        <div className="border-b border-[var(--border)] bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-2">
-            <nav className="flex items-center gap-1 text-sm text-ink-3">
+        <div className="bg-canvas">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+            <nav className="flex items-center gap-1 overflow-hidden whitespace-nowrap text-xs text-ink-3">
               <Link href="/" className="hover:text-azure transition-colors">Главная</Link>
               <ChevronRight size={12} className="text-ink-4" />
               <span className="text-ink-2">Каталог</span>
@@ -118,9 +117,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         </div>
 
         <main className="flex-1">
-          <div className="mx-auto max-w-[1400px] px-4 py-4">
-            <div className="flex items-baseline gap-3 mb-1">
-              <h1 className="text-2xl font-bold text-ink">Каталог</h1>
+          <div className="mx-auto max-w-[1440px] px-3 pb-8 pt-3 sm:px-6">
+            <div className="mb-1 flex items-baseline gap-3">
+              <h1 className="text-[28px] font-bold tracking-tight text-ink">Каталог</h1>
               <span className="text-sm text-ink-4">
                 {totalProductsAll.toLocaleString('ru-RU')} позиций
               </span>
@@ -132,7 +131,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               totalCategories={totalCategories}
             />
 
-            <div className="mt-5">
+            <div className="mt-4">
               <CatalogShowcase sections={sections} />
             </div>
           </div>
@@ -192,14 +191,14 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const baseParams = baseSearchParams.toString()
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav categories={navCategories} totalProducts={totalProductsAll} />
 
       {/* Breadcrumbs */}
-      <div className="border-b border-[var(--border)] bg-white">
-        <div className="mx-auto max-w-[1400px] px-4 py-2">
-          <nav className="flex items-center gap-1 text-sm text-ink-3">
+      <div className="bg-canvas">
+        <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+          <nav className="flex items-center gap-1 overflow-hidden whitespace-nowrap text-xs text-ink-3">
             <Link href="/" className="hover:text-azure transition-colors">
               Главная
             </Link>
@@ -220,10 +219,10 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       </div>
 
       <main className="flex-1">
-        <div className="mx-auto max-w-[1400px] px-4 py-4">
+        <div className="mx-auto max-w-[1440px] px-3 pb-8 pt-3 sm:px-6">
           {/* Page title */}
-          <div className="flex items-baseline gap-3 mb-1">
-            <h1 className="text-2xl font-bold text-ink">
+          <div className="mb-1 flex items-baseline gap-3">
+            <h1 className="text-[28px] font-bold tracking-tight text-ink">
               {activeCategoryName || 'Каталог'}
             </h1>
             <span className="text-sm text-ink-4">
@@ -238,21 +237,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             totalCategories={totalCategories}
           />
 
-          {/* Mobile filter button */}
-          <MobileFilterDrawer>
-            <CategoryTree
-              categories={categories}
-              activeSlug={parsed.categorySlug}
-            />
-            <ManufacturerFilter
-              manufacturers={manufacturers}
-              activeSlug={parsed.manufacturerSlug}
-            />
-          </MobileFilterDrawer>
-
-          <div className="flex gap-5 mt-4">
+          <div className="mt-4 flex gap-4">
             {/* Sidebar */}
-            <aside className="hidden lg:block w-[220px] shrink-0">
+            <aside className="sticky top-[76px] hidden h-fit w-[252px] shrink-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-3 lg:block">
               <Suspense fallback={<div className="h-40 skeleton rounded" />}>
                 <CategoryTree
                   categories={categories}
@@ -268,13 +255,23 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             {/* Main content */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-[var(--border)]">
+              <div className="mb-3 flex min-h-12 flex-wrap items-center gap-2 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-2">
                 {parsed.query && (
-                  <span className="text-sm text-ink-3">
+                  <span className="mr-auto min-w-0 truncate text-sm text-ink-3">
                     Результаты для «<span className="font-medium text-ink-2">{parsed.query}</span>»
                   </span>
                 )}
-                <div className="ml-auto flex items-center gap-2">
+                <div className={`${parsed.query ? '' : 'ml-auto'} flex flex-wrap items-center gap-2`}>
+                  <MobileFilterDrawer>
+                    <CategoryTree
+                      categories={categories}
+                      activeSlug={parsed.categorySlug}
+                    />
+                    <ManufacturerFilter
+                      manufacturers={manufacturers}
+                      activeSlug={parsed.manufacturerSlug}
+                    />
+                  </MobileFilterDrawer>
                   <CopyLinkBtn />
                   <a
                     href={`/api/catalog/export${baseParams ? `?${baseParams}` : ''}`}
@@ -305,8 +302,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
               {/* Product list */}
               {result.items.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-center">
-                  <div className="text-5xl mb-4 opacity-20">◆</div>
+                <div className="flex flex-col items-center justify-center rounded-[var(--radius-card)] border border-[var(--border)] bg-white py-20 text-center">
+                  <PackageSearch size={42} strokeWidth={1.4} className="mb-4 text-ink-4" />
                   <h3 className="text-lg font-bold text-ink mb-2">Ничего не найдено</h3>
                   <p className="text-sm text-ink-3 mb-5">
                     Попробуйте изменить фильтры или поисковый запрос
@@ -316,7 +313,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   </Link>
                 </div>
               ) : parsed.view === 'table' ? (
-                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
+                <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white">
                   <BulkSelectWrapper
                     products={result.items.map((p) => ({
                       id: p.id,
@@ -344,7 +341,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   </BulkSelectWrapper>
                 </div>
               ) : (
-                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
+                <div className="space-y-2">
                   <BulkSelectWrapper
                     products={result.items.map((p) => ({
                       id: p.id,
@@ -356,34 +353,29 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                     }))}
                   >
                     {result.items.map((product) => (
-                      <HoverPreview
+                      <ProductRow
                         key={product.id}
                         product={{
+                          id: product.id,
+                          slug: product.slug,
                           name: product.name,
-                          description: product.description,
-                          specs: product.specs,
-                          datasheets: product.datasheets,
+                          partNumber: product.partNumber,
+                          manufacturer: product.manufacturer,
+                          categorySlug: product.categorySlug,
+                          price: product.price,
+                          minOrder: product.minOrder,
                           package: product.package,
+                          lifecycle: product.lifecycle,
+                          description: product.description,
+                          lastEnrichedAt: product.lastEnrichedAt,
+                          datasheets: product.datasheets,
+                          images: product.images,
+                          specs: product.specs,
+                          inStock: product.inStock,
+                          stockCount: product.stockCount,
+                          unit: product.unit,
                         }}
-                      >
-                        <ProductRow
-                          product={{
-                            id: product.id,
-                            slug: product.slug,
-                            name: product.name,
-                            partNumber: product.partNumber,
-                            manufacturer: product.manufacturer,
-                            categorySlug: product.categorySlug,
-                            price: product.price,
-                            minOrder: product.minOrder,
-                            package: product.package,
-                            lifecycle: product.lifecycle,
-                            description: product.description,
-                            lastEnrichedAt: product.lastEnrichedAt,
-                            datasheets: product.datasheets,
-                          }}
-                        />
-                      </HoverPreview>
+                      />
                     ))}
                   </BulkSelectWrapper>
                 </div>
