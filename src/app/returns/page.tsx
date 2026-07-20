@@ -70,7 +70,7 @@ export default function ReturnsPage() {
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+          <div className="mx-auto max-w-[1380px] px-4 py-2 lg:px-0">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -79,8 +79,8 @@ export default function ReturnsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Возврат товара</h1>
+        <div className="mx-auto max-w-[1380px] px-4 py-7 lg:px-0">
+          <h1 className="mb-1 text-3xl font-bold tracking-[-0.035em] text-ink">Возврат товара</h1>
           <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Работаем с юридическими лицами в B2B-режиме. Возврат осуществляется в соответствии с
             условиями договора поставки и Гражданским кодексом РФ.
@@ -88,7 +88,7 @@ export default function ReturnsPage() {
 
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
             {conditions.map((c) => (
-              <div key={c.title} className="p-5 border border-[var(--border)] rounded bg-white">
+              <div key={c.title} className="rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)]">
                 <div className="flex size-9 items-center justify-center bg-azure-light mb-3 rounded">
                   <c.icon size={16} className="text-azure" />
                 </div>
@@ -104,7 +104,7 @@ export default function ReturnsPage() {
               {steps.map((s) => (
                 <div
                   key={s.n}
-                  className="flex gap-4 p-5 border border-[var(--border)] rounded bg-white"
+                  className="flex gap-4 rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)]"
                 >
                   <div className="flex size-9 items-center justify-center bg-azure text-white text-sm font-bold rounded shrink-0">
                     {s.n}
@@ -119,9 +119,9 @@ export default function ReturnsPage() {
           </section>
 
           <section className="mb-10 grid lg:grid-cols-2 gap-3">
-            <div className="p-6 bg-[#fff7ed] border border-orange-200 rounded">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
               <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle size={16} className="text-accent" />
+                <AlertTriangle size={16} className="text-amber-700" />
                 <h3 className="text-sm font-bold text-ink">Возврату не подлежат</h3>
               </div>
               <ul className="space-y-1.5 text-sm text-ink-3 leading-relaxed">
@@ -131,7 +131,7 @@ export default function ReturnsPage() {
                 <li>- Товары с истёкшим сроком уведомления (более 14 дней)</li>
               </ul>
             </div>
-            <div className="p-6 bg-azure-light border border-blue-200 rounded">
+            <div className="rounded-2xl bg-azure-light p-6">
               <div className="flex items-center gap-2 mb-3">
                 <FileCheck size={16} className="text-azure" />
                 <h3 className="text-sm font-bold text-ink">Гарантия</h3>
@@ -148,7 +148,7 @@ export default function ReturnsPage() {
 
           <Link
             href="/contacts"
-            className="inline-flex h-11 items-center gap-1.5 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+            className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-azure px-6 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
           >
             Связаться с отделом возвратов
             <ChevronRight size={14} />

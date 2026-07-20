@@ -52,7 +52,7 @@ export default function HelpPage() {
       <Header />
       <StickyNav />
       <main className="min-h-screen bg-canvas py-6">
-        <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
+        <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-sm text-ink-3 mb-6">
             <Link href="/" className="hover:text-azure">Главная</Link>
@@ -62,24 +62,24 @@ export default function HelpPage() {
 
           <div className="flex items-center gap-3 mb-6">
             <HelpCircle size={28} className="text-azure" />
-            <h1 className="text-2xl font-bold text-ink">Центр помощи</h1>
+            <h1 className="text-3xl font-bold tracking-[-0.035em] text-ink">Центр помощи</h1>
           </div>
 
           {/* Search */}
-          <div className="bg-white rounded-lg p-6 mb-8">
+          <div className="mb-8 rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)]" data-motion-reveal>
             <div className="relative max-w-2xl mx-auto">
               <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-4" />
               <input
                 type="text"
                 placeholder="Поиск по вопросам..."
-                className="w-full h-12 pl-12 pr-4 text-sm border border-[var(--border-2)] rounded-lg focus:outline-none focus:border-azure"
+                className="h-12 w-full rounded-xl border border-[var(--border-2)] pl-12 pr-4 text-sm focus:border-azure focus:outline-none"
               />
             </div>
           </div>
 
           {/* Contact Cards */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <a href={`tel:${COMPANY.phone.raw}`} className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
+            <a href={`tel:${COMPANY.phone.raw}`} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Phone size={24} className="text-azure" />
               </div>
@@ -88,7 +88,7 @@ export default function HelpPage() {
               <p className="text-xs text-ink-4 mt-1">Пн-Пт 9:00-18:00</p>
             </a>
 
-            <a href={`mailto:${COMPANY.supportEmail}`} className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow">
+            <a href={`mailto:${COMPANY.supportEmail}`} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Mail size={24} className="text-azure" />
               </div>
@@ -97,20 +97,20 @@ export default function HelpPage() {
               <p className="text-xs text-ink-4 mt-1">Ответим в течение 24 часов</p>
             </a>
 
-            <button className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow text-left">
+            <Link href="/contacts" className="rounded-2xl bg-white p-6 text-left shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <MessageCircle size={24} className="text-azure" />
               </div>
               <h3 className="font-semibold text-ink mb-2">Онлайн-чат</h3>
               <p className="text-sm text-ink-3">Задать вопрос</p>
               <p className="text-xs text-ink-4 mt-1">Обычно отвечаем за 5 минут</p>
-            </button>
+            </Link>
           </div>
 
           {/* FAQ Categories */}
           <div className="space-y-6">
             {faqCategories.map((category, idx) => (
-              <div key={idx} className="bg-white rounded-lg p-6">
+              <div key={idx} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)]">
                 <div className="flex items-center gap-3 mb-4">
                   <category.icon size={24} className="text-azure" />
                   <h2 className="text-xl font-semibold text-ink">{category.title}</h2>
@@ -140,7 +140,7 @@ export default function HelpPage() {
           </div>
 
           {/* Additional Resources */}
-          <div className="bg-white rounded-lg p-6 mt-8">
+          <div className="mt-8 rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)]">
             <h2 className="text-xl font-semibold text-ink mb-4">Полезные ссылки</h2>
             <div className="grid md:grid-cols-2 gap-4">
               <Link href="/delivery" className="flex items-center gap-3 p-4 hover:bg-[#fafafa] rounded transition-colors">

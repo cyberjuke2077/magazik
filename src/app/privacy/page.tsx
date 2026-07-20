@@ -24,14 +24,14 @@ const sections = [
   {
     title: '2. Какие данные собираются',
     content: [
-      'При оформлении запроса коммерческого предложения: ФИО, название компании, ИНН, контактный телефон, email, адрес доставки.',
+      'При оформлении заказа из корзины: ФИО, название компании, ИНН, контактный телефон, email, адрес доставки.',
       'Автоматически собираемая техническая информация: IP-адрес, тип браузера, страницы посещения, источник перехода (Cookie-файлы и метрики Яндекс.Метрика, Google Analytics).',
     ],
   },
   {
     title: '3. Цели обработки данных',
     content: [
-      'Формирование коммерческих предложений по запросам пользователей.',
+      'Формирование коммерческих предложений по оформленным заказам пользователей.',
       'Заключение и исполнение договоров поставки электронных компонентов.',
       'Информирование о статусе заказа, поступлениях, акциях (с согласия пользователя).',
       'Анализ работы Сайта, улучшение пользовательского опыта.',
@@ -105,15 +105,15 @@ export default function PrivacyPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[960px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Политика конфиденциальности</h1>
+        <div className="mx-auto max-w-[1080px] px-3 py-8 sm:px-6">
+          <h1 className="mb-1 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Политика конфиденциальности</h1>
           <p className="text-sm text-ink-3 mb-8">
             Редакция от 14 июня 2026 года
           </p>
 
-          <div className="space-y-8">
+          <div className="space-y-4">
             {sections.map((s) => (
-              <section key={s.title}>
+              <section key={s.title} className="rounded-2xl bg-white p-6 shadow-sm">
                 <h2 className="text-lg font-bold text-ink mb-3">{s.title}</h2>
                 <div className="space-y-3 text-sm text-ink-3 leading-relaxed">
                   {s.content.map((p, i) => (

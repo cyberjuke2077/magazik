@@ -4,6 +4,7 @@ import { Briefcase, MapPin, Clock, ChevronRight, Mail, TrendingUp, Users, Award 
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 export const metadata: Metadata = {
   title: 'Вакансии',
@@ -61,7 +62,7 @@ export default function JobsPage() {
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+          <div className="mx-auto max-w-[1380px] px-4 py-2 lg:px-0">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -70,8 +71,8 @@ export default function JobsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Вакансии</h1>
+        <div className="mx-auto max-w-[1380px] px-4 py-7 lg:px-0">
+          <h1 className="mb-1 text-3xl font-bold tracking-[-0.035em] text-ink">Вакансии</h1>
           <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Растём в области B2B-поставок электронных компонентов и ищем людей, которые помогут
             сделать процессы быстрее и удобнее для клиентов.
@@ -80,7 +81,7 @@ export default function JobsPage() {
           {/* Benefits */}
           <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
             {benefits.map((b) => (
-              <div key={b.title} className="p-5 border border-[var(--border)] rounded bg-white">
+              <div key={b.title} className="rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)]">
                 <div className="flex size-9 items-center justify-center bg-azure-light mb-3 rounded">
                   <b.icon size={16} className="text-azure" />
                 </div>
@@ -97,7 +98,7 @@ export default function JobsPage() {
               {positions.map((p) => (
                 <div
                   key={p.title}
-                  className="p-6 border border-[var(--border)] rounded bg-white hover:border-azure hover:shadow-sm transition-all"
+                  className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)]"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start gap-4">
                     <div className="flex-1">
@@ -128,8 +129,8 @@ export default function JobsPage() {
                       </div>
                       <div className="text-sm font-bold text-ink mb-3">{p.salary}</div>
                       <a
-                        href={`mailto:hr@electromagaz.ru?subject=Вакансия: ${p.title}`}
-                        className="flex h-9 items-center justify-center gap-1.5 rounded bg-accent px-4 text-xs font-bold text-white transition-colors hover:bg-accent-hover"
+                        href={`mailto:${COMPANY.hrEmail}?subject=Вакансия: ${p.title}`}
+                        className="flex h-9 items-center justify-center gap-1.5 rounded-xl bg-azure px-4 text-xs font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
                       >
                         Откликнуться
                         <ChevronRight size={12} />
@@ -142,14 +143,14 @@ export default function JobsPage() {
           </section>
 
           {/* Generic CTA */}
-          <section className="p-8 bg-azure-light border border-blue-200 rounded text-center">
+          <section className="rounded-2xl bg-azure-light p-8 text-center" data-motion-reveal>
             <h2 className="text-lg font-bold text-ink mb-2">Не нашли подходящую вакансию?</h2>
             <p className="text-sm text-ink-3 mb-5 max-w-xl mx-auto leading-relaxed">
-              Пришлите резюме на hr@electromagaz.ru - рассмотрим и свяжемся, когда появится релевантная позиция.
+              Пришлите резюме на {COMPANY.hrEmail} - рассмотрим и свяжемся, когда появится релевантная позиция.
             </p>
             <a
-              href="mailto:hr@electromagaz.ru"
-              className="inline-flex h-11 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+              href={`mailto:${COMPANY.hrEmail}`}
+              className="inline-flex h-11 items-center gap-2 rounded-xl bg-azure px-6 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
             >
               <Mail size={14} />
               Отправить резюме

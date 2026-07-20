@@ -61,7 +61,7 @@ export default function SupportPage() {
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+          <div className="mx-auto max-w-[1380px] px-4 py-2 lg:px-0">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -70,8 +70,8 @@ export default function SupportPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Техническая поддержка</h1>
+        <div className="mx-auto max-w-[1380px] px-4 py-7 lg:px-0">
+          <h1 className="mb-1 text-3xl font-bold tracking-[-0.035em] text-ink">Техническая поддержка</h1>
           <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Команда инженеров с опытом в схемотехнике, embedded-разработке и силовой электронике
             поможет решить технические вопросы по компонентам.
@@ -80,7 +80,7 @@ export default function SupportPage() {
           {/* Services */}
           <section className="grid md:grid-cols-3 gap-3 mb-12">
             {services.map((s) => (
-              <div key={s.title} className="p-6 border border-[var(--border)] rounded bg-white">
+              <div key={s.title} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)]">
                 <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
                   <s.icon size={18} className="text-azure" />
                 </div>
@@ -91,7 +91,7 @@ export default function SupportPage() {
           </section>
 
           {/* Contact */}
-          <section className="mb-12 p-8 bg-gradient-to-r from-azure to-azure-hover rounded">
+          <section className="mb-12 rounded-2xl bg-azure p-8" data-motion-reveal>
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">Связаться с инженерами</h2>
@@ -103,14 +103,14 @@ export default function SupportPage() {
               <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
                 <a
                   href={`tel:${COMPANY.phone.raw}`}
-                  className="flex items-center gap-2 h-11 px-5 text-sm font-semibold text-azure bg-white hover:bg-[#fafafa] rounded transition-all"
+                  className="flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-azure transition duration-200 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   <Phone size={14} />
                   {COMPANY.phone.display}
                 </a>
                 <a
                   href={`mailto:${COMPANY.supportEmail}`}
-                  className="flex items-center gap-2 h-11 px-5 text-sm font-semibold text-white border border-white/30 hover:bg-white/10 rounded transition-all"
+                  className="flex h-11 items-center gap-2 rounded-xl border border-white/30 px-5 text-sm font-semibold text-white transition-all hover:bg-white/10"
                 >
                   <Mail size={14} />
                   {COMPANY.supportEmail}
@@ -126,7 +126,7 @@ export default function SupportPage() {
               {faq.map((f, i) => (
                 <details
                   key={i}
-                  className="group p-5 border border-[var(--border)] rounded bg-white open:bg-[#f8fafc] transition-colors"
+                  className="group rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)] transition-colors open:bg-azure-dim"
                 >
                   <summary className="flex items-center justify-between cursor-pointer list-none">
                     <span className="text-sm font-bold text-ink pr-4">{f.q}</span>

@@ -22,8 +22,8 @@ import { formatPrice } from '@/lib/utils'
 const workflowSteps = [
   {
     icon: FileText,
-    title: 'Отправка запроса',
-    desc: 'Вы формируете список товаров и отправляете запрос на коммерческое предложение через сайт',
+    title: 'Сбор корзины',
+    desc: 'Вы добавляете товары в корзину и переходите к оформлению заказа',
   },
   {
     icon: Calculator,
@@ -154,26 +154,26 @@ export default function DeliveryPage() {
         </div>
 
         {/* Hero */}
-        <div className="bg-white py-12">
-          <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
-            <h1 className="mb-2 text-2xl font-bold text-ink">Условия работы и доставка</h1>
+        <div className="bg-white py-8">
+          <div className="mx-auto max-w-[1380px] px-3 sm:px-6">
+            <h1 className="mb-2 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Условия работы и доставка</h1>
             <p className="text-ink-3 max-w-2xl text-lg">
               Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа - {formatPrice(MIN_ORDER_AMOUNT)}.
-              Ответ на запрос в течение {REQUEST_PROCESSING_TIME}.
+              Подтверждаем заказ в течение {REQUEST_PROCESSING_TIME}.
             </p>
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] space-y-10 px-3 pb-10 sm:px-6">
+        <div className="mx-auto max-w-[1380px] space-y-10 px-3 pb-12 sm:px-6">
 
           {/* Key info banner */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               { icon: Building, label: 'Только для бизнеса', sub: 'Юр. лица и ИП', color: 'text-azure', bg: 'bg-azure-light' },
-              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-accent', bg: 'bg-orange-50' },
+              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-azure', bg: 'bg-azure-light' },
               { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-azure', bg: 'bg-azure-light' },
             ].map((item) => (
-              <div key={item.label} className="flex items-center gap-4 p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+              <div key={item.label} className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className={`flex size-12 items-center justify-center rounded-lg ${item.bg} shrink-0`}>
                   <item.icon size={22} className={item.color} />
                 </div>
@@ -191,7 +191,7 @@ export default function DeliveryPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {workflowSteps.map((step, i) => (
                 <div key={i} className="relative">
-                  <div className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow h-full">
+                  <div className="h-full rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
                         <step.icon size={22} className="text-azure" />
@@ -214,7 +214,7 @@ export default function DeliveryPage() {
             <h2 className="text-2xl font-bold text-ink mb-6">Варианты доставки</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {deliveryOptions.map((option) => (
-                <div key={option.name} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div key={option.name} className="rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
                       <option.icon size={22} className="text-azure" />
@@ -233,7 +233,7 @@ export default function DeliveryPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mt-6 rounded-2xl bg-azure-light p-5">
               <p className="text-sm text-blue-800">
                 <strong>Важно:</strong> Стоимость и сроки доставки рассчитываются индивидуально и включаются в коммерческое предложение.
                 Мы организуем доставку до вашего склада или терминала ТК в вашем городе.
@@ -246,7 +246,7 @@ export default function DeliveryPage() {
             <h2 className="text-2xl font-bold text-ink mb-6">Способы оплаты</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {paymentMethods.map((method) => (
-                <div key={method.name} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div key={method.name} className="rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
                       <method.icon size={20} className="text-azure" />
@@ -273,7 +273,7 @@ export default function DeliveryPage() {
           {/* Documents */}
           <section>
             <h2 className="text-2xl font-bold text-ink mb-6">Документы</h2>
-            <div className="bg-white rounded-lg shadow-sm p-8">
+            <div className="rounded-2xl bg-white p-8 shadow-sm">
               <p className="text-sm text-ink-3 mb-6">
                 Мы предоставляем полный пакет документов для бухгалтерии. Все документы оформляются в соответствии с требованиями законодательства РФ.
               </p>
@@ -291,7 +291,7 @@ export default function DeliveryPage() {
           {/* Return policy */}
           <section>
             <h2 className="text-2xl font-bold text-ink mb-6">Возврат и обмен</h2>
-            <div className="bg-white rounded-lg shadow-sm p-8">
+            <div className="rounded-2xl bg-white p-8 shadow-sm">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div>
                   <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
@@ -342,7 +342,7 @@ export default function DeliveryPage() {
           {/* FAQ */}
           <section>
             <h2 className="text-2xl font-bold text-ink mb-6">Частые вопросы</h2>
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
               {faq.map((item, i) => (
                 <div
                   key={i}
@@ -356,22 +356,22 @@ export default function DeliveryPage() {
           </section>
 
           {/* Contact */}
-          <section className="bg-gradient-to-br from-azure-light to-[#f0f9ff] rounded-lg p-8 shadow-sm">
+          <section className="rounded-2xl bg-azure p-8 text-white shadow-sm" data-motion-reveal>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
-                <h2 className="text-xl font-bold text-ink mb-2">Готовы начать работу?</h2>
-                <p className="text-sm text-ink-3">Отправьте запрос на коммерческое предложение или свяжитесь с нами напрямую</p>
+                <h2 className="mb-2 text-xl font-bold text-white">Готовы оформить заказ?</h2>
+                <p className="text-sm text-white/75">Соберите товары в корзину или свяжитесь с нами напрямую</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="flex h-11 items-center justify-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+                  className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-bold text-azure transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
                 >
                   Выбрать товары
                 </Link>
                 <a
                   href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
-                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-semibold text-ink-2 bg-white hover:bg-[#fafafa] rounded-lg transition-all shadow-sm"
+                  className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white transition-all hover:bg-white/20"
                 >
                   <Phone size={16} />
                   Позвонить

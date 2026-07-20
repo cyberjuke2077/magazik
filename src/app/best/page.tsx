@@ -25,9 +25,9 @@ export default async function BestPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-3 py-5 sm:px-6">
-          <h1 className="mb-4 text-2xl font-bold text-ink">Лучшие предложения</h1>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="mx-auto max-w-[1380px] px-3 py-8 sm:px-6">
+          <h1 className="mb-6 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Лучшие предложения</h1>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {bestProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

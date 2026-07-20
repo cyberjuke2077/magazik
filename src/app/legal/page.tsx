@@ -52,8 +52,8 @@ export default function LegalPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[960px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Реквизиты и правовая информация</h1>
+        <div className="mx-auto max-w-[1080px] px-3 py-8 sm:px-6">
+          <h1 className="mb-1 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Реквизиты и правовая информация</h1>
           <p className="text-sm text-ink-3 mb-8">
             Реквизиты компании для заключения договоров и безналичной оплаты, а также правовые документы сайта.
           </p>
@@ -61,7 +61,7 @@ export default function LegalPage() {
           {/* Реквизиты */}
           <section className="mb-8">
             <h2 className="text-lg font-bold text-ink mb-3">Реквизиты компании</h2>
-            <div className="p-5 bg-[#f8fafc] border border-[var(--border)] rounded space-y-2.5 text-sm">
+            <div className="space-y-2.5 rounded-2xl bg-white p-6 text-sm shadow-sm">
               {requisites.map((r) => (
                 <div key={r.label} className="flex justify-between gap-4">
                   <span className="text-ink-3 shrink-0">{r.label}</span>
@@ -74,7 +74,7 @@ export default function LegalPage() {
           {/* Банковские реквизиты */}
           <section className="mb-8">
             <h2 className="text-lg font-bold text-ink mb-3">Банковские реквизиты</h2>
-            <div className="p-5 bg-[#f8fafc] border border-[var(--border)] rounded space-y-2.5 text-sm">
+            <div className="space-y-2.5 rounded-2xl bg-white p-6 text-sm shadow-sm">
               {bankRequisites.map((r) => (
                 <div key={r.label} className="flex justify-between gap-4">
                   <span className="text-ink-3 shrink-0">{r.label}</span>
@@ -95,7 +95,7 @@ export default function LegalPage() {
                 <Link
                   key={d.href}
                   href={d.href}
-                  className="block p-4 border border-[var(--border)] rounded hover:border-azure hover:shadow-sm transition-all"
+                  className="block rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <div className="font-semibold text-ink">{d.title}</div>
                   <div className="text-xs text-ink-3 mt-0.5">{d.desc}</div>

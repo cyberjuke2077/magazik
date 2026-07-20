@@ -124,15 +124,15 @@ export default function OfferPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[960px] px-3 py-6 sm:px-6">
-          <h1 className="mb-1 text-2xl font-bold text-ink">Публичная оферта на поставку Товара</h1>
+        <div className="mx-auto max-w-[1080px] px-3 py-8 sm:px-6">
+          <h1 className="mb-1 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Публичная оферта на поставку Товара</h1>
           <p className="text-sm text-ink-3 mb-8">
             Условия поставки электронных компонентов для юридических лиц и индивидуальных предпринимателей.
           </p>
 
-          <div className="space-y-8">
+          <div className="space-y-4">
             {sections.map((s) => (
-              <section key={s.title}>
+              <section key={s.title} className="rounded-2xl bg-white p-6 shadow-sm">
                 <h2 className="text-lg font-bold text-ink mb-3">{s.title}</h2>
                 <div className="space-y-3 text-sm text-ink-3 leading-relaxed">
                   {s.content.map((p, i) => (

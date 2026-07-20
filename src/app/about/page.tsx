@@ -50,7 +50,7 @@ export default function AboutPage() {
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+          <div className="mx-auto max-w-[1380px] px-4 py-2 lg:px-0">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -59,11 +59,10 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
+        <div className="mx-auto max-w-[1380px] px-4 py-7 lg:px-0">
           {/* Hero */}
-          <section className="mb-8 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)] sm:p-7">
-            <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-accent">Electromagaz для бизнеса</div>
-            <h1 className="mb-3 max-w-4xl text-2xl font-bold leading-tight text-ink md:text-3xl">
+          <section className="mb-8 rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)] sm:p-7" data-motion-reveal>
+            <h1 className="mb-3 max-w-6xl text-balance text-2xl font-bold leading-tight tracking-[-0.035em] text-ink md:text-3xl">
               Поставляем электронные компоненты для промышленности с 2012 года
             </h1>
             <p className="text-base text-ink-3 max-w-3xl leading-relaxed">
@@ -74,11 +73,11 @@ export default function AboutPage() {
           </section>
 
           {/* Stats */}
-          <section className="mb-8 grid grid-cols-2 gap-px overflow-hidden border border-[var(--border)] bg-[var(--border)] lg:grid-cols-4">
+          <section className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="bg-white p-5 text-center"
+                className="rounded-2xl bg-white p-5 text-center shadow-[var(--shadow-xs)]"
               >
                 <div className="mb-1 text-2xl font-extrabold text-azure">{s.value}</div>
                 <div className="text-xs text-ink-3">{s.label}</div>
@@ -93,7 +92,7 @@ export default function AboutPage() {
               {values.map((v) => (
                 <div
                   key={v.title}
-                  className="flex gap-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]"
+                  className="flex gap-4 rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)]"
                 >
                   <div className="flex size-10 items-center justify-center bg-azure-light shrink-0 rounded">
                     <v.icon size={18} className="text-azure" />
@@ -129,7 +128,7 @@ export default function AboutPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-ink mb-4">Реквизиты и документы</h2>
-              <div className="p-5 bg-[#f8fafc] border border-[var(--border)] rounded space-y-2.5 text-sm">
+              <div className="space-y-2.5 rounded-2xl bg-white p-5 text-sm shadow-[var(--shadow-xs)]">
                 <div className="flex justify-between">
                   <span className="text-ink-3">Наименование</span>
                   <span className="text-ink font-medium text-right">{COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}</span>
@@ -158,12 +157,12 @@ export default function AboutPage() {
           </section>
 
           {/* CTA */}
-          <section className="border-l-4 border-accent bg-ink p-6 lg:p-8">
+          <section className="rounded-2xl bg-azure p-6 lg:p-8" data-motion-reveal>
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Award size={18} className="text-white" />
-                  <span className="text-sm font-semibold text-white/80 uppercase tracking-wider">
+                  <span className="text-sm font-semibold text-white/80">
                     Готовы начать?
                   </span>
                 </div>
@@ -173,13 +172,13 @@ export default function AboutPage() {
               <div className="flex gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="inline-flex h-11 items-center rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+                  className="inline-flex h-11 items-center rounded-xl bg-white px-6 text-sm font-bold text-azure transition duration-200 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Перейти в каталог
                 </Link>
                 <Link
                   href="/contacts"
-                  className="h-11 px-6 inline-flex items-center text-sm font-semibold text-white border border-white/30 hover:bg-white/10 rounded transition-all"
+                  className="inline-flex h-11 items-center rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition-all hover:bg-white/10"
                 >
                   Связаться
                 </Link>

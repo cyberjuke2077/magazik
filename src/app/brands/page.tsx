@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { BRANDS, type Brand } from '@/lib/brands'
+import { COMPANY } from '@/lib/company'
 
 const brands = BRANDS
 
@@ -24,7 +25,7 @@ function LogoCard({
     <Link
       id={`brand-${brand.id}`}
       href={`/catalog?manufacturer=${brand.id}`}
-      className={`group relative flex items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-colors hover:border-[var(--border-2)] ${className}`}
+      className={`group relative flex items-center justify-center overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)] active:translate-y-0 ${className}`}
     >
       {brand.logo ? (
         <div className="relative w-full h-full flex items-center justify-center p-6">
@@ -32,7 +33,7 @@ function LogoCard({
             src={brand.logo}
             alt={brand.name}
             fill
-            className="object-contain transition-transform duration-300 group-hover:scale-105"
+            className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
           />
         </div>
@@ -82,13 +83,13 @@ export default function BrandsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1440px] space-y-8 px-3 py-6 sm:px-6">
+        <div className="mx-auto max-w-[1380px] space-y-9 px-4 py-7 lg:px-0">
 
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#1c1917]">
-                Каталог брендов
+              <h1 className="text-2xl font-bold tracking-[-0.035em] text-ink md:text-3xl">
+                Производители
                 <span className="ml-3 text-base font-normal text-[#a8a29e]">
                   {brands.length} брендов
                 </span>
@@ -100,8 +101,8 @@ export default function BrandsPage() {
           </div>
 
           {/* ── Top brands mosaic ── */}
-          <section>
-            <h2 className="text-base font-bold text-[#1c1917] mb-5">
+          <section data-motion-reveal>
+            <h2 className="mb-5 text-lg font-bold text-ink">
               Топ {featuredBrands.length} брендов
             </h2>
 
@@ -113,13 +114,7 @@ export default function BrandsPage() {
               Row 4: medium | medium  |                  | medium | medium
               Row 5: medium | medium  | medium | medium | medium | medium
             */}
-            <div
-              className="grid gap-3"
-              style={{
-                gridTemplateColumns: 'repeat(6, 1fr)',
-                gridTemplateRows: 'repeat(5, 120px)',
-              }}
-            >
+            <div className="grid auto-rows-[112px] grid-flow-dense grid-cols-2 gap-3 md:grid-cols-6">
               {/* Espressif — large */}
               <LogoCard
                 brand={brands.find((b) => b.id === 'espressif')!}
@@ -175,8 +170,8 @@ export default function BrandsPage() {
           </section>
 
           {/* ── All brands A–Z ── */}
-          <section>
-            <h2 className="text-base font-bold text-[#1c1917] mb-5">
+          <section data-motion-reveal>
+            <h2 className="mb-5 text-lg font-bold text-ink">
               Все бренды от A до Z
             </h2>
 
@@ -220,7 +215,7 @@ export default function BrandsPage() {
                   <Link
                     key={brand.id}
                     href={`/catalog?manufacturer=${brand.id}`}
-                    className="group relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-5 transition-colors hover:border-[var(--border-2)]"
+                    className="group relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0"
                   >
                     {brand.logo ? (
                       <div className="relative w-full h-full">
@@ -248,24 +243,17 @@ export default function BrandsPage() {
           </section>
 
           {/* CTA */}
-          <section className="relative overflow-hidden border-l-4 border-accent bg-ink p-7 text-center">
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
-                backgroundSize: '30px 30px',
-              }}
-            />
+          <section className="relative overflow-hidden rounded-2xl bg-azure-dim p-7 text-center" data-motion-reveal>
             <div className="relative">
-              <h2 className="text-xl font-bold text-white mb-2">Нет нужного бренда?</h2>
-              <p className="text-white/70 text-sm mb-5 max-w-md mx-auto">
-                Работаем с более чем 200 производителями. Напишите нам — найдём нужные компоненты.
+              <h2 className="mb-2 text-xl font-bold text-ink">Нет нужного производителя?</h2>
+              <p className="mx-auto mb-5 max-w-md text-sm text-ink-3">
+                Пришлите маркировку компонента. Проверим доступность и предложим поставку.
               </p>
               <a
-                href="mailto:info@electromagaz.ru"
-                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-azure bg-white hover:bg-white rounded transition-all btn-primary shadow-sm"
+                href={`mailto:${COMPANY.email}`}
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-azure px-6 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
               >
-                Написать запрос
+                Написать нам
               </a>
             </div>
           </section>
