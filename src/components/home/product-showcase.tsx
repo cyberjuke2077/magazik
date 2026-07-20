@@ -35,7 +35,7 @@ export function ProductShowcase({
         />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {products.slice(0, 5).map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} showDiscount={false} />
           ))}
         </div>
       </div>

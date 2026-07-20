@@ -24,6 +24,7 @@ function isNewProduct(createdAt?: string): boolean {
 
 interface ProductCardProps {
   product: Product
+  showDiscount?: boolean
 }
 
 // Единая тема — azure (30% палитра)
@@ -32,7 +33,7 @@ const cardTheme = {
   iconColor: 'text-azure',
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, showDiscount = true }: ProductCardProps) {
   const discountPercent = product.priceWholesale
     ? Math.round((1 - product.priceWholesale / product.price) * 100)
     : null
@@ -123,7 +124,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <Sparkles size={8} />Новинка
             </span>
           )}
-          {discountPercent && (
+          {showDiscount && discountPercent && (
             <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
               -{discountPercent}%
             </span>
@@ -211,6 +212,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <button
             ref={btnRef}
             onClick={handleAdd}
+            aria-label={justAdded ? 'Добавлено в корзину' : inCart ? 'Товар в корзине' : 'Добавить в корзину'}
             className={`flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] text-xs font-bold transition-colors ${
               justAdded
                 ? 'bg-azure-hover text-white'
@@ -221,15 +223,18 @@ export function ProductCard({ product }: ProductCardProps) {
           >
             {justAdded ? (
               <>
-                <Check size={13} />Добавлено!
+                <Check size={13} />
+                <span className="hidden whitespace-nowrap sm:inline">Добавлено!</span>
               </>
             ) : inCart ? (
               <>
-                <Check size={13} />В корзине
+                <Check size={13} />
+                <span className="hidden whitespace-nowrap sm:inline">В корзине</span>
               </>
             ) : (
               <>
-                <ShoppingCart size={13} />В корзину
+                <ShoppingCart size={13} />
+                <span className="hidden whitespace-nowrap sm:inline">В корзину</span>
               </>
             )}
           </button>

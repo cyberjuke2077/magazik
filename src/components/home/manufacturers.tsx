@@ -14,15 +14,15 @@ export function Manufacturers() {
           href="/brands"
           linkLabel="Все бренды"
         />
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-3 overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white sm:grid-cols-4 lg:grid-cols-6">
           {brands.map((b) => (
             <Link
               key={b.id}
               href={`/catalog?brand=${b.id}`}
               aria-label={b.name}
-              className="group flex h-16 items-center justify-center rounded-[var(--radius-control)] border border-[var(--border)] bg-white p-3 transition-colors hover:border-[var(--border-2)]"
+              className="group -mb-px -mr-px flex h-[72px] items-center justify-center border-b border-r border-[var(--border)] p-3 transition-colors hover:bg-surface-muted"
             >
-              <div className="relative h-8 w-full opacity-65 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0">
+              <div className="relative h-8 w-full opacity-70 grayscale transition-all duration-200 group-hover:opacity-100 group-hover:grayscale-0 motion-reduce:transition-none">
                 <Image
                   src={b.logo!}
                   alt={b.name}

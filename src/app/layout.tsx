@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist_Mono, Onest, Wix_Madefor_Display } from 'next/font/google'
 import { Suspense } from 'react'
 import './globals.css'
 import { ToastProvider } from '@/components/ui/toast'
@@ -7,14 +7,22 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const onest = Onest({
+  variable: '--font-onest',
+  subsets: ['cyrillic', 'latin'],
+  display: 'swap',
+})
+
+const wixMadeforDisplay = Wix_Madefor_Display({
+  variable: '--font-wix-display',
+  subsets: ['cyrillic', 'latin'],
+  display: 'swap',
 })
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+  variable: '--font-code',
   subsets: ['latin'],
+  display: 'swap',
 })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
@@ -46,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="ru" className={`${onest.variable} ${wixMadeforDisplay.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-canvas antialiased">
         <ToastProvider>
           <Suspense fallback={null}>
