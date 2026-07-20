@@ -64,13 +64,13 @@ const steps = [
 
 export default function ReturnsPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -79,8 +79,8 @@ export default function ReturnsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-ink mb-2">Возврат товара</h1>
+        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
+          <h1 className="mb-1 text-2xl font-bold text-ink">Возврат товара</h1>
           <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Работаем с юридическими лицами в B2B-режиме. Возврат осуществляется в соответствии с
             условиями договора поставки и Гражданским кодексом РФ.
@@ -148,7 +148,7 @@ export default function ReturnsPage() {
 
           <Link
             href="/contacts"
-            className="inline-flex items-center gap-1.5 h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
+            className="inline-flex h-11 items-center gap-1.5 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
           >
             Связаться с отделом возвратов
             <ChevronRight size={14} />

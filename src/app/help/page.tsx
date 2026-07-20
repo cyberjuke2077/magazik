@@ -51,8 +51,8 @@ export default function HelpPage() {
     <>
       <Header />
       <StickyNav />
-      <main className="min-h-screen bg-[#f8fafc] py-8">
-        <div className="mx-auto max-w-[1400px] px-4">
+      <main className="min-h-screen bg-canvas py-6">
+        <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-sm text-ink-3 mb-6">
             <Link href="/" className="hover:text-azure">Главная</Link>

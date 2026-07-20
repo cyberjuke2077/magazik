@@ -44,13 +44,13 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -59,10 +59,11 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-10">
+        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
           {/* Hero */}
-          <section className="mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold text-ink mb-4 max-w-3xl leading-tight">
+          <section className="mb-8 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)] sm:p-7">
+            <div className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-accent">Electromagaz для бизнеса</div>
+            <h1 className="mb-3 max-w-4xl text-2xl font-bold leading-tight text-ink md:text-3xl">
               Поставляем электронные компоненты для промышленности с 2012 года
             </h1>
             <p className="text-base text-ink-3 max-w-3xl leading-relaxed">
@@ -73,26 +74,26 @@ export default function AboutPage() {
           </section>
 
           {/* Stats */}
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
+          <section className="mb-8 grid grid-cols-2 gap-px overflow-hidden border border-[var(--border)] bg-[var(--border)] lg:grid-cols-4">
             {stats.map((s) => (
               <div
                 key={s.label}
-                className="p-6 bg-azure-light border border-[var(--border)] rounded text-center"
+                className="bg-white p-5 text-center"
               >
-                <div className="text-3xl font-extrabold text-azure mb-1">{s.value}</div>
+                <div className="mb-1 text-2xl font-extrabold text-azure">{s.value}</div>
                 <div className="text-xs text-ink-3">{s.label}</div>
               </div>
             ))}
           </section>
 
           {/* Values */}
-          <section className="mb-12">
+          <section className="mb-8">
             <h2 className="text-xl font-bold text-ink mb-5">Принципы работы</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {values.map((v) => (
                 <div
                   key={v.title}
-                  className="flex gap-4 p-5 border border-[var(--border)] rounded bg-white"
+                  className="flex gap-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]"
                 >
                   <div className="flex size-10 items-center justify-center bg-azure-light shrink-0 rounded">
                     <v.icon size={18} className="text-azure" />
@@ -107,7 +108,7 @@ export default function AboutPage() {
           </section>
 
           {/* Reasons */}
-          <section className="mb-12 grid lg:grid-cols-2 gap-8">
+          <section className="mb-8 grid gap-5 lg:grid-cols-2">
             <div>
               <h2 className="text-xl font-bold text-ink mb-4">Чем занимаемся</h2>
               <div className="space-y-3 text-sm text-ink-3 leading-relaxed">
@@ -157,7 +158,7 @@ export default function AboutPage() {
           </section>
 
           {/* CTA */}
-          <section className="rounded bg-gradient-to-r from-azure to-azure-hover p-8 lg:p-10">
+          <section className="border-l-4 border-accent bg-ink p-6 lg:p-8">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -172,7 +173,7 @@ export default function AboutPage() {
               <div className="flex gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="h-11 px-6 inline-flex items-center text-sm font-semibold text-azure bg-white hover:bg-[#fafafa] rounded transition-all"
+                  className="inline-flex h-11 items-center rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
                 >
                   Перейти в каталог
                 </Link>

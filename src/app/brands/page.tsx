@@ -65,14 +65,14 @@ export default function BrandsPage() {
   const totalPositions = brands.reduce((s, b) => s + b.productCount, 0)
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main>
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
               <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -81,7 +81,7 @@ export default function BrandsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-10 space-y-12">
+        <div className="mx-auto max-w-[1440px] space-y-8 px-3 py-6 sm:px-6">
 
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -247,7 +247,7 @@ export default function BrandsPage() {
           </section>
 
           {/* CTA */}
-          <section className="bg-azure rounded p-8 text-center relative overflow-hidden">
+          <section className="relative overflow-hidden border-l-4 border-accent bg-ink p-7 text-center">
             <div
               className="absolute inset-0 opacity-10"
               style={{

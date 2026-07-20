@@ -116,14 +116,14 @@ export default function WholesalePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main>
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -140,7 +140,7 @@ export default function WholesalePage() {
               backgroundSize: '40px 40px',
             }}
           />
-          <div className="relative mx-auto max-w-[1400px] px-4 py-14">
+          <div className="relative mx-auto max-w-[1440px] px-3 py-10 sm:px-6">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/15 border border-white/20 rounded-sm text-xs text-white font-medium mb-5">
                 <Package2 size={11} />
@@ -157,7 +157,7 @@ export default function WholesalePage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-12 space-y-14">
+        <div className="mx-auto max-w-[1440px] space-y-9 px-3 py-8 sm:px-6">
 
           {/* Price tiers */}
           <section>
@@ -355,7 +355,7 @@ export default function WholesalePage() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full h-11 text-sm font-semibold text-white bg-azure hover:bg-azure disabled:opacity-60 rounded transition-all btn-primary shadow-sm"
+                      className="h-11 w-full rounded bg-accent text-sm font-bold text-white transition-colors hover:bg-accent-hover disabled:opacity-60"
                     >
                       {loading ? 'Отправляем...' : 'Отправить заявку'}
                     </button>

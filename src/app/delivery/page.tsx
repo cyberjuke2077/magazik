@@ -137,14 +137,14 @@ const faq = [
 
 export default function DeliveryPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main>
         {/* Breadcrumb */}
         <div className="bg-white">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -155,8 +155,8 @@ export default function DeliveryPage() {
 
         {/* Hero */}
         <div className="bg-white py-12">
-          <div className="mx-auto max-w-[1400px] px-4">
-            <h1 className="text-3xl font-bold text-ink mb-3">Условия работы и доставка</h1>
+          <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
+            <h1 className="mb-2 text-2xl font-bold text-ink">Условия работы и доставка</h1>
             <p className="text-ink-3 max-w-2xl text-lg">
               Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа - {formatPrice(MIN_ORDER_AMOUNT)}.
               Ответ на запрос в течение {REQUEST_PROCESSING_TIME}.
@@ -164,7 +164,7 @@ export default function DeliveryPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 pb-16 space-y-16">
+        <div className="mx-auto max-w-[1440px] space-y-10 px-3 pb-10 sm:px-6">
 
           {/* Key info banner */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -365,7 +365,7 @@ export default function DeliveryPage() {
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="flex items-center justify-center gap-2 h-11 px-6 text-sm font-bold text-white bg-azure hover:bg-azure-hover rounded-lg transition-all shadow-[0_2px_4px_rgba(0,0,0,0.1)] hover:shadow-[0_4px_12px_rgba(0,102,204,0.25)]"
+                  className="flex h-11 items-center justify-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
                 >
                   Выбрать товары
                 </Link>

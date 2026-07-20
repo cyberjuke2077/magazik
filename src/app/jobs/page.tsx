@@ -55,13 +55,13 @@ const positions = [
 
 export default function JobsPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -70,8 +70,8 @@ export default function JobsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-ink mb-2">Вакансии</h1>
+        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
+          <h1 className="mb-1 text-2xl font-bold text-ink">Вакансии</h1>
           <p className="text-sm text-ink-3 mb-8 max-w-3xl">
             Растём в области B2B-поставок электронных компонентов и ищем людей, которые помогут
             сделать процессы быстрее и удобнее для клиентов.
@@ -129,7 +129,7 @@ export default function JobsPage() {
                       <div className="text-sm font-bold text-ink mb-3">{p.salary}</div>
                       <a
                         href={`mailto:hr@electromagaz.ru?subject=Вакансия: ${p.title}`}
-                        className="flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
+                        className="flex h-9 items-center justify-center gap-1.5 rounded bg-accent px-4 text-xs font-bold text-white transition-colors hover:bg-accent-hover"
                       >
                         Откликнуться
                         <ChevronRight size={12} />
@@ -149,7 +149,7 @@ export default function JobsPage() {
             </p>
             <a
               href="mailto:hr@electromagaz.ru"
-              className="inline-flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-all"
+              className="inline-flex h-11 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
             >
               <Mail size={14} />
               Отправить резюме

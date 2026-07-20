@@ -90,13 +90,13 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -105,8 +105,8 @@ export default function PrivacyPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[900px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-ink mb-2">Политика конфиденциальности</h1>
+        <div className="mx-auto max-w-[960px] px-3 py-6 sm:px-6">
+          <h1 className="mb-1 text-2xl font-bold text-ink">Политика конфиденциальности</h1>
           <p className="text-sm text-ink-3 mb-8">
             Редакция от 14 июня 2026 года
           </p>

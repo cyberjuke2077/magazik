@@ -62,23 +62,23 @@ export default async function QuoteStatusPage({
   const StatusIcon = meta.icon
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
-      <main className="flex-1 bg-[#f8fafc] py-10">
-        <div className="mx-auto max-w-2xl px-4">
+      <main className="flex-1 py-6">
+        <div className="mx-auto max-w-3xl px-3 sm:px-6">
           {/* Статус */}
-          <div className="bg-white rounded-lg border border-[var(--border)] p-6 mb-4">
+          <div className="mb-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
                 <h1 className="text-xl font-bold text-ink">Заявка на КП</h1>
                 <p className="text-xs text-ink-3 mt-1">
-                  Создана {request.createdAt.toLocaleDateString('ru-RU')} · позиций: {request.items.length}
+                  Создана {request.createdAt.toLocaleDateString('ru-RU')} / позиций: {request.items.length}
                 </p>
                 <p className="text-xs text-ink-4 mt-1 font-mono break-all">№ {request.id}</p>
               </div>
-              <span className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border ${meta.cls}`}>
+              <span className={`inline-flex shrink-0 items-center gap-1.5 rounded px-3 py-1 text-sm font-medium border ${meta.cls}`}>
                 <StatusIcon size={15} />
                 {meta.label}
               </span>
@@ -87,15 +87,15 @@ export default async function QuoteStatusPage({
           </div>
 
           {/* Сохраните ссылку */}
-          <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded text-xs text-blue-800 mb-4">
+          <div className="mb-4 flex items-start gap-2 border-l-4 border-azure bg-azure-light p-3 text-xs text-ink-2">
             <Link2 size={15} className="mt-0.5 shrink-0" />
             <span>
-              Сохраните эту ссылку — по ней можно вернуться и проверить статус заявки в любой момент. Логин не требуется.
+              Сохраните эту ссылку - по ней можно вернуться и проверить статус заявки в любой момент. Логин не требуется.
             </span>
           </div>
 
           {/* Ваши данные */}
-          <div className="bg-white rounded-lg border border-[var(--border)] p-6 mb-4">
+          <div className="mb-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
             <h2 className="text-sm font-bold text-ink mb-3">Ваши данные</h2>
             <dl className="space-y-2 text-sm">
               {([
@@ -117,7 +117,7 @@ export default async function QuoteStatusPage({
           </div>
 
           {/* Позиции */}
-          <div className="bg-white rounded-lg border border-[var(--border)] p-6 mb-4">
+          <div className="mb-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
             <h2 className="text-sm font-bold text-ink mb-3">Позиции в заявке</h2>
             <div className="space-y-3">
               {request.items.map((item) => (
@@ -133,7 +133,7 @@ export default async function QuoteStatusPage({
           </div>
 
           {/* Контакты */}
-          <div className="bg-white rounded-lg border border-[var(--border)] p-6">
+          <div className="border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
             <h2 className="text-sm font-bold text-ink mb-3">Остались вопросы?</h2>
             <div className="space-y-2">
               <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2 text-sm text-ink-2 hover:text-azure transition-colors">
@@ -154,7 +154,7 @@ export default async function QuoteStatusPage({
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
+                className="inline-flex h-11 items-center justify-center rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
               >
                 На главную
               </Link>

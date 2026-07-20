@@ -35,13 +35,13 @@ const departments = [
 
 export default function ContactsPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main className="flex-1">
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <span>›</span>
@@ -50,15 +50,15 @@ export default function ContactsPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-10">
-          <h1 className="text-3xl font-bold text-ink mb-2">Контакты</h1>
-          <p className="text-sm text-ink-3 mb-8">
+        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
+          <h1 className="mb-1 text-2xl font-bold text-ink">Контакты</h1>
+          <p className="mb-5 text-sm text-ink-3">
             Свяжитесь с нами удобным способом - ответим в течение 24 часов в рабочие дни
           </p>
 
-          <div className="grid lg:grid-cols-3 gap-3 mb-10">
+          <div className="mb-6 grid gap-px overflow-hidden border border-[var(--border)] bg-[var(--border)] lg:grid-cols-3">
             {/* Phone */}
-            <div className="p-6 border border-[var(--border)] rounded bg-white">
+            <div className="bg-white p-5">
               <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
                 <Phone size={18} className="text-azure" />
               </div>
@@ -73,7 +73,7 @@ export default function ContactsPage() {
             </div>
 
             {/* Email */}
-            <div className="p-6 border border-[var(--border)] rounded bg-white">
+            <div className="bg-white p-5">
               <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
                 <Mail size={18} className="text-azure" />
               </div>
@@ -88,7 +88,7 @@ export default function ContactsPage() {
             </div>
 
             {/* Schedule */}
-            <div className="p-6 border border-[var(--border)] rounded bg-white">
+            <div className="bg-white p-5">
               <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
                 <Clock size={18} className="text-azure" />
               </div>
@@ -99,8 +99,8 @@ export default function ContactsPage() {
           </div>
 
           {/* Address */}
-          <section className="mb-10 grid lg:grid-cols-2 gap-6">
-            <div className="p-6 border border-[var(--border)] rounded bg-white">
+          <section className="mb-8 grid gap-4 lg:grid-cols-2">
+            <div className="border border-[var(--border)] bg-white p-5">
               <div className="flex items-center gap-2 mb-4">
                 <MapPin size={18} className="text-azure" />
                 <h2 className="text-base font-bold text-ink">Офис и склад</h2>
@@ -118,7 +118,7 @@ export default function ContactsPage() {
               </div>
             </div>
 
-            <div className="p-6 border border-[var(--border)] rounded bg-azure-light">
+            <div className="border border-[var(--border)] bg-azure-light p-5">
               <div className="flex items-center gap-2 mb-4">
                 <MessageCircle size={18} className="text-azure" />
                 <h2 className="text-base font-bold text-ink">Мессенджеры</h2>
@@ -157,7 +157,7 @@ export default function ContactsPage() {
             <h2 className="text-xl font-bold text-ink mb-5">Отделы</h2>
             <div className="grid md:grid-cols-3 gap-3">
               {departments.map((d) => (
-                <div key={d.title} className="p-5 border border-[var(--border)] rounded bg-white">
+                <div key={d.title} className="border border-[var(--border)] bg-white p-5">
                   <h3 className="text-sm font-bold text-ink mb-1">{d.title}</h3>
                   <p className="text-xs text-ink-3 mb-4 leading-relaxed">{d.desc}</p>
                   <div className="space-y-1.5 text-xs">

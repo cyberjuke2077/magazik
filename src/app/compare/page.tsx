@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function ComparePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
       <CompareClient />
