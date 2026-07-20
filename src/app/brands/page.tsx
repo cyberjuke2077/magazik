@@ -22,8 +22,9 @@ function LogoCard({
 }) {
   return (
     <Link
-      href={`/catalog?brand=${brand.id}`}
-      className={`group relative flex items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg overflow-hidden transition-all duration-200 hover:border-azure/30 hover:shadow-md hover:-translate-y-0.5 ${className}`}
+      id={`brand-${brand.id}`}
+      href={`/catalog?manufacturer=${brand.id}`}
+      className={`group relative flex items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-colors hover:border-[var(--border-2)] ${className}`}
     >
       {brand.logo ? (
         <div className="relative w-full h-full flex items-center justify-center p-6">
@@ -218,8 +219,8 @@ export default function BrandsPage() {
                 {filteredBrands.map((brand) => (
                   <Link
                     key={brand.id}
-                    href={`/catalog?brand=${brand.id}`}
-                    className="group relative flex flex-col items-center justify-center bg-[#f8f8f8] border border-black/6 rounded-lg p-5 h-28 overflow-hidden transition-all duration-300 hover:border-azure/30 hover:shadow-lg hover:-translate-y-1"
+                    href={`/catalog?manufacturer=${brand.id}`}
+                    className="group relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-5 transition-colors hover:border-[var(--border-2)]"
                   >
                     {brand.logo ? (
                       <div className="relative w-full h-full">

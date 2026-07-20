@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import {
   ChevronRight,
@@ -133,14 +134,16 @@ export default function WholesalePage() {
         </div>
 
         {/* Hero */}
-        <div className="bg-azure relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
-              backgroundSize: '40px 40px',
-            }}
+        <div className="relative overflow-hidden bg-[#0b2443]">
+          <Image
+            src="/storefront/hero-components.jpg"
+            alt="Электронные компоненты для оптовой поставки"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
           />
-          <div className="relative mx-auto max-w-[1440px] px-3 py-10 sm:px-6">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#08172c]/98 via-[#08172c]/90 to-[#08172c]/18" />
+          <div className="relative mx-auto max-w-[1440px] px-3 py-10 sm:px-6 sm:py-12">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/15 border border-white/20 rounded-sm text-xs text-white font-medium mb-5">
                 <Package2 size={11} />

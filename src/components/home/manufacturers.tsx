@@ -18,7 +18,7 @@ export function Manufacturers() {
           {brands.map((b) => (
             <Link
               key={b.id}
-              href={`/catalog?brand=${b.id}`}
+              href={b.id === 'xilinx' ? '/brands#brand-xilinx' : `/catalog?manufacturer=${b.id}`}
               aria-label={b.name}
               className="group -mb-px -mr-px flex h-[72px] items-center justify-center border-b border-r border-[var(--border)] p-3 transition-colors hover:bg-surface-muted"
             >

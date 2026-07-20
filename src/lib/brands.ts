@@ -192,7 +192,7 @@ export const BRANDS: Brand[] = [
     name: 'Xilinx',
     country: 'США',
     flag: '🇺🇸',
-    logo: '/brands/Xilinx-Logo.png',
+    logo: '/storefront/xilinx-logo.png',
     categories: ['FPGA', 'Программируемая логика', 'SoC'],
     productCount: 3200,
     featured: true,
