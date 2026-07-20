@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, ChevronUp, ChevronDown, Copy, Check, FileText } from 'lucide-react'
+import { Check, ChevronDown, ChevronUp, Copy, FileText, Minus, Plus, ShoppingCart } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
@@ -68,7 +68,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
   const previewSpecs = Object.entries(product.specs).slice(0, 8)
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
       <TrackRecentlyViewed
@@ -82,8 +82,8 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
       
       <main>
         {/* Breadcrumbs */}
-        <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-3">
+        <div>
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-3 whitespace-nowrap overflow-hidden">
               <Link href="/" className="hover:text-ink">Главная</Link>
               <span>›</span>
@@ -96,21 +96,21 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4">
+        <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
           {/* Title */}
-          <div className="pt-7 pb-8">
-            <div className="ui-eyebrow mb-3">
-              <Link href={`/catalog?manufacturer=${product.manufacturer}`} className="transition-opacity hover:opacity-70">{product.manufacturer}</Link>
+          <div className="pb-5 pt-3">
+            <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-ink-3">
+              <Link href={`/catalog?manufacturer=${product.manufacturerSlug}`} className="font-semibold text-azure hover:underline">{product.manufacturer}</Link>
               <span className="font-normal normal-case tracking-normal text-ink-4">/ {product.category}</span>
             </div>
-            <h1 className="text-3xl font-bold leading-[1.12] tracking-tight text-ink md:text-[38px]">{product.name}</h1>
+            <h1 className="max-w-5xl text-2xl font-bold leading-[1.15] tracking-tight text-ink md:text-[32px]">{product.name}</h1>
           </div>
 
           {/* Product Main Section */}
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-10">
+          <div className="mb-8 grid gap-5 lg:grid-cols-[minmax(360px,440px)_minmax(260px,1fr)_330px]">
             {/* Photo Gallery */}
             <div className="flex-shrink-0">
-              <div className="flex gap-6">
+              <div className="flex gap-3">
                 {/* Thumbnails with scroll buttons */}
                 <div className="hidden sm:flex flex-col gap-2 w-[80px]">
                   <button
@@ -166,8 +166,8 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
 
                 {/* Main Photo */}
-                <div>
-                  <div className="w-full max-w-[400px] h-[340px] sm:h-[400px] rounded-[var(--radius-card)] border border-[var(--border)] flex items-center justify-center bg-[#fafbfc] cursor-pointer mb-3 relative overflow-hidden">
+                <div className="min-w-0 flex-1">
+                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white sm:h-[420px]">
                     <Image
                       src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}
@@ -187,8 +187,8 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Product IDs */}
-            <div className="flex-grow min-w-0">
-              <div className="space-y-4 text-sm">
+            <div className="min-w-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-4">
+              <div className="space-y-3 text-sm">
                 <div className="flex items-baseline gap-3">
                   <span className="text-ink-4 text-xs block max-w-[62%]">Артикул</span>
                   <div className="flex items-center gap-2">
@@ -209,7 +209,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 
                 <div className="flex items-baseline gap-3">
                   <span className="text-ink-4 text-xs block max-w-[62%]">Бренд</span>
-                  <Link href={`/catalog?manufacturer=${product.manufacturer}`} className="text-ink font-bold text-sm hover:underline">
+                  <Link href={`/catalog?manufacturer=${product.manufacturerSlug}`} className="text-ink font-bold text-sm hover:underline">
                     {product.manufacturer}
                   </Link>
                 </div>
@@ -278,16 +278,20 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Ordering Controls */}
-            <div className="w-full lg:w-[372px] flex-shrink-0" data-add-to-cart-block>
-              <div className="rounded-[var(--radius-panel)] border border-[var(--border)] bg-white p-7 shadow-[var(--shadow-lg)]">
+            <div className="w-full" data-add-to-cart-block>
+              <div className="sticky top-[76px] rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-5">
                 {/* Price */}
-                <div className="pb-6">
-                  <div className="price text-[34px] leading-none">
+                <div className="pb-4">
+                  <div className="price text-[30px] leading-none">
                     {formatPrice(product.price)}
                   </div>
                   {product.price > 0 && (
                     <div className="mt-2 text-xs text-ink-4">за {product.unit}</div>
                   )}
+                  <div className={`mt-3 text-sm font-semibold ${product.inStock ? 'text-stock' : 'text-ink-3'}`}>
+                    {product.inStock ? 'В наличии' : 'Под заказ'}
+                    {product.stockCount > 0 ? `: ${product.stockCount.toLocaleString('ru-RU')} ${product.unit}` : ''}
+                  </div>
                 </div>
 
                 {/* Quantity */}
@@ -302,7 +306,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                           : 'bg-[#f8fafc] hover:bg-white hover:text-black'
                       }`}
                     >
-                      −
+                      <Minus size={15} />
                     </button>
                     <input
                       type="number"
@@ -314,15 +318,13 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                       onClick={() => setQuantity(quantity + 1)}
                       className="w-10 h-10 flex items-center justify-center bg-[#f8fafc] text-ink-2 hover:bg-white hover:text-black font-bold transition-colors"
                     >
-                      +
+                      <Plus size={15} />
                     </button>
                   </div>
                   
                   <div className="text-sm text-ink-3">
                     <div className="flex items-center gap-1">
-                      <svg className="w-4 h-3" fill="none" viewBox="0 0 15 11">
-                        <path d="M1 5.5L5.5 10L14 1" stroke="currentColor" strokeWidth="2"/>
-                      </svg>
+                      <Check size={14} className="text-stock" />
                       <span>{quantity} шт.</span>
                     </div>
                   </div>
@@ -352,7 +354,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
 
                 {/* Additional Links */}
-                <div className="mt-6 border-t border-[var(--border)] pt-6 space-y-3 text-sm">
+                <div className="mt-5 space-y-3 border-t border-[var(--border)] pt-5 text-sm">
                   <div>
                     <a href="#other-offers" className="text-ink font-bold hover:underline">Другие предложения</a>
                     <div className="text-xs text-ink-4">Этот же товар с другими ценами и сроками поставки</div>
@@ -367,16 +369,16 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           </div>
 
           {/* Product Content */}
-          <div className="flex gap-6 mb-10">
+          <div className="mb-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             {/* Main Content (65%) */}
-            <div className="flex-grow max-w-[850px]">
+            <div className="min-w-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-4 sm:p-5">
               {/* Tabs */}
-              <div className="flex gap-4 mb-6">
+              <div className="mb-5 flex gap-4 overflow-x-auto">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`pb-2 text-lg transition-all border-b-[3px] ${
+                    className={`whitespace-nowrap border-b-[3px] pb-2 text-sm transition-colors sm:text-base ${
                       activeTab === tab.id
                         ? 'border-azure font-bold text-ink'
                         : 'border-transparent text-ink-3 hover:border-[var(--border)]'
@@ -413,7 +415,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                     {Object.keys(product.specs).length > 0 ? (
                       <table className="w-full">
                         <tbody>
-                          {Object.entries(product.specs).map(([key, value], i) => (
+                          {Object.entries(product.specs).map(([key, value]) => (
                             <tr key={key} className="border-b border-[var(--border)]">
                               <td className="py-2 pr-12 text-ink-3 align-top w-1/3">{key}</td>
                               <td className="py-2 text-ink align-top">{value}</td>
@@ -459,7 +461,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
             </div>
 
             {/* Sidebar (35%) */}
-            <div className="flex-shrink-0 w-[450px]">
+            <div className="min-w-0">
               {/* Other Offers */}
               <div className="mb-6" id="other-offers">
                 <h3 className="text-base font-bold text-ink mb-4">Другие предложения</h3>

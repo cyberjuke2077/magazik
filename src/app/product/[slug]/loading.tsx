@@ -1,19 +1,21 @@
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 export default function ProductLoading() {
   return (
     <>
       <Header />
-      <main className="flex-1 bg-white">
+      <StickyNav />
+      <main className="flex-1 bg-canvas">
         {/* Breadcrumb skeleton */}
         <div className="border-b border-[var(--border)] bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-3">
+          <div className="mx-auto max-w-[1440px] px-3 py-3 sm:px-6">
             <div className="h-3 w-56 skeleton rounded" />
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-8">
+        <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6">
           <div className="h-4 w-32 skeleton rounded mb-6" />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">

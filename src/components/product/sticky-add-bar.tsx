@@ -59,16 +59,15 @@ export function StickyAddBar({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-[var(--border)] shadow-[0_-8px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${
-        visible ? 'translate-y-0' : 'translate-y-full'
+      className={`fixed bottom-16 left-0 right-0 z-[var(--layer-sticky)] border-t border-[var(--border)] bg-white shadow-[0_-6px_18px_rgba(32,33,36,0.08)] transition-transform duration-200 lg:bottom-0 ${
+        visible ? 'translate-y-0' : 'translate-y-0 lg:translate-y-full'
       }`}
-      aria-hidden={!visible}
     >
-      <div className="mx-auto max-w-[1400px] px-4 py-3">
-        <div className="flex items-center gap-4">
+      <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+        <div className="flex items-center gap-2 sm:gap-4">
           {/* Product info */}
-          <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-semibold text-ink-4 uppercase tracking-wide">
+          <div className="hidden min-w-0 flex-1 sm:block">
+            <div className="text-[10px] font-semibold uppercase tracking-wide text-ink-4">
               {manufacturer}
             </div>
             <div className="text-sm font-bold text-ink truncate">{productName}</div>
@@ -76,7 +75,7 @@ export function StickyAddBar({
           </div>
 
           {/* Price */}
-          <div className="hidden sm:block shrink-0 text-right">
+          <div className="min-w-0 flex-1 text-left sm:flex-none sm:text-right">
             {price > 0 ? (
               <>
                 <div className="price text-lg leading-none">
@@ -115,10 +114,10 @@ export function StickyAddBar({
           <button
             onClick={onAddToCart}
             disabled={!inStock && false}
-            className="shrink-0 flex items-center gap-1.5 h-9 px-4 sm:px-6 text-xs sm:text-sm font-bold text-white bg-azure hover:bg-azure-hover rounded transition-all"
+            className="flex h-10 shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] bg-accent px-4 text-xs font-bold text-white transition-colors hover:bg-accent-hover sm:px-6 sm:text-sm"
           >
             <ShoppingCart size={14} />
-            <span className="hidden sm:inline">В корзину</span>
+            <span>В корзину</span>
           </button>
         </div>
       </div>

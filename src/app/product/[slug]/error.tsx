@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { AlertTriangle, RefreshCw, ArrowLeft } from 'lucide-react'
 import { Header } from '@/components/layout/header'
+import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 interface ErrorProps {
@@ -14,7 +15,8 @@ export default function ProductError({ error, reset }: ErrorProps) {
   return (
     <>
       <Header />
-      <main className="flex-1 flex items-center justify-center bg-white py-20">
+      <StickyNav />
+      <main className="flex flex-1 items-center justify-center bg-canvas py-20">
         <div className="text-center max-w-sm mx-auto px-4">
           <div className="inline-flex items-center justify-center size-16 rounded bg-red-50 border border-red-100 mb-5">
             <AlertTriangle size={28} className="text-red-400" />
