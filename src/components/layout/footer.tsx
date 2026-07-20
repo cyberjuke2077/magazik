@@ -1,154 +1,102 @@
-import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Phone, MapPin, ShieldCheck, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowRight, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
-const footerLinks = {
-  catalog: {
-    title: 'Каталог',
+const footerLinks = [
+  {
+    title: 'Покупателям',
     links: [
-      { label: 'Усилители и компараторы', href: '/catalog?category=usiliteli' },
-      { label: 'Управление питанием', href: '/catalog?category=pitanie' },
-      { label: 'Интерфейсы и логика', href: '/catalog?category=interfeysy' },
-      { label: 'АЦП, ЦАП и преобразователи', href: '/catalog?category=atsp-tsap' },
-      { label: 'Датчики', href: '/catalog?category=datchiki' },
-      { label: 'Микроконтроллеры и DSP', href: '/catalog?category=mikrokontrollery' },
+      { label: 'Каталог', href: '/catalog' },
+      { label: 'Корзина', href: '/cart' },
+      { label: 'Сравнение', href: '/compare' },
+      { label: 'Доставка и оплата', href: '/delivery' },
     ],
   },
-  company: {
+  {
     title: 'Компания',
     links: [
-      { label: 'О нас', href: '/about' },
-      { label: 'Бренды', href: '/brands' },
+      { label: 'О компании', href: '/about' },
+      { label: 'Производители', href: '/brands' },
+      { label: 'Оптовым клиентам', href: '/wholesale' },
       { label: 'Вакансии', href: '/jobs' },
     ],
   },
-  support: {
+  {
     title: 'Поддержка',
     links: [
-      { label: 'Доставка и оплата', href: '/delivery' },
+      { label: 'Помощь', href: '/help' },
       { label: 'Возврат товара', href: '/returns' },
       { label: 'Техподдержка', href: '/support' },
       { label: 'Контакты', href: '/contacts' },
     ],
   },
-}
+]
 
 export function Footer() {
   return (
-    <footer className="mt-auto bg-[#171d2a] text-white">
-      {/* CTA-полоса */}
-      <div className="border-b border-white/10">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-start justify-between gap-5 px-3 py-7 sm:px-6 md:flex-row md:items-center">
+    <footer className="mt-auto border-t border-[var(--border)] bg-white text-ink">
+      <div className="bg-azure text-white">
+        <div className="mx-auto flex max-w-[1380px] flex-col items-start justify-between gap-5 px-4 py-7 md:flex-row md:items-center lg:px-0">
           <div>
-            <h3 className="text-xl font-bold text-white md:text-2xl">Нужен расчёт по спецификации?</h3>
-            <p className="mt-1 text-sm text-white/65">Пришлите список позиций, подберём, посчитаем и привезём.</p>
+            <h2 className="text-xl font-bold tracking-[-0.02em] md:text-2xl">Соберите корзину по спецификации</h2>
+            <p className="mt-1 text-sm text-white/78">Добавьте позиции по MPN. Цены и сроки подтвердим в коммерческом предложении.</p>
           </div>
-          <Link href="/request-quote" className="ui-btn ui-btn-primary shrink-0 group">
-            Запросить КП
-            <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+          <Link href="/cart" className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-azure transition duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.98]">
+            Перейти в корзину
+            <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
 
-      {/* Main */}
-      <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6 sm:py-10">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
-          {/* Brand */}
+      <div className="mx-auto max-w-[1380px] px-4 py-9 lg:px-0">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr]">
           <div>
-            <Link href="/" className="mb-4 block">
-              <span className="text-2xl font-extrabold tracking-tight text-white">
-                electro<span className="text-azure-light">magaz</span>
-              </span>
+            <Link href="/" className="inline-flex text-2xl font-extrabold tracking-[-0.055em] text-ink">
+              electro<span className="text-azure">magaz.</span>
             </Link>
-            <p className="mb-5 hidden text-sm leading-relaxed text-white/60 sm:block">
-              Поставщик электронных компонентов для инженеров и производства. Подбор аналогов,
-              поставка юрлицам по безналу с документами.
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-3">
+              Электронные компоненты для разработки и серийного производства. Подбор по MPN, документы и поставка по России.
             </p>
-            <div className="grid gap-2.5 sm:block sm:space-y-2.5">
-              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2.5 text-sm text-white/80 transition-colors hover:text-white">
-                <Phone size={14} className="shrink-0 text-azure-light" />
-                {COMPANY.phone.display}
-              </a>
-              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2.5 text-sm text-white/80 transition-colors hover:text-white">
-                <Mail size={14} className="shrink-0 text-azure-light" />
-                {COMPANY.email}
-              </a>
-              <div className="flex items-center gap-2.5 text-sm text-white/80">
-                <MapPin size={14} className="shrink-0 text-azure-light" />
-                {COMPANY.city}
-              </div>
+            <div className="mt-5 grid gap-2.5 text-sm text-ink-2">
+              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2.5 transition-colors hover:text-azure"><Phone size={15} />{COMPANY.phone.display}</a>
+              <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2.5 transition-colors hover:text-azure"><Mail size={15} />{COMPANY.email}</a>
+              <span className="flex items-center gap-2.5"><MapPin size={15} />{COMPANY.city}</span>
             </div>
           </div>
 
-          {/* Links */}
-          {Object.values(footerLinks).map((section) => (
-            <div key={section.title} className="hidden sm:block">
-              <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.08em] text-white/45">
-                {section.title}
-              </h4>
+          {footerLinks.map((section) => (
+            <nav key={section.title} aria-label={section.title}>
+              <h3 className="mb-4 text-sm font-bold text-ink">{section.title}</h3>
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
-                  <li key={link.href}>
-                    <Link href={link.href} className="text-sm text-white/70 transition-colors hover:text-white">
-                      {link.label}
-                    </Link>
-                  </li>
+                  <li key={link.href}><Link href={link.href} className="text-sm text-ink-3 transition-colors hover:text-azure">{link.label}</Link></li>
                 ))}
               </ul>
-            </div>
+            </nav>
           ))}
         </div>
-      </div>
 
-      {/* Сертификация */}
-      <div className="border-t border-white/10">
-        <div className="mx-auto max-w-[1440px] px-3 py-4 sm:px-6 sm:py-5">
-          <div className="flex items-center gap-3 sm:gap-5">
-            <div className="shrink-0 rounded-[var(--radius-control)] border border-[#EAE60E]/40 bg-white p-2">
-              <Image
-                src="/rst-quality.svg"
-                alt="Знак качества РСТ - Российский стандарт"
-                width={132}
-                height={38}
-                className="h-8 w-auto sm:h-9"
-              />
+        <div className="mt-8 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="rounded-lg border border-[var(--border)] bg-white p-2">
+              <Image src="/rst-quality.svg" alt="Знак качества РСТ" width={104} height={30} className="h-7 w-auto" />
             </div>
-            <div className="flex-1 text-left">
-              <div className="mb-1 flex items-center gap-1.5">
-                <ShieldCheck size={15} className="shrink-0 text-azure-light" />
-                <span className="text-sm font-bold text-white">Сертифицированная продукция</span>
-              </div>
-              <p className="hidden max-w-2xl text-xs leading-relaxed text-white/55 sm:block">
-                Сертификаты и декларации соответствия предоставляются по запросу.
-              </p>
+            <div>
+              <div className="flex items-center gap-1.5 text-sm font-semibold text-ink"><ShieldCheck size={15} className="text-azure" />Сертифицированная продукция</div>
+              <p className="mt-0.5 text-xs text-ink-4">Документы предоставляются при оформлении поставки.</p>
             </div>
+          </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-ink-4">
+            <Link href="/offer" className="hover:text-azure">Публичная оферта</Link>
+            <Link href="/privacy" className="hover:text-azure">Политика ПДн</Link>
+            <Link href="/terms" className="hover:text-azure">Условия</Link>
+            <Link href="/legal" className="hover:text-azure">Реквизиты</Link>
           </div>
         </div>
-      </div>
 
-      {/* Bottom */}
-      <div className="border-t border-white/10">
-        <div className="mx-auto max-w-[1440px] px-3 py-4 sm:px-6 sm:py-5">
-          <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
-            <div className="space-y-1">
-              <div className="text-xs text-white/55">
-                {COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}, ИНН {COMPANY.inn}, ОГРН {COMPANY.ogrn}
-              </div>
-              <div className="text-xs text-white/40">
-                © {new Date().getFullYear()} {COMPANY.brand}. Все права защищены. Разработано в{' '}
-                <a href="https://sharashka.onrender.com" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white">
-                  SHK Dev
-                </a>
-              </div>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/55">
-              <Link href="/offer" className="transition-colors hover:text-white">Публичная оферта</Link>
-              <Link href="/privacy" className="transition-colors hover:text-white">Политика ПДн</Link>
-              <Link href="/terms" className="transition-colors hover:text-white">Условия</Link>
-              <Link href="/legal" className="transition-colors hover:text-white">Реквизиты</Link>
-            </div>
-          </div>
+        <div className="mt-5 text-xs text-ink-4">
+          © {new Date().getFullYear()} {COMPANY.brand}. {COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}
         </div>
       </div>
     </footer>

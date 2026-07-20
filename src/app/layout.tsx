@@ -1,20 +1,15 @@
 import type { Metadata } from 'next'
-import { Geist_Mono, Onest, Wix_Madefor_Display } from 'next/font/google'
+import { Geist, Geist_Mono } from 'next/font/google'
 import { Suspense } from 'react'
 import './globals.css'
 import { ToastProvider } from '@/components/ui/toast'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
+import { StorefrontMotion } from '@/components/motion/storefront-motion'
 
-const onest = Onest({
-  variable: '--font-onest',
-  subsets: ['cyrillic', 'latin'],
-  display: 'swap',
-})
-
-const wixMadeforDisplay = Wix_Madefor_Display({
-  variable: '--font-wix-display',
+const geist = Geist({
+  variable: '--font-ui',
   subsets: ['cyrillic', 'latin'],
   display: 'swap',
 })
@@ -54,9 +49,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={`${onest.variable} ${wixMadeforDisplay.variable} ${geistMono.variable}`}>
+    <html lang="ru" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-canvas antialiased">
         <ToastProvider>
+          <StorefrontMotion />
           <Suspense fallback={null}>
             <NavProgress />
           </Suspense>

@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
-import { Boxes, FileText, GitCompareArrows, Grid3X3, Home, MessageSquare, ShoppingCart } from 'lucide-react'
+import { Boxes, CircleHelp, GitCompareArrows, Grid3X3, Home, MessageSquare, ShoppingCart } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { LiveSearchDropdown } from '@/components/ui/live-search-dropdown'
 
@@ -26,6 +27,7 @@ interface StickyNavProps {
 }
 
 export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps) {
+  const pathname = usePathname()
   const [catalogOpen, setCatalogOpen] = useState(false)
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
   const catalogMenuRef = useRef<HTMLDivElement>(null)
@@ -36,17 +38,25 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
   // На страницах, где категории не переданы пропсом (контакты, доставка и т.д.),
   // подгружаем дерево разделов клиентом, чтобы мега-меню работало везде.
   const [fetchedCats, setFetchedCats] = useState<CategoryWithChildren[]>([])
+  const [categoryLoadError, setCategoryLoadError] = useState(false)
   const cats = categories.length > 0 ? categories : fetchedCats
 
   useEffect(() => {
     if (categories.length > 0) return
     let active = true
     fetch('/api/catalog/categories')
-      .then((r) => r.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Не удалось загрузить категории: HTTP ${response.status}`)
+        }
+        return response.json()
+      })
       .then((data) => {
         if (active && Array.isArray(data)) setFetchedCats(data)
       })
-      .catch(() => {})
+      .catch(() => {
+        if (active) setCategoryLoadError(true)
+      })
     return () => {
       active = false
     }
@@ -75,7 +85,7 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
     <div className="sticky top-0 z-[var(--layer-header)] bg-white shadow-[var(--shadow-xs)]">
       <div className="relative mx-auto max-w-[1380px]">
         <div className="flex h-12 items-center gap-2 px-4 lg:grid lg:h-24 lg:grid-cols-[280px_minmax(0,1fr)_327px] lg:gap-4 lg:px-0">
-          <div className="hidden h-16 items-center overflow-hidden rounded-xl bg-accent lg:flex">
+          <div className="storefront-brand-panel hidden h-16 items-center overflow-hidden rounded-2xl bg-azure lg:flex">
             <Link href="/" className="flex h-full w-36 shrink-0 items-center px-4">
               <span className="text-[21px] font-extrabold leading-none tracking-[-0.055em] text-white">
                 electro<span className="text-white/88">magaz</span><span className="text-white">.</span>
@@ -84,7 +94,7 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
             <div ref={catalogRef} className="relative flex flex-1 justify-center">
               <button
                 onClick={() => setCatalogOpen(!catalogOpen)}
-                className="flex h-11 w-[124px] items-center justify-center gap-2 rounded-xl bg-white/12 text-sm font-bold text-white transition-colors hover:bg-white/20"
+                className="flex h-11 w-[124px] items-center justify-center gap-2 rounded-xl bg-white/14 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-white/22 active:translate-y-0 active:scale-[0.98]"
                 aria-expanded={catalogOpen}
               >
                 <Grid3X3 size={17} />
@@ -104,16 +114,17 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
           </Link>
 
           <div className="hidden h-16 grid-cols-[90px_90px_90px_57px] lg:grid">
-            <HeaderAction href="/compare" label="Сравнение" icon={GitCompareArrows} />
-            <HeaderAction href="/brands" label="Бренды" icon={Boxes} />
+            <HeaderAction href="/compare" label="Сравнение" icon={GitCompareArrows} active={pathname === '/compare'} />
+            <HeaderAction href="/brands" label="Бренды" icon={Boxes} active={pathname === '/brands'} />
             <HeaderAction
               href="/cart"
-              label={cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Запрос'}
+              label={cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Корзина'}
               icon={ShoppingCart}
               count={cartCount}
               cart
+              active={pathname === '/cart' || pathname.startsWith('/request-')}
             />
-            <HeaderAction href="/request-quote" label="КП" icon={FileText} compact />
+            <HeaderAction href="/help" label="Помощь" icon={CircleHelp} compact active={pathname === '/help'} />
           </div>
         </div>
       </div>
@@ -145,6 +156,10 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
                         </Link>
                       </li>
                     ))
+                  ) : categoryLoadError ? (
+                    <li className="px-4 py-8 text-center text-sm text-red-600">
+                      Категории не загрузились. Откройте весь каталог.
+                    </li>
                   ) : (
                     <li className="px-4 py-8 text-center text-ink-4 text-sm">
                       Категории загружаются...
@@ -196,6 +211,10 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
                       ))}
                     </div>
                   </>
+                ) : categoryLoadError ? (
+                  <div className="py-8 text-center text-sm text-red-600">
+                    Не удалось загрузить категории. Перейдите в каталог.
+                  </div>
                 ) : (
                   <div className="py-8 text-center text-sm text-ink-4">
                     Категории загружаются...
@@ -222,11 +241,11 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
       )}
 
       <nav className="fixed inset-x-0 bottom-0 z-[var(--layer-header)] grid h-16 grid-cols-5 border-t border-[var(--border)] bg-white px-1 lg:hidden">
-        <MobileNavItem href="/" label="Главная" icon={Home} />
-        <MobileNavItem href="/catalog" label="Каталог" icon={Grid3X3} />
-        <MobileNavItem href="/compare" label="Сравнить" icon={GitCompareArrows} />
-        <MobileNavItem href="/cart" label="Запрос" icon={ShoppingCart} />
-        <MobileNavItem href="/request-quote" label="КП" icon={FileText} />
+        <MobileNavItem href="/" label="Главная" icon={Home} active={pathname === '/'} />
+        <MobileNavItem href="/catalog" label="Каталог" icon={Grid3X3} active={pathname.startsWith('/catalog')} />
+        <MobileNavItem href="/compare" label="Сравнить" icon={GitCompareArrows} active={pathname === '/compare'} />
+        <MobileNavItem href="/cart" label="Корзина" icon={ShoppingCart} active={pathname === '/cart' || pathname.startsWith('/request-')} />
+        <MobileNavItem href="/help" label="Помощь" icon={CircleHelp} active={pathname === '/help'} />
       </nav>
     </div>
   )
@@ -239,6 +258,7 @@ function HeaderAction({
   count,
   cart = false,
   compact = false,
+  active = false,
 }: {
   href: string
   label: string
@@ -246,19 +266,23 @@ function HeaderAction({
   count?: number
   cart?: boolean
   compact?: boolean
+  active?: boolean
 }) {
   return (
     <Link
       href={href}
       data-cart-icon={cart ? true : undefined}
-      className={`relative flex h-16 flex-col items-center justify-center gap-1 text-xs font-medium text-ink-2 transition-colors hover:bg-surface-muted hover:text-azure ${
+      aria-current={active ? 'page' : undefined}
+      className={`relative flex h-16 flex-col items-center justify-center gap-1 text-xs font-medium transition duration-200 hover:-translate-y-0.5 hover:bg-surface-muted hover:text-azure active:translate-y-0 ${
+        active ? 'bg-azure-light text-azure' : 'text-ink-2'
+      } ${
         compact ? 'w-[57px]' : 'w-[90px]'
       }`}
     >
       <span className="relative">
         <Icon size={21} strokeWidth={1.6} />
         {typeof count === 'number' && count > 0 && (
-          <span className="absolute -right-2.5 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[9px] font-bold leading-none text-white">
+          <span className="absolute -right-2.5 -top-2 flex h-4 min-w-4 animate-bounce-in items-center justify-center rounded-full bg-azure px-1 text-[9px] font-bold leading-none text-white">
             {count > 99 ? '99+' : count}
           </span>
         )}
@@ -272,16 +296,20 @@ function MobileNavItem({
   href,
   label,
   icon: Icon,
+  active = false,
 }: {
   href: string
   label: string
   icon: typeof Home
+  active?: boolean
 }) {
   return (
     <Link
       href={href}
-      className="flex min-w-0 flex-col items-center justify-center gap-1 text-[10px] font-medium text-ink-3 transition-colors hover:text-azure"
+      aria-current={active ? 'page' : undefined}
+      className={`relative flex min-w-0 flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors ${active ? 'text-azure' : 'text-ink-3 hover:text-azure'}`}
     >
+      {active && <span className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-azure" />}
       <Icon size={20} strokeWidth={1.8} />
       <span className="truncate">{label}</span>
     </Link>

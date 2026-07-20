@@ -44,6 +44,16 @@ export const COMPANY = {
   email: 'info@electromagaz.ru',
   /** Email техподдержки — [ЗАПОЛНИТЬ] */
   supportEmail: 'support@electromagaz.ru',
+  /** Email отдела продаж */
+  salesEmail: 'sales@electromagaz.ru',
+  /** Email бухгалтерии */
+  accountingEmail: 'accounting@electromagaz.ru',
+  /** Email для вакансий */
+  hrEmail: 'hr@electromagaz.ru',
+
+  messengers: {
+    telegram: 'https://t.me/electromagaz',
+  },
 
   /** Город для коротких упоминаний */
   city: 'Москва',
