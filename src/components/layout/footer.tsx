@@ -52,8 +52,8 @@ export function Footer() {
       </div>
 
       {/* Main */}
-      <div className="mx-auto max-w-[1440px] px-3 py-10 sm:px-6">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-[1440px] px-3 py-6 sm:px-6 sm:py-10">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <Link href="/" className="mb-4 block">
@@ -61,11 +61,11 @@ export function Footer() {
                 electro<span className="text-azure-light">magaz</span>
               </span>
             </Link>
-            <p className="mb-5 text-sm leading-relaxed text-white/60">
+            <p className="mb-5 hidden text-sm leading-relaxed text-white/60 sm:block">
               Поставщик электронных компонентов для инженеров и производства. Подбор аналогов,
               поставка юрлицам по безналу с документами.
             </p>
-            <div className="space-y-2.5">
+            <div className="grid gap-2.5 sm:block sm:space-y-2.5">
               <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2.5 text-sm text-white/80 transition-colors hover:text-white">
                 <Phone size={14} className="shrink-0 text-azure-light" />
                 {COMPANY.phone.display}
@@ -83,7 +83,7 @@ export function Footer() {
 
           {/* Links */}
           {Object.values(footerLinks).map((section) => (
-            <div key={section.title}>
+            <div key={section.title} className="hidden sm:block">
               <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.08em] text-white/45">
                 {section.title}
               </h4>
@@ -103,23 +103,23 @@ export function Footer() {
 
       {/* Сертификация */}
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-[1440px] px-3 py-5 sm:px-6">
-          <div className="flex flex-col items-center gap-5 sm:flex-row">
-            <div className="shrink-0 rounded-[var(--radius-control)] border border-[#EAE60E]/40 bg-white p-2.5">
+        <div className="mx-auto max-w-[1440px] px-3 py-4 sm:px-6 sm:py-5">
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div className="shrink-0 rounded-[var(--radius-control)] border border-[#EAE60E]/40 bg-white p-2">
               <Image
                 src="/rst-quality.svg"
                 alt="Знак качества РСТ - Российский стандарт"
-                width={160}
+                width={132}
                 height={38}
-                className="h-9 w-auto"
+                className="h-8 w-auto sm:h-9"
               />
             </div>
-            <div className="flex-1 text-center sm:text-left">
-              <div className="mb-1 flex items-center justify-center gap-1.5 sm:justify-start">
+            <div className="flex-1 text-left">
+              <div className="mb-1 flex items-center gap-1.5">
                 <ShieldCheck size={15} className="shrink-0 text-azure-light" />
                 <span className="text-sm font-bold text-white">Сертифицированная продукция</span>
               </div>
-              <p className="mx-auto max-w-2xl text-xs leading-relaxed text-white/55 sm:mx-0">
+              <p className="hidden max-w-2xl text-xs leading-relaxed text-white/55 sm:block">
                 Сертификаты и декларации соответствия предоставляются по запросу.
               </p>
             </div>
@@ -129,7 +129,7 @@ export function Footer() {
 
       {/* Bottom */}
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-[1440px] px-3 py-5 sm:px-6">
+        <div className="mx-auto max-w-[1440px] px-3 py-4 sm:px-6 sm:py-5">
           <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
             <div className="space-y-1">
               <div className="text-xs text-white/55">
