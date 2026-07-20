@@ -53,34 +53,34 @@ export function CartItemRow({
   }
 
   return (
-    <div className={`flex items-center gap-4 px-5 py-4 border-b border-[var(--border)] transition-colors ${selected ? 'bg-azure-light' : 'hover:bg-[#fafafa]'}`}>
+    <div className={`grid grid-cols-[auto_56px_minmax(0,1fr)_auto] items-center gap-3 border-b border-[var(--border)] px-3 py-3 transition-colors last:border-b-0 sm:grid-cols-[auto_64px_minmax(0,1fr)_110px_112px_auto] sm:px-4 ${selected ? 'bg-azure-light' : 'hover:bg-surface-muted'}`}>
       {/* Checkbox */}
       <input
         type="checkbox"
         checked={selected}
         onChange={() => onToggleSelect(product.id)}
-        className="w-5 h-5 rounded border-[var(--border-2)] accent-azure cursor-pointer flex-shrink-0"
+        className="size-4 cursor-pointer rounded border-[var(--border-2)] accent-azure"
       />
 
       {/* Photo */}
-      <div className="w-20 h-20 flex-shrink-0 border border-[var(--border)] rounded bg-white flex items-center justify-center overflow-hidden">
-        <Package size={28} className="text-ink-4" />
+      <div className="flex size-14 items-center justify-center overflow-hidden border border-[var(--border)] bg-white sm:size-16">
+        <Package size={24} className="text-ink-4" />
       </div>
 
       {/* Name + article */}
       <div className="flex-1 min-w-0">
         <Link
           href={`/product/${product.slug}`}
-          className="text-base font-medium text-ink hover:text-azure transition-colors line-clamp-2 leading-snug"
+          className="line-clamp-2 text-sm font-semibold leading-snug text-ink transition-colors hover:text-azure"
         >
           {product.name}
         </Link>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-sm text-ink-4 font-mono">{product.partNumber}</span>
+        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+          <span className="font-mono text-xs text-ink-4">{product.partNumber}</span>
           {product.manufacturer && (
             <>
               <span className="text-ink-4">·</span>
-              <span className="text-sm text-ink-4">{product.manufacturer}</span>
+              <span className="text-xs text-ink-4">{product.manufacturer}</span>
             </>
           )}
         </div>
@@ -90,13 +90,8 @@ export function CartItemRow({
       </div>
 
       {/* Unit price */}
-      <div className="w-24 text-left flex-shrink-0 hidden md:block">
-        <div className="price text-base font-semibold">{formatPrice(unitPrice)}</div>
-        <div className="text-xs text-ink-4">за шт.</div>
-      </div>
-
       {/* Quantity stepper */}
-      <div className="flex items-center border border-[var(--border-2)] rounded overflow-hidden flex-shrink-0 w-[110px]">
+      <div className="col-start-3 row-start-2 flex w-[110px] items-center overflow-hidden rounded border border-[var(--border-2)] sm:col-start-4 sm:row-start-1">
         <button
           onClick={() => {
             const newQty = quantity - 1
@@ -125,14 +120,15 @@ export function CartItemRow({
       </div>
 
       {/* Line total */}
-      <div className="w-28 text-right flex-shrink-0 hidden md:block pl-4">
-        <div className="price text-lg">{formatPrice(lineTotal)}</div>
+      <div className="col-start-4 row-start-2 text-right sm:col-start-5 sm:row-start-1">
+        <div className="price text-base">{formatPrice(lineTotal)}</div>
+        <div className="text-[11px] text-ink-4">{formatPrice(unitPrice)} / шт.</div>
       </div>
 
       {/* Remove */}
       <button
         onClick={() => onRemove(product.id)}
-        className="w-9 h-9 flex items-center justify-center text-ink-4 hover:text-red-500 transition-colors flex-shrink-0"
+        className="col-start-4 row-start-1 flex size-8 items-center justify-center text-ink-4 transition-colors hover:text-red-500 sm:col-start-6"
         aria-label="Удалить товар"
       >
         <X size={18} />

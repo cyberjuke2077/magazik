@@ -44,7 +44,7 @@ export default function SubmitRequestPage() {
   const [consent, setConsent] = useState(false)
 
   useEffect(() => {
-    // hydration from localStorage — required after mount
+    // hydration from localStorage - required after mount
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(getRequestList())
     setMounted(true)
@@ -133,11 +133,11 @@ export default function SubmitRequestPage() {
   // Skeleton while hydrating
   if (!mounted) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
-        <main className="flex-1 bg-[#f8fafc] py-8">
-          <div className="mx-auto max-w-4xl px-4">
+        <main className="flex-1 py-6">
+          <div className="mx-auto max-w-5xl px-3 sm:px-6">
             <div className="h-8 w-64 bg-gray-200 rounded mb-6 animate-pulse" />
             <div className="bg-white rounded-lg p-6 space-y-4">
               {[1, 2, 3, 4].map((i) => (
@@ -154,12 +154,12 @@ export default function SubmitRequestPage() {
   // Redirect if no items
   if (items.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
-        <main className="flex-1 bg-[#f8fafc] py-20">
-          <div className="mx-auto max-w-md px-4 text-center">
-            <div className="bg-white rounded-lg p-8 border border-[var(--border)]">
+        <main className="flex-1 py-12">
+          <div className="mx-auto max-w-md px-3 text-center sm:px-6">
+            <div className="border border-[var(--border)] bg-white p-8 shadow-[var(--shadow-xs)]">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#f8fafc] mb-4">
                 <FileText size={32} className="text-ink-4" />
               </div>
@@ -171,7 +171,7 @@ export default function SubmitRequestPage() {
               </p>
               <Link
                 href="/catalog"
-                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
+                className="inline-flex h-10 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
               >
                 Перейти в каталог
               </Link>
@@ -184,13 +184,13 @@ export default function SubmitRequestPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
-      <main className="flex-1 bg-[#f8fafc] py-8">
+      <main className="flex-1 py-5">
         {/* Breadcrumb */}
-        <div className="mx-auto max-w-4xl px-4 mb-6">
+        <div className="mx-auto mb-4 max-w-5xl px-3 sm:px-6">
           <nav className="flex items-center gap-1.5 text-xs text-ink-4">
             <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
             <ChevronRight size={10} />
@@ -200,7 +200,7 @@ export default function SubmitRequestPage() {
           </nav>
         </div>
 
-        <div className="mx-auto max-w-4xl px-4">
+        <div className="mx-auto max-w-5xl px-3 sm:px-6">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-ink mb-2">
               Оформление запроса на КП
@@ -221,9 +221,9 @@ export default function SubmitRequestPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Contact info */}
-            <div className="bg-white rounded-lg border border-[var(--border)] p-6">
+            <div className="border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="text-lg font-bold text-ink mb-4 flex items-center gap-2">
                 <Building2 size={20} className="text-azure" />
                 Контактная информация
@@ -319,7 +319,7 @@ export default function SubmitRequestPage() {
             </div>
 
             {/* Details */}
-            <div className="bg-white rounded-lg border border-[var(--border)] p-6">
+            <div className="border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="text-lg font-bold text-ink mb-4 flex items-center gap-2">
                 <FileText size={20} className="text-azure" />
                 Детали запроса
@@ -370,7 +370,7 @@ export default function SubmitRequestPage() {
             </div>
 
             {/* Items summary */}
-            <div className="bg-white rounded-lg border border-[var(--border)] p-6">
+            <div className="border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="text-lg font-bold text-ink mb-4">
                 Товары в запросе ({items.length})
               </h2>
@@ -417,10 +417,10 @@ export default function SubmitRequestPage() {
             </label>
 
             {/* Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
               <Link
                 href="/request-list"
-                className="flex items-center gap-2 h-12 px-6 text-sm font-semibold text-ink-2 bg-white border border-[var(--border-2)] hover:bg-[#fafafa] rounded transition-colors"
+                className="flex h-11 items-center gap-2 rounded border border-[var(--border-2)] bg-white px-5 text-sm font-semibold text-ink-2 transition-colors hover:bg-surface-muted"
               >
                 <ArrowLeft size={14} />
                 Назад
@@ -429,7 +429,7 @@ export default function SubmitRequestPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 flex items-center justify-center gap-2 h-12 text-sm font-semibold text-white bg-azure hover:bg-azure-hover disabled:bg-gray-300 disabled:cursor-not-allowed rounded transition-colors"
+                className="flex h-11 flex-1 items-center justify-center gap-2 rounded bg-accent text-sm font-bold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:bg-gray-300"
               >
                 {isSubmitting ? (
                   <>

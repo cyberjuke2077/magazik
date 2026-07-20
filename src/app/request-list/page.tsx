@@ -23,7 +23,7 @@ export default function RequestListPage() {
   const [showClearConfirm, setShowClearConfirm] = useState(false)
 
   useEffect(() => {
-    // hydration from localStorage — required after mount
+    // hydration from localStorage - required after mount
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(getRequestList())
     setMounted(true)
@@ -51,11 +51,11 @@ export default function RequestListPage() {
   // Skeleton while hydrating
   if (!mounted) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
-        <main className="flex-1 bg-[#f8fafc] py-8">
-          <div className="mx-auto max-w-4xl px-4">
+        <main className="flex-1 py-6">
+          <div className="mx-auto max-w-5xl px-3 sm:px-6">
             <div className="h-8 w-64 bg-gray-200 rounded mb-6 animate-pulse" />
             <div className="bg-white rounded-lg p-6 space-y-4">
               {[1, 2, 3].map((i) => (
@@ -72,12 +72,12 @@ export default function RequestListPage() {
   // Empty state
   if (items.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
-        <main className="flex-1 bg-[#f8fafc] py-20">
-          <div className="mx-auto max-w-md px-4 text-center">
-            <div className="bg-white rounded-lg p-8 border border-[var(--border)]">
+        <main className="flex-1 py-12">
+          <div className="mx-auto max-w-md px-3 text-center sm:px-6">
+            <div className="border border-[var(--border)] bg-white p-8 shadow-[var(--shadow-xs)]">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#f8fafc] mb-4">
                 <ShoppingCart size={32} className="text-ink-4" />
               </div>
@@ -89,7 +89,7 @@ export default function RequestListPage() {
               </p>
               <Link
                 href="/catalog"
-                className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
+                className="inline-flex h-10 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
               >
                 Перейти в каталог
               </Link>
@@ -102,12 +102,12 @@ export default function RequestListPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
-      <main className="flex-1 bg-[#f8fafc] py-8">
-        <div className="mx-auto max-w-4xl px-4">
+      <main className="flex-1 py-5">
+        <div className="mx-auto max-w-5xl px-3 sm:px-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -149,7 +149,7 @@ export default function RequestListPage() {
           )}
 
           {/* Items table */}
-          <div className="bg-white rounded-lg border border-[var(--border)] overflow-hidden">
+          <div className="overflow-hidden border border-[var(--border)] bg-white shadow-[var(--shadow-xs)]">
             {/* Table header */}
             <div className="hidden sm:grid grid-cols-[1fr_120px_120px_40px] gap-4 px-4 py-3 bg-[#f8fafc] border-b border-[var(--border)] text-xs font-semibold text-ink-3 uppercase tracking-wider">
               <span>Товар</span>
@@ -170,7 +170,7 @@ export default function RequestListPage() {
                     {item.name}
                   </div>
                   <div className="text-xs text-ink-3 mt-0.5">
-                    {item.partNumber} · {item.manufacturer}
+                    {item.partNumber} / {item.manufacturer}
                   </div>
                 </div>
 
@@ -221,7 +221,7 @@ export default function RequestListPage() {
             </Link>
             <button
               onClick={() => router.push('/request-list/submit')}
-              className="flex items-center gap-2 h-11 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
+              className="flex h-11 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
             >
               Оформить запрос
               <ArrowRight size={14} />

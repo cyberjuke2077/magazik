@@ -62,11 +62,11 @@ export default function CartPage() {
   // Skeleton while hydrating
   if (!mounted) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
         <main>
-          <div className="mx-auto max-w-[1400px] px-4 py-6">
+          <div className="mx-auto max-w-[1440px] px-3 py-5 sm:px-6">
             <div className="h-5 w-40 skeleton rounded mb-5" />
             <div className="border border-[var(--border)] rounded">
               {[1, 2, 3].map((i) => (
@@ -83,13 +83,13 @@ export default function CartPage() {
   // Empty cart
   if (items.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen bg-white">
+      <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
         <main>
           {/* Breadcrumb */}
           <div className="border-b border-[var(--border)]">
-            <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+            <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
               <nav className="flex items-center gap-1.5 text-xs text-ink-4">
                 <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
                 <ChevronRight size={10} />
@@ -98,22 +98,24 @@ export default function CartPage() {
             </div>
           </div>
 
-          <div className="mx-auto max-w-[1400px] px-4 py-20 text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded border border-[var(--border)] bg-[#f8fafc] mb-6">
-              <ShoppingCart size={36} className="text-ink-4" />
+          <div className="mx-auto max-w-[1440px] px-3 py-8 sm:px-6 sm:py-12">
+            <div className="border border-[var(--border)] bg-white px-5 py-10 text-center shadow-[var(--shadow-xs)] sm:py-14">
+            <div className="mb-5 inline-flex size-16 items-center justify-center rounded bg-surface-muted">
+              <ShoppingCart size={30} className="text-ink-4" />
             </div>
             <h1 className="text-xl font-bold text-ink mb-2">Список запроса пуст</h1>
             <p className="text-sm text-ink-3 mb-8 max-w-xs mx-auto leading-relaxed">
               Добавьте товары в список для формирования запроса на коммерческое предложение.
-              Минимальная сумма заказа — 200 000 ₽.
+              Минимальная сумма заказа - 200 000 ₽.
             </p>
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-2 h-10 px-6 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
+              className="inline-flex h-10 items-center gap-2 rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
             >
               Перейти в каталог
               <ArrowRight size={14} />
             </Link>
+            </div>
           </div>
         </main>
         <Footer />
@@ -122,14 +124,14 @@ export default function CartPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
       <main className="flex-1">
         {/* Breadcrumb */}
         <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1400px] px-4 py-2.5">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <ChevronRight size={10} />
@@ -138,7 +140,7 @@ export default function CartPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1400px] px-4 py-6">
+        <div className="mx-auto max-w-[1440px] px-3 py-5 sm:px-6">
           {/* Page title */}
           <div className="flex items-center justify-between mb-5">
             <h1 className="text-xl font-bold text-ink">
@@ -156,17 +158,17 @@ export default function CartPage() {
             </button>
           </div>
 
-          <div className="flex gap-6 items-start">
+          <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_296px]">
             {/* Left: items list */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="flex items-center gap-5 px-5 py-3 bg-[#f8fafc] border border-[var(--border)] rounded-t text-base">
+              <div className="flex items-center gap-4 border border-[var(--border)] bg-surface-muted px-3 py-2.5 text-sm sm:px-4">
                 <label className="flex items-center gap-3 cursor-pointer select-none text-ink-3 hover:text-ink transition-colors">
                   <input
                     type="checkbox"
                     checked={allSelected}
                     onChange={toggleSelectAll}
-                    className="w-5 h-5 rounded border-[var(--border-2)] accent-azure"
+                    className="size-4 rounded border-[var(--border-2)] accent-azure"
                   />
                   Выбрать все
                 </label>
@@ -182,19 +184,10 @@ export default function CartPage() {
                 )}
 
                 {/* Column headers */}
-                <div className="ml-auto hidden md:flex items-center text-sm text-ink-3 font-medium gap-4">
-                  <span className="w-5" />
-                  <span className="w-20" />
-                  <span className="flex-1" />
-                  <span className="w-24 text-left">Цена</span>
-                  <span className="w-[110px] text-center">Количество</span>
-                  <span className="w-28 text-right">Сумма</span>
-                  <span className="w-9" />
-                </div>
               </div>
 
               {/* Items */}
-              <div className="border-x border-b border-[var(--border)] rounded-b overflow-hidden">
+              <div className="overflow-hidden border-x border-b border-[var(--border)] bg-white">
                 {items.map((item) => (
                   <CartItemRow
                     key={item.product.id}
@@ -226,8 +219,8 @@ export default function CartPage() {
             </div>
 
             {/* Right: summary */}
-            <div className="w-72 flex-shrink-0 sticky top-24">
-              <div className="border border-[var(--border)] rounded-lg overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
+            <div className="w-full lg:sticky lg:top-24">
+              <div className="overflow-hidden border border-[var(--border)] bg-white shadow-[var(--shadow-xs)]">
                 {/* Header */}
                 <div className="px-4 py-3 bg-[#f8fafc] border-b border-[var(--border)]">
                   <span className="text-sm font-semibold text-ink">Итого</span>
@@ -264,7 +257,7 @@ export default function CartPage() {
                 <div className="px-4 pb-4">
                   <Link
                     href="/request-quote"
-                    className="flex items-center justify-center gap-2 w-full h-11 text-sm font-semibold text-white bg-azure hover:bg-azure-hover rounded transition-colors"
+                    className="flex h-11 w-full items-center justify-center gap-2 rounded bg-accent text-sm font-bold text-white transition-colors hover:bg-accent-hover"
                   >
                     Отправить запрос на КП
                     <ArrowRight size={14} />
