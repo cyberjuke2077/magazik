@@ -3,7 +3,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { BadgeCheck } from 'lucide-react'
 
 const AUTOPLAY_DELAY_MS = 6000
 
@@ -73,12 +72,6 @@ const quickLinks = [
     description: 'Сенсоры и измерения',
     href: '/catalog?category=datchiki',
   },
-  {
-    title: 'Честный ЗНАК',
-    description: 'Сертификация поставки',
-    href: '/delivery#documents',
-    certification: true,
-  },
 ]
 
 export function HeroSlider() {
@@ -102,7 +95,7 @@ export function HeroSlider() {
     <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6" data-motion-reveal>
       <div className="mx-auto max-w-[1380px] overflow-hidden px-4 lg:flex lg:gap-4 lg:px-0">
         <div
-          className="relative h-[160px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[220px] lg:w-[330px]"
+          className="relative h-[180px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[250px] lg:w-[360px]"
           role="region"
           aria-roledescription="карусель"
           aria-label="Подборки компонентов"
@@ -176,25 +169,19 @@ export function HeroSlider() {
             <Link
               key={item.href}
               href={item.href}
-              className="group relative h-[111px] w-[100px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[220px] lg:w-auto lg:flex-1 lg:hover:flex-[1.34] lg:hover:shadow-[var(--shadow-azure-md)]"
+              className="group relative h-[128px] w-[116px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[250px] lg:w-auto lg:flex-1 lg:hover:flex-[1.24] lg:hover:shadow-[var(--shadow-azure-md)]"
               data-motion-scale
             >
-              {'certification' in item ? (
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,#68b7ff_0,#1475e8_38%,#0754b8_100%)]">
-                  <BadgeCheck className="absolute bottom-2 right-2 text-white/24 lg:bottom-4 lg:right-4" size={76} strokeWidth={1.25} />
-                </div>
-              ) : (
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover saturate-[1.25] contrast-[1.06] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
-                  sizes="(max-width: 1024px) 100px, 183px"
-                />
-              )}
-              <div className={`absolute inset-0 ${'certification' in item ? 'bg-gradient-to-b from-transparent to-[#063d8c]/78' : 'bg-gradient-to-b from-white/12 via-transparent to-[#071b33]/88'}`} />
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover saturate-[1.25] contrast-[1.06] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
+                sizes="(max-width: 1024px) 116px, 180px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-transparent to-[#071b33]/88" />
               <div className="absolute inset-x-0 bottom-0 p-3 text-white lg:p-5">
-                <div className="font-display text-[12px] font-bold leading-[1.08] drop-shadow-sm lg:text-[17px]">{item.title}</div>
+                <div className="font-display text-[13px] font-bold leading-[1.08] drop-shadow-sm lg:text-[18px]">{item.title}</div>
                 <div className="mt-1 hidden text-[13px] leading-tight text-white/82 lg:block">{item.description}</div>
               </div>
             </Link>
