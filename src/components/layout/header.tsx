@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Mail, MapPin, Phone, Menu, X, Search, Check } from 'lucide-react'
+import { Check, Mail, MapPin, Menu, Phone, Search, X } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const cities = [
@@ -86,42 +86,39 @@ export function Header() {
   }
 
   return (
-    <header className="w-full">
-      <div className="mx-auto max-w-[1400px] px-4">
-          <div className="flex items-center gap-8 h-[70px]">
+    <header className="w-full border-b border-[var(--border)] bg-white">
+      <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
+          <div className="flex h-[52px] items-center gap-5 lg:h-10">
 
             {/* Logo */}
-            <Link href="/" className="shrink-0">
-              <div className="text-[2.2rem] font-extrabold text-ink tracking-tight leading-none">
+            <Link href="/" className="shrink-0 lg:hidden">
+              <div className="text-[22px] font-extrabold leading-none tracking-tight text-ink">
                 electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
               </div>
             </Link>
 
             {/* Address */}
-            <div className="hidden lg:flex flex-col leading-snug gap-1">
+            <div className="hidden items-center lg:flex">
               <button 
                 onClick={() => setCityModalOpen(true)}
-                className="flex items-center gap-1.5 text-[15px] font-extrabold text-ink hover:text-azure transition-colors"
+                className="flex items-center gap-1.5 text-xs font-semibold text-ink-2 transition-colors hover:text-azure"
               >
-                <MapPin size={15} className="text-azure" />
+                <MapPin size={14} className="text-azure" />
                 {selectedCity}
               </button>
-              <span className="text-[12px] text-ink-4 pl-[22px]">Магазины и оптовые отделы</span>
             </div>
 
             {/* Phone */}
-            <div className="hidden lg:flex flex-col leading-snug gap-1">
-              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-1.5 text-[15px] font-extrabold text-ink hover:text-azure transition-colors">
-                <Phone size={15} className="text-azure" />
+            <div className="hidden items-center lg:flex">
+              <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-1.5 text-xs font-semibold text-ink-2 transition-colors hover:text-azure">
+                <Phone size={14} className="text-azure" />
                 {COMPANY.phone.display}
-              </a>
-              <a href={`mailto:${COMPANY.email}`} className="text-[12px] text-ink-4 pl-[22px] hover:text-azure transition-colors">
-                {COMPANY.email}
               </a>
             </div>
 
             {/* Nav links */}
-            <nav className="hidden lg:flex items-center gap-6 ml-auto text-[14px] font-semibold text-ink-2">
+            <nav className="ml-auto hidden items-center gap-6 text-xs font-medium text-ink-3 lg:flex">
+              <Link href="/wholesale" className="transition-colors hover:text-azure">Оптовым клиентам</Link>
               <Link href="/delivery" className="hover:text-azure transition-colors">Доставка</Link>
               <Link href="/brands"   className="hover:text-azure transition-colors">Бренды</Link>
               <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-1.5 hover:text-azure transition-colors">
@@ -133,7 +130,9 @@ export function Header() {
             {/* Mobile burger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden ml-auto flex items-center justify-center size-10 rounded-[var(--radius-control)] text-ink-3 hover:bg-gray-100 transition-all"
+              className="ml-auto flex size-9 items-center justify-center rounded-[var(--radius-control)] text-ink-3 transition-colors hover:bg-surface-muted lg:hidden"
+              aria-label={mobileOpen ? 'Закрыть меню' : 'Открыть меню'}
+              aria-expanded={mobileOpen}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -142,9 +141,10 @@ export function Header() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-b border-[var(--border)] bg-white animate-slide-down">
-          <div className="mx-auto max-w-[1400px] px-4 py-3 space-y-1">
+        <div className="border-b border-[var(--border)] bg-white lg:hidden">
+          <div className="mx-auto max-w-[1440px] space-y-1 px-3 py-3">
             <Link href="/catalog"  onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Каталог</Link>
+            <Link href="/wholesale" onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Оптовым клиентам</Link>
             <Link href="/brands"   onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Бренды</Link>
             <Link href="/delivery" onClick={() => setMobileOpen(false)} className="flex items-center rounded-[var(--radius-control)] px-3 py-2.5 text-sm font-medium text-ink-2 hover:bg-azure-light hover:text-azure">Доставка</Link>
           </div>
@@ -155,10 +155,10 @@ export function Header() {
       {cityModalOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/60 z-[100]"
+            className="fixed inset-0 z-[var(--layer-overlay)] bg-black/45"
             onClick={() => setCityModalOpen(false)}
           />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl bg-white rounded-lg shadow-2xl z-[100] max-h-[500px] overflow-hidden">
+          <div className="fixed left-1/2 top-1/2 z-[var(--layer-overlay)] max-h-[min(620px,90dvh)] w-[calc(100%-24px)] max-w-4xl -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[var(--radius-panel)] bg-white shadow-[var(--shadow-xl)]">
             <div className="p-4 border-b border-[var(--border)]">
               <div className="relative">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
@@ -174,7 +174,7 @@ export function Header() {
             </div>
             <div className="p-4 overflow-y-auto max-h-[400px]">
               {filteredCities.length > 0 ? (
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {filteredCities.map((city) => (
                     <button
                       key={city.name}

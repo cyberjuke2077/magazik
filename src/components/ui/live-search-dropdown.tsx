@@ -226,8 +226,8 @@ export function LiveSearchDropdown() {
 
   return (
     <div className="flex-1 relative">
-      <form onSubmit={handleSubmit} className="relative bg-white h-[68px]">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+      <form onSubmit={handleSubmit} className="relative h-11 rounded-[var(--radius-control)] bg-surface-muted">
+        <Search size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
         <input
           ref={inputRef}
           type="text"
@@ -244,12 +244,12 @@ export function LiveSearchDropdown() {
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onKeyDown={handleKeyDown}
           placeholder="Поиск по артикулу, названию или производителю"
-          className="w-full h-full pl-12 pr-24 text-[16px] bg-transparent text-gray-900 placeholder-gray-400 outline-none"
+          className="h-full w-full rounded-[var(--radius-control)] border border-transparent bg-transparent pl-10 pr-3 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 sm:pr-24"
           autoComplete="off"
         />
         <button
           type="submit"
-          className="absolute right-3 top-1/2 -translate-y-1/2 h-9 px-4 text-sm font-semibold text-white bg-azure hover:bg-azure-hover transition-colors rounded-sm"
+          className="absolute right-1 top-1/2 hidden h-9 -translate-y-1/2 rounded-[7px] bg-azure px-4 text-sm font-semibold text-white transition-colors hover:bg-azure-hover sm:block"
         >
           Найти
         </button>
@@ -259,7 +259,7 @@ export function LiveSearchDropdown() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute top-[68px] left-0 right-0 bg-white border border-gray-200 shadow-2xl z-[70] overflow-hidden rounded-b-lg animate-in fade-in slide-in-from-top-1 duration-150"
+          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white shadow-[var(--shadow-xl)]"
         >
           {/* Loading skeleton */}
           {isLoading && <SkeletonResults />}

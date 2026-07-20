@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect } from 'react'
-import { ShoppingCart } from 'lucide-react'
+import { FileText, GitCompareArrows, Grid3X3, Home, ShoppingCart } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { LiveSearchDropdown } from '@/components/ui/live-search-dropdown'
 
@@ -70,56 +70,63 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
     : ''
 
   return (
-    <div className="sticky top-0 z-50">
-      <div className="mx-auto max-w-[1400px] px-4 relative">
-        <div className="flex items-center h-[68px] rounded-lg shadow-[0_8px_30px_rgba(0,0,0,0.12),_0_4px_12px_rgba(0,102,204,0.15)] bg-white">
+    <div className="sticky top-0 z-[var(--layer-header)] border-b border-[var(--border)] bg-white shadow-[var(--shadow-xs)]">
+      <div className="relative mx-auto max-w-[1440px] px-3 sm:px-6">
+        <div className="flex h-[60px] items-center gap-2 lg:gap-3">
+
+          <Link href="/" className="hidden shrink-0 lg:block">
+            <span className="text-[26px] font-extrabold leading-none tracking-tight text-ink">
+              electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
+            </span>
+          </Link>
 
           {/* Catalog button */}
-          <div ref={catalogRef} className="relative shrink-0">
+          <Link
+            href="/catalog"
+            className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-accent text-white lg:hidden"
+            aria-label="Открыть каталог"
+          >
+            <Grid3X3 size={19} />
+          </Link>
+          <div ref={catalogRef} className="relative hidden shrink-0 lg:block">
             <button
               onClick={() => setCatalogOpen(!catalogOpen)}
-              className={`flex items-center gap-3 h-[68px] px-7 font-bold transition-all rounded-l ${
+              className={`flex h-11 items-center gap-2.5 rounded-[var(--radius-control)] px-5 text-sm font-bold transition-colors ${
                 catalogOpen
-                  ? 'bg-azure-hover text-white'
-                  : 'bg-azure text-white hover:bg-azure-hover'
+                  ? 'bg-accent-hover text-white'
+                  : 'bg-accent text-white hover:bg-accent-hover'
               }`}
+              aria-expanded={catalogOpen}
             >
-              <div className="grid grid-cols-3 gap-[2px] shrink-0">
-                {[...Array(9)].map((_, i) => (
-                  <div key={i} className="size-[4px] bg-white/90" />
-                ))}
-              </div>
-              <span className="text-[16px]">Каталог</span>
+              <Grid3X3 size={18} />
+              <span>Каталог</span>
             </button>
           </div>
 
           {/* Search — live autocomplete with full dropdown */}
           <LiveSearchDropdown />
 
-          {/* Right icons — постоянный серый фон */}
-          <div className="hidden lg:flex items-stretch shrink-0 bg-gray-100 h-[68px] rounded-r">
-            <Link
-              href="/cart"
-              data-cart-icon
-              className="flex flex-col items-center justify-center gap-1.5 px-6 text-ink-3 hover:text-azure transition-colors relative"
-            >
-              <div className="relative">
-                <ShoppingCart size={26} strokeWidth={1.5} />
-                <span className="absolute -top-2 -right-2.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold bg-accent text-white leading-none">
-                  {cartCount > 99 ? '99+' : cartCount}
-                </span>
-              </div>
-              <span className="text-[13px] leading-none font-bold text-ink">
-                {cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Запрос'}
-              </span>
-            </Link>
-          </div>
+          <Link
+            href="/compare"
+            className="hidden h-11 shrink-0 flex-col items-center justify-center gap-0.5 rounded-[var(--radius-control)] px-3 text-[11px] font-medium text-ink-3 transition-colors hover:bg-surface-muted hover:text-azure lg:flex"
+          >
+            <GitCompareArrows size={19} strokeWidth={1.8} />
+            Сравнение
+          </Link>
 
-          {/* Mobile cart */}
-          <Link href="/cart" data-cart-icon className="lg:hidden relative flex items-center justify-center size-9 text-ink-3">
-            <ShoppingCart size={20} />
-            <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center size-4 rounded-full text-[9px] font-bold bg-accent text-white">
-              {cartCount > 99 ? '99+' : cartCount}
+          <Link
+            href="/cart"
+            data-cart-icon
+            className="relative flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] text-ink-3 transition-colors hover:bg-surface-muted hover:text-azure lg:h-11 lg:w-auto lg:min-w-[92px] lg:gap-2 lg:px-3"
+          >
+            <span className="relative">
+              <ShoppingCart size={21} strokeWidth={1.8} />
+              <span className="absolute -right-2 -top-2 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-accent px-1 text-[9px] font-bold leading-none text-white">
+                {cartCount > 99 ? '99+' : cartCount}
+              </span>
+            </span>
+            <span className="hidden text-xs font-semibold text-ink lg:block">
+              {cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Запрос'}
             </span>
           </Link>
         </div>
@@ -127,8 +134,8 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
 
       {/* Mega menu - ChipDip style - positioned absolutely relative to parent */}
       {catalogOpen && (
-        <div ref={catalogMenuRef} className="absolute top-[76px] left-0 right-0 mx-auto max-w-[1400px] px-4 z-[60]">
-          <div className="bg-white border border-[var(--border)] rounded-[var(--radius-card)] shadow-[var(--shadow-xl)] max-h-[500px] overflow-hidden overflow-y-auto">
+        <div ref={catalogMenuRef} className="absolute left-0 right-0 top-[60px] z-[var(--layer-menu)] mx-auto max-w-[1440px] px-6">
+          <div className="max-h-[560px] overflow-hidden overflow-y-auto rounded-b-[var(--radius-panel)] border border-t-0 border-[var(--border)] bg-white shadow-[var(--shadow-xl)]">
             <div className="flex">
               {/* Left column - main categories */}
               <div className="w-[240px] bg-white border-r border-[var(--border)]">
@@ -138,7 +145,6 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
                       <li
                         key={cat.slug}
                         onMouseEnter={() => setHoveredCategory(cat.slug)}
-                        onMouseLeave={() => setHoveredCategory(null)}
                       >
                         <Link
                           href={`/catalog?category=${cat.slug}`}
@@ -189,7 +195,7 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
             </div>
 
             {/* Footer with "Весь каталог" button */}
-            <div className="border-t border-[var(--border)] px-4 py-2 bg-[#f8fafc] flex items-center justify-between">
+            <div className="flex items-center justify-between border-t border-[var(--border)] bg-surface-muted px-4 py-2.5">
               <span className="text-xs text-ink-3">
                 {totalProducts > 0 ? `${totalProducts.toLocaleString('ru-RU')} товаров` : '2 000 000+ товаров'}
               </span>
@@ -198,12 +204,40 @@ export function StickyNav({ categories = [], totalProducts = 0 }: StickyNavProps
                 onClick={() => setCatalogOpen(false)}
                 className="text-xs font-semibold text-azure hover:underline"
               >
-                Весь каталог →
+                Весь каталог
               </Link>
             </div>
           </div>
         </div>
       )}
+
+      <nav className="fixed inset-x-0 bottom-0 z-[var(--layer-header)] grid h-16 grid-cols-5 border-t border-[var(--border)] bg-white px-1 lg:hidden">
+        <MobileNavItem href="/" label="Главная" icon={Home} />
+        <MobileNavItem href="/catalog" label="Каталог" icon={Grid3X3} />
+        <MobileNavItem href="/compare" label="Сравнить" icon={GitCompareArrows} />
+        <MobileNavItem href="/cart" label="Запрос" icon={ShoppingCart} />
+        <MobileNavItem href="/request-quote" label="КП" icon={FileText} />
+      </nav>
     </div>
+  )
+}
+
+function MobileNavItem({
+  href,
+  label,
+  icon: Icon,
+}: {
+  href: string
+  label: string
+  icon: typeof Home
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex min-w-0 flex-col items-center justify-center gap-1 text-[10px] font-medium text-ink-3 transition-colors hover:text-azure"
+    >
+      <Icon size={20} strokeWidth={1.8} />
+      <span className="truncate">{label}</span>
+    </Link>
   )
 }
