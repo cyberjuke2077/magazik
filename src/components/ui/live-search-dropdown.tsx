@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, Clock, ChevronRight, Package, Tag, Building2 } from 'lucide-react'
 
@@ -101,16 +101,11 @@ export function LiveSearchDropdown() {
   const [isLoading, setIsLoading] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
-  const [history, setHistory] = useState<string[]>([])
+  const [history, setHistory] = useState<string[]>(getSearchHistory)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  // Load history on mount
-  useEffect(() => {
-    setHistory(getSearchHistory())
-  }, [])
 
   // Build flat list of navigable items for keyboard nav
   const navItems = useCallback((): Array<{ type: string; href: string; label: string }> => {

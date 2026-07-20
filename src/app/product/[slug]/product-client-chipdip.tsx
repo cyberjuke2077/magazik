@@ -99,11 +99,11 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
         <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
           {/* Title */}
           <div className="pb-5 pt-0">
-            <h1 className="max-w-5xl text-2xl font-bold leading-[1.15] tracking-tight text-ink md:text-[32px]">{product.name}</h1>
+            <h1 className="max-w-6xl text-balance text-2xl font-bold leading-[1.15] tracking-[-0.035em] text-ink md:text-[32px]">{product.name}</h1>
           </div>
 
           {/* Product Main Section */}
-          <div className="mb-8 grid gap-5 rounded-xl border border-[var(--border)] bg-white p-4 sm:p-6 lg:min-h-[687px] lg:grid-cols-[640px_minmax(0,1fr)]">
+          <div className="mb-8 grid gap-5 rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-6 lg:min-h-[687px] lg:grid-cols-[640px_minmax(0,1fr)]" data-motion-reveal>
             {/* Photo Gallery */}
             <div className="flex-shrink-0 lg:row-span-2">
               <div className="flex gap-3 lg:gap-6">
@@ -163,14 +163,14 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
                 {/* Main Photo */}
                 <div className="min-w-0 flex-1">
-                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden bg-white sm:h-[420px] lg:h-[548px] lg:max-w-[484px]">
+                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden rounded-2xl bg-white sm:h-[420px] lg:h-[548px] lg:max-w-[484px]" data-motion-scale>
                     <Image
                       src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}
                       width={400}
                       height={400}
-                      priority
-                      className="w-full h-full object-contain p-4"
+                      loading="eager"
+                      className="h-full w-full object-contain p-4 transition-transform duration-700 ease-out hover:scale-105"
                       unoptimized={photos[activePhoto].startsWith('/')}
                     />
                   </div>
@@ -275,7 +275,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
             {/* Ordering Controls */}
             <div className="w-full lg:px-6" data-add-to-cart-block>
-              <div className="sticky top-[112px]">
+              <div className="sticky top-[112px] rounded-2xl bg-surface-muted p-4 shadow-[var(--shadow-xs)]">
                 {/* Price */}
                 <div className="pb-4">
                   <div className="price text-[30px] leading-none">
@@ -367,7 +367,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           {/* Product Content */}
           <div className="mb-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
             {/* Main Content (65%) */}
-            <div className="min-w-0 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-4 sm:p-5">
+            <div className="min-w-0 rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               {/* Tabs */}
               <div className="mb-5 flex gap-4 overflow-x-auto">
                 {tabs.map((tab) => (
@@ -461,7 +461,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
               {/* Other Offers */}
               <div className="mb-6" id="other-offers">
                 <h3 className="text-base font-bold text-ink mb-4">Другие предложения</h3>
-                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
+                <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)]">
                   <div className="p-4 text-center text-sm text-ink-4">
                     Другие предложения для этого товара отсутствуют
                   </div>
@@ -471,7 +471,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
               {/* Analogs */}
               <div className="mb-6" id="analogs">
                 <h3 className="text-base font-bold text-ink mb-4">Аналоги</h3>
-                <div className="border border-[var(--border)] rounded-[var(--radius-card)] overflow-hidden">
+                <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)]">
                   {related.length > 0 ? (
                     <div className="divide-y divide-[var(--border)]">
                       {related.slice(0, 3).map((analog) => (

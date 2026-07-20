@@ -119,8 +119,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
         <main className="flex-1">
           <div className="mx-auto max-w-[1440px] px-3 pb-8 pt-3 sm:px-6">
-            <div className="mb-1 flex items-baseline gap-3">
-              <h1 className="text-[28px] font-bold tracking-tight text-ink">Каталог</h1>
+            <div className="mb-1 flex items-baseline gap-3" data-motion-reveal>
+              <h1 className="text-[30px] font-bold tracking-[-0.035em] text-ink">Каталог товаров</h1>
               <span className="text-sm text-ink-4">
                 {totalProductsAll.toLocaleString('ru-RU')} позиций
               </span>
@@ -132,7 +132,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               totalCategories={totalCategories}
             />
 
-            <div className="mt-4">
+            <div className="mt-5">
               <CatalogShowcase sections={sections} />
             </div>
           </div>
@@ -223,7 +223,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
         <div className="mx-auto max-w-[1380px] px-4 pb-8 pt-3 lg:px-0">
           {/* Page title */}
           <div className="mb-1 flex items-baseline gap-3">
-            <h1 className="text-[28px] font-bold tracking-tight text-ink">
+            <h1 className="text-[30px] font-bold tracking-[-0.035em] text-ink">
               {activeCategoryName || 'Каталог'}
             </h1>
             <span className="text-sm text-ink-4">
@@ -233,7 +233,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
           <div className="mt-4 flex gap-4">
             {/* Sidebar */}
-            <aside className="sticky top-[112px] hidden h-fit w-[280px] shrink-0 rounded-xl border border-[var(--border)] bg-white p-4 lg:block">
+            <aside className="sticky top-[112px] hidden h-fit w-[280px] shrink-0 overflow-hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] lg:block">
               <Suspense fallback={<div className="h-40 skeleton rounded" />}>
                 <CategoryTree
                   categories={categories}
@@ -249,7 +249,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             {/* Main content */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="mb-3 flex min-h-12 flex-wrap items-center gap-2 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-2">
+              <div className="mb-3 flex min-h-14 flex-wrap items-center gap-2 rounded-2xl bg-white p-2.5 shadow-[var(--shadow-xs)]">
                 {parsed.query && (
                   <span className="mr-auto min-w-0 truncate text-sm text-ink-3">
                     Результаты для «<span className="font-medium text-ink-2">{parsed.query}</span>»
@@ -337,7 +337,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   </BulkSelectWrapper>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <BulkSelectWrapper
                     products={result.items.map((p) => ({
                       id: p.id,

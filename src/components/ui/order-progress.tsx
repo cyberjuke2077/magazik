@@ -38,12 +38,12 @@ export function OrderProgress({ currentAmount, minAmount }: OrderProgressProps) 
           {formatPrice(currentAmount)} из {formatPrice(minAmount)}
         </span>
         {remaining > 0 ? (
-          <span className="text-orange-600 font-medium">
+          <span className="font-medium text-azure">
             Осталось: {formatPrice(remaining)}
           </span>
         ) : (
           <span className="text-green-600 font-medium">
-            ✓ Готово к отправке
+            Готово к оформлению
           </span>
         )}
       </div>

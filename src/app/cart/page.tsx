@@ -89,11 +89,11 @@ export default function CartPage() {
         <StickyNav />
         <main className="flex-1">
           <div className="mx-auto max-w-[1380px] px-4 pb-7 pt-7 lg:px-0">
-            <h1 className="mb-3 text-[30px] font-bold leading-tight text-ink">Список запроса</h1>
-            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-xl border border-[var(--border)] bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]">
+            <h1 className="mb-3 text-[30px] font-bold leading-tight tracking-[-0.035em] text-ink">Корзина</h1>
+            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]" data-motion-reveal>
               <Image
                 src="/storefront/empty-request-list.png"
-                alt=""
+                alt="Пустая корзина Electromagaz"
                 width={320}
                 height={210}
                 className="mb-2 h-[210px] w-[320px] object-contain"
@@ -101,7 +101,7 @@ export default function CartPage() {
               <h2 className="mb-2 text-xl font-bold text-ink">Пока пусто</h2>
               <p className="max-w-md text-sm leading-relaxed text-ink-3">
                 Выберите компоненты в <Link href="/catalog" className="text-azure hover:underline">каталоге</Link> или найдите их по точному MPN.
-                Мы подготовим коммерческое предложение по вашему списку.
+                После оформления мы подтвердим цены и сроки поставки.
               </p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function CartPage() {
             <nav className="flex items-center gap-1.5 text-xs text-ink-4">
               <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-ink-3">Список запроса</span>
+              <span className="text-ink-3">Корзина</span>
             </nav>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function CartPage() {
           {/* Page title */}
           <div className="flex items-center justify-between mb-5">
             <h1 className="text-xl font-bold text-ink">
-              Список запроса
+              Корзина
               <span className="ml-2 text-base font-normal text-ink-4">
                 ({totalItems} {totalItems === 1 ? 'товар' : totalItems < 5 ? 'товара' : 'товаров'})
               </span>
@@ -143,7 +143,7 @@ export default function CartPage() {
               className="flex items-center gap-2 text-sm text-ink-4 hover:text-red-500 transition-colors"
             >
               <Trash2 size={15} />
-              Очистить список
+              Очистить корзину
             </button>
           </div>
 
@@ -151,7 +151,7 @@ export default function CartPage() {
             {/* Left: items list */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="flex items-center gap-4 border border-[var(--border)] bg-surface-muted px-3 py-2.5 text-sm sm:px-4">
+              <div className="flex items-center gap-4 rounded-t-2xl bg-surface-muted px-3 py-2.5 text-sm sm:px-4">
                 <label className="flex items-center gap-3 cursor-pointer select-none text-ink-3 hover:text-ink transition-colors">
                   <input
                     type="checkbox"
@@ -176,7 +176,7 @@ export default function CartPage() {
               </div>
 
               {/* Items */}
-              <div className="overflow-hidden border-x border-b border-[var(--border)] bg-white">
+              <div className="overflow-hidden rounded-b-2xl bg-white shadow-[var(--shadow-xs)]">
                 {items.map((item) => (
                   <CartItemRow
                     key={item.product.id}
@@ -209,7 +209,7 @@ export default function CartPage() {
 
             {/* Right: summary */}
             <div className="w-full lg:sticky lg:top-24">
-              <div className="overflow-hidden border border-[var(--border)] bg-white shadow-[var(--shadow-xs)]">
+              <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-azure-sm)]">
                 {/* Header */}
                 <div className="px-4 py-3 bg-[#f8fafc] border-b border-[var(--border)]">
                   <span className="text-sm font-semibold text-ink">Итого</span>
@@ -230,7 +230,7 @@ export default function CartPage() {
 
                   <div className="border-t border-[var(--border)] pt-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-ink-3">Сумма запроса:</span>
+                      <span className="text-sm text-ink-3">Сумма корзины:</span>
                       <span className={totalPrice > 0 ? 'price text-lg' : 'text-lg font-bold text-ink'}>
                         {totalPrice > 0 ? formatPrice(totalPrice) : 'По запросу'}
                       </span>
@@ -246,9 +246,9 @@ export default function CartPage() {
                 <div className="px-4 pb-4">
                   <Link
                     href="/request-quote"
-                    className="flex h-11 w-full items-center justify-center gap-2 rounded bg-accent text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+                    className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-azure text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-[var(--shadow-azure-md)] active:translate-y-0 active:scale-[0.98]"
                   >
-                    Отправить запрос на КП
+                    Перейти к оформлению
                     <ArrowRight size={14} />
                   </Link>
                 </div>
@@ -265,7 +265,7 @@ export default function CartPage() {
                   </div>
                   <div className="flex items-start gap-2 text-xs text-ink-3">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
-                    <span>Ответ на запрос в течение 24 часов</span>
+                    <span>Подтверждение заказа в течение 24 часов</span>
                   </div>
                 </div>
               </div>

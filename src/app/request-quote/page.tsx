@@ -156,10 +156,10 @@ export default function RequestQuotePage() {
                 <FileText size={32} className="text-ink-4" />
               </div>
               <h1 className="text-xl font-bold text-ink mb-2">
-                Список запроса пуст
+                Корзина пуста
               </h1>
               <p className="text-sm text-ink-3 mb-6">
-                Добавьте товары в список для формирования запроса на коммерческое предложение.
+                Добавьте товары в корзину, чтобы перейти к оформлению.
               </p>
               <Link
                 href="/catalog"
@@ -186,25 +186,25 @@ export default function RequestQuotePage() {
           <nav className="flex items-center gap-1.5 text-xs text-ink-4">
             <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
             <ChevronRight size={10} />
-            <Link href="/cart" className="hover:text-ink-3 transition-colors">Список запроса</Link>
+            <Link href="/cart" className="hover:text-ink-3 transition-colors">Корзина</Link>
             <ChevronRight size={10} />
-            <span className="text-ink-3">Запрос на КП</span>
+            <span className="text-ink-3">Оформление</span>
           </nav>
         </div>
 
         <div className="mx-auto max-w-5xl px-3 sm:px-6">
           <div className="mb-5">
             <h1 className="text-2xl font-bold text-ink mb-2">
-              Запрос коммерческого предложения
+              Оформление заказа
             </h1>
             <p className="text-sm text-ink-3">
-              Заполните форму, и мы свяжемся с вами в течение 24 часов для согласования цены и сроков поставки
+              Укажите контактные данные. Мы подтвердим цены и сроки поставки в течение 24 часов.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Контактная информация */}
-            <div className="border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
+            <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
                 <Building2 size={20} className="text-azure" />
                 Контактная информация
@@ -305,10 +305,10 @@ export default function RequestQuotePage() {
             </div>
 
             {/* Детали запроса */}
-            <div className="border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
+            <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
                 <FileText size={20} className="text-azure" />
-                Детали запроса
+                Детали заказа
               </h2>
               
               <div className="space-y-4">
@@ -356,9 +356,9 @@ export default function RequestQuotePage() {
             </div>
 
             {/* Список товаров */}
-            <div className="border border-[var(--border)] bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
+            <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="mb-4 text-base font-bold text-ink">
-                Товары в запросе ({items.length})
+                Товары в корзине ({items.length})
               </h2>
               
               <div className="space-y-3 mb-4">
@@ -422,16 +422,16 @@ export default function RequestQuotePage() {
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
               <Link
                 href="/cart"
-                className="flex h-11 items-center gap-2 rounded border border-[var(--border-2)] bg-white px-5 text-sm font-semibold text-ink-2 transition-colors hover:bg-surface-muted"
+                className="flex h-11 items-center gap-2 rounded-xl border border-[var(--border-2)] bg-white px-5 text-sm font-semibold text-ink-2 transition-colors hover:bg-surface-muted"
               >
                 <ArrowLeft size={14} />
-                Назад к списку
+                Назад в корзину
               </Link>
               
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex h-11 flex-1 items-center justify-center gap-2 rounded bg-accent text-sm font-bold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:bg-gray-300"
+                className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-azure text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300"
               >
                 {isSubmitting ? (
                   <>
@@ -441,7 +441,7 @@ export default function RequestQuotePage() {
                 ) : (
                   <>
                     <CheckCircle size={16} />
-                    Отправить запрос на КП
+                    Оформить заказ
                   </>
                 )}
               </button>

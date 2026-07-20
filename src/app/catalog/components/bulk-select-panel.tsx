@@ -79,7 +79,7 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
     <BulkSelectContext.Provider value={{ selectedIds, toggle }}>
       <div className="relative">
         {/* Select all header row */}
-        <div className="flex items-center gap-4 h-[40px] px-4 bg-gray-50 border-b border-[var(--border)] text-xs font-semibold text-ink-3 uppercase tracking-wide">
+        <div className="hidden h-[40px] items-center gap-4 border-b border-[var(--border)] bg-gray-50 px-4 text-xs font-semibold uppercase tracking-wide text-ink-3 sm:flex">
           <button
             onClick={toggleAll}
             className="shrink-0 text-ink-4 hover:text-azure transition-colors"

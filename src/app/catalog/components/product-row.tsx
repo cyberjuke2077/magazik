@@ -29,7 +29,7 @@ interface ProductRowData {
 
 export function ProductRow({ product }: { product: ProductRowData }) {
   return (
-    <article className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 rounded-xl border border-[var(--border)] bg-white p-3 transition-colors hover:border-[var(--border-2)] sm:min-h-[240px] sm:grid-cols-[192px_minmax(0,1fr)_190px] sm:gap-6 sm:p-6">
+    <article className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl bg-white p-3 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-md)] sm:min-h-[240px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5">
       <ProductImage product={product} />
       <ProductDetails product={product} />
       <ProductCommerce product={product} />
@@ -47,13 +47,13 @@ function ProductImage({ product }: { product: ProductRowData }) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[var(--radius-control)] border border-[var(--border)] bg-surface-muted"
+      className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-surface-muted"
     >
       <Image
         src={image}
         alt={product.name}
         fill
-        className="object-contain p-2"
+        className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
         sizes="(max-width: 640px) 76px, 192px"
       />
     </Link>
@@ -84,7 +84,7 @@ function ProductDetails({ product }: { product: ProductRowData }) {
         {product.name}
       </Link>
       {specs.length > 0 ? (
-        <dl className="mt-2 grid gap-x-4 gap-y-1 text-[11px] sm:grid-cols-2">
+        <dl className="mt-2 hidden gap-x-4 gap-y-1 text-[11px] sm:grid sm:grid-cols-2">
           {specs.map(([key, value]) => (
             <div key={key} className="flex min-w-0 gap-1.5">
               <dt className="shrink-0 text-ink-4">{key}:</dt>
@@ -124,7 +124,7 @@ function ProductCommerce({ product }: { product: ProductRowData }) {
     : 'Под заказ'
 
   return (
-    <div className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+    <div className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
       <div className="sm:text-right">
         <div className={displayPrice ? 'price text-lg' : 'text-sm font-semibold text-ink-3'}>
           {formatPrice(displayPrice)}

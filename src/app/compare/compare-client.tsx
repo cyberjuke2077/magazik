@@ -17,6 +17,7 @@ export function CompareClient() {
   const { items: compareItems, mounted } = useCompare()
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [onlyDifferences, setOnlyDifferences] = useState(false)
   const { addItem } = useCart()
 
@@ -29,10 +30,14 @@ export function CompareClient() {
       return
     }
     setLoading(true)
+    setLoadError(null)
     const ids = compareItems.map((i) => i.id)
     fetchCompareProducts(ids)
       .then((data) => setProducts(data))
-      .catch(() => setProducts([]))
+      .catch((error: unknown) => {
+        setProducts([])
+        setLoadError(error instanceof Error ? error.message : 'Не удалось загрузить товары для сравнения')
+      })
       .finally(() => setLoading(false))
   }, [mounted, compareItems])
 
@@ -42,8 +47,8 @@ export function CompareClient() {
       <main className="flex-1">
         <div className="mx-auto max-w-[1400px] px-4 py-10">
           <h1 className="mb-2 text-2xl font-bold text-ink">Сравнение товаров</h1>
-          <div className="py-20 flex items-center justify-center text-gray-400">
-            Загрузка...
+          <div className="mt-6 grid gap-3 rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)] sm:grid-cols-3">
+            {[1, 2, 3].map((item) => <div key={item} className="skeleton h-[260px]" />)}
           </div>
         </div>
       </main>
@@ -51,14 +56,28 @@ export function CompareClient() {
   }
 
   // Empty state
+  if (loadError) {
+    return (
+      <main className="flex-1">
+        <div className="mx-auto max-w-[1380px] px-4 py-8 lg:px-0">
+          <div className="rounded-2xl bg-white px-6 py-16 text-center shadow-[var(--shadow-xs)]">
+            <h1 className="text-2xl font-bold text-ink">Сравнение не загрузилось</h1>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-ink-3">{loadError}</p>
+            <button onClick={() => window.location.reload()} className="mt-5 h-10 rounded-xl bg-azure px-5 text-sm font-bold text-white hover:bg-azure-hover">Повторить</button>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
   if (products.length === 0) {
     return (
       <main className="flex-1">
         <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-6 lg:px-0">
-          <div className="grid min-h-[266px] items-center rounded-xl border border-[var(--border)] bg-white px-6 py-5 sm:grid-cols-[380px_minmax(0,1fr)] sm:px-10">
+          <div className="grid min-h-[300px] items-center rounded-2xl bg-white px-6 py-5 shadow-[var(--shadow-xs)] sm:grid-cols-[380px_minmax(0,1fr)] sm:px-10" data-motion-reveal>
             <Image
               src="/storefront/empty-compare.png"
-              alt=""
+              alt="Пустой список сравнения Electromagaz"
               width={350}
               height={230}
               className="mx-auto h-[210px] w-[350px] object-contain"
@@ -77,7 +96,7 @@ export function CompareClient() {
                 </Link>
                 <Link
                   href="/catalog"
-                  className="inline-flex h-11 min-w-[138px] items-center justify-center rounded-lg bg-accent px-5 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+                  className="inline-flex h-11 min-w-[138px] items-center justify-center rounded-xl bg-azure px-5 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98]"
                 >
                   В каталог
                 </Link>
@@ -136,7 +155,7 @@ export function CompareClient() {
         </label>
 
         {/* Comparison table */}
-        <div className="overflow-x-auto border border-gray-200 bg-white shadow-[var(--shadow-xs)]">
+        <div className="overflow-x-auto rounded-2xl bg-white shadow-[var(--shadow-xs)]">
           <table className="min-w-full text-sm">
             <thead>
               <tr>
@@ -278,7 +297,7 @@ export function CompareClient() {
                     <button
                       onClick={() => handleAddToCart(p)}
                       disabled={!p.inStock && false}
-                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded bg-accent text-xs font-bold text-white transition-colors hover:bg-accent-hover"
+                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-azure text-xs font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98]"
                     >
                       <ShoppingCart size={12} />В корзину
                     </button>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ShoppingCart, Check } from 'lucide-react'
 import {
   addToRequestList,
@@ -9,6 +9,7 @@ import {
   updateRequestListQuantity,
 } from '@/lib/request-list-store'
 import { QuantityStepper } from './quantity-stepper'
+import { flyToCart } from '@/lib/fly-to-cart'
 
 interface AddToCartBtnProps {
   productId: string
@@ -35,6 +36,7 @@ export function AddToCartBtn({
 }: AddToCartBtnProps) {
   const [quantity, setQuantity] = useState(minOrder)
   const [inCart, setInCart] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     // hydration from localStorage — required after mount
@@ -58,6 +60,7 @@ export function AddToCartBtn({
       quantity,
     })
     setInCart(true)
+    flyToCart(buttonRef.current)
   }
 
   function handleQuantityChange(newQty: number) {
@@ -75,8 +78,9 @@ export function AddToCartBtn({
         onChange={handleQuantityChange}
       />
       <button
+        ref={buttonRef}
         onClick={handleAdd}
-        className={`flex items-center gap-1.5 h-8 px-3 text-xs font-bold rounded-[var(--radius-control)] transition-colors whitespace-nowrap ${
+        className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-xs font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] ${
           inCart
             ? 'bg-azure-light text-azure border border-azure/30'
             : 'bg-accent text-white hover:bg-accent-hover'

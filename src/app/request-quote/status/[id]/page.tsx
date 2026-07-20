@@ -11,7 +11,7 @@ import { COMPANY } from '@/lib/company'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Статус заявки',
+  title: 'Статус заказа',
   robots: { index: false, follow: false },
 }
 
@@ -22,13 +22,13 @@ const STATUS_META: Record<
 > = {
   new: {
     label: 'Принята',
-    desc: 'Заявка получена и ожидает обработки. Менеджер свяжется с вами для согласования цены и сроков.',
+    desc: 'Заказ получен и ожидает обработки. Менеджер свяжется с вами для согласования цены и сроков.',
     icon: Clock,
     cls: 'bg-amber-50 text-amber-700 border-amber-200',
   },
   in_progress: {
     label: 'В работе',
-    desc: 'Мы готовим коммерческое предложение по вашей заявке.',
+    desc: 'Мы готовим коммерческое предложение по вашему заказу.',
     icon: FileText,
     cls: 'bg-blue-50 text-blue-700 border-blue-200',
   },
@@ -40,7 +40,7 @@ const STATUS_META: Record<
   },
   rejected: {
     label: 'Отклонена',
-    desc: 'К сожалению, заявка отклонена. По вопросам свяжитесь с нами любым удобным способом.',
+    desc: 'К сожалению, заказ отклонен. По вопросам свяжитесь с нами любым удобным способом.',
     icon: XCircle,
     cls: 'bg-[#f8fafc] text-ink-3 border-[var(--border)]',
   },
@@ -69,10 +69,10 @@ export default async function QuoteStatusPage({
       <main className="flex-1 py-6">
         <div className="mx-auto max-w-3xl px-3 sm:px-6">
           {/* Статус */}
-          <div className="mb-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
+          <div className="mb-4 rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <h1 className="text-xl font-bold text-ink">Заявка на КП</h1>
+                <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">Статус заказа</h1>
                 <p className="text-xs text-ink-3 mt-1">
                   Создана {request.createdAt.toLocaleDateString('ru-RU')} / позиций: {request.items.length}
                 </p>
@@ -90,12 +90,12 @@ export default async function QuoteStatusPage({
           <div className="mb-4 flex items-start gap-2 border-l-4 border-azure bg-azure-light p-3 text-xs text-ink-2">
             <Link2 size={15} className="mt-0.5 shrink-0" />
             <span>
-              Сохраните эту ссылку - по ней можно вернуться и проверить статус заявки в любой момент. Логин не требуется.
+              Сохраните эту ссылку - по ней можно вернуться и проверить статус заказа в любой момент. Логин не требуется.
             </span>
           </div>
 
           {/* Ваши данные */}
-          <div className="mb-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
+          <div className="mb-4 rounded-2xl bg-white p-5 shadow-sm">
             <h2 className="text-sm font-bold text-ink mb-3">Ваши данные</h2>
             <dl className="space-y-2 text-sm">
               {([
@@ -117,8 +117,8 @@ export default async function QuoteStatusPage({
           </div>
 
           {/* Позиции */}
-          <div className="mb-4 border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
-            <h2 className="text-sm font-bold text-ink mb-3">Позиции в заявке</h2>
+          <div className="mb-4 rounded-2xl bg-white p-5 shadow-sm">
+            <h2 className="text-sm font-bold text-ink mb-3">Товары в заказе</h2>
             <div className="space-y-3">
               {request.items.map((item) => (
                 <div key={item.id} className="flex items-center justify-between py-2 border-b border-[var(--border)] last:border-0">
@@ -133,7 +133,7 @@ export default async function QuoteStatusPage({
           </div>
 
           {/* Контакты */}
-          <div className="border border-[var(--border)] bg-white p-5 shadow-[var(--shadow-xs)]">
+          <div className="rounded-2xl bg-white p-5 shadow-sm">
             <h2 className="text-sm font-bold text-ink mb-3">Остались вопросы?</h2>
             <div className="space-y-2">
               <a href={`tel:${COMPANY.phone.raw}`} className="flex items-center gap-2 text-sm text-ink-2 hover:text-azure transition-colors">
@@ -148,13 +148,13 @@ export default async function QuoteStatusPage({
             <div className="mt-5 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/catalog"
-                className="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-ink-2 bg-white border border-[var(--border-2)] hover:bg-[#fafafa] rounded transition-colors"
+                className="inline-flex h-11 items-center justify-center rounded-xl border border-[var(--border-2)] bg-white px-6 text-sm font-semibold text-ink-2 transition-colors hover:bg-[#fafafa]"
               >
                 Продолжить выбор товаров
               </Link>
               <Link
                 href="/"
-                className="inline-flex h-11 items-center justify-center rounded bg-accent px-6 text-sm font-bold text-white transition-colors hover:bg-accent-hover"
+                className="inline-flex h-11 items-center justify-center rounded-xl bg-azure px-6 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-md active:translate-y-0"
               >
                 На главную
               </Link>
