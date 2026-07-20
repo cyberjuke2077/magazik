@@ -9,6 +9,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['html', { open: 'never' }], ['list']] : 'list',
   outputDir: 'test-results',
+  snapshotPathTemplate: '{testDir}/baseline/{projectName}/{arg}{ext}',
   expect: {
     timeout: 10_000,
     toHaveScreenshot: {

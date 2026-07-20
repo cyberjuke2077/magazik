@@ -66,7 +66,7 @@ test.describe('public storefront contracts', () => {
   })
 
   test('cart and product hooks remain available', async ({ page }) => {
-    await openStable(page, '/catalog')
+    await openStable(page, '/catalog?category=pitanie')
     await expect(page.locator('[data-cart-icon]').first()).toBeAttached()
 
     const firstProduct = page.locator('a[href^="/product/"]').first()
