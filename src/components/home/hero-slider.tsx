@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { BadgeCheck } from 'lucide-react'
 
 const AUTOPLAY_DELAY_MS = 6000
 
@@ -72,6 +73,12 @@ const quickLinks = [
     description: 'Сенсоры и измерения',
     href: '/catalog?category=datchiki',
   },
+  {
+    title: 'Честный ЗНАК',
+    description: 'Сертификация поставки',
+    href: '/delivery#documents',
+    certification: true,
+  },
 ]
 
 export function HeroSlider() {
@@ -123,14 +130,14 @@ export function HeroSlider() {
                   alt={slide.alt}
                   fill
                   priority={index === 0}
-                  className="object-cover"
+                  className="object-cover saturate-[1.2] contrast-[1.05] brightness-[1.08]"
                   sizes="(max-width: 1024px) 100vw, 1050px"
                 />
                 <div
                   className={`absolute inset-0 ${
                     contentOnRight
-                      ? 'bg-gradient-to-l from-[#08172c]/96 via-[#08172c]/78 to-[#08172c]/10'
-                      : 'bg-gradient-to-r from-[#08172c]/96 via-[#08172c]/76 to-transparent'
+                      ? 'bg-gradient-to-l from-[#08172c]/88 via-[#08172c]/62 to-[#08172c]/5'
+                      : 'bg-gradient-to-r from-[#08172c]/88 via-[#08172c]/60 to-transparent'
                   }`}
                 />
                 <div
@@ -172,17 +179,23 @@ export function HeroSlider() {
               className="group relative h-[111px] w-[100px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[220px] lg:w-auto lg:flex-1 lg:hover:flex-[1.34] lg:hover:shadow-[var(--shadow-azure-md)]"
               data-motion-scale
             >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
-                sizes="(max-width: 1024px) 100px, 183px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-white via-white/84 to-white/5" />
-              <div className="absolute inset-x-0 top-0 p-3 text-ink lg:p-5">
-                <div className="font-display text-[12px] font-bold leading-[1.08] lg:text-[17px]">{item.title}</div>
-                <div className="mt-1 hidden text-[13px] leading-tight text-ink-2 lg:block">{item.description}</div>
+              {'certification' in item ? (
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,#68b7ff_0,#1475e8_38%,#0754b8_100%)]">
+                  <BadgeCheck className="absolute bottom-2 right-2 text-white/24 lg:bottom-4 lg:right-4" size={76} strokeWidth={1.25} />
+                </div>
+              ) : (
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover saturate-[1.25] contrast-[1.06] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100px, 183px"
+                />
+              )}
+              <div className={`absolute inset-0 ${'certification' in item ? 'bg-gradient-to-b from-transparent to-[#063d8c]/78' : 'bg-gradient-to-b from-white/12 via-transparent to-[#071b33]/88'}`} />
+              <div className="absolute inset-x-0 bottom-0 p-3 text-white lg:p-5">
+                <div className="font-display text-[12px] font-bold leading-[1.08] drop-shadow-sm lg:text-[17px]">{item.title}</div>
+                <div className="mt-1 hidden text-[13px] leading-tight text-white/82 lg:block">{item.description}</div>
               </div>
             </Link>
           ))}

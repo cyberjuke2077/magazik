@@ -6,6 +6,28 @@
   --font-mono: var(--font-code);
 }
 
+.account-input {
+  height: 3rem;
+  width: 100%;
+  border: 1px solid var(--border-2);
+  border-radius: 0.75rem;
+  background: white;
+  padding: 0 0.875rem 0 2.625rem;
+  color: var(--ink);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.account-input::placeholder {
+  color: var(--ink-4);
+}
+
+.account-input:focus {
+  border-color: var(--azure);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--azure) 12%, transparent);
+}
+
 /* Dense storefront tokens */
 @theme {
   --color-canvas: #f3f4f6;
@@ -359,15 +381,6 @@ h4 {
 }
 .animate-marquee:hover { animation-play-state: paused; }
 
-.brand-marquee {
-  animation: marquee 34s linear infinite;
-  will-change: transform;
-}
-.brand-marquee:hover,
-.brand-marquee:focus-within {
-  animation-play-state: paused;
-}
-
 @keyframes mobile-filter-enter {
   from { transform: translateX(100%); }
   to { transform: translateX(0); }
@@ -577,7 +590,7 @@ h4 {
 /* Reduced motion — гасим инфинит-лупы и reveal */
 @media (prefers-reduced-motion: reduce) {
   .animate-float, .animate-spin-slow, .animate-marquee,
-  .brand-marquee, .animate-pulse-dot, .scan-line, .delivery-dot, .skeleton,
+  .animate-pulse-dot, .scan-line, .delivery-dot, .skeleton,
   .mobile-filter-enter {
     animation: none !important;
   }

@@ -7,24 +7,19 @@ export function Manufacturers() {
   if (brands.length === 0) return null
 
   return (
-    <section className="overflow-hidden border-y border-[var(--border)] bg-white py-4 lg:py-6" aria-label="Производители" data-motion-reveal>
-      <div className="brand-marquee group flex w-max">
-        {[0, 1].map((copyIndex) => (
-          <div key={copyIndex} className="flex shrink-0 gap-3 pr-3 lg:gap-4 lg:pr-4" aria-hidden={copyIndex === 1}>
-            {brands.map((brand) => (
-              <Link
-                key={`${copyIndex}-${brand.id}`}
-                href={brand.id === 'xilinx' ? '/brands#brand-xilinx' : `/catalog?manufacturer=${brand.id}`}
-                aria-label={copyIndex === 0 ? brand.name : undefined}
-                tabIndex={copyIndex === 0 ? 0 : -1}
-                className="flex h-[62px] w-[128px] shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-azure/30 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:h-[72px] lg:w-[148px]"
-              >
-                <span className="relative h-9 w-full">
-                  <Image src={brand.logo!} alt={brand.name} fill className="object-contain" sizes="148px" />
-                </span>
-              </Link>
-            ))}
-          </div>
+    <section className="border-y border-[var(--border)] bg-white py-5 lg:py-7" aria-label="Производители" data-motion-reveal>
+      <div className="mx-auto grid max-w-[1380px] grid-cols-3 gap-2.5 px-4 sm:grid-cols-4 lg:grid-cols-6 lg:gap-4 lg:px-0">
+        {brands.map((brand) => (
+          <Link
+            key={brand.id}
+            href={brand.id === 'xilinx' ? '/brands#brand-xilinx' : `/catalog?manufacturer=${brand.id}`}
+            aria-label={brand.name}
+            className="flex h-[64px] min-w-0 items-center justify-center rounded-xl border border-[var(--border)] bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-azure/30 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:h-[76px]"
+          >
+            <span className="relative h-9 w-full">
+              <Image src={brand.logo!} alt={brand.name} fill className="object-contain" sizes="(max-width: 640px) 30vw, 200px" />
+            </span>
+          </Link>
         ))}
       </div>
     </section>

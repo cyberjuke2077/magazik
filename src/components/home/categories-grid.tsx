@@ -48,7 +48,7 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
                       src={categoryPhoto(section.slug)}
                       alt={section.name}
                       fill
-                      className="object-cover transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
+                      className="object-cover saturate-[1.18] contrast-[1.04] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
                       sizes="(max-width: 1024px) 50vw, 112px"
                     />
                   </div>

@@ -271,7 +271,7 @@ export default function DeliveryPage() {
           </section>
 
           {/* Documents */}
-          <section>
+          <section id="documents" className="scroll-mt-40">
             <h2 className="text-2xl font-bold text-ink mb-6">Документы</h2>
             <div className="rounded-2xl bg-white p-8 shadow-sm">
               <p className="text-sm text-ink-3 mb-6">

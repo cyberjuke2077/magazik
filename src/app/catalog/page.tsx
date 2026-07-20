@@ -4,14 +4,11 @@ import Link from 'next/link'
 import { ChevronRight, Download, PackageSearch } from 'lucide-react'
 import { getProductsPaginated } from '@/lib/queries/products'
 import {
-  getCatalogSections,
-  getCategoriesWithChildren,
   getCategoriesWithCounts,
   getCategoryBySlug,
   getManufacturersWithCounts,
 } from '@/lib/queries/categories'
 import { parseCatalogParams } from '@/lib/catalog-utils'
-import { prisma } from '@/lib/prisma'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
@@ -26,8 +23,6 @@ import { ActiveFilters } from './components/active-filters'
 import { CopyLinkBtn } from './components/copy-link-btn'
 import { BulkSelectWrapper } from './components/bulk-select-panel'
 import { MobileFilterDrawer } from './components/mobile-filter-drawer'
-import { CatalogStats } from './components/catalog-stats'
-import { CatalogShowcase } from './components/catalog-showcase'
 import { CatalogGuideStrip } from './components/catalog-guide-strip'
 
 interface CatalogPageProps {
@@ -89,60 +84,6 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   const categorySlug = Array.isArray(params.category) ? params.category[0] : params.category || null
   const manufacturerSlug = Array.isArray(params.manufacturer) ? params.manufacturer[0] : params.manufacturer || null
 
-  // Витрина разделов показывается, когда не выбран ни один фильтр.
-  const showShowcase = !query && !categorySlug && !manufacturerSlug
-
-  const [navCategories, totalManufacturers, totalCategories, totalProductsAll] = await Promise.all([
-    getCategoriesWithChildren(),
-    prisma.manufacturer.count(),
-    prisma.category.count({ where: { parentId: { not: null } } }),
-    prisma.product.count(),
-  ])
-
-  if (showShowcase) {
-    const sections = await getCatalogSections()
-
-    return (
-      <div className="flex min-h-screen flex-col bg-canvas">
-        <Header />
-        <StickyNav categories={navCategories} totalProducts={totalProductsAll} />
-
-        <div className="bg-canvas">
-          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
-            <nav className="flex items-center gap-1 overflow-hidden whitespace-nowrap text-xs text-ink-3">
-              <Link href="/" className="hover:text-azure transition-colors">Главная</Link>
-              <ChevronRight size={12} className="text-ink-4" />
-              <span className="text-ink-2">Каталог</span>
-            </nav>
-          </div>
-        </div>
-
-        <main className="flex-1">
-          <div className="mx-auto max-w-[1440px] px-3 pb-8 pt-3 sm:px-6">
-            <div className="mb-1 flex items-baseline gap-3" data-motion-reveal>
-              <h1 className="text-[30px] font-bold tracking-[-0.035em] text-ink">Каталог товаров</h1>
-              <span className="text-sm text-ink-4">
-                {totalProductsAll.toLocaleString('ru-RU')} позиций
-              </span>
-            </div>
-
-            <CatalogStats
-              totalProducts={totalProductsAll}
-              totalManufacturers={totalManufacturers}
-              totalCategories={totalCategories}
-            />
-
-            <div className="mt-5">
-              <CatalogShowcase sections={sections} />
-            </div>
-          </div>
-        </main>
-
-        <Footer />
-      </div>
-    )
-  }
-
   // First pass: get total count to properly parse params
   const prelimResult = await getProductsPaginated({
     page: 1,
@@ -194,7 +135,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
-      <StickyNav categories={navCategories} totalProducts={totalProductsAll} />
+      <StickyNav />
 
       {/* Breadcrumbs */}
       <div className="bg-canvas">
