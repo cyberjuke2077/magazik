@@ -95,6 +95,7 @@ retrospectives/
 
 # dev-инструменты (opencode, agents, skills) - не для публичного репо
 AGENTS.md
+.codex/
 opencode.json
 opencode.jsonc
 skills/
