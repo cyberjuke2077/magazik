@@ -34,7 +34,7 @@ yarn-error.log*
 logs/
 parser.pid
 
-# env files (шаблон .env.example — в репо)
+# env files (шаблон .env.example - в репо)
 .env*
 !.env.example
 
