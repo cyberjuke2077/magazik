@@ -92,10 +92,10 @@ export function HeroSlider() {
   }, [paused])
 
   return (
-    <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6">
+    <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6" data-motion-reveal>
       <div className="mx-auto max-w-[1380px] overflow-hidden px-4 lg:flex lg:gap-4 lg:px-0">
         <div
-          className="relative h-[146px] w-full shrink-0 overflow-hidden rounded-xl bg-[#0c2340] lg:h-[206px] lg:w-[282px]"
+          className="relative h-[160px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[220px] lg:w-[330px]"
           role="region"
           aria-roledescription="карусель"
           aria-label="Подборки компонентов"
@@ -152,7 +152,7 @@ export function HeroSlider() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/72">
                     {slide.eyebrow}
                   </span>
-                  <h1 className="mt-1.5 max-w-[20ch] text-[21px] font-bold leading-[1.05] tracking-[-0.025em] lg:text-[22px]">
+                  <h1 className="mt-1.5 max-w-6xl text-[21px] font-bold leading-[1.05] tracking-[-0.025em] text-balance lg:text-[24px]">
                     {slide.title}
                   </h1>
                   <p className="mt-2 max-w-[30ch] text-[12px] leading-[1.35] text-white/78 lg:text-[13px]">
@@ -164,18 +164,19 @@ export function HeroSlider() {
           })}
         </div>
 
-        <div className="no-scrollbar mt-4 flex gap-2.5 overflow-x-auto lg:mt-0 lg:gap-4 lg:overflow-visible">
+        <div className="no-scrollbar mt-4 flex gap-2.5 overflow-x-auto lg:mt-0 lg:min-w-0 lg:flex-1 lg:gap-3 lg:overflow-visible">
           {quickLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group relative h-[111px] w-[100px] shrink-0 overflow-hidden rounded-xl bg-white lg:h-[206px] lg:w-[183px]"
+              className="group relative h-[111px] w-[100px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[220px] lg:w-auto lg:flex-1 lg:hover:flex-[1.34] lg:hover:shadow-[var(--shadow-azure-md)]"
+              data-motion-scale
             >
               <Image
                 src={item.image}
                 alt={item.title}
                 fill
-                className="object-cover transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.025]"
+                className="object-cover transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
                 sizes="(max-width: 1024px) 100px, 183px"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-white via-white/84 to-white/5" />

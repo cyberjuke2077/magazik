@@ -22,16 +22,16 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
   if (featuredSections.length === 0) return null
 
   return (
-    <section className="bg-white pb-2 pt-[18px] lg:pb-[29px] lg:pt-[29px]">
+    <section className="bg-white pb-2 pt-[18px] lg:pb-[29px] lg:pt-[29px]" data-motion-reveal>
       <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-[68px]">
+        <div className="grid grid-flow-dense grid-cols-2 gap-3 lg:grid-cols-12 lg:gap-5">
           {featuredSections.map((section, index) => {
             const children = section.children.slice(0, 4)
 
             return (
               <article
                 key={section.id}
-                className={`min-w-0 overflow-hidden rounded-xl bg-white lg:overflow-visible lg:rounded-none lg:bg-transparent ${
+                className={`min-w-0 overflow-hidden rounded-xl bg-surface-muted transition-colors hover:bg-azure-dim lg:col-span-3 lg:overflow-visible lg:rounded-2xl lg:bg-transparent lg:p-3 ${
                   index >= 2 ? 'hidden lg:block' : ''
                 }`}
               >
@@ -48,7 +48,7 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
                       src={categoryPhoto(section.slug)}
                       alt={section.name}
                       fill
-                      className="object-cover transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.025]"
+                      className="object-cover transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
                       sizes="(max-width: 1024px) 50vw, 112px"
                     />
                   </div>

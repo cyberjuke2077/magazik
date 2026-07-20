@@ -20,7 +20,7 @@ export function B2bCta() {
           </div>
           <div className="flex flex-wrap gap-2">
             <Link href="/request-quote" className="ui-btn ui-btn-primary group">
-              Запросить КП
+              Перейти в корзину
               <ArrowRight size={17} className="transition-transform group-hover:translate-x-1" />
             </Link>
             <a href={`tel:${COMPANY.phone.raw}`} className="ui-btn ui-btn-secondary">

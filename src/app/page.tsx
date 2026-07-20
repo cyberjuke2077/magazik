@@ -7,6 +7,7 @@ import { HeroSlider } from '@/components/home/hero-slider'
 import { CategoriesGrid } from '@/components/home/categories-grid'
 import { Manufacturers } from '@/components/home/manufacturers'
 import { ProductShowcase } from '@/components/home/product-showcase'
+import { SearchPromise } from '@/components/home/search-promise'
 import { getProducts } from '@/lib/queries/products'
 import { getCatalogSections, getCategoriesWithChildren, getTotalProductCount } from '@/lib/queries/categories'
 
@@ -34,6 +35,7 @@ export default async function HomePage() {
         <HeroSlider />
         <CategoriesGrid sections={sections} />
         <Manufacturers />
+        <SearchPromise />
         <ProductShowcase
           title="Недавно добавили"
           href="/catalog?sort=new"

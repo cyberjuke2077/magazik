@@ -3,7 +3,7 @@ import { ListChecks, Calculator, FileSignature, Truck, ArrowRight } from 'lucide
 import { Reveal } from './reveal'
 
 const steps = [
-  { icon: ListChecks, title: 'Заявка или список', desc: 'Пришлите спецификацию или соберите позиции в корзину-запрос.' },
+  { icon: ListChecks, title: 'Корзина или список', desc: 'Пришлите спецификацию или соберите позиции в корзину.' },
   { icon: Calculator, title: 'Подбор и расчёт', desc: 'Проверим наличие, предложим аналоги и сформируем КП с ценами.' },
   { icon: FileSignature, title: 'Договор и оплата', desc: 'Согласуем условия, работаем по безналу с НДС и договором.' },
   { icon: Truck, title: 'Поставка и документы', desc: 'Отгружаем со склада и передаём полный пакет документов.' },
@@ -25,7 +25,7 @@ export function Workflow() {
             href="/request-quote"
             className="ui-btn ui-btn-lg shrink-0 bg-white text-ink hover:bg-white/90 group"
           >
-            Запросить КП
+            Перейти в корзину
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
