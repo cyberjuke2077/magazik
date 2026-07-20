@@ -74,15 +74,16 @@ export function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <Link
-      href={`/product/${product.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-azure/30 hover:shadow-[var(--shadow-lg)]"
-    >
+    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-colors hover:border-[var(--border-2)]">
       {/* Image zone */}
       <div
-        className={`relative flex items-center justify-center overflow-hidden ${cardTheme.bg}`}
-        style={{ height: '180px' }}
+        className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${cardTheme.bg}`}
       >
+        <Link
+          href={`/product/${product.slug}`}
+          className="absolute inset-0 z-10"
+          aria-label={product.name}
+        />
         {/* Image when available, fallback to package SVG, then category icon */}
         {product.images && product.images.length > 0 ? (
           <Image
@@ -95,7 +96,7 @@ export function ProductCard({ product }: ProductCardProps) {
         ) : packageSvg ? (
           <Image
             src={packageSvg}
-            alt={`${product.name} — корпус`}
+            alt={`${product.name} - корпус`}
             fill
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
             className="object-contain p-5 z-10"
@@ -119,12 +120,12 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
           {isNew && (
             <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-              <Sparkles size={8} />NEW
+              <Sparkles size={8} />Новинка
             </span>
           )}
           {discountPercent && (
             <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-              −{discountPercent}%
+              -{discountPercent}%
             </span>
           )}
         </div>
@@ -145,14 +146,16 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col gap-2 p-4">
+      <div className="flex flex-1 flex-col gap-2 p-3">
         <div className="text-[11px] font-semibold uppercase tracking-wide text-ink-4">
           {product.manufacturer}
         </div>
 
-        <h3 className="line-clamp-2 flex-1 text-sm font-semibold leading-snug text-ink-2">
-          {product.name}
-        </h3>
+        <Link href={`/product/${product.slug}`} className="flex-1">
+          <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-ink-2 transition-colors hover:text-azure">
+            {product.name}
+          </h3>
+        </Link>
 
         <div className="mpn w-fit rounded-[var(--radius-control)] bg-[#f8fafc] px-2 py-0.5 text-[11px] text-ink-3">
           {product.partNumber}
@@ -167,7 +170,6 @@ export function ProductCard({ product }: ProductCardProps) {
           ) : (
             <span className="font-semibold text-accent">Под заказ</span>
           )}
-          <span className="text-ink-4">·</span>
           <span className="text-ink-4">1-2 недели</span>
         </div>
 
@@ -214,7 +216,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 ? 'bg-azure-hover text-white'
                 : inCart
                 ? 'border border-azure/20 bg-azure/10 text-azure'
-                : 'bg-azure text-white hover:bg-azure-hover'
+                : 'bg-accent text-white hover:bg-accent-hover'
             }`}
           >
             {justAdded ? (
@@ -233,6 +235,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </button>
         </div>
       </div>
-    </Link>
+    </article>
   )
 }

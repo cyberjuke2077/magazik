@@ -22,19 +22,19 @@ export function SectionHeader({
   const centered = align === 'center'
   return (
     <div
-      className={`mb-10 flex flex-col gap-5 ${
+      className={`mb-3 flex flex-col gap-3 ${
         centered ? 'items-center text-center' : 'md:flex-row md:items-end md:justify-between'
       }`}
     >
       <div className="max-w-2xl">
-        {eyebrow && <div className="ui-eyebrow mb-3">{eyebrow}</div>}
-        <h2 className="section-heading text-balance">{title}</h2>
-        {description && <p className="text-lead mt-4">{description}</p>}
+        {eyebrow && <div className="ui-eyebrow mb-2">{eyebrow}</div>}
+        <h2 className="text-xl font-bold tracking-tight text-ink sm:text-2xl">{title}</h2>
+        {description && <p className="mt-2 max-w-[65ch] text-sm text-ink-3">{description}</p>}
       </div>
       {href && !centered && (
         <Link
           href={href}
-          className="ui-btn ui-btn-secondary shrink-0 group"
+          className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-azure hover:underline group"
         >
           {linkLabel}
           <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />

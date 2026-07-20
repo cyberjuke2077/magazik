@@ -1,63 +1,56 @@
-import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
-import { CategoryIcon } from '@/components/ui/component-icons'
-import { SectionHeader } from './section-header'
-import { Reveal } from './reveal'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
 import { type CatalogSectionView } from '@/lib/queries/categories'
 
 const CATEGORY_PHOTOS = [
-  '/photos/cat-1.jpg', '/photos/cat-2.jpg', '/photos/cat-3.jpg',
-  '/photos/cat-4.jpg', '/photos/cat-5.jpg', '/photos/cat-6.jpg',
+  '/photos/cat-1.jpg',
+  '/photos/cat-2.jpg',
+  '/photos/cat-3.jpg',
+  '/photos/cat-4.jpg',
+  '/photos/cat-5.jpg',
+  '/photos/cat-6.jpg',
 ]
 
 export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] }) {
-  const cats = sections.slice(0, 6)
   return (
-    <section className="section-pad bg-white">
-      <div className="mx-auto max-w-[1400px] px-4">
-        <SectionHeader
-          eyebrow="Каталог"
-          title="Категории компонентов"
-          description="Полупроводники, пассивные компоненты, питание, датчики и интерфейсы — всё под параметрический подбор."
-          href="/catalog"
-          linkLabel="Все категории"
-        />
-
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
-          {cats.map((cat, i) => (
-            <Reveal key={cat.id} delay={(i % 3) * 80}>
-              <Link
-                href={`/catalog?category=${cat.slug}`}
-                className="group ui-card ui-card-hover relative block aspect-[5/4] overflow-hidden"
-              >
+    <section className="bg-canvas py-5">
+      <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <h2 className="text-xl font-bold tracking-tight text-ink sm:text-2xl">Категории компонентов</h2>
+          <Link href="/catalog" className="inline-flex items-center gap-1 text-sm font-semibold text-azure hover:underline">
+            Весь каталог
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {sections.slice(0, 6).map((section, index) => (
+            <Link
+              key={section.id}
+              href={`/catalog?category=${section.slug}`}
+              className="group grid min-h-[116px] grid-cols-[112px_minmax(0,1fr)] overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-colors hover:border-[var(--border-2)]"
+            >
+              <div className="relative">
                 <Image
-                  src={CATEGORY_PHOTOS[i % CATEGORY_PHOTOS.length]}
-                  alt={cat.name}
+                  src={CATEGORY_PHOTOS[index]}
+                  alt={section.name}
                   fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover"
+                  sizes="112px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent" />
-
-                <span className="absolute right-4 top-4 flex size-11 items-center justify-center rounded-[var(--radius-control)] bg-white/95 text-azure backdrop-blur">
-                  <CategoryIcon slug={cat.icon ?? cat.slug} size={22} />
+              </div>
+              <div className="flex min-w-0 flex-col justify-center p-3">
+                <h3 className="text-sm font-bold leading-snug text-ink transition-colors group-hover:text-azure">
+                  {section.name}
+                </h3>
+                <span className="mt-1 text-xs text-ink-4">
+                  {section.productCount.toLocaleString('ru-RU')} позиций
                 </span>
-
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <h3 className="text-lg font-bold leading-tight text-white">{cat.name}</h3>
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <span className="text-sm text-white/75">
-                      <span className="tnum">{cat.productCount.toLocaleString('ru-RU')}</span> позиций
-                    </span>
-                    <ArrowUpRight
-                      size={20}
-                      className="text-white/80 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                    />
-                  </div>
-                </div>
-              </Link>
-            </Reveal>
+                <span className="mt-2 line-clamp-1 text-xs text-ink-3">
+                  {section.children.slice(0, 2).map((child) => child.name).join(', ')}
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

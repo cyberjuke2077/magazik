@@ -7,12 +7,8 @@ import { HeroSlider } from '@/components/home/hero-slider'
 import { TrustBadges } from '@/components/home/trust-badges'
 import { CategoriesGrid } from '@/components/home/categories-grid'
 import { Manufacturers } from '@/components/home/manufacturers'
-import { Benefits } from '@/components/home/benefits'
 import { ProductShowcase } from '@/components/home/product-showcase'
-import { IndustrySolutions } from '@/components/home/industry-solutions'
-import { Workflow } from '@/components/home/workflow'
 import { B2bCta } from '@/components/home/b2b-cta'
-import { Faq } from '@/components/home/faq'
 import { getProducts } from '@/lib/queries/products'
 import { getCatalogSections, getCategoriesWithChildren, getTotalProductCount } from '@/lib/queries/categories'
 
@@ -31,7 +27,7 @@ export default async function HomePage() {
   const newArrivals = allProducts.slice(5, 10).length >= 4 ? allProducts.slice(5, 10) : allProducts.slice(0, 5)
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <OrganizationJsonLd />
       <Header />
       <StickyNav categories={categories} totalProducts={totalProducts} />
@@ -41,27 +37,18 @@ export default async function HomePage() {
         <TrustBadges totalProducts={totalProducts} sectionsCount={sections.length} />
         <CategoriesGrid sections={sections} />
         <Manufacturers />
-        <Benefits />
         <ProductShowcase
-          eyebrow="Новинки"
           title="Недавно добавили"
-          description="Свежие поступления и расширение ассортимента по популярным категориям."
           href="/catalog?sort=new"
           products={newArrivals}
         />
         <ProductShowcase
-          eyebrow="Хиты продаж"
           title="Чаще всего заказывают"
-          description="Позиции, которые регулярно берут инженеры и закупщики."
           href="/catalog"
           products={bestSellers}
-          muted
         />
         <RecentlyViewed variant="home" />
-        <IndustrySolutions />
-        <Workflow />
         <B2bCta />
-        <Faq />
       </main>
 
       <Footer />

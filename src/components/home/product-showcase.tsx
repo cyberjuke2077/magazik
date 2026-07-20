@@ -1,6 +1,5 @@
 import { ProductCard } from '@/components/catalog/product-card'
 import { SectionHeader } from './section-header'
-import { Reveal } from './reveal'
 import { type Product } from '@/lib/queries/products'
 
 interface ProductShowcaseProps {
@@ -25,8 +24,8 @@ export function ProductShowcase({
 }: ProductShowcaseProps) {
   if (products.length === 0) return null
   return (
-    <section className={`section-pad ${muted ? 'bg-[#f8fafc]' : 'bg-white'}`}>
-      <div className="mx-auto max-w-[1400px] px-4">
+    <section className={`py-5 ${muted ? 'bg-surface-muted' : 'bg-canvas'}`}>
+      <div className="mx-auto max-w-[1440px] px-3 sm:px-6">
         <SectionHeader
           eyebrow={eyebrow}
           title={title}
@@ -34,11 +33,9 @@ export function ProductShowcase({
           href={href}
           linkLabel={linkLabel}
         />
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {products.slice(0, 5).map((product, i) => (
-            <Reveal key={product.id} delay={(i % 5) * 60} className="h-full">
-              <ProductCard product={product} />
-            </Reveal>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {products.slice(0, 5).map((product) => (
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </div>
