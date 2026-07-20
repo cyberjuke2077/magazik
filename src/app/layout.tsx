@@ -47,11 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <head>
-        {/* Помечаем, что JS активен, до рендера body — reveal-анимации без мелькания контента */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
-      </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen bg-canvas antialiased">
         <ToastProvider>
           <Suspense fallback={null}>
             <NavProgress />
