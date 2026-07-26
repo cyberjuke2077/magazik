@@ -10,7 +10,7 @@
 
 ## 3. Результат
 
-Частично: в индекс добавлены второй мозг, инструкции, Kiro specs, local project config, legacy collector source, tests и parsed CSV. До завершения остаются commit, push и проверка удалённых refs. Секреты, raw runtime-конфиг, SQLite DB, логи, кэши и database backups намеренно остаются вне Git.
+Да: второй мозг, инструкции, Kiro specs, local project config, legacy collector source, tests и parsed CSV опубликованы в private GitHub-репозитории. Секреты, raw runtime-конфиг, SQLite DB, логи, кэши и database backups намеренно остаются вне Git.
 
 ## 4. Что можно было лучше
 
