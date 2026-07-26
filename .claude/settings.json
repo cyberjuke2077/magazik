@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git push --force*)",
+      "Bash(git add .)",
+      "Bash(git add -A)",
+      "Bash(cat .env)",
+      "Bash(cat *.env*)",
+      "Bash(curl * | bash*)",
+      "Bash(wget * | bash*)",
+      "Bash(export *=* && curl*)",
+      "Bash(npm publish*)",
+      "Bash(vercel --prod*)"
+    ]
+  }
+}

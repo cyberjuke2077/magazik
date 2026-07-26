@@ -1,0 +1,5 @@
+[features]
+memories = true
+
+[mcp_servers.supabase]
+url = "https://mcp.supabase.com/mcp"

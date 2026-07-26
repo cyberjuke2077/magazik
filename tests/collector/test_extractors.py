@@ -1,0 +1,68 @@
+"""Tests for data extractors."""
+
+import pytest
+from scripts.collector.extractors.base import BaseExtractor, ExtractResult
+from scripts.collector.extractors.chipdip import ChipDipExtractor
+
+
+def test_extract_result_success():
+    """Test successful extraction result."""
+    result = ExtractResult.success({"name": "Test"})
+    
+    assert result.success is True
+    assert result.data == {"name": "Test"}
+    assert result.error is None
+
+
+def test_extract_result_failure():
+    """Test failed extraction result."""
+    result = ExtractResult.failure("Not found")
+    
+    assert result.success is False
+    assert result.data is None
+    assert result.error == "Not found"
+
+
+def test_chipdip_get_url():
+    """Test ChipDip URL generation."""
+    extractor = ChipDipExtractor()
+    url = extractor.get_url("AOZ1284PI", "AOS")
+    
+    assert "chipdip.ru" in url
+    assert "AOZ1284PI" in url
+
+
+def test_google_get_url():
+    """Test Google search URL generation."""
+    from scripts.collector.extractors.google import GoogleExtractor
+    
+    extractor = GoogleExtractor("google")
+    url = extractor.get_url("AOZ1284PI", "AOS")
+    
+    assert "google.com" in url
+    assert "AOZ1284PI" in url
+    assert "AOS" in url or "datasheet" in url
+
+
+def test_octopart_get_url():
+    """Test Octopart URL generation."""
+    from scripts.collector.extractors.octopart import OctopartExtractor
+    extractor = OctopartExtractor()
+    url = extractor.get_url("LM358", "Texas Instruments")
+    assert url == "https://octopart.com/search?q=LM358"
+
+
+def test_digikey_get_url():
+    """Test Digi-Key URL generation."""
+    from scripts.collector.extractors.digikey import DigiKeyExtractor
+    extractor = DigiKeyExtractor()
+    url = extractor.get_url("LM358", "Texas Instruments")
+    assert url == "https://www.digikey.com/en/products/result?keywords=LM358"
+
+
+def test_mouser_get_url():
+    """Test Mouser URL generation."""
+    from scripts.collector.extractors.mouser import MouserExtractor
+    extractor = MouserExtractor()
+    url = extractor.get_url("LM358", "Texas Instruments")
+    assert url == "https://www.mouser.com/ProductDetail/LM358"

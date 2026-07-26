@@ -59,10 +59,8 @@ venv-test/
 # editors / IDE
 .vscode/
 .idea/
-.kiro/
 .opencode/
 .opencode-router/
-.agents/
 
 # backups / one-shot artifacts
 *.bak
@@ -83,32 +81,11 @@ agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
 
-# claude code - весь локальный мозг (скиллы, настройки, память)
-.claude/
-
-# локальные документы - не для публичного репо
-CLAUDE.md
-docs/business/
-docs/superpowers/
-plans/
-retrospectives/
-
-# dev-инструменты (opencode, agents, skills) - не для публичного репо
-AGENTS.md
-.codex/
+# Dev-инструменты, не являющиеся проектной документацией
 opencode.json
 opencode.jsonc
-skills/
+/skills/
 skills-lock.json
 
-# парсер/коллектор - живёт локально вне репо (правило 11 в CLAUDE.md)
-/check-parser.sh
-/start_collector.sh
+# Локальный runtime-конфиг collector может содержать ключи и учётные данные.
 /config.yaml
-tests/collector/
-data/parsed/
-
-# Локальные заметки (второй мозг) - вне гита, как CLAUDE.md/.claude/docs/business
-CLAUDE.local.md
-ai-clone/
-live-metrics.md

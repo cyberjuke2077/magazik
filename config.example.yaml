@@ -1,0 +1,8 @@
+# Локальный template для collector.
+# Скопируй в config.yaml и добавь локальные credentials вне Git.
+sessions: {}
+delays: {}
+retry: {}
+sources: {}
+database: {}
+logging: {}
