@@ -71,16 +71,17 @@ npm run build
 
 В Git также лежат `plans/`, `retrospectives/`, `.agents/`, `.claude/`, `.codex/` и `.kiro/`. Это переносимый проектный контекст. Personal account settings, подключённые приложения и доступы к внешним сервисам не переносятся из GitHub - каждый разработчик подключает их в своём Codex отдельно.
 
-`AGENTS.md` - правильное место для общих правил репозитория. Подробности о механике есть в [официальной документации Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md).
+`AGENTS.md` - правильное место для общих правил репозитория. Подробности о механике есть в [официальной документации Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md). Для совместной работы с владельцем проекта выполни [отдельный протокол Codex](codex-collaboration.md) до первой задачи.
 
 ## 6. Рабочий Git-flow
 
 `main` - общая рабочая ветка. Для незавершённой задачи создай отдельную ветку:
 
 ```bash
+git fetch origin
 git switch main
 git pull --ff-only
-git switch -c feat/короткое-название-задачи
+git switch -c codex/короткое-название-задачи
 ```
 
 Дальше:
@@ -89,7 +90,7 @@ git switch -c feat/короткое-название-задачи
 git status
 git add src/конкретный-файл.ts
 git commit -m "feat: короткое описание"
-git push -u origin feat/короткое-название-задачи
+git push -u origin codex/короткое-название-задачи
 ```
 
 Не используй `git add .` и не пушь незнакомые чужие изменения. Для большой, рискованной или визуальной задачи открой PR в `main`, проверь preview и только потом сливай. Подробное правило - в [docs/github-workflow.md](github-workflow.md).
