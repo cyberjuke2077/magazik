@@ -57,7 +57,7 @@ npm run db:publish
 ```bash
 DATABASE_URL=...    # локальная БД (Docker)
 DIRECT_URL=...      # прямой URL для миграций (тот же Docker)
-PROD_DATABASE_URL=... # Supabase прод (для db:publish)
+PUBLISH_DATABASE_URL=... # Supabase прод (для db:publish)
 ```
 
 ## Когда запускать

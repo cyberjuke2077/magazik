@@ -17,6 +17,8 @@
 
 ## Быстрый старт
 
+Полный runbook для нового разработчика: [docs/developer-onboarding.md](docs/developer-onboarding.md).
+
 ### 1. Установка
 
 ```bash
@@ -25,12 +27,13 @@ npm install
 
 > Пакетный менеджер проекта — **npm** (lock-файл: `package-lock.json`). Vercel собирает через npm (`vercel.json`).
 
-### 2. БД
+### 2. Локальная конфигурация и БД
 
-Скопируйте `.env.example` в `.env` и заполните `DATABASE_URL`, затем:
+Скопируйте `.env.example` в `.env`, замените local passwords и `ADMIN_SESSION_SECRET`, затем:
 
 ```bash
-docker-compose up -d postgres
+cp .env.example .env
+docker compose up -d postgres
 npm run db:migrate
 npm run db:generate
 ```
@@ -143,7 +146,7 @@ npm run db:publish                 # опубликовать каталог в 
 └──────────────────────────┘         └──────────────────────────────┘
 ```
 
-- **Код:** push в `main` → Vercel автоматически собирает и деплоит (env прописаны в Vercel для production/preview/development).
+- **Код:** Vercel деплоит только если проект подключён к этому GitHub-репозиторию и Environment Variables настроены в Vercel. Push сам по себе не является доказательством production deploy.
 - **Каталог:** парсер наполняет локальную БД → `npm run db:publish` зеркалирует каталожные таблицы в Supabase одной транзакцией (без блокировки читателей).
 - **Заявки клиентов** (`QuoteRequest`/`QuoteRequestItem`) живут только в проде и при публикации не трогаются.
 - **Картинки** хранятся в Cloudflare R2 — общие для local и prod, публикация не нужна.
