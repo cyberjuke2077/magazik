@@ -12,6 +12,7 @@ import { formatPrice } from '@/lib/utils'
 import { type Product } from '@/lib/queries/products'
 import { fetchCompareProducts } from './actions'
 import { RecentlyViewed } from '@/components/catalog/recently-viewed'
+import { buildComparisonSpecRows } from '@/lib/compare-specs'
 
 export function CompareClient() {
   const { items: compareItems, mounted } = useCompare()
@@ -109,18 +110,12 @@ export function CompareClient() {
     )
   }
 
-  // Build full union of all spec keys
-  const allSpecKeys = Array.from(
-    new Set(products.flatMap((p) => Object.keys(p.specs))),
-  ).sort()
+  const comparisonRows = buildComparisonSpecRows(products)
 
   // Filter to only differences if toggled
-  const visibleSpecKeys = onlyDifferences
-    ? allSpecKeys.filter((key) => {
-        const values = products.map((p) => p.specs[key] || '-')
-        return new Set(values).size > 1
-      })
-    : allSpecKeys
+  const visibleSpecRows = onlyDifferences
+    ? comparisonRows.filter((row) => row.isDifferent)
+    : comparisonRows
 
   function handleAddToCart(product: Product) {
     addItem(product, product.minOrder)
@@ -261,7 +256,7 @@ export function CompareClient() {
               )}
 
               {/* Specs */}
-              {visibleSpecKeys.length === 0 && (
+              {visibleSpecRows.length === 0 && (
                 <tr>
                   <td
                     colSpan={products.length + 1}
@@ -273,17 +268,17 @@ export function CompareClient() {
                   </td>
                 </tr>
               )}
-              {visibleSpecKeys.map((key) => (
-                <tr key={key}>
+              {visibleSpecRows.map((row) => (
+                <tr key={row.key}>
                   <td className="sticky left-0 bg-gray-50 border-b border-r border-gray-200 px-4 py-3 text-xs text-gray-600">
-                    {key}
+                    {row.key}
                   </td>
                   {products.map((p) => (
                     <td
                       key={p.id}
                       className="border-b border-r border-gray-200 last:border-r-0 px-4 py-3 text-xs text-gray-800"
                     >
-                      {p.specs[key] || <span className="text-gray-300">-</span>}
+                      {row.values[p.id] || <span className="text-gray-300">-</span>}
                     </td>
                   ))}
                 </tr>

@@ -15,6 +15,10 @@ export interface ParsedProduct {
   categoryPath: string[]
   description: string | null
   weight: number | null
+  /** Current single-unit price from the source, when publicly available */
+  price: number | null
+  /** ISO 4217 currency for price */
+  currency: string | null
   specifications: Record<string, string>
   images: string[]
   datasheets: string[]

@@ -7,6 +7,7 @@ import {
   isInCompare,
   toggleCompare,
 } from '@/lib/compare-store'
+import { useToast } from '@/components/ui/toast'
 
 interface CompareToggleBtnProps {
   item: CompareItem
@@ -21,6 +22,7 @@ interface CompareToggleBtnProps {
 export function CompareToggleBtn({ item, variant = 'icon' }: CompareToggleBtnProps) {
   const [active, setActive] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const { toast } = useToast()
 
   useEffect(() => {
     // hydration from localStorage — required after mount
@@ -39,8 +41,16 @@ export function CompareToggleBtn({ item, variant = 'icon' }: CompareToggleBtnPro
     e.stopPropagation()
     const result = toggleCompare(item)
     if (result === 'full') {
-      // Silent: button stays unchanged when at COMPARE_LIMIT
+      toast('В сравнении уже 4 товара. Удалите один, чтобы добавить новый.', {
+        variant: 'info',
+        action: { label: 'Открыть сравнение', href: '/compare' },
+      })
       return
+    }
+    if (result === 'added') {
+      toast('Товар добавлен в сравнение', {
+        action: { label: 'Сравнить', href: '/compare' },
+      })
     }
   }
 

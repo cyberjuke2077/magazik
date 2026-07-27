@@ -10,11 +10,13 @@
  * Options:
  *   --input-dir <path>   Override ENRICHMENT_INPUT_DIR
  *   --batch-size <n>     Override ENRICHMENT_BATCH_SIZE
+ *   --limit <n>          Process at most n deduplicated MPNs
  *   --resume             Continue previous run
  *   --dry-run            Only import/normalize, no API calls
  *   --skip-mouser        Skip Mouser queue
  *   --skip-lcsc          Skip LCSC queue
  *   --mouser-only        Only process Mouser queue
+ *   --force-refresh      Re-fetch even recently completed products
  *   --no-tui             Disable TUI dashboard (legacy JSON mode)
  *   --log-mode           Same as --no-tui
  */
@@ -55,11 +57,13 @@ async function main(): Promise<void> {
     ...baseConfig,
     ...(cliArgs.inputDir && { inputDir: cliArgs.inputDir }),
     ...(cliArgs.batchSize && { batchSize: cliArgs.batchSize }),
+    ...(cliArgs.limit && { limit: cliArgs.limit }),
     resume: cliArgs.resume,
     dryRun: cliArgs.dryRun,
     skipMouser: cliArgs.skipMouser,
     skipLcsc: cliArgs.skipLcsc,
     mouserOnly: cliArgs.mouserOnly,
+    forceRefresh: cliArgs.forceRefresh,
     bus,
     loggerSilent: false,
     progressSilentConsole: false,
@@ -71,9 +75,13 @@ async function main(): Promise<void> {
   if (cliArgs.resume) {
     console.log('[resume] Continuing previous run')
   }
+  if (cliArgs.forceRefresh) {
+    console.log('[force-refresh] Fresh-product cache disabled')
+  }
 
   console.log(`Input dir: ${config.inputDir}`)
   console.log(`Batch size: ${config.batchSize}`)
+  if (config.limit !== undefined) console.log(`Trial limit: ${config.limit}`)
   console.log()
 
   const startTime = Date.now()

@@ -20,9 +20,11 @@ import * as cheerio from 'cheerio'
 import type { Browser, BrowserContext, Page } from 'playwright-core'
 
 import { parseProductPage } from '../../parser/product-parser'
+import type { ParsedProduct } from '../../parser/types'
 import { type EnrichmentResult } from '../types'
 import { registerBrowser, unregisterBrowser } from '../browser-registry'
 import { getCaptchaSolver } from '../../captcha/2captcha-solver'
+import { normalizeMpn } from '../ingest/mpn-normalizer'
 
 /** Configuration for ChipDip client */
 export interface ChipDipClientConfig {
@@ -34,6 +36,10 @@ export interface ChipDipClientConfig {
   proxyUserRange: [number, number]
   /** Number of concurrent sessions (1-3) */
   concurrency: number
+  /** Random delay between completed product lookups */
+  requestDelayRange?: [number, number]
+  /** Random delay between pages within one lookup */
+  pageDelayRange?: [number, number]
 }
 
 /** ChipDip client interface */
@@ -58,6 +64,43 @@ const VIEWPORT_SIZES = [
   { width: 1680, height: 1050 },
 ]
 
+/** Maximum number of search results inspected before declaring no exact MPN match. */
+const MAX_PRODUCT_CANDIDATES = 5
+
+export function isMatchingChipDipProduct(
+  requestedMpn: string,
+  parsedPartNumber: string | null,
+): boolean {
+  if (!parsedPartNumber) return false
+  return normalizeMpn(parsedPartNumber) === normalizeMpn(requestedMpn)
+}
+
+export function buildChipDipDescription(product: ParsedProduct): string {
+  const sourceDescription = product.description?.trim()
+  if (sourceDescription) return sourceDescription
+
+  const parts = [product.name.trim()]
+  if (product.partNumber) parts.push(`MPN: ${product.partNumber}.`)
+  if (product.manufacturer) parts.push(`Производитель: ${product.manufacturer}.`)
+
+  const category =
+    product.categoryPath.length > 0
+      ? product.categoryPath.join(' / ')
+      : product.category
+  if (category) parts.push(`Категория: ${category}.`)
+
+  const mainSpecs = Object.entries(product.specifications).slice(0, 8)
+  if (mainSpecs.length > 0) {
+    parts.push(
+      `Основные характеристики: ${mainSpecs
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('; ')}.`,
+    )
+  }
+
+  return parts.join(' ').replace(/\s+/g, ' ').trim()
+}
+
 /** Resource types to block for reduced fingerprint and traffic */
 // DISABLED: Loading all resources like a real browser for maximum stealth
 // const BLOCKED_RESOURCE_TYPES = ['image', 'font', 'stylesheet']
@@ -66,16 +109,16 @@ const VIEWPORT_SIZES = [
  * Generates a random jitter delay between 20-45 seconds.
  * Longer delays = more human-like, less suspicious.
  */
-function getJitterMs(): number {
-  return Math.floor(Math.random() * 25000) + 20000
+function getJitterMs(range: [number, number] = [20_000, 45_000]): number {
+  return Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0]
 }
 
 /**
  * Random micro-delay after page load (1-3 seconds).
  * Simulates human reading/scanning the page before next action.
  */
-function getMicroDelayMs(): number {
-  return Math.floor(Math.random() * 2000) + 1000
+function getMicroDelayMs(range: [number, number] = [1_000, 3_000]): number {
+  return Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0]
 }
 
 /** Counter for session rotation */
@@ -523,85 +566,76 @@ export async function createChipDipClient(config: ChipDipClientConfig): Promise<
       // No product links found → not found on ChipDip
       if (productLinks.length === 0) {
         // Apply jitter before returning
-        await sleep(getJitterMs())
+        await sleep(getJitterMs(config.requestDelayRange))
         return null
       }
 
-      // Small micro-delay before navigating to product (human would scan results first)
-      await sleep(getMicroDelayMs())
+      const candidates = Array.from(new Set(productLinks)).slice(
+        0,
+        MAX_PRODUCT_CANDIDATES,
+      )
 
-      // Navigate to first product page
-      const productUrl = productLinks[0].startsWith('http')
-        ? productLinks[0]
-        : `https://www.chipdip.ru${productLinks[0]}`
+      for (const candidate of candidates) {
+        await sleep(getMicroDelayMs(config.pageDelayRange))
 
-      const productResponse = await page.goto(productUrl, {
-        waitUntil: 'domcontentloaded',
-        timeout: 30_000,
-      })
+        const productUrl = candidate.startsWith('http')
+          ? candidate
+          : `https://www.chipdip.ru${candidate}`
 
-      if (!productResponse) {
-        await sleep(getJitterMs())
-        return null
+        const productResponse = await page.goto(productUrl, {
+          waitUntil: 'domcontentloaded',
+          timeout: 30_000,
+        })
+        if (!productResponse) continue
+
+        const productFinalUrl = productResponse.url()
+        const productHtml = await page.content()
+        if (
+          detectBlock({
+            status: productResponse.status(),
+            html: productHtml,
+            headers: productResponse.headers(),
+            finalUrl: productFinalUrl,
+          }).blocked
+        ) {
+          continue
+        }
+
+        await sleep(getMicroDelayMs(config.pageDelayRange))
+        const parseResult = parseProductPage(productHtml)
+        if (!parseResult.success || !parseResult.data) continue
+
+        const parsed = parseResult.data
+        if (!isMatchingChipDipProduct(mpn, parsed.partNumber)) continue
+
+        const result: EnrichmentResult = {
+          source: 'chipdip',
+          mpn,
+          brand: canonicalBrand,
+          name: parsed.name || undefined,
+          description: buildChipDipDescription(parsed),
+          descriptionLanguage: 'ru',
+          sku: parsed.sku || undefined,
+          weight: parsed.weight ?? undefined,
+          price: parsed.price ?? undefined,
+          currency: parsed.currency ?? undefined,
+          categoryName: parsed.category || undefined,
+          categoryPath: parsed.categoryPath.length > 0 ? parsed.categoryPath : undefined,
+          specs: Object.entries(parsed.specifications).map(([key, value]) => ({
+            key,
+            value,
+          })),
+          imageUrls: parsed.images.length > 0 ? parsed.images : undefined,
+          datasheetUrls: parsed.datasheets.length > 0 ? parsed.datasheets : undefined,
+          package: undefined,
+        }
+
+        await sleep(getJitterMs(config.requestDelayRange))
+        return result
       }
 
-      const productStatus = productResponse.status()
-      const productHeaders = productResponse.headers()
-      const productFinalUrl = productResponse.url()
-      const productHtml = await page.content()
-
-      // Handle 403 on product page — this is NOT a site-wide block,
-      // just this specific product is unavailable. Skip it.
-      if (
-        detectBlock({
-          status: productStatus,
-          html: productHtml,
-          headers: productHeaders,
-          finalUrl: productFinalUrl,
-        }).blocked
-      ) {
-        await sleep(getJitterMs())
-        return null
-      }
-
-      // Parse product page using existing parser
-      const finalHtml = await page.content()
-
-      // Micro-delay: simulate human reading the product page
-      await sleep(getMicroDelayMs())
-
-      const parseResult = parseProductPage(finalHtml)
-
-      if (!parseResult.success || !parseResult.data) {
-        await sleep(getJitterMs())
-        return null
-      }
-
-      const parsed = parseResult.data
-
-      // Map ParsedProduct → EnrichmentResult
-      const result: EnrichmentResult = {
-        source: 'chipdip',
-        mpn,
-        brand: canonicalBrand,
-        name: parsed.name || undefined,
-        description: parsed.description || undefined,
-        descriptionLanguage: 'ru',
-        categoryName: parsed.category || undefined,
-        categoryPath: parsed.categoryPath.length > 0 ? parsed.categoryPath : undefined,
-        specs: Object.entries(parsed.specifications).map(([key, value]) => ({
-          key,
-          value,
-        })),
-        imageUrls: parsed.images.length > 0 ? parsed.images : undefined,
-        datasheetUrls: parsed.datasheets.length > 0 ? parsed.datasheets : undefined,
-        package: undefined,
-      }
-
-      // Apply jitter delay before next call
-      await sleep(getJitterMs())
-
-      return result
+      await sleep(getJitterMs(config.requestDelayRange))
+      return null
     },
 
     async close(): Promise<void> {
