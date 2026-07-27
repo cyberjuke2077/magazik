@@ -22,6 +22,7 @@ import {
   extractImages,
   extractDatasheets,
   extractAnalogs,
+  extractPrice,
 } from './product-parser'
 
 // Load HTML fixture
@@ -440,7 +441,7 @@ describe('extractDescription', () => {
     const description = extractDescription($)
 
     // Assert
-    expect(description).toBe('<p>Product description</p>')
+    expect(description).toBe('Product description')
   })
 
   test('extracts description from product-description class', () => {
@@ -452,7 +453,7 @@ describe('extractDescription', () => {
     const description = extractDescription($)
 
     // Assert
-    expect(description).toBe('<strong>Details</strong>')
+    expect(description).toBe('Details')
   })
 
   test('returns null when description not found', () => {
@@ -467,7 +468,7 @@ describe('extractDescription', () => {
     expect(description).toBeNull()
   })
 
-  test('preserves HTML formatting in description', () => {
+  test('converts HTML formatting to readable plain text', () => {
     // Arrange
     const html = '<div itemprop="description"><p>Line 1</p><ul><li>Item</li></ul></div>'
     const $ = cheerio.load(html)
@@ -476,8 +477,27 @@ describe('extractDescription', () => {
     const description = extractDescription($)
 
     // Assert
-    expect(description).toContain('<p>Line 1</p>')
-    expect(description).toContain('<ul><li>Item</li></ul>')
+    expect(description).toBe('Line 1 Item')
+  })
+})
+
+describe('extractPrice', () => {
+  test('extracts RUB price from itemprop markup', () => {
+    const $ = cheerio.load(
+      '<meta itemprop="price" content="1250.50"><meta itemprop="priceCurrency" content="RUB">',
+    )
+    expect(extractPrice($)).toEqual({ price: 1250.5, currency: 'RUB' })
+  })
+
+  test('extracts price from JSON-LD offers', () => {
+    const $ = cheerio.load(
+      '<script type="application/ld+json">{"@type":"Product","offers":{"price":"99,90","priceCurrency":"RUB"}}</script>',
+    )
+    expect(extractPrice($)).toEqual({ price: 99.9, currency: 'RUB' })
+  })
+
+  test('returns null when a public price is absent', () => {
+    expect(extractPrice(cheerio.load('<div>Цена по запросу</div>'))).toBeNull()
   })
 })
 

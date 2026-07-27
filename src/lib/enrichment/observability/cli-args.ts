@@ -2,11 +2,13 @@ export interface RunCliFlags {
   noTui: boolean
   inputDir?: string
   batchSize?: number
+  limit?: number
   resume?: boolean
   dryRun?: boolean
   skipMouser?: boolean
   skipLcsc?: boolean
   mouserOnly?: boolean
+  forceRefresh?: boolean
 }
 
 export function parseRunArgs(argv: string[]): RunCliFlags {
@@ -24,6 +26,14 @@ export function parseRunArgs(argv: string[]): RunCliFlags {
       case '--batch-size':
         flags.batchSize = Number(argv[++i])
         break
+      case '--limit': {
+        const value = Number(argv[++i])
+        if (!Number.isInteger(value) || value < 1) {
+          throw new CliUsageError('--limit requires a positive integer')
+        }
+        flags.limit = value
+        break
+      }
       case '--resume':
         flags.resume = true
         break
@@ -38,6 +48,9 @@ export function parseRunArgs(argv: string[]): RunCliFlags {
         break
       case '--mouser-only':
         flags.mouserOnly = true
+        break
+      case '--force-refresh':
+        flags.forceRefresh = true
         break
     }
   }

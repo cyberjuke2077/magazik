@@ -4,7 +4,12 @@ import { resolve } from 'node:path'
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 
-import { detectBlock, isBlocked } from './chipdip-client'
+import {
+  buildChipDipDescription,
+  detectBlock,
+  isBlocked,
+  isMatchingChipDipProduct,
+} from './chipdip-client'
 
 const FIXTURE_DIR = resolve(
   __dirname,
@@ -99,5 +104,61 @@ describe('detectBlock - synthetic non-blocked HTML (post-fix PBT)', () => {
       ),
       { numRuns: 200 },
     )
+  })
+})
+
+describe('ChipDip product identity and description', () => {
+  it('accepts only the requested normalized MPN', () => {
+    expect(isMatchingChipDipProduct('HMC908LC5', 'hmc908lc5')).toBe(true)
+    expect(isMatchingChipDipProduct('HMC908LC5', 'AL8843SP-13')).toBe(false)
+    expect(isMatchingChipDipProduct('HMC908LC5', null)).toBe(false)
+  })
+
+  it('keeps a description collected from the matching product page', () => {
+    expect(
+      buildChipDipDescription({
+        name: 'HMC908LC5, Конвертер',
+        partNumber: 'HMC908LC5',
+        sku: '8043939896',
+        manufacturer: 'Analog Devices',
+        category: 'Конвертеры',
+        categoryPath: ['Радиокомпоненты', 'Конвертеры'],
+        description: 'Описание именно HMC908LC5.',
+        weight: null,
+        price: null,
+        currency: null,
+        specifications: { Корпус: 'LC5' },
+        images: [],
+        datasheets: [],
+        analogs: [],
+      }),
+    ).toBe('Описание именно HMC908LC5.')
+  })
+
+  it('builds a product-specific fallback from collected fields', () => {
+    const description = buildChipDipDescription({
+      name: 'HMC908LC5, Конвертер',
+      partNumber: 'HMC908LC5',
+      sku: null,
+      manufacturer: 'Analog Devices',
+      category: 'Конвертеры',
+      categoryPath: ['Радиокомпоненты', 'Конвертеры'],
+      description: null,
+      weight: null,
+      price: null,
+      currency: null,
+      specifications: {
+        Корпус: 'LC5',
+        Назначение: 'ВЧ демодулятор',
+      },
+      images: [],
+      datasheets: [],
+      analogs: [],
+    })
+
+    expect(description).toContain('MPN: HMC908LC5')
+    expect(description).toContain('Производитель: Analog Devices')
+    expect(description).toContain('Корпус: LC5')
+    expect(description).toContain('Назначение: ВЧ демодулятор')
   })
 })

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skipFreshProducts": true,
+  "freshnessDays": 90,
+  "chipdip": {
+    "requestDelayMinMs": 30000,
+    "requestDelayMaxMs": 60000,
+    "pageDelayMinMs": 1500,
+    "pageDelayMaxMs": 3500
+  }
+}
