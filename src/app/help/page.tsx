@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { HelpCircle, Search, Phone, Mail, MessageCircle, FileText, Package, CreditCard, Truck, RefreshCw } from 'lucide-react'
+import { HelpCircle, Search, Phone, Mail, FileText, Package, CreditCard, Truck, RefreshCw } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
@@ -78,14 +78,14 @@ export default function HelpPage() {
           </div>
 
           {/* Contact Cards */}
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
             <a href={`tel:${COMPANY.phone.raw}`} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Phone size={24} className="text-azure" />
               </div>
               <h3 className="font-semibold text-ink mb-2">Позвонить</h3>
               <p className="text-sm text-ink-3">{COMPANY.phone.display}</p>
-              <p className="text-xs text-ink-4 mt-1">Пн-Пт 9:00-18:00</p>
+              <p className="text-xs text-ink-4 mt-1">Мобильный телефон</p>
             </a>
 
             <a href={`mailto:${COMPANY.supportEmail}`} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
@@ -94,17 +94,8 @@ export default function HelpPage() {
               </div>
               <h3 className="font-semibold text-ink mb-2">Написать</h3>
               <p className="text-sm text-ink-3">{COMPANY.supportEmail}</p>
-              <p className="text-xs text-ink-4 mt-1">Ответим в течение 24 часов</p>
+              <p className="text-xs text-ink-4 mt-1">Единый адрес для обращений</p>
             </a>
-
-            <Link href="/contacts" className="rounded-2xl bg-white p-6 text-left shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
-              <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                <MessageCircle size={24} className="text-azure" />
-              </div>
-              <h3 className="font-semibold text-ink mb-2">Онлайн-чат</h3>
-              <p className="text-sm text-ink-3">Задать вопрос</p>
-              <p className="text-xs text-ink-4 mt-1">Обычно отвечаем за 5 минут</p>
-            </Link>
           </div>
 
           {/* FAQ Categories */}

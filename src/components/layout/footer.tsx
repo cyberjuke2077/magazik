@@ -1,6 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const footerLinks = [
@@ -77,16 +76,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="rounded-lg border border-[var(--border)] bg-white p-2">
-              <Image src="/rst-quality.svg" alt="Знак качества РСТ" width={104} height={30} className="h-7 w-auto" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 text-sm font-semibold text-ink"><ShieldCheck size={15} className="text-azure" />Сертифицированная продукция</div>
-              <p className="mt-0.5 text-xs text-ink-4">Документы предоставляются при оформлении поставки.</p>
-            </div>
-          </div>
+        <div className="mt-8 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-end">
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-ink-4">
             <Link href="/offer" className="hover:text-azure">Публичная оферта</Link>
             <Link href="/privacy" className="hover:text-azure">Политика ПДн</Link>

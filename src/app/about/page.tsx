@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Users, TrendingUp, Truck, Shield, Award } from 'lucide-react'
+import { Award, Building2, FileText, ListChecks, Search } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
@@ -9,36 +9,29 @@ import { COMPANY } from '@/lib/company'
 export const metadata: Metadata = {
   title: 'О компании',
   description:
-    'Electromagaz - поставщик электронных компонентов для промышленных предприятий и B2B-клиентов с 2012 года. Более 500 000 позиций в наличии.',
+    'Electromagaz - B2B-каталог электронных компонентов с поиском по MPN и заявками на коммерческое предложение.',
 }
-
-const stats = [
-  { value: '12+', label: 'лет на рынке' },
-  { value: '500k+', label: 'позиций в каталоге' },
-  { value: '8 000+', label: 'клиентов' },
-  { value: '450+', label: 'брендов' },
-]
 
 const values = [
   {
-    icon: Shield,
-    title: 'Только оригиналы',
-    desc: 'Работаем напрямую с авторизованными дистрибьюторами. Каждая партия проходит входной контроль.',
+    icon: Search,
+    title: 'Поиск по MPN',
+    desc: 'Каталог помогает найти компонент по маркировке, производителю и категории.',
   },
   {
-    icon: Truck,
-    title: 'Прозрачные сроки',
-    desc: 'Указываем реальные сроки поставки. Не обещаем «1 день» там, где это невозможно.',
+    icon: FileText,
+    title: 'Технические данные',
+    desc: 'Карточки объединяют характеристики, изображения и доступную документацию.',
   },
   {
-    icon: Users,
-    title: 'B2B-фокус',
-    desc: 'Работаем с юридическими лицами и ИП. Все документы в порядке: НДС, сертификаты, ТРО.',
+    icon: Building2,
+    title: 'B2B-формат',
+    desc: 'Юридические лица и ИП могут направить заявку на коммерческое предложение.',
   },
   {
-    icon: TrendingUp,
-    title: 'Опт от 200 000 ₽',
-    desc: 'Гибкая ценовая политика для оптовых клиентов. Индивидуальные коммерческие предложения.',
+    icon: ListChecks,
+    title: 'Запрос по списку',
+    desc: 'Позиции можно собрать в корзину и передать менеджеру одной заявкой.',
   },
 ]
 
@@ -63,26 +56,12 @@ export default function AboutPage() {
           {/* Hero */}
           <section className="mb-8 rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)] sm:p-7" data-motion-reveal>
             <h1 className="mb-3 max-w-6xl text-balance text-2xl font-bold leading-tight tracking-[-0.035em] text-ink md:text-3xl">
-              Поставляем электронные компоненты для промышленности с 2012 года
+              Электронные компоненты для промышленности и разработки
             </h1>
             <p className="text-base text-ink-3 max-w-3xl leading-relaxed">
-              Electromagaz - оптовый поставщик электронных компонентов и средств промышленной
-              автоматизации. Работаем с предприятиями, R&D-отделами, ОКР и серийным производством
-              по всей России и СНГ.
+              Electromagaz - B2B-каталог электронных компонентов. Помогаем найти нужную
+              позицию по MPN, собрать список и направить запрос на коммерческое предложение.
             </p>
-          </section>
-
-          {/* Stats */}
-          <section className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl bg-white p-5 text-center shadow-[var(--shadow-xs)]"
-              >
-                <div className="mb-1 text-2xl font-extrabold text-azure">{s.value}</div>
-                <div className="text-xs text-ink-3">{s.label}</div>
-              </div>
-            ))}
           </section>
 
           {/* Values */}
@@ -112,17 +91,16 @@ export default function AboutPage() {
               <h2 className="text-xl font-bold text-ink mb-4">Чем занимаемся</h2>
               <div className="space-y-3 text-sm text-ink-3 leading-relaxed">
                 <p>
-                  Поставляем компоненты для производственных предприятий: микроконтроллеры,
-                  пассивные компоненты, силовую электронику, датчики, разъёмы, средства автоматизации.
+                  В каталоге собраны микроконтроллеры, пассивные компоненты, силовая электроника,
+                  датчики, разъёмы и другие компоненты для разработки и производства.
                 </p>
                 <p>
-                  Помогаем с подбором аналогов снятых с производства позиций, ищем редкие компоненты
-                  через сеть зарубежных поставщиков, работаем с образцами и мелкими партиями для
-                  R&D-задач.
+                  Для каждой доступной позиции показываем производителя, характеристики,
+                  изображения и техническую документацию.
                 </p>
                 <p>
-                  Формируем индивидуальные коммерческие предложения по BOM-листу, учитываем
-                  требования по сертификатам, маркировке и срокам поставки.
+                  Покупатель может собрать список товаров и направить его менеджеру для уточнения
+                  цены, наличия, документов и условий поставки.
                 </p>
               </div>
             </div>
@@ -150,7 +128,7 @@ export default function AboutPage() {
                   <span className="text-ink font-medium text-right">{COMPANY.legalAddress.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}</span>
                 </div>
                 <div className="pt-2 border-t border-[var(--border)] text-xs text-ink-3">
-                  Полный пакет документов и сертификатов предоставляется по запросу при заключении договора.
+                  Реквизиты используются для договора и безналичной оплаты B2B-поставок.
                 </div>
               </div>
             </div>
@@ -167,7 +145,7 @@ export default function AboutPage() {
                   </span>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-1">Получите коммерческое предложение</h3>
-                <p className="text-sm text-white/80">Сформируйте BOM-лист - пришлём цены и сроки в течение 24 часов</p>
+                <p className="text-sm text-white/80">Соберите список позиций и направьте его менеджеру для расчёта</p>
               </div>
               <div className="flex gap-3 shrink-0">
                 <Link

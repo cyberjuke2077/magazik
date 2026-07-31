@@ -61,7 +61,7 @@ export default function NotFound() {
             >
               <Search size={14} className="text-azure mb-2" />
               <div className="text-xs font-bold text-gray-900">Микросхемы</div>
-              <div className="text-xs text-gray-400 mt-0.5">62 000+ позиций</div>
+              <div className="text-xs text-gray-400 mt-0.5">Открыть категорию</div>
             </Link>
             <Link
               href="/catalog?category=rezistory"
@@ -69,7 +69,7 @@ export default function NotFound() {
             >
               <Search size={14} className="text-azure mb-2" />
               <div className="text-xs font-bold text-gray-900">Резисторы</div>
-              <div className="text-xs text-gray-400 mt-0.5">48 000+ позиций</div>
+              <div className="text-xs text-gray-400 mt-0.5">Открыть категорию</div>
             </Link>
             <Link
               href="/catalog?category=kontrollery"
@@ -77,7 +77,7 @@ export default function NotFound() {
             >
               <Search size={14} className="text-azure mb-2" />
               <div className="text-xs font-bold text-gray-900">Контроллеры</div>
-              <div className="text-xs text-gray-400 mt-0.5">9 000+ позиций</div>
+              <div className="text-xs text-gray-400 mt-0.5">Открыть категорию</div>
             </Link>
           </div>
         </div>
