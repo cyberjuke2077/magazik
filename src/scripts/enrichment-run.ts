@@ -5,7 +5,7 @@
  * Supports CLI flags to override config and control execution mode.
  *
  * Usage:
- *   pnpm enrichment:run [options]
+ *   npm run enrichment:run -- [options]
  *
  * Options:
  *   --input-dir <path>   Override ENRICHMENT_INPUT_DIR

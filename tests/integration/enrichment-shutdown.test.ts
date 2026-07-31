@@ -19,10 +19,10 @@
  *      гарантированно быть внутри `searchMpn` (page.goto к chipdip.ru).
  *   5. Шлёт SIGINT (или SIGTERM, или двойной SIGINT) на процесс-группу.
  *   6. Ждёт exit (или принудительно убивает по таймауту).
- *   7. Сравнивает pgrep-снимки до/после, ищет orphan-Chromium.
+ *   7. Сравнивает кроссплатформенные снимки процессов до/после.
  *
  * Запуск:
- *   pnpm test:integration tests/integration/enrichment-shutdown.test.ts
+ *   npm run test:integration -- tests/integration/enrichment-shutdown.test.ts
  *
  * Validates: Requirements 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.9
  *
@@ -83,10 +83,29 @@ import { join, resolve } from 'node:path'
 import fc from 'fast-check'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { diffOrphans, snapshotChromiumPids } from './helpers/process-snapshot'
+import {
+  describeProcessPids,
+  diffOrphans,
+  snapshotChromiumPids,
+} from './helpers/process-snapshot'
 
 const REPO_ROOT = resolve(__dirname, '../..')
 const ENRICHMENT_SCRIPT = 'src/scripts/enrichment-run.ts'
+
+function npmExecTsx(args: string[]): { command: string; args: string[] } {
+  const npmArgs = ['exec', 'tsx', '--', ...args]
+
+  if (process.platform === 'win32') {
+    // Аргументы формируются только из внутренних констант теста, без данных пользователя.
+    const commandLine = ['npm.cmd', ...npmArgs].join(' ')
+    return {
+      command: process.env.ComSpec || 'cmd.exe',
+      args: ['/d', '/s', '/c', commandLine],
+    }
+  }
+
+  return { command: 'npm', args: npmArgs }
+}
 
 // `logger.info({ event: 'chipdip_healthcheck_ok' })` — после health-check
 // orchestrator идёт в `runChipDipLoop`, где сразу `getNextBatch` → `searchMpn`.
@@ -139,16 +158,20 @@ interface RunResult {
  * выдержать паузу (внутри searchMpn), послать сигнал, дождаться выхода.
  *
  * `detached: true` → child получает свою process-group, можно слать сигнал
- * по `-pgid`, чтобы зацепить tsx/node, а не только pnpm-обёртку.
+ * по `-pgid`, чтобы зацепить tsx/node, а не только npm-обёртку.
+ * На Windows signal-сценарии пропускаются, потому что Node не поддерживает
+ * POSIX process groups и graceful SIGINT для дочерних console-процессов.
  */
 async function runAndSignal(args: RunArgs): Promise<RunResult> {
   const startedAt = Date.now()
+  const invocation = npmExecTsx([ENRICHMENT_SCRIPT, '--skip-mouser', '--skip-lcsc'])
   const child: ChildProcess = spawn(
-    'pnpm',
-    ['tsx', ENRICHMENT_SCRIPT, '--skip-mouser', '--skip-lcsc'],
+    invocation.command,
+    invocation.args,
     {
       cwd: REPO_ROOT,
-      detached: true,
+      detached: process.platform !== 'win32',
+      windowsHide: true,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: {
         ...process.env,
@@ -296,19 +319,6 @@ async function settle(ms = 3_000): Promise<void> {
   await sleep(ms)
 }
 
-async function psFp(pids: number[]): Promise<string> {
-  if (pids.length === 0) return '(none)'
-  const { exec } = await import('node:child_process')
-  const { promisify } = await import('node:util')
-  const execAsync = promisify(exec)
-  try {
-    const { stdout } = await execAsync(`ps -fp ${pids.join(',')}`)
-    return stdout
-  } catch (err) {
-    return `(ps failed: ${(err as Error).message})`
-  }
-}
-
 function formatOrphanFailure(scenario: string, orphans: number[], result: RunResult): string {
   return (
     `[Bug A] ${scenario}: orphaned Chromium-процессы остались после shutdown.\n` +
@@ -320,7 +330,9 @@ function formatOrphanFailure(scenario: string, orphans: number[], result: RunRes
   )
 }
 
-describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
+const describeSignalShutdown = process.platform === 'win32' ? describe.skip : describe
+
+describeSignalShutdown('enrichment shutdown - Bug A exploration (UNFIXED code)', () => {
   it('SIGINT during in-flight searchMpn leaves no orphaned Chromium processes', async () => {
     const before = await snapshotChromiumPids()
     const result = await runAndSignal({ signal: 'SIGINT' })
@@ -335,7 +347,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
           `  exitCode=${result.exitCode}, exitSignal=${result.exitSignal}, ` +
           `durationMs=${result.durationMs}, reachedInFlight=${result.reachedInFlight}\n` +
           `  orphan pids=${JSON.stringify(orphans)}\n` +
-          `  ps -fp:\n${await psFp(orphans)}`,
+          `  process info:\n${await describeProcessPids(orphans)}`,
       )
     }
 
@@ -356,7 +368,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
           `  exitCode=${result.exitCode}, exitSignal=${result.exitSignal}, ` +
           `durationMs=${result.durationMs}\n` +
           `  orphan pids=${JSON.stringify(orphans)}\n` +
-          `  ps -fp:\n${await psFp(orphans)}`,
+          `  process info:\n${await describeProcessPids(orphans)}`,
       )
     }
 
@@ -377,7 +389,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
           `  exitCode=${result.exitCode}, exitSignal=${result.exitSignal}, ` +
           `durationMs=${result.durationMs}\n` +
           `  orphan pids=${JSON.stringify(orphans)}\n` +
-          `  ps -fp:\n${await psFp(orphans)}`,
+          `  process info:\n${await describeProcessPids(orphans)}`,
       )
     }
 
@@ -392,6 +404,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
         fc.constantFrom<NodeJS.Signals>('SIGINT', 'SIGTERM'),
         fc.constantFrom(1, 2),
         async (signal, _mpnsCount) => {
+          void _mpnsCount
           // _mpnsCount фиксируется в shrink-сценарии для расширенной версии,
           // в текущем тесте очередь — TEST_MPNS длиной 2.
           const before = await snapshotChromiumPids()
@@ -405,7 +418,7 @@ describe('enrichment shutdown — Bug A exploration (UNFIXED code)', () => {
               `[Bug A property counterexample] signal=${signal}\n` +
                 `  exitCode=${result.exitCode}, durationMs=${result.durationMs}\n` +
                 `  orphans=${JSON.stringify(orphans)}\n` +
-                `  ps:\n${await psFp(orphans)}`,
+                `  process info:\n${await describeProcessPids(orphans)}`,
             )
           }
           expect(orphans).toEqual([])
@@ -449,12 +462,19 @@ interface HappyPathResult {
 
 async function runUntilNaturalExit(timeoutMs: number): Promise<HappyPathResult> {
   const startedAt = Date.now()
+  const invocation = npmExecTsx([
+    ENRICHMENT_SCRIPT,
+    '--dry-run',
+    '--skip-mouser',
+    '--skip-lcsc',
+  ])
   const child: ChildProcess = spawn(
-    'pnpm',
-    ['tsx', ENRICHMENT_SCRIPT, '--dry-run', '--skip-mouser', '--skip-lcsc'],
+    invocation.command,
+    invocation.args,
     {
       cwd: REPO_ROOT,
-      detached: true,
+      detached: process.platform !== 'win32',
+      windowsHide: true,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: {
         ...process.env,
@@ -533,13 +553,13 @@ describe('happy-path shutdown', () => {
     const orphans = diffOrphans(before, after)
 
     if (orphans.length > 0) {
-      const psOutput = await psFp(orphans)
+      const processInfo = await describeProcessPids(orphans)
        
       console.error(
         `[Bug A preservation counterexample] happy-path leaves orphans!\n` +
           `  exitCode=${result.exitCode}, durationMs=${result.durationMs}\n` +
           `  orphans=${JSON.stringify(orphans)}\n` +
-          `  ps -fp:\n${psOutput}\n` +
+          `  process info:\n${processInfo}\n` +
           `  CRITICAL: баг шире — orphan'ы появляются даже без SIGINT`,
       )
     }
@@ -556,6 +576,7 @@ describe('happy-path shutdown', () => {
   it('property: small happy-path runs always exit clean', async () => {
     await fc.assert(
       fc.asyncProperty(fc.constantFrom(1, 2), async (_mpnsCount) => {
+        void _mpnsCount
         const before = await snapshotChromiumPids()
         const result = await runUntilNaturalExit(HAPPY_PATH_BUDGET_MS + 5_000)
         await settle()

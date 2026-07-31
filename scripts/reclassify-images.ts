@@ -22,7 +22,7 @@
  * кропом, что роняло качество и не убирало знак).
  *
  * Usage:
- *   pnpm tsx scripts/reclassify-images.ts [--dry-run] [--limit N]
+ *   npm exec tsx -- scripts/reclassify-images.ts [--dry-run] [--limit N]
  */
 import './_load-env'
 

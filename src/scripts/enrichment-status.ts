@@ -4,7 +4,7 @@
  * Displays current progress and breakdown of the enrichment pipeline.
  *
  * Usage:
- *   pnpm enrichment:status [options]
+ *   npm run enrichment:status -- [options]
  *
  * Options:
  *   --watch              Live TUI watcher (polls DB every 2s)

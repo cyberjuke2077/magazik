@@ -9,9 +9,9 @@
  * cheap. Safe to interrupt and resume.
  *
  * Usage:
- *   pnpm tsx scripts/backfill-images-to-r2.ts --dry-run
- *   pnpm tsx scripts/backfill-images-to-r2.ts --limit 100
- *   pnpm tsx scripts/backfill-images-to-r2.ts --concurrency 4
+ *   npm exec tsx -- scripts/backfill-images-to-r2.ts --dry-run
+ *   npm exec tsx -- scripts/backfill-images-to-r2.ts --limit 100
+ *   npm exec tsx -- scripts/backfill-images-to-r2.ts --concurrency 4
  */
 
 import './_load-env'

@@ -6,13 +6,6 @@ interface CaptchaResult {
   error?: string
 }
 
-interface CaptchaTask {
-  taskId: string
-  status: 'processing' | 'ready' | 'error'
-  solution?: string
-  errorDescription?: string
-}
-
 export class TwoCaptchaSolver {
   private apiKey: string
   private baseUrl: string

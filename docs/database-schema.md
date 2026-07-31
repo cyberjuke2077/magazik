@@ -302,10 +302,10 @@ If performance degrades at scale:
 docker-compose up -d postgres
 
 # Run migrations
-pnpm prisma migrate dev
+npm run db:migrate
 
 # Verify schema
-pnpm prisma studio
+npm run db:studio
 ```
 
 ### Adding New Fields
@@ -314,10 +314,10 @@ Always use migrations (never manual schema edits):
 ```bash
 # Edit schema.prisma
 # Then create migration
-pnpm prisma migrate dev --name add_product_weight
+npm run db:migrate -- --name add_product_weight
 
 # Apply to production
-pnpm prisma migrate deploy
+npm exec prisma migrate deploy
 ```
 
 ### Data Integrity

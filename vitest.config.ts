@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'node',
     // Интеграционные тесты живут в `tests/integration/` и запускаются отдельной конфигурацией
     // `vitest.integration.config.ts` (см. скрипт `test:integration`). Здесь явно исключаем
-    // их из обычного `pnpm test`, чтобы не подмешивать долгие сценарии с реальным Chromium.
+    // их из обычного `npm test`, чтобы не подмешивать долгие сценарии с реальным Chromium.
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

@@ -6,11 +6,11 @@
  *
  * Safe to re-run: any -main.webp still pointed at by a row is preserved.
  *
- * Run AFTER `pnpm tsx scripts/clean-images.ts` finishes successfully on
+ * Run AFTER `npm exec tsx -- scripts/clean-images.ts` finishes successfully on
  * the entire dataset.
  *
  * Usage:
- *   pnpm tsx scripts/cleanup-r2-originals.ts [--dry-run]
+ *   npm exec tsx -- scripts/cleanup-r2-originals.ts [--dry-run]
  */
 import './_load-env'
 

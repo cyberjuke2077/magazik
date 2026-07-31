@@ -9,7 +9,7 @@
  * Семейства синхронизированы с PACKAGE_FAMILIES
  * (src/lib/enrichment/constants/package-families.ts).
  *
- * Usage: pnpm tsx scripts/gen-package-svgs.ts
+ * Usage: npm exec tsx -- scripts/gen-package-svgs.ts
  */
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -150,7 +150,7 @@ function dip(label: string, perSide: number): string {
 }
 
 /** TO-220 — корпус с металлическим фланцем и 3 ногами. */
-function to220(label: string): string {
+function to220(): string {
   const bodyW = 120
   const bodyH = 130
   const x0 = CX - bodyW / 2
@@ -170,7 +170,7 @@ function to220(label: string): string {
 }
 
 /** DPAK/D2PAK (TO-252/TO-263) — SMD power с tab. */
-function dpak(label: string): string {
+function dpak(): string {
   const bodyW = 160
   const bodyH = 120
   const x0 = CX - bodyW / 2
@@ -189,7 +189,7 @@ function dpak(label: string): string {
 }
 
 /** TO-92 — радиальный корпус с плоской гранью и 3 ногами. */
-function to92(label: string): string {
+function to92(): string {
   const cx = CX
   const cy = 150
   const r = 80
@@ -208,7 +208,7 @@ function to92(label: string): string {
 }
 
 /** SOD — двухвыводной SMD-диод с полоской катода. */
-function sod(label: string): string {
+function sod(): string {
   const bodyW = 180
   const bodyH = 90
   const x0 = CX - bodyW / 2
@@ -224,7 +224,7 @@ function sod(label: string): string {
 }
 
 /** BGA — квадрат с сеткой шариков. */
-function bga(label: string): string {
+function bga(): string {
   const body = 180
   const x0 = CX - body / 2
   const y0 = 105
@@ -243,7 +243,7 @@ function bga(label: string): string {
 }
 
 /** Chip — двухвыводной SMD (резистор/конденсатор 0805 и т.п.). */
-function chip(label: string): string {
+function chip(): string {
   const bodyW = 200
   const bodyH = 110
   const x0 = CX - bodyW / 2
@@ -265,13 +265,13 @@ const FILES: Record<string, string> = {
   qfn: svg('QFN', quadNoLead('QFN', 6)),
   qfp: svg('QFP', quadFlat('QFP', 7)),
   dip: svg('DIP', dip('DIP', 4)),
-  to220: svg('TO-220', to220('TO-220')),
-  to252: svg('TO-252', dpak('TO-252')),
-  to263: svg('TO-263', dpak('TO-263')),
-  to92: svg('TO-92', to92('TO-92')),
-  sod: svg('SOD', sod('SOD')),
-  bga: svg('BGA', bga('BGA')),
-  chip: svg('Chip SMD', chip('Chip')),
+  to220: svg('TO-220', to220()),
+  to252: svg('TO-252', dpak()),
+  to263: svg('TO-263', dpak()),
+  to92: svg('TO-92', to92()),
+  sod: svg('SOD', sod()),
+  bga: svg('BGA', bga()),
+  chip: svg('Chip SMD', chip()),
 }
 
 function main(): void {

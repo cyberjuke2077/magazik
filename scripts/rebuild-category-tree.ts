@@ -11,8 +11,8 @@
  *  - удаляет пустые категории-призраки
  *
  * Запуск:
- *   pnpm tsx scripts/rebuild-category-tree.ts            # dry-run (только отчёт)
- *   pnpm tsx scripts/rebuild-category-tree.ts --apply    # применить к БД
+ *   npm exec tsx -- scripts/rebuild-category-tree.ts            # dry-run (только отчёт)
+ *   npm exec tsx -- scripts/rebuild-category-tree.ts --apply    # применить к БД
  */
 
 import { prisma } from '../src/lib/prisma'

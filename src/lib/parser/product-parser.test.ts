@@ -959,17 +959,23 @@ describe('extractSpecifications - preservation', () => {
   const safeValue = (v: string): string => v.replace(/[<>&]/g, '')
   const isUsablePair = ([k, v]: readonly [string, string]): boolean =>
     k.trim().length > 0 && v.trim().length > 0 && !RESERVED_KEYS.test(k.trim())
+  const uniquePairs = fc.uniqueArray(
+    fc.tuple(
+      fc.string({ minLength: 1, maxLength: 30 }),
+      fc.string({ minLength: 1, maxLength: 50 }),
+    ),
+    {
+      minLength: 1,
+      maxLength: 5,
+      selector: ([key]) => safeKey(key).trim(),
+    },
+  )
+
   it('Property 2: Preservation — synthetic dl returns expected key/value pairs', () => {
     // Validates: Requirements 3.1, 3.2
     fc.assert(
       fc.property(
-        fc.array(
-          fc.tuple(
-            fc.string({ minLength: 1, maxLength: 30 }),
-            fc.string({ minLength: 1, maxLength: 50 }),
-          ),
-          { minLength: 1, maxLength: 5 },
-        ),
+        uniquePairs,
         (pairs) => {
           // Strip HTML special chars to avoid spurious tags / entity confusion
           const safe = pairs.map(
@@ -996,13 +1002,7 @@ describe('extractSpecifications - preservation', () => {
     // Validates: Requirements 3.1, 3.2
     fc.assert(
       fc.property(
-        fc.array(
-          fc.tuple(
-            fc.string({ minLength: 1, maxLength: 30 }),
-            fc.string({ minLength: 1, maxLength: 50 }),
-          ),
-          { minLength: 1, maxLength: 5 },
-        ),
+        uniquePairs,
         (pairs) => {
           const safe = pairs.map(
             ([k, v]) => [safeKey(k), safeValue(v)] as const,
@@ -1028,13 +1028,7 @@ describe('extractSpecifications - preservation', () => {
     // Validates: Requirements 3.1, 3.2
     fc.assert(
       fc.property(
-        fc.array(
-          fc.tuple(
-            fc.string({ minLength: 1, maxLength: 30 }),
-            fc.string({ minLength: 1, maxLength: 50 }),
-          ),
-          { minLength: 1, maxLength: 5 },
-        ),
+        uniquePairs,
         (pairs) => {
           const safe = pairs.map(
             ([k, v]) => [safeKey(k), safeValue(v)] as const,
@@ -1059,6 +1053,21 @@ describe('extractSpecifications - preservation', () => {
       ),
       { numRuns: 50 },
     )
+  })
+
+  it('duplicate keys keep the first parsed value', () => {
+    const $ = cheerio.load(
+      `<div class="property">` +
+        `<span class="property-name">ref</span>` +
+        `<span class="property-value">first</span>` +
+        `</div>` +
+        `<div class="property">` +
+        `<span class="property-name">ref</span>` +
+        `<span class="property-value">second</span>` +
+        `</div>`,
+    )
+
+    expect(extractSpecifications($)).toEqual({ ref: 'first' })
   })
 
   it('Property 2: Preservation — HTML без блока характеристик возвращает {}', () => {

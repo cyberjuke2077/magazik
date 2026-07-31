@@ -211,7 +211,7 @@ export async function closeAllBrowsers(timeoutMs = 5000): Promise<void> {
 
   // Eager catch-all: cloakbrowser hides the chromium child process behind
   // playwright-core, so the per-browser SIGKILL after the timeout race below
-  // is a no-op. Worse, if our parent (pnpm/tsx) tears the Node process down
+  // is a no-op. Worse, if our parent (npm/tsx) tears the Node process down
   // mid-shutdown, the tree-kill at the END of this function never runs and
   // chromium descendants leak. Do a synchronous tree-kill UP FRONT so the
   // chromium pids are signalled before any await.

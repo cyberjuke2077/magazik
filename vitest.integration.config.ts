@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config'
 import { resolve } from 'path'
 
 // Изолированная конфигурация для интеграционных тестов (тэг @integration).
-// Запускается только через `pnpm test:integration`, чтобы не подмешиваться в обычный `pnpm test`.
+// Запускается только через `npm run test:integration`, чтобы не подмешиваться в обычный `npm test`.
 export default defineConfig({
   test: {
     name: '@integration',

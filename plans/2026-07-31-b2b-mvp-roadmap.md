@@ -270,11 +270,18 @@ MPN, карточки содержат подтверждённые данные
 
 ### Автоматические проверки
 
-- [ ] Исправить integration-тесты: npm вместо pnpm.
-- [ ] Заменить Unix-зависимость `pgrep` на кроссплатформенную проверку процессов.
+- [x] Исправить integration-тесты: npm вместо pnpm.
+- [x] Заменить Unix-зависимость `pgrep` на кроссплатформенную проверку процессов.
+  - [x] Windows использует `Get-CimInstance Win32_Process`, macOS/Linux - `ps`.
+  - [x] 3 happy-path integration-теста прошли на Windows; 4 POSIX signal-теста
+        явно пропущены как неприменимые к Windows process groups.
 - [ ] Установить Playwright Chromium в рабочем и CI-окружении.
 - [ ] Добиться прохождения unit, integration, lint, build и всех Playwright-тестов.
-- [ ] Устранить или явно принять lint warnings.
+  - [x] Unit: 213 тестов прошли.
+  - [x] Integration на Windows: 3 прошли, 4 POSIX signal-сценария пропущены.
+  - [x] TypeScript и lint прошли без ошибок и предупреждений.
+  - [ ] Build и Playwright остаются на отдельную проверку.
+- [x] Устранить или явно принять lint warnings.
 - [ ] Устранить неоднозначный workspace root Next.js.
 - [ ] Перейти с устаревшего `middleware` convention на `proxy`.
 

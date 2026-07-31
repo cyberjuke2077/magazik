@@ -14,7 +14,6 @@
 
 import {
   type ProxyConfig,
-  type ProxyStats,
   type ProxyWithStats,
   type ProxyManagerConfig,
   type ProxyManager,

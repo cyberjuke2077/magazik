@@ -3,8 +3,8 @@
  * Восстанавливает все категории (с исходными id/slug/parentId) и привязку
  * товаров к категориям, затем удаляет категории, которых не было в снимке.
  *
- *   pnpm tsx scripts/restore-category-backup.ts <stamp>
- *   например: pnpm tsx scripts/restore-category-backup.ts 20260531-pre-rebuild
+ *   npm exec tsx -- scripts/restore-category-backup.ts <stamp>
+ *   например: npm exec tsx -- scripts/restore-category-backup.ts 20260531-pre-rebuild
  */
 import { readFileSync } from 'fs'
 import { prisma } from '../src/lib/prisma'

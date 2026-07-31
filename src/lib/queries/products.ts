@@ -98,20 +98,6 @@ function getSortOrderBy(sort: SortOption): Prisma.ProductOrderByWithRelationInpu
   }
 }
 
-function getSortOrderByRaw(sort: SortOption): Prisma.Sql {
-  switch (sort) {
-    case 'name':
-      return Prisma.sql`p."name" ASC`
-    case 'partNumber':
-      return Prisma.sql`p."partNumber" ASC`
-    case 'manufacturer':
-      return Prisma.sql`m."name" ASC`
-    case 'date':
-    default:
-      return Prisma.sql`p."createdAt" DESC`
-  }
-}
-
 export async function getProducts(): Promise<Product[]> {
   const products = await prisma.product.findMany({
     include: {

@@ -6,9 +6,9 @@
  * CloakBrowser+JSON-LD client, and persists results via persistBatch().
  *
  * Usage:
- *   pnpm enrichment:reenrich --limit 50
- *   pnpm enrichment:reenrich --status unresolved --limit 100
- *   pnpm enrichment:reenrich --dry-run
+ *   npm run enrichment:reenrich -- --limit 50
+ *   npm run enrichment:reenrich -- --status unresolved --limit 100
+ *   npm run enrichment:reenrich -- --dry-run
  *
  * Why: ~27% of products are stuck in unresolved/pending. The rewritten
  * lcsc-client (JSON-LD parse instead of brittle SPA DOM scrape) recovers
