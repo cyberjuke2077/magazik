@@ -16,13 +16,13 @@
 
 ## 3. Результат: да
 
-- Pull Request #2 с веткой `codex/integrate-37lunar-work` влит в `main`. Локальный `main` и `origin/main` совпадают на merge-коммите `c03986e`.
+- Pull Request #2 с веткой `codex/integrate-37lunar-work` влит в `main`. Локальный `main` синхронизирован с `origin/main`; финальная ретроспектива добавлена отдельным документационным Pull Request.
 - Кодовая ветка `codex/parser-trial-limit` находится на `cc6d459`. Она прошла 212 unit-тестов, lint без ошибок и production-сборку.
 - Отдельная ветка `codex/test-commit` находится на `04a95af` и содержит документацию общей Supabase. Ветка расходится с кодовой веткой и представлена отдельным Pull Request.
 - Итоговый `main` повторно прошёл 212 unit-тестов, lint с 0 ошибок и 11 существующими предупреждениями, а также production build.
 - Supabase-авторизация получила доступ к `37Lunar's Org`, а пользователь получил роль Administrator. Подтверждён проект `37Lunar's Project` с ref `dbumwpnbtvixfusxnggn`.
 - Проект Supabase подключён к `cyberjuke2077/magazik`: working directory `.`, автоматический production deploy выключен, automatic branching выключен. После перезагрузки страницы настройка подтверждена кнопкой `Disable integration`.
-- Ветка `codex/minimal-ui-redesign` содержит три коммита, но последний коммит откатывает редизайн. Итоговое дерево этой ветки совпадает с `origin/main`, поэтому переносить из неё нечего.
+- Ветка `codex/minimal-ui-redesign` содержит три коммита, но последний коммит откатывает редизайн. После отката её дерево совпадало с доинтеграционным `main` на `9d281e3`; уникальных итоговых изменений для переноса из неё нет.
 - В проекте `cyberjuke2077's Org/electromagaz` RLS выключен на всех 13 таблицах `public`, RLS-политик 0, роли `anon` и `authenticated` имеют права `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `TRUNCATE`, `REFERENCES` и `TRIGGER` на все 13 таблиц.
 - В Pull Request #2 перенесены осмысленные изменения соразработчика; пустой `a48e596 тест` не перенесён.
 - Реальный integration-тест ChipDip не запускался, потому что он делает внешние запросы, а предыдущий health-check уже зафиксировал блокировку и остановку повторных запросов.
