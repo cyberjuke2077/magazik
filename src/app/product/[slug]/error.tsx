@@ -7,11 +7,10 @@ import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 interface ErrorProps {
-  error: Error & { digest?: string }
   reset: () => void
 }
 
-export default function ProductError({ error, reset }: ErrorProps) {
+export default function ProductError({ reset }: ErrorProps) {
   return (
     <>
       <Header />
@@ -23,7 +22,7 @@ export default function ProductError({ error, reset }: ErrorProps) {
           </div>
           <h1 className="text-xl font-bold text-ink mb-2">Ошибка загрузки товара</h1>
           <p className="text-sm text-ink-3 mb-6 leading-relaxed">
-            {error.message || 'Не удалось загрузить страницу товара. Попробуйте ещё раз.'}
+            Не удалось загрузить страницу товара. Попробуйте ещё раз или вернитесь в каталог.
           </p>
           <div className="flex items-center justify-center gap-3">
             <button onClick={reset} className="ui-btn ui-btn-primary">

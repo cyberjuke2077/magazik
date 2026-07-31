@@ -1,4 +1,4 @@
-import { Boxes, Truck, FileCheck2, Headset } from 'lucide-react'
+import { Boxes, FileCheck2, Headset, ListChecks } from 'lucide-react'
 
 interface TrustBadgesProps {
   totalProducts: number
@@ -9,9 +9,9 @@ interface TrustBadgesProps {
 export function TrustBadges({ totalProducts, sectionsCount }: TrustBadgesProps) {
   const items = [
     { icon: Boxes, value: `${totalProducts.toLocaleString('ru-RU')}`, label: 'позиций в каталоге' },
-    { icon: Truck, value: 'По всей РФ', label: 'отгрузка со склада в Москве' },
-    { icon: FileCheck2, value: 'Безнал с НДС', label: 'полный пакет документов' },
-    { icon: Headset, value: `${sectionsCount} разделов`, label: 'подбор и техподдержка' },
+    { icon: ListChecks, value: 'По запросу', label: 'цены и сроки в КП' },
+    { icon: FileCheck2, value: 'По позициям', label: 'состав документов' },
+    { icon: Headset, value: `${sectionsCount} разделов`, label: 'каталог по направлениям' },
   ]
   return (
     <section className="bg-canvas py-3">

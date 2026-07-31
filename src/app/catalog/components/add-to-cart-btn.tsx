@@ -80,6 +80,7 @@ export function AddToCartBtn({
       <button
         ref={buttonRef}
         onClick={handleAdd}
+        aria-label={inCart ? 'Товар в корзине' : 'Добавить в корзину'}
         className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-xs font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] ${
           inCart
             ? 'bg-azure-light text-azure border border-azure/30'

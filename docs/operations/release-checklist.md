@@ -33,6 +33,7 @@
 - [ ] `npm run lint`.
 - [ ] `npm run build`.
 - [ ] `npm run test:e2e` для desktop и mobile.
+- [ ] `npm run check:db-failure:local` после production-сборки.
 - [ ] Известные warnings перечислены и приняты владельцем либо исправлены.
 
 ## 3. База и данные

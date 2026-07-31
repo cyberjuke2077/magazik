@@ -122,7 +122,8 @@ export function HeroSlider() {
                   src={slide.image}
                   alt={slide.alt}
                   fill
-                  priority={index === 0}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
                   className="object-cover saturate-[1.2] contrast-[1.05] brightness-[1.08]"
                   sizes="(max-width: 1024px) 100vw, 1050px"
                 />
@@ -165,7 +166,7 @@ export function HeroSlider() {
         </div>
 
         <div className="no-scrollbar mt-4 flex gap-2.5 overflow-x-auto lg:mt-0 lg:min-w-0 lg:flex-1 lg:gap-3 lg:overflow-visible">
-          {quickLinks.map((item) => (
+          {quickLinks.map((item, index) => (
             <Link
               key={item.href}
               href={item.href}
@@ -176,6 +177,8 @@ export function HeroSlider() {
                 src={item.image}
                 alt={item.title}
                 fill
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
                 className="object-cover saturate-[1.25] contrast-[1.06] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
                 sizes="(max-width: 1024px) 116px, 180px"
               />

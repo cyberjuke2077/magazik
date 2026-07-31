@@ -24,6 +24,7 @@ function LoginForm() {
       <input
         type="text"
         name="username"
+        aria-label="Логин"
         placeholder="Логин"
         autoComplete="username"
         autoFocus
@@ -33,6 +34,7 @@ function LoginForm() {
       <input
         type="password"
         name="password"
+        aria-label="Пароль"
         placeholder="Пароль"
         autoComplete="current-password"
         required

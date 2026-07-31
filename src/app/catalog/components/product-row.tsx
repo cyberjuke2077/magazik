@@ -27,17 +27,17 @@ interface ProductRowData {
   unit: string
 }
 
-export function ProductRow({ product }: { product: ProductRowData }) {
+export function ProductRow({ product, priority = false }: { product: ProductRowData; priority?: boolean }) {
   return (
     <article className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl bg-white p-3 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-md)] sm:min-h-[240px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5">
-      <ProductImage product={product} />
+      <ProductImage product={product} priority={priority} />
       <ProductDetails product={product} />
       <ProductCommerce product={product} />
     </article>
   )
 }
 
-function ProductImage({ product }: { product: ProductRowData }) {
+function ProductImage({ product, priority }: { product: ProductRowData; priority: boolean }) {
   const image = product.images[0] ?? fallbackImageForProduct({
     package: product.package,
     partNumber: product.partNumber,
@@ -53,6 +53,8 @@ function ProductImage({ product }: { product: ProductRowData }) {
         src={image}
         alt={product.name}
         fill
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
         className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
         sizes="(max-width: 640px) 76px, 192px"
       />
@@ -117,20 +119,12 @@ function ProductDetails({ product }: { product: ProductRowData }) {
 
 function ProductCommerce({ product }: { product: ProductRowData }) {
   const displayPrice = product.price === 0 ? null : product.price
-  const stockLabel = product.inStock
-    ? product.stockCount > 0
-      ? `В наличии: ${product.stockCount.toLocaleString('ru-RU')} ${product.unit}`
-      : 'В наличии'
-    : 'Под заказ'
 
   return (
     <div className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
       <div className="sm:text-right">
         <div className={displayPrice ? 'price text-lg' : 'text-sm font-semibold text-ink-3'}>
           {formatPrice(displayPrice)}
-        </div>
-        <div className={`mt-1 text-[11px] ${product.inStock ? 'text-stock' : 'text-ink-3'}`}>
-          {stockLabel}
         </div>
         <div className="text-[10px] text-ink-4">Минимум: {product.minOrder} {product.unit}</div>
       </div>

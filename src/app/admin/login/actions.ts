@@ -8,6 +8,10 @@ import {
   checkAdminCredentials,
   createSessionToken,
 } from '@/lib/admin-auth'
+import {
+  enforceSubmissionRateLimit,
+  SubmissionRateLimitExceededError,
+} from '@/lib/submission-rate-limit'
 
 export async function loginAdmin(
   _prev: { error: string } | null,
@@ -15,6 +19,14 @@ export async function loginAdmin(
 ): Promise<{ error: string } | null> {
   const username = String(formData.get('username') ?? '')
   const password = String(formData.get('password') ?? '')
+  try {
+    await enforceSubmissionRateLimit('admin_login', username.slice(0, 200))
+  } catch (error) {
+    if (error instanceof SubmissionRateLimitExceededError) {
+      return { error: 'Слишком много попыток входа. Повторите позже.' }
+    }
+    throw error
+  }
   if (!(await checkAdminCredentials(username, password))) {
     return { error: 'Неверный логин или пароль' }
   }

@@ -316,3 +316,17 @@ model WholesaleLead {
   @@index([createdAt])
   @@index([email])
 }
+
+// Короткоживущие счётчики публичных форм. Идентификатор клиента хранится
+// только внутри SHA-256 ключа, без IP, email и других персональных данных.
+model SubmissionRateLimit {
+  key         String   @id
+  scope       String
+  count       Int      @default(1)
+  windowStart DateTime
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([expiresAt])
+}

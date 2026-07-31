@@ -11,7 +11,7 @@ import { COMPANY } from '@/lib/company'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Статус заказа',
+  title: 'Статус заявки',
   robots: { index: false, follow: false },
 }
 
@@ -22,25 +22,25 @@ const STATUS_META: Record<
 > = {
   new: {
     label: 'Принята',
-    desc: 'Заказ получен и ожидает обработки. Менеджер свяжется с вами для согласования цены и сроков.',
+    desc: 'Заявка сохранена и ожидает обработки менеджером.',
     icon: Clock,
     cls: 'bg-amber-50 text-amber-700 border-amber-200',
   },
   in_progress: {
     label: 'В работе',
-    desc: 'Мы готовим коммерческое предложение по вашему заказу.',
+    desc: 'Менеджер проверяет позиции и условия коммерческого предложения.',
     icon: FileText,
     cls: 'bg-blue-50 text-blue-700 border-blue-200',
   },
   quoted: {
     label: 'КП готово',
-    desc: 'Коммерческое предложение подготовлено и направлено вам. Проверьте указанные контакты.',
+    desc: 'Коммерческое предложение подготовлено. Для получения документа свяжитесь с менеджером и назовите номер заявки.',
     icon: CheckCircle,
     cls: 'bg-green-50 text-green-700 border-green-200',
   },
   rejected: {
     label: 'Отклонена',
-    desc: 'К сожалению, заказ отклонен. По вопросам свяжитесь с нами любым удобным способом.',
+    desc: 'Заявка не принята к дальнейшей обработке. Причину можно уточнить у менеджера по номеру заявки.',
     icon: XCircle,
     cls: 'bg-[#f8fafc] text-ink-3 border-[var(--border)]',
   },
@@ -54,7 +54,15 @@ export default async function QuoteStatusPage({
   const { id } = await params
   const request = await prisma.quoteRequest.findUnique({
     where: { id },
-    include: { items: { orderBy: { createdAt: 'asc' } } },
+    select: {
+      id: true,
+      status: true,
+      createdAt: true,
+      items: {
+        orderBy: { createdAt: 'asc' },
+        select: { id: true, name: true, partNumber: true, quantity: true },
+      },
+    },
   })
   if (!request) notFound()
 
@@ -72,7 +80,7 @@ export default async function QuoteStatusPage({
           <div className="mb-4 rounded-2xl bg-white p-6 shadow-sm">
             <div className="flex items-start justify-between gap-4 mb-4">
               <div>
-                <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">Статус заказа</h1>
+                <h1 className="text-2xl font-bold tracking-[-0.03em] text-ink">Статус заявки</h1>
                 <p className="text-xs text-ink-3 mt-1">
                   Создана {request.createdAt.toLocaleDateString('ru-RU')} / позиций: {request.items.length}
                 </p>
@@ -90,35 +98,13 @@ export default async function QuoteStatusPage({
           <div className="mb-4 flex items-start gap-2 border-l-4 border-azure bg-azure-light p-3 text-xs text-ink-2">
             <Link2 size={15} className="mt-0.5 shrink-0" />
             <span>
-              Сохраните эту ссылку - по ней можно вернуться и проверить статус заказа в любой момент. Логин не требуется.
+              Сохраните эту ссылку - по ней можно вернуться и проверить статус заявки. Не передавайте ссылку посторонним.
             </span>
-          </div>
-
-          {/* Ваши данные */}
-          <div className="mb-4 rounded-2xl bg-white p-5 shadow-sm">
-            <h2 className="text-sm font-bold text-ink mb-3">Ваши данные</h2>
-            <dl className="space-y-2 text-sm">
-              {([
-                ['Компания', request.companyName],
-                ['ИНН', request.inn],
-                ['Контактное лицо', request.contactPerson],
-                ['Телефон', request.phone],
-                ['Email', request.email],
-                ['Адрес доставки', request.deliveryAddress],
-              ] as Array<[string, string | null]>)
-                .filter(([, v]) => v)
-                .map(([label, value]) => (
-                  <div key={label} className="flex justify-between gap-4">
-                    <dt className="text-ink-3 shrink-0">{label}</dt>
-                    <dd className="text-ink text-right">{value}</dd>
-                  </div>
-                ))}
-            </dl>
           </div>
 
           {/* Позиции */}
           <div className="mb-4 rounded-2xl bg-white p-5 shadow-sm">
-            <h2 className="text-sm font-bold text-ink mb-3">Товары в заказе</h2>
+            <h2 className="text-sm font-bold text-ink mb-3">Товары в заявке</h2>
             <div className="space-y-3">
               {request.items.map((item) => (
                 <div key={item.id} className="flex items-center justify-between py-2 border-b border-[var(--border)] last:border-0">

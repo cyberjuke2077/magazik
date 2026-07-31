@@ -96,7 +96,10 @@ export default function CartPage() {
                 alt="Пустая корзина Electromagaz"
                 width={320}
                 height={210}
-                className="mb-2 h-[210px] w-[320px] object-contain"
+                loading="eager"
+                fetchPriority="high"
+                style={{ width: 'auto', height: 'auto' }}
+                className="mb-2 object-contain"
               />
               <h2 className="mb-2 text-xl font-bold text-ink">Пока пусто</h2>
               <p className="max-w-md text-sm leading-relaxed text-ink-3">
@@ -261,11 +264,11 @@ export default function CartPage() {
                   </div>
                   <div className="flex items-start gap-2 text-xs text-ink-3">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
-                    <span>Минимальный заказ от 200 000 ₽</span>
+                    <span>Минимальные партии и условия уточняются в КП</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs text-ink-3">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
-                    <span>Подтверждение заказа в течение 24 часов</span>
+                    <span>Менеджер подтвердит цены и сроки поставки</span>
                   </div>
                 </div>
               </div>

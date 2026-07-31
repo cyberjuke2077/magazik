@@ -11,6 +11,10 @@ const r2Hostname = (() => {
 })()
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ['127.0.0.1'],
+  turbopack: {
+    root: process.cwd(),
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'assets.lcsc.com' },
@@ -20,6 +24,23 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'static.chipdip.ru' },
       ...(r2Hostname ? [{ protocol: 'https' as const, hostname: r2Hostname }] : []),
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: '/request-quote/status/:path*',
+        headers: [
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+        ],
+      },
+      {
+        source: '/admin/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+        ],
+      },
+    ]
   },
 }
 

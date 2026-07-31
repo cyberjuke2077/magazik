@@ -3,6 +3,11 @@
 import { prisma } from '@/lib/prisma'
 import { notifyNewWholesaleLead } from '@/lib/notifications'
 import { validateWholesaleInput } from '@/lib/validate-wholesale-input'
+import {
+  enforceSubmissionRateLimit,
+  SubmissionRateLimitExceededError,
+} from '@/lib/submission-rate-limit'
+import { logSubmissionEvent } from '@/lib/submission-log'
 
 export interface WholesaleLeadInput {
   name: string
@@ -20,12 +25,20 @@ export type WholesaleLeadResult =
 export async function submitWholesaleLead(
   input: WholesaleLeadInput,
 ): Promise<WholesaleLeadResult> {
+  const startedAt = Date.now()
   try {
     // Единая серверная валидация (согласие ПДн, форматы, лимиты).
     const validation = validateWholesaleInput(input)
     if (!validation.valid) {
+      logSubmissionEvent({
+        scope: 'wholesale_lead',
+        outcome: 'rejected_validation',
+        durationMs: Date.now() - startedAt,
+      })
       return { success: false, error: validation.error ?? 'Некорректные данные' }
     }
+
+    await enforceSubmissionRateLimit('wholesale_lead', input.email)
 
     const lead = await prisma.wholesaleLead.create({
       data: {
@@ -40,7 +53,7 @@ export async function submitWholesaleLead(
     })
 
     // Уведомление администратору (fail-safe: сбой не ломает сохранение лида)
-    await notifyNewWholesaleLead({
+    const notification = await notifyNewWholesaleLead({
       leadId: lead.id,
       name: input.name,
       company: input.company,
@@ -49,11 +62,31 @@ export async function submitWholesaleLead(
       message: input.message,
     })
 
+    logSubmissionEvent({
+      scope: 'wholesale_lead',
+      outcome: 'saved',
+      requestId: lead.id,
+      durationMs: Date.now() - startedAt,
+      notificationStatus: notification.status,
+    })
+
     return { success: true }
   } catch (error) {
-    console.error('[WholesaleLead] Error:', error)
-    const message =
-      error instanceof Error ? error.message : 'Произошла ошибка при отправке заявки'
-    return { success: false, error: message }
+    if (error instanceof SubmissionRateLimitExceededError) {
+      logSubmissionEvent({
+        scope: 'wholesale_lead',
+        outcome: 'rejected_rate_limit',
+        durationMs: Date.now() - startedAt,
+      })
+      return { success: false, error: 'Слишком много попыток. Повторите позже.' }
+    }
+
+    logSubmissionEvent({
+      scope: 'wholesale_lead',
+      outcome: 'failed',
+      durationMs: Date.now() - startedAt,
+      errorType: error instanceof Error ? error.name : 'UnknownError',
+    })
+    return { success: false, error: 'Не удалось сохранить заявку. Повторите попытку позже.' }
   }
 }

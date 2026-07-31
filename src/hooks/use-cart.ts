@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { type Product, type CartItem } from '@/types'
 
 const CART_KEY = 'electromagaz_cart'
+const CART_UPDATED_EVENT = 'electromagaz:cart-updated'
 
 function loadCart(): CartItem[] {
   if (typeof window === 'undefined') return []
@@ -18,8 +19,9 @@ function loadCart(): CartItem[] {
 function saveCart(items: CartItem[]): void {
   try {
     localStorage.setItem(CART_KEY, JSON.stringify(items))
-  } catch {
-    // ignore storage errors
+    queueMicrotask(() => window.dispatchEvent(new Event(CART_UPDATED_EVENT)))
+  } catch (error) {
+    console.error('[cart] Failed to save cart:', error)
   }
 }
 
@@ -28,45 +30,62 @@ export function useCart() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // hydration from localStorage — required after mount
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setItems(loadCart())
-    setMounted(true)
-  }, [])
+    const syncCart = () => setItems(loadCart())
 
-  useEffect(() => {
-    if (mounted) saveCart(items)
-  }, [items, mounted])
+    // hydration from localStorage - required after mount
+    syncCart()
+    // Hydration readiness is intentionally established after the client reads localStorage.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true)
+    window.addEventListener(CART_UPDATED_EVENT, syncCart)
+    window.addEventListener('storage', syncCart)
+
+    return () => {
+      window.removeEventListener(CART_UPDATED_EVENT, syncCart)
+      window.removeEventListener('storage', syncCart)
+    }
+  }, [])
 
   const addItem = useCallback((product: Product, quantity = 1) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.product.id === product.id)
+      let next: CartItem[]
       if (existing) {
-        return prev.map((i) =>
+        next = prev.map((i) =>
           i.product.id === product.id
             ? { ...i, quantity: i.quantity + quantity }
             : i,
         )
+      } else {
+        next = [...prev, { product, quantity: Math.max(quantity, product.minOrder) }]
       }
-      return [...prev, { product, quantity: Math.max(quantity, product.minOrder) }]
+      saveCart(next)
+      return next
     })
   }, [])
 
   const removeItem = useCallback((productId: string) => {
-    setItems((prev) => prev.filter((i) => i.product.id !== productId))
+    setItems((prev) => {
+      const next = prev.filter((i) => i.product.id !== productId)
+      saveCart(next)
+      return next
+    })
   }, [])
 
   const updateQuantity = useCallback((productId: string, quantity: number) => {
-    setItems((prev) =>
-      prev.map((i) => {
+    setItems((prev) => {
+      const next = prev.map((i) => {
         if (i.product.id !== productId) return i
         const min = i.product.minOrder
         return { ...i, quantity: Math.max(min, quantity) }
-      }),
-    )
+      })
+      saveCart(next)
+      return next
+    })
   }, [])
 
   const clearCart = useCallback(() => {
+    saveCart([])
     setItems([])
   }, [])
 

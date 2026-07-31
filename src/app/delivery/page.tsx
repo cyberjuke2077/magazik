@@ -9,15 +9,13 @@ import {
   FileText,
   Phone,
   CheckCircle2,
-  AlertCircle,
   Package,
   Calculator,
 } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
-import { MIN_ORDER_AMOUNT, CONTACT_PHONE, REQUEST_PROCESSING_TIME } from '@/lib/constants'
-import { formatPrice } from '@/lib/utils'
+import { COMPANY } from '@/lib/company'
 
 const workflowSteps = [
   {
@@ -28,17 +26,17 @@ const workflowSteps = [
   {
     icon: Calculator,
     title: 'Согласование КП',
-    desc: 'Мы связываемся с вами в течение 24 часов, согласовываем цену, сроки и условия поставки',
+    desc: 'Менеджер проверяет позиции и согласовывает цену, сроки и условия поставки',
   },
   {
     icon: Building,
     title: 'Выставление счёта',
-    desc: 'После согласования выставляем счёт на оплату с полным пакетом документов',
+    desc: 'После согласования фиксируем состав документов и выставляем счёт на оплату',
   },
   {
     icon: Truck,
     title: 'Закупка и доставка',
-    desc: 'После оплаты закупаем товар у поставщиков и организуем доставку до вашего склада',
+    desc: 'После выполнения условий оплаты организуем поставку согласованным способом',
   },
 ]
 
@@ -46,20 +44,20 @@ const deliveryOptions = [
   {
     icon: Truck,
     name: 'Транспортная компания',
-    description: 'Организуем доставку через проверенные ТК (Деловые Линии, ПЭК, Байкал-Сервис). Стоимость и сроки рассчитываются индивидуально.',
-    features: ['Доставка до терминала или склада', 'Страхование груза', 'Трекинг отправления'],
+    description: 'Перевозчик, маршрут, стоимость и сроки согласуются в коммерческом предложении.',
+    features: ['До терминала или адреса', 'Условия страхования уточняются', 'Трекинг зависит от перевозчика'],
   },
   {
     icon: Package,
-    name: 'Курьерская доставка',
-    description: 'Для срочных заказов организуем курьерскую доставку по Москве и МО. Доставка в день готовности заказа.',
-    features: ['Доставка до двери', 'Гибкий график', 'Только Москва и МО'],
+    name: 'Адресная доставка',
+    description: 'Возможность адресной доставки проверяется для конкретного города и состава заказа.',
+    features: ['Адрес указывается в заявке', 'Срок подтверждает менеджер', 'Стоимость включается в КП'],
   },
   {
     icon: Building,
     name: 'Самовывоз',
-    description: 'Вы можете забрать заказ самостоятельно после согласования готовности. Предварительный звонок обязателен.',
-    features: ['Бесплатно', 'По предварительной договорённости', 'Москва'],
+    description: 'Возможность и адрес самовывоза указываются в коммерческом предложении, если этот вариант доступен.',
+    features: ['Только после подтверждения', 'Адрес фиксируется в КП', 'Дата согласуется заранее'],
   },
 ]
 
@@ -72,21 +70,21 @@ const paymentMethods = [
     badgeColor: 'text-azure bg-azure/8 border-azure/15',
     features: [
       'Оплата по счёту',
-      'Полный пакет документов (счёт, УПД, счёт-фактура)',
-      'Отсрочка платежа для постоянных клиентов',
-      'НДС 20%',
+      'Оплата по реквизитам из счёта',
+      'Состав документов фиксируется в КП',
+      'Налоговые условия указываются в счёте',
     ],
   },
   {
     icon: FileText,
-    name: 'Предоплата 100%',
-    description: 'Для новых клиентов требуется полная предоплата. После оплаты начинаем закупку товара.',
-    badge: 'Для новых клиентов',
+    name: 'Условия оплаты',
+    description: 'Порядок и срок оплаты согласуются для конкретной поставки и фиксируются в документах.',
+    badge: 'По согласованию',
     badgeColor: 'text-accent bg-accent/8 border-accent/15',
     features: [
       'Оплата после согласования КП',
-      'Закупка начинается после поступления средств',
-      'Все документы предоставляются',
+      'Условия фиксируются до поставки',
+      'Состав документов подтверждается отдельно',
     ],
   },
 ]
@@ -103,23 +101,23 @@ const documents = [
 const faq = [
   {
     q: 'Какая минимальная сумма заказа?',
-    a: `Минимальная сумма заказа - ${formatPrice(MIN_ORDER_AMOUNT)}. Мы работаем только с оптовыми заказами для юридических лиц и ИП.`,
+    a: 'Минимальная сумма и партия зависят от выбранных позиций и указываются в коммерческом предложении.',
   },
   {
     q: 'Как быстро вы отвечаете на запрос?',
-    a: `Мы обрабатываем запросы в течение ${REQUEST_PROCESSING_TIME} в рабочие дни. Вы получите коммерческое предложение с ценами и сроками поставки.`,
+    a: 'Менеджер обрабатывает заявку и связывается с вами для подтверждения цены, наличия и сроков поставки.',
   },
   {
     q: 'Откуда вы закупаете товар?',
-    a: 'Мы работаем напрямую с официальными дистрибьюторами и производителями. Все компоненты оригинальные, с сертификатами.',
+    a: 'Источник поставки и доступные документы проверяются для конкретной позиции до согласования коммерческого предложения.',
   },
   {
     q: 'Какие сроки поставки?',
-    a: 'Сроки зависят от наличия товара у поставщиков. Обычно 7-21 день с момента оплаты. Точные сроки согласовываем в коммерческом предложении.',
+    a: 'Срок зависит от наличия и маршрута поставки. Точная дата указывается в коммерческом предложении.',
   },
   {
     q: 'Можно ли получить отсрочку платежа?',
-    a: 'Да, для постоянных клиентов возможна отсрочка платежа до 30 дней. Условия обсуждаются индивидуально.',
+    a: 'Порядок оплаты является предметом конкретного коммерческого предложения и договора.',
   },
   {
     q: 'Работаете ли вы с физическими лицами?',
@@ -131,7 +129,7 @@ const faq = [
   },
   {
     q: 'Возможен ли возврат товара?',
-    a: 'Возврат возможен в течение 14 дней, если товар ненадлежащего качества или не соответствует заказу. Товар должен быть в оригинальной упаковке, без следов монтажа.',
+    a: 'Условия возврата определяются договором, коммерческим предложением и применимым законодательством. Для обращения свяжитесь с менеджером.',
   },
 ]
 
@@ -158,8 +156,8 @@ export default function DeliveryPage() {
           <div className="mx-auto max-w-[1380px] px-3 sm:px-6">
             <h1 className="mb-2 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Условия работы и доставка</h1>
             <p className="text-ink-3 max-w-2xl text-lg">
-              Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа - {formatPrice(MIN_ORDER_AMOUNT)}.
-              Подтверждаем заказ в течение {REQUEST_PROCESSING_TIME}.
+              Работаем под заказ с юридическими лицами и ИП. Цена, минимальная партия,
+              способ оплаты и срок поставки подтверждаются в коммерческом предложении.
             </p>
           </div>
         </div>
@@ -170,8 +168,8 @@ export default function DeliveryPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               { icon: Building, label: 'Только для бизнеса', sub: 'Юр. лица и ИП', color: 'text-azure', bg: 'bg-azure-light' },
-              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-azure', bg: 'bg-azure-light' },
-              { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-azure', bg: 'bg-azure-light' },
+              { icon: Calculator, label: 'Условия в КП', sub: 'Цена и минимальная партия', color: 'text-azure', bg: 'bg-azure-light' },
+              { icon: Clock, label: 'Связь с менеджером', sub: 'После обработки заявки', color: 'text-azure', bg: 'bg-azure-light' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <div className={`flex size-12 items-center justify-center rounded-lg ${item.bg} shrink-0`}>
@@ -236,7 +234,7 @@ export default function DeliveryPage() {
             <div className="mt-6 rounded-2xl bg-azure-light p-5">
               <p className="text-sm text-blue-800">
                 <strong>Важно:</strong> Стоимость и сроки доставки рассчитываются индивидуально и включаются в коммерческое предложение.
-                Мы организуем доставку до вашего склада или терминала ТК в вашем городе.
+                Доступные варианты и маршрут подтверждаются менеджером до согласования заказа.
               </p>
             </div>
           </section>
@@ -275,7 +273,7 @@ export default function DeliveryPage() {
             <h2 className="text-2xl font-bold text-ink mb-6">Документы</h2>
             <div className="rounded-2xl bg-white p-8 shadow-sm">
               <p className="text-sm text-ink-3 mb-6">
-                Мы предоставляем полный пакет документов для бухгалтерии. Все документы оформляются в соответствии с требованиями законодательства РФ.
+                Возможный комплект документов перечислен ниже. Фактический состав подтверждается для конкретной поставки в КП или договоре.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {documents.map((doc) => (
@@ -292,50 +290,11 @@ export default function DeliveryPage() {
           <section>
             <h2 className="text-2xl font-bold text-ink mb-6">Возврат и обмен</h2>
             <div className="rounded-2xl bg-white p-8 shadow-sm">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
-                    <CheckCircle2 size={20} className="text-green-600" />
-                    Принимаем возврат
-                  </h3>
-                  <ul className="space-y-3">
-                    {[
-                      'Товар ненадлежащего качества',
-                      'Товар не соответствует заказу',
-                      'Брак или дефект компонента',
-                      'Повреждение при транспортировке',
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-ink-2">
-                        <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
-                    <AlertCircle size={20} className="text-accent" />
-                    Не принимаем возврат
-                  </h3>
-                  <ul className="space-y-3">
-                    {[
-                      'Товар надлежащего качества',
-                      'Товар со следами монтажа или пайки',
-                      'Нарушена заводская упаковка',
-                      'Прошло более 14 дней с момента получения',
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm text-ink-2">
-                        <AlertCircle size={16} className="text-accent shrink-0 mt-0.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="mt-6 pt-6 border-t border-[var(--border)] text-sm text-ink-3">
-                Для оформления возврата свяжитесь с нами в течение 14 дней с момента получения заказа.
-                Возврат денежных средств осуществляется в течение 10 рабочих дней после получения товара.
-              </div>
+              <p className="text-sm leading-relaxed text-ink-3">
+                Возможность и порядок возврата зависят от причины обращения, состояния товара,
+                условий конкретной поставки и применимого законодательства. Направьте менеджеру
+                номер заявки и описание ситуации - обращение будет рассмотрено по документам сделки.
+              </p>
             </div>
           </section>
 
@@ -370,7 +329,7 @@ export default function DeliveryPage() {
                   Выбрать товары
                 </Link>
                 <a
-                  href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
+                  href={`tel:${COMPANY.phone.raw}`}
                   className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white transition-all hover:bg-white/20"
                 >
                   <Phone size={16} />

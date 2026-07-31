@@ -17,6 +17,7 @@ export function RequestStatusSelect({
 
   return (
     <select
+      aria-label="Статус заявки"
       defaultValue={current}
       disabled={pending}
       onChange={(e) => {

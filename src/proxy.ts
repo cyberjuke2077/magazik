@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { ADMIN_COOKIE, verifySessionToken } from '@/lib/admin-auth'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Страница логина доступна без сессии
@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get(ADMIN_COOKIE)?.value
   if (await verifySessionToken(token)) return NextResponse.next()
 
-  // API — 401, страницы — редирект на логин
+  // API - 401, страницы - редирект на логин
   if (pathname.startsWith('/api/')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }

@@ -28,4 +28,13 @@ describe('validateWholesaleInput', () => {
     expect(result.valid).toBe(false)
     expect(result.error).toBeDefined()
   })
+
+  it('rejects a non-string required field received at runtime', () => {
+    const malformed = {
+      ...validInput,
+      name: { unexpected: true },
+    } as unknown as Parameters<typeof validateWholesaleInput>[0]
+
+    expect(validateWholesaleInput(malformed).valid).toBe(false)
+  })
 })

@@ -16,6 +16,9 @@ export const SESSION_TTL_HOURS = 24 * 7 // неделя
 function getSigningKey(): string {
   const s = process.env.ADMIN_SESSION_SECRET
   if (!s) throw new Error('ADMIN_SESSION_SECRET не задан')
+  if (new TextEncoder().encode(s).length < 32) {
+    throw new Error('ADMIN_SESSION_SECRET должен содержать не менее 32 байт')
+  }
   // Пароль в материале ключа: смена ADMIN_PASSWORD инвалидирует все
   // активные сессии (старые подписи перестают сходиться).
   return `${s}:${process.env.ADMIN_PASSWORD ?? ''}`

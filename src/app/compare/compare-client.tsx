@@ -81,7 +81,10 @@ export function CompareClient() {
               alt="Пустой список сравнения Electromagaz"
               width={350}
               height={230}
-              className="mx-auto h-[210px] w-[350px] object-contain"
+              loading="eager"
+              fetchPriority="high"
+              style={{ width: 'auto', height: 'auto' }}
+              className="mx-auto object-contain"
             />
             <div className="max-w-xl">
               <h1 className="mb-3 text-[24px] font-bold leading-tight text-ink">Список сравнения пуст</h1>
@@ -203,25 +206,6 @@ export function CompareClient() {
                       </div>
                     ) : (
                       <span className="text-gray-400 text-xs">по запросу</span>
-                    )}
-                  </td>
-                ))}
-              </tr>
-
-              {/* Stock row */}
-              <tr>
-                <td className="sticky left-0 bg-gray-50 border-b border-r border-gray-200 px-4 py-3 font-semibold text-gray-700">
-                  Наличие
-                </td>
-                {products.map((p) => (
-                  <td key={p.id} className="border-b border-r border-gray-200 last:border-r-0 px-4 py-3">
-                    {p.inStock ? (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-azure">
-                        <span className="size-1.5 rounded-full bg-azure animate-pulse-dot" />
-                        {p.stockCount.toLocaleString('ru-RU')} {p.unit}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-accent font-semibold">Под заказ</span>
                     )}
                   </td>
                 ))}

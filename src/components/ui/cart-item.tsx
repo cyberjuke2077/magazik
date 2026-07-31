@@ -19,10 +19,11 @@ interface CartItemRowProps {
 interface QuantityInputProps {
   quantity: number
   minOrder: number
+  label: string
   onCommit: (quantity: number) => void
 }
 
-function QuantityInput({ quantity, minOrder, onCommit }: QuantityInputProps) {
+function QuantityInput({ quantity, minOrder, label, onCommit }: QuantityInputProps) {
   const [value, setValue] = useState(String(quantity))
 
   function commit() {
@@ -36,6 +37,7 @@ function QuantityInput({ quantity, minOrder, onCommit }: QuantityInputProps) {
 
   return (
     <input
+      aria-label={label}
       type="text"
       inputMode="numeric"
       value={value}
@@ -114,6 +116,7 @@ export function CartItemRow({
       {/* Quantity stepper */}
       <div className="col-span-2 col-start-2 row-start-2 flex w-[110px] items-center overflow-hidden rounded border border-[var(--border-2)] sm:col-span-1 sm:col-start-4 sm:row-start-1">
         <button
+          aria-label={`Уменьшить количество ${product.partNumber}`}
           onClick={() => {
             const newQty = quantity - 1
             if (newQty >= product.minOrder) onUpdateQuantity(product.id, newQty)
@@ -127,9 +130,11 @@ export function CartItemRow({
           key={quantity}
           quantity={quantity}
           minOrder={product.minOrder}
+          label={`Количество ${product.partNumber}`}
           onCommit={(nextQuantity) => onUpdateQuantity(product.id, nextQuantity)}
         />
         <button
+          aria-label={`Увеличить количество ${product.partNumber}`}
           onClick={() => onUpdateQuantity(product.id, quantity + 1)}
           className="w-8 h-9 flex items-center justify-center text-ink-3 hover:bg-gray-100 transition-colors border-l border-[var(--border-2)]"
         >

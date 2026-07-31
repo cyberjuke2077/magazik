@@ -46,9 +46,16 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run dev -- --webpack',
     url: baseURL,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,
+    env: {
+      TELEGRAM_BOT_TOKEN: '',
+      TELEGRAM_CHAT_ID: '',
+      ADMIN_USERNAME: 'mvp-admin',
+      ADMIN_PASSWORD: 'local-e2e-password',
+      ADMIN_SESSION_SECRET: 'local-e2e-session-secret-at-least-32-bytes',
+    },
   },
 })

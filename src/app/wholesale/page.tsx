@@ -24,39 +24,39 @@ import { Footer } from '@/components/layout/footer'
 import { COMPANY } from '@/lib/company'
 import { submitWholesaleLead } from './actions'
 
-const priceTiers = [
-  { from: 1, to: 99, label: 'Розница', discount: 0, color: 'text-ink-3', bg: 'bg-azure-light' },
-  { from: 100, to: 499, label: 'Мелкий опт', discount: 15, color: 'text-accent', bg: 'bg-accent/8' },
-  { from: 500, to: 1999, label: 'Средний опт', discount: 25, color: 'text-azure', bg: 'bg-azure/8' },
-  { from: 2000, to: null, label: 'Крупный опт', discount: 40, color: 'text-azure', bg: 'bg-azure/15' },
+const cooperationSteps = [
+  { label: 'Спецификация', description: 'Пришлите MPN, количество и желаемые сроки' },
+  { label: 'Проверка', description: 'Уточним доступность позиций и комплект документов' },
+  { label: 'Коммерческое предложение', description: 'Зафиксируем цены и условия конкретной поставки' },
+  { label: 'Согласование', description: 'Согласуем оплату, отгрузку и дальнейшие действия' },
 ]
 
 const benefits = [
   {
     icon: TrendingDown,
-    title: 'Скидки до 40%',
-    description: 'Прогрессивная система скидок в зависимости от объёма заказа',
+    title: 'Индивидуальные цены',
+    description: 'Рассчитываем предложение под состав и объём конкретной заявки',
     color: 'text-azure',
     bg: 'bg-azure/8',
   },
   {
     icon: FileText,
-    title: 'Полный пакет документов',
-    description: 'Счёт, накладная, счёт-фактура, сертификаты качества на все позиции',
+    title: 'Документы к поставке',
+    description: 'Состав доступных документов подтверждаем для конкретных позиций',
     color: 'text-accent',
     bg: 'bg-accent/8',
   },
   {
     icon: Package2,
-    title: 'Резервирование склада',
-    description: 'Резервируем нужные позиции под ваши регулярные заказы',
+    title: 'Планирование поставки',
+    description: 'Согласуем наличие, сроки и возможность резервирования позиций',
     color: 'text-azure',
     bg: 'bg-azure/8',
   },
   {
     icon: Headphones,
-    title: 'Персональный менеджер',
-    description: 'Выделенный менеджер для оптовых клиентов, помощь с подбором',
+    title: 'Связь с менеджером',
+    description: 'Можно направить запрос по MPN, аналогам и условиям поставки',
     color: 'text-accent',
     bg: 'bg-accent/8',
   },
@@ -64,11 +64,11 @@ const benefits = [
 
 const conditions = [
   'Работаем с юридическими лицами и ИП',
-  'Оплата по счёту, банковской картой или наличными',
-  'Отсрочка платежа для постоянных клиентов',
-  'Доставка по всей России и СНГ',
-  'Минимальная сумма оптового заказа - 10 000 ₽',
-  'Возможность заказа под конкретный проект',
+  'Цена, наличие и минимальная партия подтверждаются в коммерческом предложении',
+  'Способ и срок оплаты фиксируются в счёте или договоре',
+  'География и способ доставки согласуются для конкретной поставки',
+  'Комплект документов зависит от товара и условий сделки',
+  'Можно направить спецификацию под конкретный проект',
 ]
 
 export default function WholesalePage() {
@@ -139,6 +139,8 @@ export default function WholesalePage() {
             src="/storefront/hero-components.jpg"
             alt="Электронные компоненты для оптовой поставки"
             fill
+            loading="eager"
+            fetchPriority="high"
             className="object-cover object-center"
             sizes="100vw"
           />
@@ -153,7 +155,7 @@ export default function WholesalePage() {
                 Специальные условия<br />для бизнеса
               </h1>
               <p className="text-white/70 text-base max-w-lg">
-                Скидки до 40%, персональный менеджер, полный пакет документов.
+                Подбор по MPN, индивидуальное коммерческое предложение и согласование условий поставки.
                 Работаем с производителями, интеграторами и дистрибьюторами.
               </p>
             </div>
@@ -162,34 +164,21 @@ export default function WholesalePage() {
 
         <div className="mx-auto max-w-[1380px] space-y-9 px-3 py-8 sm:px-6">
 
-          {/* Price tiers */}
+          {/* Cooperation steps */}
           <section>
-            <h2 className="text-xl font-bold text-ink mb-2">Ценовые уровни</h2>
-            <p className="text-sm text-ink-3 mb-6">Скидка применяется автоматически при достижении порога</p>
+            <h2 className="text-xl font-bold text-ink mb-2">Как формируется предложение</h2>
+            <p className="text-sm text-ink-3 mb-6">Условия подтверждаются отдельно для каждой спецификации</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {priceTiers.map((tier) => (
+              {cooperationSteps.map((step, index) => (
                 <div
-                  key={tier.label}
-                  className={`relative flex flex-col rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
-                    tier.discount >= 25 ? 'ring-2 ring-azure/20' : ''
-                  }`}
+                  key={step.label}
+                  className="relative flex flex-col rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
-                  {tier.discount >= 25 && (
-                    <div className="absolute -top-2.5 left-4 px-2.5 py-0.5 bg-azure text-white text-[10px] font-semibold rounded-sm">
-                      Популярный
-                    </div>
-                  )}
-                  <div className={`inline-flex items-center self-start px-2.5 py-1 rounded text-xs font-semibold mb-3 ${tier.bg} ${tier.color}`}>
-                    {tier.label}
+                  <div className="mb-3 flex size-8 items-center justify-center rounded bg-azure-light text-sm font-bold text-azure">
+                    {index + 1}
                   </div>
-                  <div className="text-3xl font-bold text-ink mb-1">
-                    {tier.discount === 0 ? '-' : `-${tier.discount}%`}
-                  </div>
-                  <div className="text-xs text-ink-3">
-                    {tier.to
-                      ? `от ${tier.from} до ${tier.to} шт.`
-                      : `от ${tier.from} шт.`}
-                  </div>
+                  <h3 className="mb-1 text-sm font-semibold text-ink">{step.label}</h3>
+                  <p className="text-xs leading-relaxed text-ink-3">{step.description}</p>
                 </div>
               ))}
             </div>
@@ -230,7 +219,7 @@ export default function WholesalePage() {
               <div className="mt-6 rounded-2xl bg-azure-light p-5">
                 <h3 className="text-sm font-semibold text-ink mb-2">Нужна срочная поставка?</h3>
                 <p className="text-xs text-ink-3 mb-3">
-                  Позвоните нам - обсудим условия и сроки в течение 15 минут.
+                  Позвоните нам - менеджер уточнит задачу и доступные варианты поставки.
                 </p>
                 <a
                   href={`tel:${COMPANY.phone.raw}`}
@@ -253,17 +242,19 @@ export default function WholesalePage() {
                     </div>
                     <h3 className="text-base font-bold text-ink mb-2">Заявка отправлена!</h3>
                     <p className="text-sm text-ink-3">
-                      Наш менеджер свяжется с вами в течение 2 часов в рабочее время.
+                      Менеджер свяжется с вами, чтобы уточнить позиции и условия поставки.
                     </p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Имя *</label>
+                        <label htmlFor="wholesale-name" className="block text-xs font-medium text-[#44403c] mb-1.5">Имя *</label>
                         <div className="relative">
                           <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                           <input
+                            id="wholesale-name"
+                            name="name"
                             type="text"
                             value={form.name}
                             onChange={(e) => set('name', e.target.value)}
@@ -273,10 +264,12 @@ export default function WholesalePage() {
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-[#44403c] mb-1.5">Компания</label>
+                        <label htmlFor="wholesale-company" className="block text-xs font-medium text-[#44403c] mb-1.5">Компания</label>
                         <div className="relative">
                           <Building2 size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                           <input
+                            id="wholesale-company"
+                            name="company"
                             type="text"
                             value={form.company}
                             onChange={(e) => set('company', e.target.value)}
@@ -288,10 +281,12 @@ export default function WholesalePage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-[#44403c] mb-1.5">Email *</label>
+                      <label htmlFor="wholesale-email" className="block text-xs font-medium text-[#44403c] mb-1.5">Email *</label>
                       <div className="relative">
                         <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                         <input
+                          id="wholesale-email"
+                          name="email"
                           type="email"
                           value={form.email}
                           onChange={(e) => set('email', e.target.value)}
@@ -302,10 +297,12 @@ export default function WholesalePage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-[#44403c] mb-1.5">Телефон *</label>
+                      <label htmlFor="wholesale-phone" className="block text-xs font-medium text-[#44403c] mb-1.5">Телефон *</label>
                       <div className="relative">
                         <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                         <input
+                          id="wholesale-phone"
+                          name="phone"
                           type="tel"
                           value={form.phone}
                           onChange={(e) => set('phone', e.target.value)}
@@ -316,10 +313,12 @@ export default function WholesalePage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-[#44403c] mb-1.5">Сообщение</label>
+                      <label htmlFor="wholesale-message" className="block text-xs font-medium text-[#44403c] mb-1.5">Сообщение</label>
                       <div className="relative">
                         <MessageSquare size={14} className="absolute left-3 top-3 text-ink-4" />
                         <textarea
+                          id="wholesale-message"
+                          name="message"
                           value={form.message}
                           onChange={(e) => set('message', e.target.value)}
                           placeholder="Опишите ваши потребности: какие компоненты, объём, сроки..."
@@ -329,8 +328,10 @@ export default function WholesalePage() {
                       </div>
                     </div>
 
-                    <label className="flex items-start gap-2.5 cursor-pointer">
+                    <label htmlFor="wholesale-consent" className="flex items-start gap-2.5 cursor-pointer">
                       <input
+                        id="wholesale-consent"
+                        name="consent"
                         type="checkbox"
                         checked={consent}
                         onChange={(e) => setConsent(e.target.checked)}

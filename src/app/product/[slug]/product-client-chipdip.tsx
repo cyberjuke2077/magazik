@@ -170,6 +170,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                       width={400}
                       height={400}
                       loading="eager"
+                      fetchPriority="high"
                       className="h-full w-full object-contain p-4 transition-transform duration-700 ease-out hover:scale-105"
                       unoptimized={photos[activePhoto].startsWith('/')}
                     />
@@ -190,6 +191,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                   <div className="flex items-center gap-2">
                     <span className="text-ink font-bold text-sm">{product.partNumber}</span>
                     <button
+                      aria-label="Уменьшить количество"
                       onClick={() => handleCopy(product.partNumber, 'partNumber')}
                       className="relative opacity-50 hover:opacity-100 transition-opacity"
                       title="Копировать"
@@ -284,10 +286,6 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                   {product.price > 0 && (
                     <div className="mt-2 text-xs text-ink-4">за {product.unit}</div>
                   )}
-                  <div className={`mt-3 text-sm font-semibold ${product.inStock ? 'text-stock' : 'text-ink-3'}`}>
-                    {product.inStock ? 'В наличии' : 'Под заказ'}
-                    {product.stockCount > 0 ? `: ${product.stockCount.toLocaleString('ru-RU')} ${product.unit}` : ''}
-                  </div>
                 </div>
 
                 {/* Quantity */}
@@ -305,12 +303,14 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                       <Minus size={15} />
                     </button>
                     <input
+                      aria-label="Количество"
                       type="number"
                       value={quantity}
                       onChange={(e) => setQuantity(Math.max(product.minOrder, parseInt(e.target.value) || product.minOrder))}
                       className="w-[64px] h-10 text-center border-x border-[var(--border-2)] font-bold text-lg outline-none"
                     />
                     <button
+                      aria-label="Увеличить количество"
                       onClick={() => setQuantity(quantity + 1)}
                       className="w-10 h-10 flex items-center justify-center bg-[#f8fafc] text-ink-2 hover:bg-white hover:text-black font-bold transition-colors"
                     >

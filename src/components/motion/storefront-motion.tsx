@@ -1,12 +1,12 @@
 'use client'
 
-import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(useGSAP, ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger)
 }
 
 function revealElements() {
@@ -59,7 +59,7 @@ function scrubText() {
 export function StorefrontMotion() {
   const pathname = usePathname()
 
-  useGSAP(() => {
+  useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     let motionContext: gsap.Context | undefined
@@ -76,7 +76,7 @@ export function StorefrontMotion() {
       window.clearTimeout(timer)
       motionContext?.revert()
     }
-  }, { dependencies: [pathname], revertOnUpdate: true })
+  }, [pathname])
 
   return null
 }

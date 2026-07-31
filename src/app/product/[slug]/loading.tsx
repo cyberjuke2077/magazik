@@ -4,7 +4,7 @@ import { Footer } from '@/components/layout/footer'
 
 export default function ProductLoading() {
   return (
-    <>
+    <div aria-label="Загрузка товара" aria-live="polite">
       <Header />
       <StickyNav />
       <main className="flex-1 bg-canvas">
@@ -67,6 +67,6 @@ export default function ProductLoading() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   )
 }

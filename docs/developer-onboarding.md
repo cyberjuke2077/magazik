@@ -42,16 +42,23 @@ openssl rand -hex 32
 
 ```bash
 docker compose up -d postgres
-npm run db:migrate
+npm run db:migrate:local
 npm run db:generate
-npm run dev
+npm run db:seed:local-mvp
+npm run dev:local
 ```
+
+Если старый Docker volume использует прежний пароль роли, один раз выполни
+`npm run db:sync-local-password`, затем повтори миграции. Команда изменяет только
+локальную PostgreSQL и не подключается к Supabase.
 
 Открой `http://localhost:3000`. Проверить базу можно так:
 
 ```bash
 docker compose ps
 npm run db:studio
+npm run db:stats:local
+npm run db:check:local-mvp
 ```
 
 ### Что будет в чистом окружении
@@ -64,11 +71,17 @@ npm run db:studio
 
 ```bash
 npm test
+npm run test:integration
 npm run lint
-npm run build
+npm run build:local
+npm run test:e2e:local
+npm run check:db-failure:local
 ```
 
-Для e2e-тестов сначала запусти dev-сервер, затем используй `npm run test:e2e`. Интеграционные тесты и enrichment требуют внешние сервисы, поэтому не запускай их наугад.
+`test:e2e:local` сам запускает временный dev-сервер и Chromium на локальной БД.
+`check:db-failure:local` запускается после сборки и проверяет безопасную страницу
+ошибки с намеренно недоступной тестовой БД. Enrichment и внешние сервисы в этот
+локальный набор не входят.
 
 ## 5. Работа с Codex и вторым мозгом
 

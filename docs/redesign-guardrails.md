@@ -91,7 +91,8 @@ request-list в один UX — это не потеря данных, они и
 
 ### Уведомления (Telegram)
 - `src/lib/notifications.ts`: `notifyNewQuoteRequest`, `notifyNewWholesaleLead` → общий `sendTelegram`.
-- Env-зависимо: без `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` уведомления тихо выключены (fail-safe).
+- Env-зависимо: без `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` заявка сохраняется,
+  а структурированный лог получает `notificationStatus: not_configured`.
   Сбой Telegram НЕ ломает сохранение заявки/лида.
 - Редизайн: вёрстки не касается, но не убирать вызовы notify из server actions.
 

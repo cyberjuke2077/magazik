@@ -7,11 +7,10 @@ import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 
 interface ErrorProps {
-  error: Error & { digest?: string }
   reset: () => void
 }
 
-export default function CatalogError({ error, reset }: ErrorProps) {
+export default function CatalogError({ reset }: ErrorProps) {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Header />
@@ -25,7 +24,7 @@ export default function CatalogError({ error, reset }: ErrorProps) {
             Ошибка загрузки каталога
           </h1>
           <p className="text-sm text-ink-3 mb-6 leading-relaxed">
-            {error.message || 'Что-то пошло не так. Попробуйте обновить страницу.'}
+            Не удалось загрузить каталог. Попробуйте ещё раз или вернитесь на главную страницу.
           </p>
           <div className="flex items-center justify-center gap-3">
             <button onClick={reset} className="ui-btn ui-btn-primary">

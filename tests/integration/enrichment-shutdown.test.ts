@@ -312,11 +312,26 @@ function waitForExit(
 }
 
 /**
- * Дать ОС время полностью убрать дочерние процессы из таблицы (после exit
- * родителя ядру нужно несколько мс на reparent / zombie reap).
+ * Дождаться, пока ОС полностью уберёт дочерние процессы из таблицы. На Windows
+ * завершение дерева процессов может быть отложено на несколько секунд после
+ * exit родителя, поэтому один мгновенный снимок даёт ложные orphan-срабатывания.
+ * Постоянный orphan всё равно будет возвращён по истечении ограниченного срока.
  */
-async function settle(ms = 3_000): Promise<void> {
-  await sleep(ms)
+async function waitForNoNewChromium(
+  before: number[],
+  timeoutMs = 10_000,
+): Promise<number[]> {
+  const deadline = Date.now() + timeoutMs
+  let orphans: number[] = []
+
+  do {
+    const after = await snapshotChromiumPids()
+    orphans = diffOrphans(before, after)
+    if (orphans.length === 0) return []
+    await sleep(500)
+  } while (Date.now() < deadline)
+
+  return orphans
 }
 
 function formatOrphanFailure(scenario: string, orphans: number[], result: RunResult): string {
@@ -336,9 +351,7 @@ describeSignalShutdown('enrichment shutdown - Bug A exploration (UNFIXED code)',
   it('SIGINT during in-flight searchMpn leaves no orphaned Chromium processes', async () => {
     const before = await snapshotChromiumPids()
     const result = await runAndSignal({ signal: 'SIGINT' })
-    await settle()
-    const after = await snapshotChromiumPids()
-    const orphans = diffOrphans(before, after)
+    const orphans = await waitForNoNewChromium(before)
 
     if (orphans.length > 0) {
        
@@ -357,9 +370,7 @@ describeSignalShutdown('enrichment shutdown - Bug A exploration (UNFIXED code)',
   it('SIGTERM also leaves no orphans', async () => {
     const before = await snapshotChromiumPids()
     const result = await runAndSignal({ signal: 'SIGTERM' })
-    await settle()
-    const after = await snapshotChromiumPids()
-    const orphans = diffOrphans(before, after)
+    const orphans = await waitForNoNewChromium(before)
 
     if (orphans.length > 0) {
        
@@ -378,9 +389,7 @@ describeSignalShutdown('enrichment shutdown - Bug A exploration (UNFIXED code)',
   it('double SIGINT during in-flight searchMpn still completes shutdown without leaks', async () => {
     const before = await snapshotChromiumPids()
     const result = await runAndSignal({ signal: 'SIGINT', doubleSignal: true })
-    await settle()
-    const after = await snapshotChromiumPids()
-    const orphans = diffOrphans(before, after)
+    const orphans = await waitForNoNewChromium(before)
 
     if (orphans.length > 0) {
        
@@ -409,9 +418,7 @@ describeSignalShutdown('enrichment shutdown - Bug A exploration (UNFIXED code)',
           // в текущем тесте очередь — TEST_MPNS длиной 2.
           const before = await snapshotChromiumPids()
           const result = await runAndSignal({ signal })
-          await settle()
-          const after = await snapshotChromiumPids()
-          const orphans = diffOrphans(before, after)
+          const orphans = await waitForNoNewChromium(before)
           if (orphans.length > 0) {
              
             console.error(
@@ -547,10 +554,7 @@ describe('happy-path shutdown', () => {
     const before = await snapshotChromiumPids()
 
     const result = await runUntilNaturalExit(HAPPY_PATH_BUDGET_MS + 5_000)
-    await settle()
-
-    const after = await snapshotChromiumPids()
-    const orphans = diffOrphans(before, after)
+    const orphans = await waitForNoNewChromium(before)
 
     if (orphans.length > 0) {
       const processInfo = await describeProcessPids(orphans)
@@ -579,9 +583,7 @@ describe('happy-path shutdown', () => {
         void _mpnsCount
         const before = await snapshotChromiumPids()
         const result = await runUntilNaturalExit(HAPPY_PATH_BUDGET_MS + 5_000)
-        await settle()
-        const after = await snapshotChromiumPids()
-        const orphans = diffOrphans(before, after)
+        const orphans = await waitForNoNewChromium(before)
 
         expect(result.exitCode).toBe(0)
         expect(result.durationMs).toBeLessThan(HAPPY_PATH_BUDGET_MS)

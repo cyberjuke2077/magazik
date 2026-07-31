@@ -206,6 +206,28 @@ model Datasheet {
 
 **Why separate model?** Products often have multiple datasheets (different languages, revisions, application notes).
 
+### SubmissionRateLimit
+
+Короткоживущие счётчики для публичных форм и входа в админку.
+
+```prisma
+model SubmissionRateLimit {
+  key         String   @id
+  scope       String
+  count       Int      @default(1)
+  windowStart DateTime
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([expiresAt])
+}
+```
+
+`key` является SHA-256 от области, временного окна и хэшированного идентификатора
+клиента. Исходные IP, email, телефон и другие контактные данные в таблицу не
+записываются. Просроченные счётчики удаляются при следующем обращении к форме.
+
 ### ProductAnalog
 Many-to-many self-relation for alternative/compatible products.
 

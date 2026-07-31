@@ -1,9 +1,9 @@
 /**
  * Уведомления о событиях магазина. Сейчас — Telegram.
  *
- * Env (опционально — без них уведомления тихо пропускаются):
- *   TELEGRAM_BOT_TOKEN — токен бота от @BotFather
- *   TELEGRAM_CHAT_ID   — id чата получателя
+ * Env:
+ *   TELEGRAM_BOT_TOKEN - токен бота от @BotFather
+ *   TELEGRAM_CHAT_ID   - id чата получателя
  */
 
 interface QuoteNotification {
@@ -25,19 +25,24 @@ interface WholesaleNotification {
   message?: string | null
 }
 
+export type NotificationDelivery =
+  | { status: 'sent' }
+  | { status: 'not_configured' }
+  | { status: 'failed'; errorType: string }
+
 function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 /**
- * Низкоуровневая отправка в Telegram. Никогда не бросает исключение —
+ * Низкоуровневая отправка в Telegram. Никогда не бросает исключение -
  * сбой уведомления не должен ломать бизнес-операцию (сохранение заявки/лида).
- * Если env не заданы — тихо пропускаем (уведомления просто выключены).
+ * Результат возвращается вызывающему коду для структурированного лога.
  */
-async function sendTelegram(text: string): Promise<void> {
+async function sendTelegram(text: string): Promise<NotificationDelivery> {
   const token = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_CHAT_ID
-  if (!token || !chatId) return
+  if (!token || !chatId) return { status: 'not_configured' }
 
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -47,16 +52,20 @@ async function sendTelegram(text: string): Promise<void> {
       signal: AbortSignal.timeout(10_000),
     })
     if (!res.ok) {
-      console.error('[notify] Telegram ответил', res.status, await res.text())
+      return { status: 'failed', errorType: `TelegramHttp${res.status}` }
     }
+    return { status: 'sent' }
   } catch (e) {
-    console.error('[notify] Telegram недоступен:', e instanceof Error ? e.message : e)
+    return {
+      status: 'failed',
+      errorType: e instanceof Error ? e.name : 'UnknownError',
+    }
   }
 }
 
 /** Уведомление о новой заявке на КП. */
-export async function notifyNewQuoteRequest(q: QuoteNotification): Promise<void> {
-  const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
+export async function notifyNewQuoteRequest(q: QuoteNotification): Promise<NotificationDelivery> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
   const text = [
     '🔔 <b>Новая заявка на КП</b>',
     '',
@@ -70,12 +79,12 @@ export async function notifyNewQuoteRequest(q: QuoteNotification): Promise<void>
     `${baseUrl}/admin/requests/${q.requestId}`,
   ].join('\n')
 
-  await sendTelegram(text)
+  return sendTelegram(text)
 }
 
 /** Уведомление о новой оптовой заявке (страница /wholesale). */
-export async function notifyNewWholesaleLead(w: WholesaleNotification): Promise<void> {
-  const baseUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
+export async function notifyNewWholesaleLead(w: WholesaleNotification): Promise<NotificationDelivery> {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
   const text = [
     '🟠 <b>Новая оптовая заявка</b>',
     '',
@@ -88,5 +97,5 @@ export async function notifyNewWholesaleLead(w: WholesaleNotification): Promise<
     `${baseUrl}/admin/wholesale`,
   ].join('\n')
 
-  await sendTelegram(text)
+  return sendTelegram(text)
 }

@@ -25,6 +25,7 @@ function isNewProduct(createdAt?: string): boolean {
 interface ProductCardProps {
   product: Product
   showDiscount?: boolean
+  priority?: boolean
 }
 
 // Единая тема - azure (30% палитра)
@@ -33,7 +34,7 @@ const cardTheme = {
   iconColor: 'text-azure',
 }
 
-export function ProductCard({ product, showDiscount = true }: ProductCardProps) {
+export function ProductCard({ product, showDiscount = true, priority = false }: ProductCardProps) {
   const discountPercent = product.priceWholesale
     ? Math.round((1 - product.priceWholesale / product.price) * 100)
     : null
@@ -91,6 +92,8 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
             src={product.images[0]}
             alt={product.name}
             fill
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
             className="z-10 object-contain p-3 transition-transform duration-300 group-hover:scale-105"
           />
@@ -99,6 +102,8 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
             src={packageSvg}
             alt={`${product.name} - корпус`}
             fill
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
             className="z-10 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
           />
@@ -162,17 +167,7 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
           {product.partNumber}
         </div>
 
-        {/* Stock + delivery */}
-        <div className="flex items-center gap-2 text-[11px]">
-          {product.inStock ? (
-            <span className="font-semibold text-stock">
-              {product.stockCount.toLocaleString('ru-RU')} шт
-            </span>
-          ) : (
-            <span className="font-semibold text-accent">Под заказ</span>
-          )}
-          <span className="text-ink-4">1-2 недели</span>
-        </div>
+        <div className="text-[11px] text-ink-4">1-2 недели</div>
 
         {/* Price */}
         <div className="pt-0.5">

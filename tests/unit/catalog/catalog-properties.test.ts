@@ -344,6 +344,25 @@ describe('Property 6: QuoteRequest validation', () => {
     )
   })
 
+  it('duplicate products, fractional quantities and malformed dates are rejected', () => {
+    fc.assert(
+      fc.property(validInputArb, (base) => {
+        const duplicate = [base.items[0], base.items[0]]
+        expect(validateQuoteInput({ ...base, items: duplicate }).valid).toBe(false)
+        expect(
+          validateQuoteInput({
+            ...base,
+            items: [{ ...base.items[0], quantity: 1.5 }],
+          }).valid,
+        ).toBe(false)
+        expect(
+          validateQuoteInput({ ...base, desiredDeliveryDate: 'not-a-date' }).valid,
+        ).toBe(false)
+      }),
+      { numRuns: 30 },
+    )
+  })
+
   it('all valid statuses are recognized', () => {
     fc.assert(
       fc.property(

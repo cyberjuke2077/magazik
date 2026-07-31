@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import {
   ChevronRight,
   ArrowLeft,
@@ -19,7 +18,6 @@ import { formatPrice } from '@/lib/utils'
 import { submitQuoteRequest } from '@/app/request-list/actions'
 
 export default function RequestQuotePage() {
-  const router = useRouter()
   const { items, totalPrice, mounted, clearCart } = useCart()
 
   const [formData, setFormData] = useState({
@@ -116,7 +114,7 @@ export default function RequestQuotePage() {
 
     if (result.success) {
       clearCart()
-      router.push(`/request-quote/status/${result.requestId}`)
+      window.location.assign(`/request-quote/status/${result.requestId}`)
     } else {
       setSubmitError(result.error)
     }
@@ -195,10 +193,10 @@ export default function RequestQuotePage() {
         <div className="mx-auto max-w-5xl px-3 sm:px-6">
           <div className="mb-5">
             <h1 className="text-2xl font-bold text-ink mb-2">
-              Оформление заказа
+              Запрос коммерческого предложения
             </h1>
             <p className="text-sm text-ink-3">
-              Укажите контактные данные. Мы подтвердим цены и сроки поставки в течение 24 часов.
+              Укажите контактные данные. Менеджер свяжется с вами, чтобы подтвердить цены и сроки поставки.
             </p>
           </div>
 
@@ -212,10 +210,12 @@ export default function RequestQuotePage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                  <label htmlFor="companyName" className="block text-sm font-medium text-ink-2 mb-1.5">
                     Название компании <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="companyName"
+                    name="companyName"
                     type="text"
                     value={formData.companyName}
                     onChange={(e) => handleChange('companyName', e.target.value)}
@@ -230,10 +230,12 @@ export default function RequestQuotePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                  <label htmlFor="inn" className="block text-sm font-medium text-ink-2 mb-1.5">
                     ИНН <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="inn"
+                    name="inn"
                     type="text"
                     value={formData.inn}
                     onChange={(e) => handleChange('inn', e.target.value)}
@@ -249,10 +251,12 @@ export default function RequestQuotePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                  <label htmlFor="contactPerson" className="block text-sm font-medium text-ink-2 mb-1.5">
                     Контактное лицо <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="contactPerson"
+                    name="contactPerson"
                     type="text"
                     value={formData.contactPerson}
                     onChange={(e) => handleChange('contactPerson', e.target.value)}
@@ -267,10 +271,12 @@ export default function RequestQuotePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                  <label htmlFor="phone" className="block text-sm font-medium text-ink-2 mb-1.5">
                     Телефон <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="phone"
+                    name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
@@ -285,10 +291,12 @@ export default function RequestQuotePage() {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                  <label htmlFor="email" className="block text-sm font-medium text-ink-2 mb-1.5">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="email"
+                    name="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleChange('email', e.target.value)}
@@ -313,10 +321,12 @@ export default function RequestQuotePage() {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                  <label htmlFor="comment" className="block text-sm font-medium text-ink-2 mb-1.5">
                     Комментарий к заказу
                   </label>
                   <textarea
+                    id="comment"
+                    name="comment"
                     value={formData.comment}
                     onChange={(e) => handleChange('comment', e.target.value)}
                     placeholder="Укажите дополнительные пожелания или требования к заказу"
@@ -327,10 +337,12 @@ export default function RequestQuotePage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                    <label htmlFor="desiredDeliveryDate" className="block text-sm font-medium text-ink-2 mb-1.5">
                       Желаемая дата поставки
                     </label>
                     <input
+                      id="desiredDeliveryDate"
+                      name="desiredDeliveryDate"
                       type="date"
                       value={formData.desiredDeliveryDate}
                       onChange={(e) => handleChange('desiredDeliveryDate', e.target.value)}
@@ -340,10 +352,12 @@ export default function RequestQuotePage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-ink-2 mb-1.5">
+                    <label htmlFor="deliveryAddress" className="block text-sm font-medium text-ink-2 mb-1.5">
                       Адрес доставки
                     </label>
                     <input
+                      id="deliveryAddress"
+                      name="deliveryAddress"
                       type="text"
                       value={formData.deliveryAddress}
                       onChange={(e) => handleChange('deliveryAddress', e.target.value)}
@@ -396,8 +410,10 @@ export default function RequestQuotePage() {
             </div>
 
             {/* Согласие на обработку ПДн (152-ФЗ) */}
-            <label className="flex items-start gap-3 cursor-pointer">
+            <label htmlFor="consent" className="flex items-start gap-3 cursor-pointer">
               <input
+                id="consent"
+                name="consent"
                 type="checkbox"
                 checked={consent}
                 onChange={(e) => setConsent(e.target.checked)}
@@ -441,7 +457,7 @@ export default function RequestQuotePage() {
                 ) : (
                   <>
                     <CheckCircle size={16} />
-                    Оформить заказ
+                    Отправить заявку
                   </>
                 )}
               </button>

@@ -17,7 +17,7 @@ function SkeletonRow() {
 
 export default function CatalogLoading() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white" aria-label="Загрузка каталога" aria-live="polite">
       <Header />
       <StickyNav />
 

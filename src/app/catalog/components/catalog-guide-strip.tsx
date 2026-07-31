@@ -44,7 +44,8 @@ export function CatalogGuideStrip() {
             fill
             className="object-cover opacity-62 transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
             sizes="220px"
-            loading={index === 0 ? 'eager' : 'lazy'}
+            loading={index < 4 ? 'eager' : 'lazy'}
+            fetchPriority={index < 4 ? 'high' : 'auto'}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/28" />
           <div className="relative flex h-full max-w-[17ch] items-center p-4 text-[14px] font-bold leading-[1.2] text-ink">

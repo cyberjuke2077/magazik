@@ -1,24 +1,10 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Suspense } from 'react'
 import './globals.css'
 import { ToastProvider } from '@/components/ui/toast'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
-import { StorefrontMotion } from '@/components/motion/storefront-motion'
-
-const geist = Geist({
-  variable: '--font-ui',
-  subsets: ['cyrillic', 'latin'],
-  display: 'swap',
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-code',
-  subsets: ['latin'],
-  display: 'swap',
-})
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 
@@ -29,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | Electromagaz',
   },
   description:
-    'Интернет-магазин электронных компонентов: резисторы, конденсаторы, микросхемы, датчики, контроллеры. Оптом и в розницу. Отправка в день заказа.',
+    'Каталог электронных компонентов для бизнеса: поиск по MPN, подбор позиций и запрос коммерческого предложения.',
   keywords: ['электронные компоненты', 'резисторы', 'конденсаторы', 'микросхемы', 'Arduino', 'STM32'],
   openGraph: {
     type: 'website',
@@ -49,14 +35,21 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={`${geist.variable} ${geistMono.variable}`}>
+    <html lang="ru" data-scroll-behavior="smooth">
       <body className="min-h-screen bg-canvas antialiased">
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white shadow-lg transition-transform focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-azure focus:ring-offset-2"
+        >
+          К основному содержанию
+        </a>
         <ToastProvider>
-          <StorefrontMotion />
           <Suspense fallback={null}>
             <NavProgress />
           </Suspense>
-          {children}
+          <div id="main-content" tabIndex={-1}>
+            {children}
+          </div>
           <CompareBar />
           <ScrollToTop />
         </ToastProvider>

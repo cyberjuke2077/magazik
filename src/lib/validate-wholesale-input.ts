@@ -13,18 +13,24 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function validateWholesaleInput(input: WholesaleLeadInput): WholesaleValidationResult {
   // Согласие на ПДн (ФЗ-152): проверяем на сервере, клиентский чекбокс обходится
-  if (!input.consent) {
+  if (input.consent !== true) {
     return { valid: false, error: 'Необходимо согласие на обработку персональных данных' }
   }
 
-  if (!input.name?.trim()) {
+  if (typeof input.name !== 'string' || !input.name.trim()) {
     return { valid: false, error: 'Укажите имя' }
   }
-  if (!input.phone?.trim()) {
+  if (typeof input.phone !== 'string' || !input.phone.trim()) {
     return { valid: false, error: 'Укажите телефон' }
   }
-  if (!input.email?.trim()) {
+  if (typeof input.email !== 'string' || !input.email.trim()) {
     return { valid: false, error: 'Укажите email' }
+  }
+  if (
+    (input.company != null && typeof input.company !== 'string') ||
+    (input.message != null && typeof input.message !== 'string')
+  ) {
+    return { valid: false, error: 'Некорректный формат одного из полей' }
   }
 
   // Format checks — отсекаем мусорные лиды
@@ -39,10 +45,10 @@ export function validateWholesaleInput(input: WholesaleLeadInput): WholesaleVali
   // Length limits
   if (
     input.name.length > MAX_FIELD ||
-    (input.company?.length ?? 0) > MAX_FIELD ||
+    (typeof input.company === 'string' ? input.company.length : 0) > MAX_FIELD ||
     input.email.length > MAX_FIELD ||
     input.phone.length > MAX_FIELD ||
-    (input.message?.length ?? 0) > MAX_MESSAGE
+    (typeof input.message === 'string' ? input.message.length : 0) > MAX_MESSAGE
   ) {
     return { valid: false, error: 'Превышена допустимая длина одного из полей' }
   }

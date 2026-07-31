@@ -21,6 +21,7 @@ export interface RequestListItem {
 }
 
 const CART_KEY = 'electromagaz_cart'
+const CART_UPDATED_EVENT = 'electromagaz:cart-updated'
 
 function readCart(): CartItem[] {
   if (typeof window === 'undefined') return []
@@ -36,8 +37,9 @@ function writeCart(items: CartItem[]): void {
   if (typeof window === 'undefined') return
   try {
     localStorage.setItem(CART_KEY, JSON.stringify(items))
-  } catch {
-    // ignore quota / privacy errors
+    queueMicrotask(() => window.dispatchEvent(new Event(CART_UPDATED_EVENT)))
+  } catch (error) {
+    console.error('[cart] Failed to save request list:', error)
   }
 }
 
