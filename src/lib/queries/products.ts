@@ -182,6 +182,35 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   return products.map(transformProduct)
 }
 
+/**
+ * Returns the newest successfully enriched products for the storefront.
+ * Ordering by lastEnrichedAt makes newly parsed cards appear automatically,
+ * including existing products that were refreshed with better source data.
+ */
+export async function getRecentlyEnrichedProducts(limit = 8): Promise<Product[]> {
+  const products = await prisma.product.findMany({
+    where: {
+      enrichmentStatus: 'complete',
+      lastEnrichedAt: { not: null },
+    },
+    include: {
+      category: true,
+      manufacturer: true,
+      images: {
+        orderBy: { order: 'asc' },
+      },
+      specifications: {
+        orderBy: { order: 'asc' },
+      },
+      datasheets: true,
+    },
+    orderBy: { lastEnrichedAt: 'desc' },
+    take: Math.max(1, Math.min(limit, 12)),
+  })
+
+  return products.map(transformProduct)
+}
+
 export async function getProductsByIds(ids: string[]): Promise<Product[]> {
   if (ids.length === 0) return []
   const products = await prisma.product.findMany({

@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
 import { type EnrichmentConfig } from './types'
+import defaults from '../../../config/enrichment.json'
 
 /**
  * Loads and validates enrichment pipeline configuration from environment variables.
@@ -60,17 +61,76 @@ export function loadEnrichmentConfig(): EnrichmentConfig {
     'ENRICHMENT_PERSIST_BATCH',
   )
 
+  const freshnessDays = parseNonNegativeInt(
+    process.env.ENRICHMENT_FRESHNESS_DAYS || String(defaults.freshnessDays),
+    'ENRICHMENT_FRESHNESS_DAYS',
+  )
+
+  const skipFreshProducts =
+    process.env.ENRICHMENT_SKIP_FRESH === undefined
+      ? defaults.skipFreshProducts
+      : parseBoolean(process.env.ENRICHMENT_SKIP_FRESH, 'ENRICHMENT_SKIP_FRESH')
+
+  const chipdipRequestDelayRange = parseDelayRange(
+    process.env.CHIPDIP_REQUEST_DELAY_MIN_MS ||
+      String(defaults.chipdip.requestDelayMinMs),
+    process.env.CHIPDIP_REQUEST_DELAY_MAX_MS ||
+      String(defaults.chipdip.requestDelayMaxMs),
+    'CHIPDIP_REQUEST_DELAY',
+  )
+
+  const chipdipPageDelayRange = parseDelayRange(
+    process.env.CHIPDIP_PAGE_DELAY_MIN_MS ||
+      String(defaults.chipdip.pageDelayMinMs),
+    process.env.CHIPDIP_PAGE_DELAY_MAX_MS ||
+      String(defaults.chipdip.pageDelayMaxMs),
+    'CHIPDIP_PAGE_DELAY',
+  )
+
   return {
     inputDir: inputDir!,
     chipdipProxyTemplate,
     chipdipProxyUrl,
     chipdipProxyUserRange,
     chipdipConcurrency,
+    skipFreshProducts,
+    freshnessDays,
+    chipdipRequestDelayRange,
+    chipdipPageDelayRange,
     mouserApiKey,
     batchSize,
     persistBatchSize,
     databaseUrl: databaseUrl!,
   }
+}
+
+function parseBoolean(raw: string, varName: string): boolean {
+  if (raw === '1' || raw.toLowerCase() === 'true') return true
+  if (raw === '0' || raw.toLowerCase() === 'false') return false
+  throw new Error(`Invalid ${varName}: expected true/false or 1/0, got "${raw}"`)
+}
+
+function parseNonNegativeInt(raw: string, varName: string): number {
+  const value = Number(raw)
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(
+      `Invalid ${varName}: expected non-negative integer, got "${raw}"`,
+    )
+  }
+  return value
+}
+
+function parseDelayRange(
+  rawMin: string,
+  rawMax: string,
+  varName: string,
+): [number, number] {
+  const min = parsePositiveInt(rawMin, `${varName}_MIN_MS`)
+  const max = parsePositiveInt(rawMax, `${varName}_MAX_MS`)
+  if (max < min) {
+    throw new Error(`Invalid ${varName}: max ${max} must be >= min ${min}`)
+  }
+  return [min, max]
 }
 
 /**

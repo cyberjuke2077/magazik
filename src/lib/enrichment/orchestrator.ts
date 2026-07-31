@@ -26,6 +26,7 @@ import {
   type EnrichmentEvents,
   createNoopEnrichmentEvents,
 } from './observability/event-bus'
+import { filterFreshProducts } from './queue/fresh-product-filter'
 
 export interface OrchestratorConfig extends EnrichmentConfig {
   resume?: boolean
@@ -33,13 +34,13 @@ export interface OrchestratorConfig extends EnrichmentConfig {
   skipMouser?: boolean
   skipLcsc?: boolean
   mouserOnly?: boolean
+  forceRefresh?: boolean
+  /** Maximum number of deduplicated MPNs to process, for controlled trial runs. */
+  limit?: number
   bus?: EnrichmentEvents
   loggerSilent?: boolean
   progressSilentConsole?: boolean
 }
-
-/** Batch size for persistence writes (lower = data lost on Ctrl+C is minimised) */
-const PERSIST_BATCH_SIZE = 5
 
 /** Pause duration when ChipDip is blocked (no proxy): 2-4 hours */
 const CHIPDIP_BLOCK_PAUSE_MS = 2 * 60 * 60 * 1000 // 2 hours minimum
@@ -155,13 +156,31 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     console.log(`   Строк: ${importStats.totalRows} (пропущено: ${importStats.skippedRows})`)
 
     // Step 2: Deduplicate
-    const parts = deduplicate(rows)
-    console.log(`   Уникальных артикулов: ${parts.length}`)
+    const deduplicatedParts = deduplicate(rows)
+    const cacheResult =
+      config.skipFreshProducts && !config.forceRefresh
+        ? await filterFreshProducts(deduplicatedParts, config.freshnessDays)
+        : { pending: deduplicatedParts, skipped: 0 }
+    const eligibleParts = cacheResult.pending
+    const parts = config.limit === undefined
+      ? eligibleParts
+      : eligibleParts.slice(0, config.limit)
+    console.log(`   Уникальных артикулов: ${deduplicatedParts.length}`)
+    console.log(`   Пропущено свежих карточек: ${cacheResult.skipped}`)
+    if (config.limit !== undefined) {
+      console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${parts.length})`)
+    }
 
     // Step 3: Dry run — log stats and exit
     if (config.dryRun) {
       logger.info({ event: 'dry_run_complete' })
       console.log(`\n🏁 Dry run завершён. Без записи в БД.`)
+      return
+    }
+
+    if (parts.length === 0) {
+      logger.info({ event: 'pipeline_nothing_to_do' })
+      console.log(`\n🏁 Все карточки свежие. Запросы к источникам не выполнялись.`)
       return
     }
 
@@ -206,6 +225,8 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
         proxyUrl: config.chipdipProxyUrl,
         proxyUserRange: config.chipdipProxyUserRange,
         concurrency: config.chipdipConcurrency,
+        requestDelayRange: config.chipdipRequestDelayRange,
+        pageDelayRange: config.chipdipPageDelayRange,
       })
 
       const healthy = await chipdipClient.healthCheck()
@@ -321,8 +342,6 @@ async function runChipDipLoop(
   bus: EnrichmentEvents,
   isShutdown: () => boolean,
 ): Promise<void> {
-  const persistBuffer: Array<{ identity: PartIdentity; result: EnrichmentResult | null }> = []
-
   while (!isShutdown()) {
     const batch = await journal.getNextBatch(runId, 'pending', FETCH_BATCH_SIZE)
 
@@ -351,8 +370,9 @@ async function runChipDipLoop(
         const durationMs = Date.now() - startMs
 
         if (result) {
+          const persisted = await persistBeforeStatusUpdate(part, result, logger)
+          if (!persisted) continue
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'chipdip_done')
-          persistBuffer.push({ identity: part, result })
 
           logger.info({
             event: 'chipdip_found',
@@ -461,19 +481,9 @@ async function runChipDipLoop(
         }
       }
 
-      // Flush persist buffer when full
-      if (persistBuffer.length >= PERSIST_BATCH_SIZE) {
-        await flushPersistBuffer(persistBuffer, logger)
-      }
-
       // Update progress
       await updateProgressStats(runId, journal, progress)
     }
-  }
-
-  // Flush remaining items
-  if (persistBuffer.length > 0) {
-    await flushPersistBuffer(persistBuffer, logger)
   }
 }
 
@@ -491,8 +501,6 @@ async function runLcscLoop(
   bus: EnrichmentEvents,
   isShutdown: () => boolean,
 ): Promise<void> {
-  const persistBuffer: Array<{ identity: PartIdentity; result: EnrichmentResult | null }> = []
-
   while (!isShutdown()) {
     const batch = await journal.getChipDipNotFound(runId, FETCH_BATCH_SIZE)
 
@@ -524,8 +532,9 @@ async function runLcscLoop(
         const durationMs = Date.now() - startMs
 
         if (result) {
+          const persisted = await persistBeforeStatusUpdate(part, result, logger)
+          if (!persisted) continue
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'lcsc_done')
-          persistBuffer.push({ identity: part, result })
 
           logger.info({
             event: 'lcsc_found',
@@ -603,19 +612,9 @@ async function runLcscLoop(
         }
       }
 
-      // Flush persist buffer when full
-      if (persistBuffer.length >= PERSIST_BATCH_SIZE) {
-        await flushPersistBuffer(persistBuffer, logger)
-      }
-
       // Update progress
       await updateProgressStats(runId, journal, progress)
     }
-  }
-
-  // Flush remaining items
-  if (persistBuffer.length > 0) {
-    await flushPersistBuffer(persistBuffer, logger)
   }
 }
 
@@ -633,8 +632,6 @@ async function runMouserLoop(
   bus: EnrichmentEvents,
   isShutdown: () => boolean,
 ): Promise<void> {
-  const persistBuffer: Array<{ identity: PartIdentity; result: EnrichmentResult | null }> = []
-
   while (!isShutdown()) {
     // Check quota before processing
     if (client.isQuotaExhausted()) {
@@ -684,8 +681,9 @@ async function runMouserLoop(
         const durationMs = Date.now() - startMs
 
         if (result) {
+          const persisted = await persistBeforeStatusUpdate(part, result, logger)
+          if (!persisted) continue
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'mouser_done')
-          persistBuffer.push({ identity: part, result })
 
           logger.info({
             event: 'mouser_found',
@@ -705,8 +703,9 @@ async function runMouserLoop(
           })
         } else {
           // Not found or brand mismatch — create stub
+          const persisted = await persistBeforeStatusUpdate(part, null, logger)
+          if (!persisted) continue
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'mouser_not_found')
-          persistBuffer.push({ identity: part, result: null })
 
           logger.info({
             event: 'mouser_not_found',
@@ -770,48 +769,45 @@ async function runMouserLoop(
         })
       }
 
-      // Flush persist buffer when full
-      if (persistBuffer.length >= PERSIST_BATCH_SIZE) {
-        await flushPersistBuffer(persistBuffer, logger)
-      }
-
       // Update progress
       await updateProgressStats(runId, journal, progress)
     }
   }
-
-  // Flush remaining items
-  if (persistBuffer.length > 0) {
-    await flushPersistBuffer(persistBuffer, logger)
-  }
 }
 
 /**
- * Flushes the persist buffer by writing items to the database.
+ * Persists a source result before advancing its journal state.
+ *
+ * This keeps the item retryable when Supabase is temporarily unavailable.
+ * Advancing the journal first can lose the in-memory result if another
+ * parallel source loop aborts the run.
  */
-async function flushPersistBuffer(
-  buffer: Array<{ identity: PartIdentity; result: EnrichmentResult | null }>,
+async function persistBeforeStatusUpdate(
+  identity: PartIdentity,
+  result: EnrichmentResult | null,
   logger: EnrichmentLogger,
-): Promise<void> {
-  const items = buffer.splice(0, buffer.length)
-
-  if (items.length === 0) return
-
+): Promise<boolean> {
   try {
-    const result = await persistBatch(items)
-
-    if (result.failed > 0) {
-      logger.warn({
-        event: 'persist_partial_failure',
-        error: `${result.failed}/${items.length} items failed`,
+    const persisted = await persistBatch([{ identity, result }])
+    if (persisted.failed > 0) {
+      logger.error({
+        event: 'persist_error',
+        mpn: identity.canonicalMpn,
+        brand: identity.canonicalBrand,
+        error: persisted.errors.map((item) => item.error).join('; '),
       })
+      return false
     }
+    return true
   } catch (err) {
     const errorMsg = err instanceof Error ? err.message : String(err)
     logger.error({
       event: 'persist_error',
+      mpn: identity.canonicalMpn,
+      brand: identity.canonicalBrand,
       error: errorMsg,
     })
+    return false
   }
 }
 
@@ -829,8 +825,6 @@ async function runUnresolvedFinalizerLoop(
   progress: ProgressReporter,
   isShutdown: () => boolean,
 ): Promise<void> {
-  const persistBuffer: Array<{ identity: PartIdentity; result: EnrichmentResult | null }> = []
-
   while (!isShutdown()) {
     const batch = await journal.getLcscNotFound(runId, FETCH_BATCH_SIZE)
 
@@ -847,25 +841,19 @@ async function runUnresolvedFinalizerLoop(
 
     for (const part of batch) {
       if (isShutdown()) break
+      const persisted = await persistBeforeStatusUpdate(part, null, logger)
+      if (!persisted) continue
       await journal.updateStatus(
         runId, part.canonicalBrand, part.canonicalMpn, 'unresolved',
       )
-      persistBuffer.push({ identity: part, result: null })
       logger.info({
         event: 'finalized_unresolved',
         mpn: part.canonicalMpn,
         brand: part.canonicalBrand,
       })
 
-      if (persistBuffer.length >= PERSIST_BATCH_SIZE) {
-        await flushPersistBuffer(persistBuffer, logger)
-      }
       await updateProgressStats(runId, journal, progress)
     }
-  }
-
-  if (persistBuffer.length > 0) {
-    await flushPersistBuffer(persistBuffer, logger)
   }
 }
 
