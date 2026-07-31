@@ -4,6 +4,7 @@ import { ArrowLeftRight, Clock, FileCheck, AlertTriangle, ChevronRight } from 'l
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
+import { COMPANY } from '@/lib/company'
 
 export const metadata: Metadata = {
   title: 'Возврат товара',
@@ -14,51 +15,46 @@ export const metadata: Metadata = {
 const conditions = [
   {
     icon: Clock,
-    title: '14 дней',
-    desc: 'Срок для уведомления о браке с момента получения товара',
+    title: 'Сообщите сразу',
+    desc: 'Срок обращения определяется документами конкретной поставки',
   },
   {
     icon: FileCheck,
-    title: 'Заводская упаковка',
-    desc: 'Возврат принимается только в оригинальной упаковке без следов вскрытия и эксплуатации',
+    title: 'Сохраните товар',
+    desc: 'Не изменяйте состояние товара и упаковки до согласования проверки',
   },
   {
     icon: ArrowLeftRight,
-    title: 'Все документы',
-    desc: 'УПД, накладная, акт о выявленных недостатках - обязательны',
+    title: 'Приложите данные',
+    desc: 'Номер заказа, MPN, количество, описание и фото помогают проверить обращение',
   },
   {
     icon: AlertTriangle,
-    title: 'Только брак',
-    desc: 'Товар надлежащего качества возврату не подлежит (B2B-условия)',
+    title: 'По условиям сделки',
+    desc: 'Основание возврата или замены проверяется по согласованным документам',
   },
 ]
 
 const steps = [
   {
     n: 1,
-    title: 'Свяжитесь с менеджером',
-    desc: 'Напишите на returns@electromagaz.ru или позвоните по телефону. Опишите проблему и приложите фото/видео дефекта.',
+    title: 'Направьте обращение',
+    desc: `Напишите на ${COMPANY.email}. Укажите номер заказа, контактное лицо и описание ситуации.`,
   },
   {
     n: 2,
-    title: 'Составьте акт',
-    desc: 'Менеджер пришлёт форму акта о выявленных недостатках. Заполните, подпишите и отсканируйте.',
+    title: 'Приложите материалы',
+    desc: 'Добавьте MPN, количество, фото упаковки и товара, а также документы поставки, если они доступны.',
   },
   {
     n: 3,
-    title: 'Отправьте товар',
-    desc: 'После согласования направьте товар по адресу склада в оригинальной упаковке. Отправку оплачивает покупатель, при подтверждённом браке - компенсируем.',
+    title: 'Дождитесь инструкции',
+    desc: 'Не отправляйте товар без подтверждённого адреса, получателя и способа передачи.',
   },
   {
     n: 4,
-    title: 'Экспертиза',
-    desc: 'Проводим входной контроль и экспертизу. Срок - до 10 рабочих дней.',
-  },
-  {
-    n: 5,
-    title: 'Возврат средств или замена',
-    desc: 'При подтверждении брака возвращаем оплату на расчётный счёт или производим замену по согласованию.',
+    title: 'Получите результат',
+    desc: 'Дальнейшие действия и сроки сообщаются после проверки основания и документов сделки.',
   },
 ]
 
@@ -118,39 +114,23 @@ export default function ReturnsPage() {
             </div>
           </section>
 
-          <section className="mb-10 grid lg:grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <AlertTriangle size={16} className="text-amber-700" />
-                <h3 className="text-sm font-bold text-ink">Возврату не подлежат</h3>
-              </div>
-              <ul className="space-y-1.5 text-sm text-ink-3 leading-relaxed">
-                <li>- Товары без видимых дефектов, соответствующие заказу</li>
-                <li>- Изделия со следами монтажа, пайки, эксплуатации</li>
-                <li>- Компоненты, заказанные под индивидуальный проект (custom-orders)</li>
-                <li>- Товары с истёкшим сроком уведомления (более 14 дней)</li>
-              </ul>
+          <section className="mb-10 rounded-2xl border border-amber-200 bg-amber-50 p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <AlertTriangle size={16} className="text-amber-700" />
+              <h3 className="text-sm font-bold text-ink">Важно до отправки товара</h3>
             </div>
-            <div className="rounded-2xl bg-azure-light p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <FileCheck size={16} className="text-azure" />
-                <h3 className="text-sm font-bold text-ink">Гарантия</h3>
-              </div>
-              <p className="text-sm text-ink-3 leading-relaxed mb-2">
-                Гарантия на электронные компоненты - 12 месяцев с даты поставки, если иное не
-                указано в спецификации производителя.
-              </p>
-              <p className="text-sm text-ink-3 leading-relaxed">
-                Гарантийные случаи рассматриваются в индивидуальном порядке после экспертизы.
-              </p>
-            </div>
+            <p className="text-sm text-ink-3 leading-relaxed">
+              Публичная страница не устанавливает единый срок, гарантию или безусловное право
+              на возврат для всех B2B-поставок. Применяются условия конкретной сделки и
+              законодательство РФ. Адрес и способ передачи необходимо получить у менеджера.
+            </p>
           </section>
 
           <Link
             href="/contacts"
             className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-azure px-6 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
           >
-            Связаться с отделом возвратов
+            Связаться с компанией
             <ChevronRight size={14} />
           </Link>
         </div>

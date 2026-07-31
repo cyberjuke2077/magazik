@@ -78,7 +78,7 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-end">
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-ink-4">
-            <Link href="/offer" className="hover:text-azure">Публичная оферта</Link>
+            <Link href="/offer" className="hover:text-azure">Условия B2B-поставки</Link>
             <Link href="/privacy" className="hover:text-azure">Политика ПДн</Link>
             <Link href="/terms" className="hover:text-azure">Условия</Link>
             <Link href="/legal" className="hover:text-azure">Реквизиты</Link>

@@ -261,11 +261,11 @@ export default function CartPage() {
                   </div>
                   <div className="flex items-start gap-2 text-xs text-ink-3">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
-                    <span>Минимальный заказ от 200 000 ₽</span>
+                    <span>Условия рассчитываются для состава заявки</span>
                   </div>
                   <div className="flex items-start gap-2 text-xs text-ink-3">
                     <Package size={13} className="mt-0.5 flex-shrink-0 text-azure" />
-                    <span>Подтверждение заказа в течение 24 часов</span>
+                    <span>Цена и срок фиксируются в коммерческом предложении</span>
                   </div>
                 </div>
               </div>

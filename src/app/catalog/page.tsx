@@ -60,10 +60,10 @@ export async function generateMetadata({ searchParams }: CatalogPageProps): Prom
     const cat = await getCategoryBySlug(categorySlug)
     if (cat) {
       return {
-        title: `${cat.name} — купить оптом и в розницу`,
+        title: `${cat.name} - каталог и B2B-заявка`,
         description:
           cat.description ||
-          `${cat.name}: ${cat.count.toLocaleString('ru-RU')} позиций в наличии и под заказ. Отправка в день заказа, доставка по России. Купить в Electromagaz.`,
+          `${cat.name}: ${cat.count.toLocaleString('ru-RU')} позиций в каталоге. Поиск по MPN и формирование B2B-заявки.`,
         alternates: { canonical },
       }
     }
@@ -72,7 +72,7 @@ export async function generateMetadata({ searchParams }: CatalogPageProps): Prom
   return {
     title: 'Каталог электронных компонентов',
     description:
-      'Полный каталог электронных компонентов: резисторы, конденсаторы, микросхемы, транзисторы, датчики. Оптом и в розницу, отправка в день заказа.',
+      'Каталог электронных компонентов с поиском по MPN и формированием B2B-заявки.',
     alternates: { canonical },
   }
 }

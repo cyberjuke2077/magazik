@@ -3,10 +3,10 @@ import { SectionHeader } from './section-header'
 import { Reveal } from './reveal'
 
 const benefits = [
-  { icon: Replace, title: 'Подбор аналогов', desc: 'Найдём замену под нужные параметры, корпус и бюджет — с учётом доступности.' },
-  { icon: PackageCheck, title: 'Поставка под заказ', desc: 'Привезём позиции, которых нет в наличии, и согласуем сроки заранее.' },
-  { icon: FileText, title: 'Документы для юрлиц', desc: 'Работаем по безналу с НДС, выдаём полный пакет закрывающих документов.' },
-  { icon: Headset, title: 'Коммерческое предложение', desc: 'Сформируем КП по вашему списку позиций и просчитаем опт.' },
+  { icon: Replace, title: 'Запрос аналога', desc: 'Передайте ключевые параметры, корпус и ограничения для проверки вариантов.' },
+  { icon: PackageCheck, title: 'Позиции под запрос', desc: 'Добавьте MPN и количество, даже если готовой цены пока нет в каталоге.' },
+  { icon: FileText, title: 'Условия в КП', desc: 'Цена, срок и доступные документы фиксируются для конкретной заявки.' },
+  { icon: Headset, title: 'Коммерческое предложение', desc: 'Корзина превращается в структурированный запрос для менеджера.' },
 ]
 
 export function Benefits() {
@@ -15,8 +15,8 @@ export function Benefits() {
       <div className="mx-auto max-w-[1400px] px-4">
         <SectionHeader
           eyebrow="Почему мы"
-          title="Не просто склад — инженерный сервис"
-          description="Помогаем закрыть спецификацию целиком: от подбора аналога до документов и поставки."
+          title="Каталог для B2B-заявок"
+          description="Соберите позиции по MPN и передайте требования одним запросом."
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {benefits.map((b, i) => (
