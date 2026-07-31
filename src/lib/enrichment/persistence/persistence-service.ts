@@ -26,6 +26,7 @@ import {
 import { shouldOverwrite } from './provenance-merger'
 import { generateSlug } from './slug-generator'
 import {
+  FALLBACK_SECTION_SLUG,
   classifyProduct,
   isJunkLeafName,
   normalizeLeafName,
@@ -111,20 +112,26 @@ export async function persistBatch(
   await mirrorImagesToStorage(items)
 
   try {
-    await prisma.$transaction(async (tx) => {
-      for (const { identity, result } of items) {
-        try {
-          await persistItem(tx, identity, result)
-          persisted++
-        } catch (err) {
-          failed++
-          errors.push({
-            mpn: identity.canonicalMpn,
-            error: err instanceof Error ? err.message : String(err),
-          })
+    await prisma.$transaction(
+      async (tx) => {
+        for (const { identity, result } of items) {
+          try {
+            await persistItem(tx, identity, result)
+            persisted++
+          } catch (err) {
+            failed++
+            errors.push({
+              mpn: identity.canonicalMpn,
+              error: err instanceof Error ? err.message : String(err),
+            })
+          }
         }
-      }
-    })
+      },
+      {
+        maxWait: 30_000,
+        timeout: 60_000,
+      },
+    )
   } catch (err) {
     // Transaction-level failure — all items failed
     const txError = err instanceof Error ? err.message : String(err)
@@ -177,13 +184,35 @@ async function persistItem(
         mpnNormalized: identity.canonicalMpn,
       },
     },
-    select: { id: true, enrichmentMeta: true, slug: true },
+    select: { id: true, enrichmentMeta: true, slug: true, price: true },
   })
 
   const existingMeta = existingProduct?.enrichmentMeta as EnrichmentMeta | null
 
   // Build new enrichment meta
   const newMeta: EnrichmentMeta = { ...(existingMeta ?? {}) }
+
+  const sourceCategoryPath = [
+    ...(result?.categoryPath ?? []),
+    ...(result?.categoryName ? [result.categoryName] : []),
+  ].filter((value, index, values) => value && values.indexOf(value) === index)
+  if (sourceCategoryPath.length > 0) {
+    newMeta.sourceCategoryPath = sourceCategoryPath
+    const classifiedSection = classifyProduct({
+      categoryPath: result?.categoryPath,
+      categoryName: result?.categoryName,
+      productName: result?.name,
+      mpn: identity.canonicalMpn,
+      package: result?.package,
+    })
+    const flags = new Set(newMeta.flags ?? [])
+    if (classifiedSection === FALLBACK_SECTION_SLUG) {
+      flags.add('category_needs_review')
+    } else {
+      flags.delete('category_needs_review')
+    }
+    newMeta.flags = Array.from(flags)
+  }
 
   // Determine field values with provenance checks
   const productName = result?.name ?? `${identity.canonicalBrand} ${identity.originalMpn}`
@@ -210,6 +239,25 @@ async function persistItem(
     newMeta.category = buildProvenance(source)
   }
 
+  // A price without provenance is managed manually by the store and must
+  // never be overwritten by enrichment. Parser-managed prices may refresh
+  // according to the normal source-priority rules.
+  const hasManualPrice =
+    existingProduct?.price !== null &&
+    existingProduct?.price !== undefined &&
+    !existingMeta?.price
+  const hasSupportedSourcePrice =
+    result?.price !== undefined &&
+    result.price > 0 &&
+    (result.currency === undefined || result.currency === 'RUB')
+  const writePrice =
+    hasSupportedSourcePrice &&
+    !hasManualPrice &&
+    shouldOverwrite(existingMeta, 'price', source)
+  if (writePrice) {
+    newMeta.price = buildProvenance(source)
+  }
+
   // Resolve package: prefer the source's raw package string (e.g. "SOIC-8").
   // When absent, derive a package family from the MPN/name so the column
   // is populated for catalog faceting and the generic-image fallback.
@@ -231,6 +279,9 @@ async function persistItem(
     ...(writeCategory ? { categoryId } : {}),
     ...(result?.lifecycle ? { lifecycle: result.lifecycle } : {}),
     ...(resolvedPackage ? { package: resolvedPackage } : {}),
+    ...(result?.sku ? { sku: result.sku } : {}),
+    ...(result?.weight !== undefined ? { weight: result.weight } : {}),
+    ...(writePrice ? { price: result?.price, currency: 'RUB' } : {}),
     ...(writeDescription && productDescription !== undefined
       ? { description: productDescription }
       : {}),
@@ -260,6 +311,9 @@ async function persistItem(
       lastEnrichedAt: now,
       ...(result?.lifecycle ? { lifecycle: result.lifecycle } : {}),
       ...(result?.package ? { package: result.package } : {}),
+      ...(result?.sku ? { sku: result.sku } : {}),
+      ...(result?.weight !== undefined ? { weight: result.weight } : {}),
+      ...(writePrice ? { price: result?.price, currency: 'RUB' } : {}),
     },
     update: {
       ...(writeName ? { name: productName } : {}),
@@ -269,6 +323,9 @@ async function persistItem(
       ...(writeCategory ? { categoryId } : {}),
       ...(result?.lifecycle ? { lifecycle: result.lifecycle } : {}),
       ...(result?.package ? { package: result.package } : {}),
+      ...(result?.sku ? { sku: result.sku } : {}),
+      ...(result?.weight !== undefined ? { weight: result.weight } : {}),
+      ...(writePrice ? { price: result?.price, currency: 'RUB' } : {}),
       enrichmentStatus,
       enrichmentMeta: newMeta as unknown as JsonValue,
       lastEnrichedAt: now,

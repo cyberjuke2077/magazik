@@ -88,6 +88,14 @@ export interface EnrichmentResult {
   name?: string
   /** Product description text */
   description?: string
+  /** Source-specific SKU, when available */
+  sku?: string
+  /** Product weight in grams */
+  weight?: number
+  /** Public source price for one unit */
+  price?: number
+  /** ISO 4217 currency for price */
+  currency?: string
   /** Language of the description field */
   descriptionLanguage?: 'ru' | 'en'
   /** Category name from the source */
@@ -136,8 +144,12 @@ export interface EnrichmentMeta {
   images?: FieldProvenance
   /** Provenance for the datasheets list */
   datasheets?: FieldProvenance
+  /** Provenance for a parser-managed public price */
+  price?: FieldProvenance
   /** Operational flags (e.g. brand_unmapped, multiplePackages) */
   flags?: string[]
+  /** Raw source breadcrumb retained for taxonomy review and new rules */
+  sourceCategoryPath?: string[]
   /** Language of the stored description */
   descriptionLanguage?: 'ru' | 'en'
 }
@@ -164,6 +176,14 @@ export interface EnrichmentConfig {
   chipdipProxyUserRange: [number, number]
   /** Number of concurrent CloakBrowser sessions for ChipDip (1-3) */
   chipdipConcurrency: number
+  /** Skip complete products enriched within freshnessDays */
+  skipFreshProducts: boolean
+  /** Age after which a complete product becomes eligible for refresh */
+  freshnessDays: number
+  /** Random delay between ChipDip products */
+  chipdipRequestDelayRange: [number, number]
+  /** Random delay between pages within one ChipDip lookup */
+  chipdipPageDelayRange: [number, number]
   /** Mouser Search API key */
   mouserApiKey: string
   /** Number of items per processing batch (default 500) */

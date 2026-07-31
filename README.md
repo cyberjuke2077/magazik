@@ -56,8 +56,10 @@ npm run enrichment:run
 
 # С опциями
 npm run enrichment:run -- --input-dir /path/to/excels --batch-size 50
+npm run enrichment:run -- --input-dir /path/to/supplier-files --limit 3 --no-tui # пробный прогон трёх MPN
 npm run enrichment:run -- --resume
 npm run enrichment:run -- --dry-run         # без API-вызовов
+npm run enrichment:run -- --force-refresh   # обновить даже свежие карточки
 npm run enrichment:run -- --skip-mouser     # отключить Mouser
 npm run enrichment:run -- --mouser-only     # только Mouser
 npm run enrichment:run -- --no-tui          # legacy-логи вместо Ink TUI
@@ -67,7 +69,10 @@ npm run enrichment:status
 npm run enrichment:watch
 ```
 
-Вход: `ENRICHMENT_INPUT_DIR` в `.env`. Источники по приоритету: Mouser (API) → LCSC (scraping) → ChipDip (stealth Chromium).
+  Вход: `ENRICHMENT_INPUT_DIR` в `.env`. Несекретные интервалы и срок
+  свежести хранятся в `config/enrichment.json`. По умолчанию товары
+  `complete`, обновлённые за последние 90 дней, не запрашиваются повторно.
+  Источники обрабатываются каскадом ChipDip → LCSC → Mouser.
 
 ## Структура проекта
 

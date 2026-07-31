@@ -4,7 +4,10 @@ import { type DataSource, type EnrichmentMeta, type FieldProvenance, SOURCE_PRIO
  * Fields in EnrichmentMeta that carry provenance information.
  * Excludes operational fields like `flags` and `descriptionLanguage`.
  */
-type ProvenanceField = keyof Omit<EnrichmentMeta, 'flags' | 'descriptionLanguage'>
+type ProvenanceField = keyof Omit<
+  EnrichmentMeta,
+  'flags' | 'descriptionLanguage' | 'sourceCategoryPath'
+>
 
 /**
  * Determines whether a new source should overwrite an existing field value

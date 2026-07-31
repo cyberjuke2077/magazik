@@ -42,18 +42,6 @@ function extractText($: cheerio.CheerioAPI, selector: string): string | null {
 }
 
 /**
- * Safely extracts HTML content from element
- * Returns null if element not found or empty
- */
-function extractHtml($: cheerio.CheerioAPI, selector: string): string | null {
-  const element = $(selector).first()
-  if (element.length === 0) return null
-  
-  const html = element.html()
-  return html && html.trim().length > 0 ? html.trim() : null
-}
-
-/**
  * Extracts product name from page title or h1
  * Tries multiple selectors in priority order
  */
@@ -249,8 +237,19 @@ export function extractDescription($: cheerio.CheerioAPI): string | null {
   ]
   
   for (const selector of selectors) {
-    const html = extractHtml($, selector)
-    if (html) return html
+    const element = $(selector).first()
+    if (element.length === 0) continue
+
+    const normalized = element.clone()
+    normalized.find('br').replaceWith(' ')
+    normalized
+      .find('p, li, div, section, article, h1, h2, h3, h4, h5, h6')
+      .each((_, block) => {
+        $(block).append(' ')
+      })
+
+    const text = normalizeSpecText(normalized.text())
+    if (text) return text
   }
   
   return null
@@ -440,6 +439,74 @@ export function extractWeight($: cheerio.CheerioAPI): number | null {
   return isNaN(weight) ? null : weight
 }
 
+function parseMoney(raw: string): number | null {
+  const normalized = raw
+    .replace(/\s|\u00a0/g, '')
+    .replace(',', '.')
+    .replace(/[^\d.]/g, '')
+  if (!normalized) return null
+  const value = Number(normalized)
+  return Number.isFinite(value) && value > 0 ? value : null
+}
+
+/**
+ * Extracts the current public price and currency from structured product data.
+ * ChipDip prices are RUB unless the page explicitly declares another currency.
+ */
+export function extractPrice(
+  $: cheerio.CheerioAPI,
+): { price: number; currency: string } | null {
+  const itemprop = $('[itemprop="price"]').first()
+  if (itemprop.length > 0) {
+    const price = parseMoney(
+      itemprop.attr('content') || itemprop.text(),
+    )
+    if (price !== null) {
+      const currency =
+        $('[itemprop="priceCurrency"]').first().attr('content') ||
+        $('[itemprop="priceCurrency"]').first().text().trim() ||
+        'RUB'
+      return { price, currency: currency.toUpperCase() }
+    }
+  }
+
+  const scripts = $('script[type="application/ld+json"]').toArray()
+  for (const script of scripts) {
+    try {
+      const parsed = JSON.parse($(script).html() || 'null') as unknown
+      const nodes = Array.isArray(parsed) ? parsed : [parsed]
+      for (const node of nodes) {
+        if (!node || typeof node !== 'object') continue
+        const record = node as Record<string, unknown>
+        const offers = Array.isArray(record.offers)
+          ? record.offers[0]
+          : record.offers
+        if (!offers || typeof offers !== 'object') continue
+        const offer = offers as Record<string, unknown>
+        const price = parseMoney(String(offer.price ?? ''))
+        if (price !== null) {
+          return {
+            price,
+            currency: String(offer.priceCurrency || 'RUB').toUpperCase(),
+          }
+        }
+      }
+    } catch {
+      // Ignore malformed unrelated JSON-LD blocks.
+    }
+  }
+
+  for (const script of $('script').toArray()) {
+    const content = $(script).html() || ''
+    const priceMatch = content.match(/["']price["']\s*:\s*["']?([\d.,\s]+)/i)
+    if (!priceMatch) continue
+    const price = parseMoney(priceMatch[1])
+    if (price !== null) return { price, currency: 'RUB' }
+  }
+
+  return null
+}
+
 /**
  * Main parser function - orchestrates all extraction functions
  * 
@@ -467,6 +534,7 @@ export function parseProductPage(html: string): ParseResult<ParsedProduct> {
     }
     
     // Extract all fields using pure functions
+    const sourcePrice = extractPrice($)
     const product: ParsedProduct = {
       name: extractProductName($) || '',
       partNumber: extractPartNumber($),
@@ -476,6 +544,8 @@ export function parseProductPage(html: string): ParseResult<ParsedProduct> {
       categoryPath: extractCategoryPath($),
       description: extractDescription($),
       weight: extractWeight($),
+      price: sourcePrice?.price ?? null,
+      currency: sourcePrice?.currency ?? null,
       specifications: extractSpecifications($),
       images: extractImages($),
       datasheets: extractDatasheets($),

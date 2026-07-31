@@ -6,6 +6,7 @@ import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 import { HeroSlider } from '@/components/home/hero-slider'
 import { CategoriesGrid } from '@/components/home/categories-grid'
 import { Manufacturers } from '@/components/home/manufacturers'
+import { RecentProducts } from '@/components/home/recent-products'
 import { getCatalogSections } from '@/lib/queries/categories'
 
 export default async function HomePage() {
@@ -20,6 +21,7 @@ export default async function HomePage() {
       <main className="flex-1">
         <HeroSlider />
         <CategoriesGrid sections={sections} />
+        <RecentProducts />
         <Manufacturers />
         <RecentlyViewed variant="home" />
       </main>
