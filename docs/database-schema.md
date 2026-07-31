@@ -284,7 +284,7 @@ await prisma.product.findMany({
 ### Target Scale (2M products)
 - Indexes ensure queries remain fast (<100ms)
 - Pagination required for large result sets
-- Consider full-text search (Meilisearch) for complex queries
+- Measure PostgreSQL FTS relevance and latency before adding another search service
 - Batch imports use transactions for data integrity
 
 ### Future Optimizations

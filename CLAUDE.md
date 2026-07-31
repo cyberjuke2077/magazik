@@ -15,7 +15,7 @@ enrichment-пайплайном обогащения данных, корзин�
 
 Next.js 16 (App Router) + React 19, TypeScript strict, Tailwind CSS v4,
 PostgreSQL 16 + Prisma 5 (Docker локально, Supabase прод),
-Meilisearch, Vercel, Cloudflare R2 (картинки).
+PostgreSQL FTS, Vercel, Cloudflare R2 (картинки).
 Пакетный менеджер: npm (не pnpm, не yarn).
 Тесты: Vitest (unit) + Playwright (e2e) + fast-check (property).
 

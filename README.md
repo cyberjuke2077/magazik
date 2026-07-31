@@ -9,7 +9,7 @@
 - **Стили:** Tailwind CSS v4
 - **БД:** PostgreSQL 16 + Prisma 5 (локально — Docker, прод — Supabase)
 - **Хостинг:** Vercel (авто-деплой из `main`), картинки — Cloudflare R2
-- **Поиск:** Postgres FTS (tsvector, веса A/B/C) + Meilisearch
+- **Поиск:** PostgreSQL FTS (tsvector, веса A/B/C)
 - **Enrichment:** TS pipeline (Mouser API, LCSC, ChipDip)
 - **Браузерная автоматизация:** cloakbrowser + playwright-core
 - **Тесты:** Vitest + Playwright + fast-check
