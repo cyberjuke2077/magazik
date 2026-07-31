@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { LayoutDashboard, Inbox, Building2, Package, LogOut, ExternalLink } from 'lucide-react'
 import { logoutAdmin } from '../login/actions'
 
-export const metadata = { title: 'Админ-панель — Electromagaz' }
+export const metadata = { title: 'Админ-панель - Electromagaz' }
 
 const NAV = [
   { href: '/admin', label: 'Дашборд', icon: LayoutDashboard },

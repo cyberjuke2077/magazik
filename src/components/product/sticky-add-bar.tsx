@@ -114,7 +114,7 @@ export function StickyAddBar({
           <button
             onClick={onAddToCart}
             disabled={!inStock && false}
-            className="flex h-10 shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] bg-azure px-4 text-xs font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-md active:translate-y-0 sm:px-6 sm:text-sm"
+            className="flex h-10 shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] bg-azure px-4 text-xs font-bold text-white transition-colors hover:bg-azure-hover active:translate-y-px sm:px-6 sm:text-sm"
           >
             <ShoppingCart size={14} />
             <span>В корзину</span>

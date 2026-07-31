@@ -1,192 +1,71 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-
-const AUTOPLAY_DELAY_MS = 6000
-
-const slides = [
-  {
-    image: '/storefront/hero-components.jpg',
-    href: '/catalog',
-    alt: 'Катушки с электронными компонентами и платы для серийного производства',
-    eyebrow: 'Поставка электронных компонентов',
-    title: 'Найдём компонент по точному MPN',
-    description: 'Проверяем наличие, сроки поставки и документацию для разработки и серийного производства.',
-  },
-  {
-    image: '/storefront/hero-xilinx.jpg',
-    href: '/brands#brand-xilinx',
-    alt: 'FPGA на профессиональной отладочной плате',
-    eyebrow: 'Программируемая логика',
-    title: 'FPGA и решения Xilinx',
-    description: 'Компоненты для цифровой обработки сигналов, телекоммуникаций и встраиваемых систем.',
-    logo: '/storefront/xilinx-logo.png',
-  },
-  {
-    image: '/storefront/hero-embedded.jpg',
-    href: '/catalog?category=mikrokontrollery',
-    alt: 'Микроконтроллеры, радиомодули и компоненты в инженерной лаборатории',
-    eyebrow: 'Для embedded-разработки',
-    title: 'MCU, DSP и беспроводные модули',
-    description: 'Подбор элементной базы от прототипа до устойчивой серийной поставки.',
-    align: 'right' as const,
-  },
-]
+import { ArrowRight, FileText } from 'lucide-react'
 
 const quickLinks = [
-  {
-    image: '/storefront/category-mcu.jpg',
-    title: 'MCU и DSP',
-    description: 'MCU и DSP',
-    href: '/catalog?category=mikrokontrollery',
-  },
-  {
-    image: '/storefront/category-power.jpg',
-    title: 'Питание',
-    description: 'DC-DC и PMIC',
-    href: '/catalog?category=pitanie',
-  },
-  {
-    image: '/storefront/category-converters.jpg',
-    title: 'АЦП и ЦАП',
-    description: 'Преобразователи',
-    href: '/catalog?category=atsp-tsap',
-  },
-  {
-    image: '/storefront/category-interfaces.jpg',
-    title: 'Интерфейсы',
-    description: 'Логика и драйверы',
-    href: '/catalog?category=interfeysy',
-  },
-  {
-    image: '/storefront/category-rf.jpg',
-    title: 'RF-модули',
-    description: 'RF и беспроводная связь',
-    href: '/catalog?category=rch',
-  },
-  {
-    image: '/storefront/category-sensors.jpg',
-    title: 'Датчики',
-    description: 'Сенсоры и измерения',
-    href: '/catalog?category=datchiki',
-  },
+  { title: 'MCU и DSP', description: 'Микроконтроллеры', href: '/catalog?category=mikrokontrollery' },
+  { title: 'Питание', description: 'DC-DC и PMIC', href: '/catalog?category=pitanie' },
+  { title: 'АЦП и ЦАП', description: 'Преобразователи', href: '/catalog?category=atsp-tsap' },
+  { title: 'Интерфейсы', description: 'Логика и драйверы', href: '/catalog?category=interfeysy' },
+  { title: 'RF-модули', description: 'Беспроводная связь', href: '/catalog?category=rch' },
+  { title: 'Датчики', description: 'Сенсоры и измерения', href: '/catalog?category=datchiki' },
 ]
 
 export function HeroSlider() {
-  const [activeSlide, setActiveSlide] = useState(0)
-  const [paused, setPaused] = useState(false)
-
-  useEffect(() => {
-    if (paused) return
-
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (media.matches) return
-
-    const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % slides.length)
-    }, AUTOPLAY_DELAY_MS)
-
-    return () => window.clearInterval(timer)
-  }, [paused])
-
   return (
-    <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6" data-motion-reveal>
-      <div className="mx-auto max-w-[1380px] overflow-hidden px-4 lg:flex lg:gap-4 lg:px-0">
-        <div
-          className="relative h-[180px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[250px] lg:w-[360px]"
-          role="region"
-          aria-roledescription="карусель"
-          aria-label="Подборки компонентов"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocusCapture={() => setPaused(true)}
-          onBlurCapture={() => setPaused(false)}
-        >
-          {slides.map((slide, index) => {
-            const isActive = index === activeSlide
-            const contentOnRight = slide.align === 'right'
-
-            return (
-              <Link
-                key={slide.image}
-                href={slide.href}
-                className={`absolute inset-0 transition-opacity duration-[400ms] motion-reduce:transition-none ${
-                  isActive ? 'z-[1] opacity-100' : 'pointer-events-none opacity-0'
-                }`}
-                aria-hidden={!isActive}
-                tabIndex={isActive ? 0 : -1}
-              >
-                <Image
-                  src={slide.image}
-                  alt={slide.alt}
-                  fill
-                  priority={index === 0}
-                  className="object-cover saturate-[1.2] contrast-[1.05] brightness-[1.08]"
-                  sizes="(max-width: 1024px) 100vw, 1050px"
-                />
-                <div
-                  className={`absolute inset-0 ${
-                    contentOnRight
-                      ? 'bg-gradient-to-l from-[#08172c]/88 via-[#08172c]/62 to-[#08172c]/5'
-                      : 'bg-gradient-to-r from-[#08172c]/88 via-[#08172c]/60 to-transparent'
-                  }`}
-                />
-                <div
-                  className={`relative flex h-full flex-col justify-center p-4 text-white lg:p-5 ${
-                    contentOnRight ? 'ml-auto items-start' : ''
-                  }`}
-                >
-                  {slide.logo && (
-                    <span className="mb-2 flex h-7 w-[108px] items-center rounded-md bg-white px-2.5">
-                      <Image
-                        src={slide.logo}
-                        alt="Xilinx"
-                        width={92}
-                        height={28}
-                        className="h-4 w-auto object-contain"
-                      />
-                    </span>
-                  )}
-                  <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/72">
-                    {slide.eyebrow}
-                  </span>
-                  <h1 className="mt-1.5 max-w-6xl text-[21px] font-bold leading-[1.05] tracking-[-0.025em] text-balance lg:text-[24px]">
-                    {slide.title}
-                  </h1>
-                  <p className="mt-2 max-w-[30ch] text-[12px] leading-[1.35] text-white/78 lg:text-[13px]">
-                    {slide.description}
-                  </p>
-                </div>
+    <section className="border-b border-[var(--border)] bg-white" data-motion-reveal>
+      <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
+        <div className="grid overflow-hidden border-x border-[var(--border)] lg:min-h-[430px] lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)]">
+          <div className="flex flex-col justify-center px-5 py-9 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
+            <p className="mb-5 text-sm font-semibold text-azure">Поставка электронных компонентов</p>
+            <h1 className="max-w-3xl text-balance text-[34px] font-bold leading-[1.04] tracking-[-0.045em] text-ink sm:text-[48px] lg:text-[54px]">
+              Найдём компонент по точному MPN
+            </h1>
+            <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-ink-3 sm:mt-5 sm:text-lg">
+              Проверим наличие, срок поставки и документацию для разработки и серийного производства.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3 sm:mt-8">
+              <Link href="/catalog" className="ui-btn ui-btn-primary">
+                Открыть каталог
+                <ArrowRight size={16} />
               </Link>
-            )
-          })}
+              <Link href="/request-quote" className="ui-btn ui-btn-secondary">
+                <FileText size={16} />
+                Запросить КП
+              </Link>
+            </div>
+          </div>
+
+          <Link
+            href="/catalog"
+            className="group relative min-h-[240px] overflow-hidden border-t border-[var(--border)] bg-[#dfe6ed] sm:min-h-[300px] lg:min-h-full lg:border-l lg:border-t-0"
+            aria-label="Перейти в каталог электронных компонентов"
+            data-motion-scale
+          >
+            <Image
+              src="/storefront/hero-components.jpg"
+              alt="Электронные компоненты и печатные платы для серийного производства"
+              fill
+              priority
+              className="object-cover object-center saturate-[0.82] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-[1.02]"
+              sizes="(max-width: 1024px) 100vw, 58vw"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,24,40,0.14),transparent_45%)]" />
+          </Link>
         </div>
 
-        <div className="no-scrollbar mt-4 flex gap-2.5 overflow-x-auto lg:mt-0 lg:min-w-0 lg:flex-1 lg:gap-3 lg:overflow-visible">
+        <nav className="no-scrollbar flex overflow-x-auto border-x border-b border-[var(--border)]" aria-label="Популярные категории">
           {quickLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group relative h-[128px] w-[116px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[250px] lg:w-auto lg:flex-1 lg:hover:flex-[1.24] lg:hover:shadow-[var(--shadow-azure-md)]"
-              data-motion-scale
+              className="group min-w-[168px] flex-1 border-r border-[var(--border)] px-5 py-4 last:border-r-0 hover:bg-surface-muted"
             >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover saturate-[1.25] contrast-[1.06] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
-                sizes="(max-width: 1024px) 116px, 180px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-transparent to-[#071b33]/88" />
-              <div className="absolute inset-x-0 bottom-0 p-3 text-white lg:p-5">
-                <div className="font-display text-[13px] font-bold leading-[1.08] drop-shadow-sm lg:text-[18px]">{item.title}</div>
-                <div className="mt-1 hidden text-[13px] leading-tight text-white/82 lg:block">{item.description}</div>
-              </div>
+              <span className="block text-sm font-semibold text-ink transition-colors group-hover:text-azure">{item.title}</span>
+              <span className="mt-0.5 block text-xs text-ink-4">{item.description}</span>
             </Link>
           ))}
-        </div>
+        </nav>
       </div>
     </section>
   )

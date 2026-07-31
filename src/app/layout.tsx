@@ -25,7 +25,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Electromagaz — электронные компоненты',
+    default: 'Electromagaz - электронные компоненты',
     template: '%s | Electromagaz',
   },
   description:

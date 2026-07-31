@@ -55,7 +55,7 @@ export function AccountClient() {
         </p>
       </div>
 
-      <div className="grid overflow-hidden rounded-[26px] bg-white shadow-[var(--shadow-azure-md)] lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,0.68fr)]">
+      <div className="grid overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border)] bg-white lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,0.68fr)]">
         <AccountPreview />
         <section className="border-t border-[var(--border)] p-5 sm:p-8 lg:border-l lg:border-t-0 lg:p-10" aria-label="Вход и регистрация">
           <AuthTabs tab={tab} onChange={setTab} />
@@ -70,11 +70,9 @@ export function AccountClient() {
 
 function AccountPreview() {
   return (
-    <section className="relative overflow-hidden bg-[#082b59] p-6 text-white sm:p-10 lg:min-h-[610px] lg:p-12">
-      <div className="absolute -right-24 -top-24 size-72 rounded-full bg-[#1988ff]/28 blur-3xl" />
-      <div className="absolute -bottom-24 left-1/4 size-64 rounded-full bg-cyan-300/12 blur-3xl" />
-      <div className="relative">
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-white/12 ring-1 ring-white/15">
+    <section className="bg-ink p-6 text-white sm:p-10 lg:min-h-[610px] lg:p-12">
+      <div>
+        <div className="flex size-12 items-center justify-center rounded-[var(--radius-control)] border border-white/16 bg-white/[0.06]">
           <ShieldCheck size={25} />
         </div>
         <h2 className="mt-7 max-w-[14ch] text-[30px] font-bold leading-[1.05] tracking-[-0.035em] sm:text-[38px]">
@@ -84,10 +82,10 @@ function AccountPreview() {
           После подключения аккаунта здесь появятся реальные данные пользователя и его заказов.
         </p>
 
-        <div className="mt-10 space-y-3">
+        <div className="mt-10 border-t border-white/16">
           {futureFeatures.map((feature) => (
-            <div key={feature.title} className="flex gap-4 rounded-2xl bg-white/[0.07] p-4 ring-1 ring-white/10 backdrop-blur-sm">
-              <feature.icon className="mt-0.5 shrink-0 text-[#66b4ff]" size={20} />
+            <div key={feature.title} className="flex gap-4 border-b border-white/16 py-5">
+              <feature.icon className="mt-0.5 shrink-0 text-[#8cbcff]" size={20} />
               <div>
                 <h3 className="text-sm font-semibold">{feature.title}</h3>
                 <p className="mt-1 text-xs leading-5 text-white/62">{feature.text}</p>
@@ -102,7 +100,7 @@ function AccountPreview() {
 
 function AuthTabs({ tab, onChange }: { tab: AuthTab; onChange: (tab: AuthTab) => void }) {
   return (
-    <div className="grid grid-cols-2 rounded-xl bg-surface-muted p-1" role="tablist" aria-label="Авторизация">
+    <div className="grid grid-cols-2 rounded-[var(--radius-control)] bg-surface-muted p-1" role="tablist" aria-label="Авторизация">
       {(['login', 'register'] as const).map((item) => (
         <button
           key={item}
@@ -110,8 +108,8 @@ function AuthTabs({ tab, onChange }: { tab: AuthTab; onChange: (tab: AuthTab) =>
           role="tab"
           aria-selected={tab === item}
           onClick={() => onChange(item)}
-          className={`h-11 rounded-lg text-sm font-semibold transition duration-200 active:scale-[0.98] ${
-            tab === item ? 'bg-white text-ink shadow-[var(--shadow-xs)]' : 'text-ink-3 hover:text-ink'
+          className={`h-11 rounded-lg text-sm font-semibold transition-colors duration-200 active:translate-y-px ${
+            tab === item ? 'border border-[var(--border)] bg-white text-ink' : 'text-ink-3 hover:text-ink'
           }`}
         >
           {item === 'login' ? 'Войти' : 'Регистрация'}

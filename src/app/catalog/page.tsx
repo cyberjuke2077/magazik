@@ -40,7 +40,7 @@ export async function generateMetadata({ searchParams }: CatalogPageProps): Prom
   const manufacturerSlug = firstParam(params.manufacturer)
 
   // Канонический URL держит только осмысленные фильтры; sort/view/limit/page
-  // схлопываются — это один и тот же контент в другом порядке, дубли для робота.
+  // схлопываются - это один и тот же контент в другом порядке, дубли для робота.
   const canonicalParams = new URLSearchParams()
   if (categorySlug) canonicalParams.set('category', categorySlug)
   if (manufacturerSlug) canonicalParams.set('manufacturer', manufacturerSlug)
@@ -60,7 +60,7 @@ export async function generateMetadata({ searchParams }: CatalogPageProps): Prom
     const cat = await getCategoryBySlug(categorySlug)
     if (cat) {
       return {
-        title: `${cat.name} — купить оптом и в розницу`,
+        title: `${cat.name} - купить оптом и в розницу`,
         description:
           cat.description ||
           `${cat.name}: ${cat.count.toLocaleString('ru-RU')} позиций в наличии и под заказ. Отправка в день заказа, доставка по России. Купить в Electromagaz.`,
@@ -139,7 +139,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
       {/* Breadcrumbs */}
       <div className="bg-canvas">
-        <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-[29px] lg:px-0">
+        <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-6 lg:px-0">
           <nav className="flex items-center gap-1 overflow-hidden whitespace-nowrap text-xs text-ink-3">
             <Link href="/" className="hover:text-azure transition-colors">
               Главная
@@ -161,10 +161,10 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
       </div>
 
       <main className="flex-1">
-        <div className="mx-auto max-w-[1380px] px-4 pb-8 pt-3 lg:px-0">
+        <div className="mx-auto max-w-[1380px] px-4 pb-10 pt-3 lg:px-0">
           {/* Page title */}
           <div className="mb-1 flex items-baseline gap-3">
-            <h1 className="text-[30px] font-bold tracking-[-0.035em] text-ink">
+            <h1 className="text-[32px] font-bold tracking-[-0.04em] text-ink sm:text-[36px]">
               {activeCategoryName || 'Каталог'}
             </h1>
             <span className="text-sm text-ink-4">
@@ -172,9 +172,9 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             </span>
           </div>
 
-          <div className="mt-4 flex gap-4">
+          <div className="mt-5 flex gap-5">
             {/* Sidebar */}
-            <aside className="sticky top-[112px] hidden h-fit w-[280px] shrink-0 overflow-hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] lg:block">
+            <aside className="sticky top-[96px] hidden h-fit w-[272px] shrink-0 overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-4 lg:block">
               <Suspense fallback={<div className="h-40 skeleton rounded" />}>
                 <CategoryTree
                   categories={categories}
@@ -190,7 +190,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             {/* Main content */}
             <div className="flex-1 min-w-0">
               {/* Toolbar */}
-              <div className="mb-3 flex min-h-14 flex-wrap items-center gap-2 rounded-2xl bg-white p-2.5 shadow-[var(--shadow-xs)]">
+              <div className="mb-3 flex min-h-14 flex-wrap items-center gap-2 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-2.5">
                 {parsed.query && (
                   <span className="mr-auto min-w-0 truncate text-sm text-ink-3">
                     Результаты для «<span className="font-medium text-ink-2">{parsed.query}</span>»

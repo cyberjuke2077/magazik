@@ -209,7 +209,7 @@ export default function CartPage() {
 
             {/* Right: summary */}
             <div className="w-full lg:sticky lg:top-24">
-              <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-azure-sm)]">
+              <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white">
                 {/* Header */}
                 <div className="px-4 py-3 bg-[#f8fafc] border-b border-[var(--border)]">
                   <span className="text-sm font-semibold text-ink">Итого</span>
@@ -246,7 +246,7 @@ export default function CartPage() {
                 <div className="px-4 pb-4">
                   <Link
                     href="/request-quote"
-                    className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-azure text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-[var(--shadow-azure-md)] active:translate-y-0 active:scale-[0.98]"
+                    className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-azure text-sm font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
                   >
                     Перейти к оформлению
                     <ArrowRight size={14} />

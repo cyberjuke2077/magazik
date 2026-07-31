@@ -173,7 +173,7 @@ export default function DeliveryPage() {
               { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-azure', bg: 'bg-azure-light' },
               { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-azure', bg: 'bg-azure-light' },
             ].map((item) => (
-              <div key={item.label} className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+              <div key={item.label} className="flex items-center gap-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6">
                 <div className={`flex size-12 items-center justify-center rounded-lg ${item.bg} shrink-0`}>
                   <item.icon size={22} className={item.color} />
                 </div>
@@ -191,7 +191,7 @@ export default function DeliveryPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {workflowSteps.map((step, i) => (
                 <div key={i} className="relative">
-                  <div className="h-full rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                  <div className="h-full rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
                         <step.icon size={22} className="text-azure" />
@@ -214,7 +214,7 @@ export default function DeliveryPage() {
             <h2 className="text-2xl font-bold text-ink mb-6">Варианты доставки</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {deliveryOptions.map((option) => (
-                <div key={option.name} className="rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <div key={option.name} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
                       <option.icon size={22} className="text-azure" />
@@ -246,7 +246,7 @@ export default function DeliveryPage() {
             <h2 className="text-2xl font-bold text-ink mb-6">Способы оплаты</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {paymentMethods.map((method) => (
-                <div key={method.name} className="rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <div key={method.name} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
                       <method.icon size={20} className="text-azure" />
@@ -365,7 +365,7 @@ export default function DeliveryPage() {
               <div className="flex flex-col sm:flex-row gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-bold text-azure transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
+                  className="flex h-11 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-white px-6 text-sm font-bold text-azure transition-colors hover:bg-surface-muted active:translate-y-px"
                 >
                   Выбрать товары
                 </Link>

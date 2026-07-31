@@ -21,7 +21,7 @@ export function MobileFilterDrawer({ children }: MobileFilterDrawerProps) {
 
   return (
     <>
-      {/* Trigger button — visible only on mobile */}
+      {/* Trigger button - visible only on mobile */}
       <button
         onClick={() => setOpen(true)}
         className="flex h-9 items-center gap-2 rounded-[var(--radius-control)] border border-[var(--border)] bg-white px-3 text-sm font-medium text-ink-2 transition-colors hover:border-azure/40 lg:hidden"

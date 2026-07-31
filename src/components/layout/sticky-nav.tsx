@@ -16,37 +16,35 @@ export function StickyNav() {
     : ''
 
   return (
-    <div className="sticky top-0 z-[var(--layer-header)] bg-white shadow-[var(--shadow-xs)]">
+    <div className="sticky top-0 z-[var(--layer-header)] border-b border-[var(--border)] bg-white">
       <div className="relative mx-auto max-w-[1380px]">
-        <div className="flex h-12 items-center gap-2 px-4 lg:grid lg:h-24 lg:grid-cols-[280px_minmax(0,1fr)_327px] lg:gap-4 lg:px-0">
-          <div className="storefront-brand-panel hidden h-16 items-center overflow-hidden rounded-2xl bg-azure lg:flex">
-            <Link href="/" className="flex h-full w-36 shrink-0 items-center px-4">
-              <span className="text-[21px] font-extrabold leading-none tracking-[-0.055em] text-white">
-                electro<span className="text-white/88">magaz</span><span className="text-white">.</span>
+        <div className="flex h-[54px] items-center gap-2 px-4 lg:grid lg:h-20 lg:grid-cols-[260px_minmax(0,1fr)_auto] lg:gap-5 lg:px-0">
+          <div className="hidden h-14 items-center gap-4 lg:flex">
+            <Link href="/" className="flex h-12 shrink-0 items-center">
+              <span className="text-[22px] font-extrabold leading-none tracking-[-0.055em] text-ink">
+                electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
               </span>
             </Link>
-            <div className="relative flex flex-1 justify-center">
-              <Link
-                href="/catalog"
-                className="flex h-11 w-[124px] items-center justify-center gap-2 rounded-xl bg-white/14 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-white/22 active:translate-y-0 active:scale-[0.98]"
-              >
-                <Grid3X3 size={17} />
-                <span>Каталог</span>
-              </Link>
-            </div>
+            <Link
+              href="/catalog"
+              className="flex h-10 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-azure px-4 text-sm font-semibold text-white transition-colors hover:bg-azure-hover active:translate-y-px"
+            >
+              <Grid3X3 size={16} strokeWidth={1.8} />
+              <span>Каталог</span>
+            </Link>
           </div>
 
           <LiveSearchDropdown />
 
           <Link
             href="/contacts"
-            className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#f7f7f7] text-ink-3 transition-colors hover:text-azure lg:hidden"
+            className="flex size-10 shrink-0 items-center justify-center rounded-[var(--radius-control)] border border-[var(--border)] bg-white text-ink-3 transition-colors hover:border-[var(--border-2)] hover:text-azure lg:hidden"
             aria-label="Связаться с нами"
           >
             <MessageSquare size={18} strokeWidth={1.7} />
           </Link>
 
-          <div className="hidden h-16 grid-cols-[90px_90px_90px_57px] lg:grid">
+          <div className="hidden h-14 grid-cols-[78px_78px_88px_64px] lg:grid">
             <HeaderAction href="/compare" label="Сравнение" icon={GitCompareArrows} active={pathname === '/compare'} />
             <HeaderAction href="/account" label="Профиль" icon={UserRound} active={pathname.startsWith('/account')} />
             <HeaderAction
@@ -95,16 +93,16 @@ function HeaderAction({
       href={href}
       data-cart-icon={cart ? true : undefined}
       aria-current={active ? 'page' : undefined}
-      className={`relative flex h-16 flex-col items-center justify-center gap-1 text-xs font-medium transition duration-200 hover:-translate-y-0.5 hover:bg-surface-muted hover:text-azure active:translate-y-0 ${
-        active ? 'bg-azure-light text-azure' : 'text-ink-2'
+      className={`relative flex h-14 flex-col items-center justify-center gap-1 rounded-[var(--radius-control)] text-[11px] font-medium transition-colors hover:bg-surface-muted hover:text-azure ${
+        active ? 'bg-azure-dim text-azure' : 'text-ink-3'
       } ${
-        compact ? 'w-[57px]' : 'w-[90px]'
+        compact ? 'w-16' : cart ? 'w-[88px]' : 'w-[78px]'
       }`}
     >
       <span className="relative">
         <Icon size={21} strokeWidth={1.6} />
         {typeof count === 'number' && count > 0 && (
-          <span className="absolute -right-2.5 -top-2 flex h-4 min-w-4 animate-bounce-in items-center justify-center rounded-full bg-azure px-1 text-[9px] font-bold leading-none text-white">
+          <span className="absolute -right-2.5 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-azure px-1 text-[9px] font-bold leading-none text-white">
             {count > 99 ? '99+' : count}
           </span>
         )}
@@ -131,7 +129,7 @@ function MobileNavItem({
       aria-current={active ? 'page' : undefined}
       className={`relative flex min-w-0 flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors ${active ? 'text-azure' : 'text-ink-3 hover:text-azure'}`}
     >
-      {active && <span className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-azure" />}
+      {active && <span className="absolute inset-x-6 top-0 h-0.5 bg-azure" />}
       <Icon size={20} strokeWidth={1.8} />
       <span className="truncate">{label}</span>
     </Link>

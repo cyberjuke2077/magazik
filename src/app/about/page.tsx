@@ -172,7 +172,7 @@ export default function AboutPage() {
               <div className="flex gap-3 shrink-0">
                 <Link
                   href="/catalog"
-                  className="inline-flex h-11 items-center rounded-xl bg-white px-6 text-sm font-bold text-azure transition duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                  className="inline-flex h-11 items-center rounded-[var(--radius-control)] bg-white px-6 text-sm font-bold text-azure transition-colors duration-200 hover:bg-surface-muted active:translate-y-px"
                 >
                   Перейти в каталог
                 </Link>

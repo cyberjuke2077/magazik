@@ -125,7 +125,7 @@ export default function ContactsPage() {
                   href={COMPANY.messengers.telegram}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition-colors duration-200 hover:bg-surface-muted"
                 >
                   <Send size={16} className="text-[#0088cc]" />
                   <div>
@@ -137,7 +137,7 @@ export default function ContactsPage() {
                   href={`https://wa.me/${COMPANY.phone.raw.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition-colors duration-200 hover:bg-surface-muted"
                 >
                   <MessageCircle size={16} className="text-[#25D366]" />
                   <div>

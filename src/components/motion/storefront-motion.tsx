@@ -11,11 +11,11 @@ if (typeof window !== 'undefined') {
 
 function revealElements() {
   gsap.utils.toArray<HTMLElement>('[data-motion-reveal]').forEach((element) => {
-    gsap.fromTo(element, { autoAlpha: 0, y: 18 }, {
+    gsap.fromTo(element, { autoAlpha: 0, y: 10 }, {
       autoAlpha: 1,
       y: 0,
-      duration: 0.65,
-      ease: 'power3.out',
+      duration: 0.42,
+      ease: 'power2.out',
       scrollTrigger: { trigger: element, start: 'top 92%', once: true },
     })
   })
@@ -23,7 +23,7 @@ function revealElements() {
 
 function scaleElements() {
   gsap.utils.toArray<HTMLElement>('[data-motion-scale]').forEach((element) => {
-    gsap.fromTo(element, { autoAlpha: 0.55, scale: 0.92 }, {
+    gsap.fromTo(element, { autoAlpha: 0.86, scale: 0.985 }, {
       autoAlpha: 1,
       scale: 1,
       ease: 'none',

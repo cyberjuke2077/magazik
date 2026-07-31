@@ -79,7 +79,7 @@ export default function HelpPage() {
 
           {/* Contact Cards */}
           <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <a href={`tel:${COMPANY.phone.raw}`} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
+            <a href={`tel:${COMPANY.phone.raw}`} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6 transition-colors duration-200 hover:border-[var(--border-2)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Phone size={24} className="text-azure" />
               </div>
@@ -88,7 +88,7 @@ export default function HelpPage() {
               <p className="text-xs text-ink-4 mt-1">Пн-Пт 9:00-18:00</p>
             </a>
 
-            <a href={`mailto:${COMPANY.supportEmail}`} className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
+            <a href={`mailto:${COMPANY.supportEmail}`} className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6 transition-colors duration-200 hover:border-[var(--border-2)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <Mail size={24} className="text-azure" />
               </div>
@@ -97,7 +97,7 @@ export default function HelpPage() {
               <p className="text-xs text-ink-4 mt-1">Ответим в течение 24 часов</p>
             </a>
 
-            <Link href="/contacts" className="rounded-2xl bg-white p-6 text-left shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)]">
+            <Link href="/contacts" className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6 text-left transition-colors duration-200 hover:border-[var(--border-2)]">
               <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
                 <MessageCircle size={24} className="text-azure" />
               </div>

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 interface RevealProps {
   children: ReactNode
   className?: string
-  /** Задержка появления (мс) — для лёгкого стаггера соседних блоков */
+  /** Задержка появления (мс) - для лёгкого стаггера соседних блоков */
   delay?: number
   as?: 'div' | 'section'
 }

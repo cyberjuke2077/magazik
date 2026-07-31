@@ -103,7 +103,7 @@ export default function SupportPage() {
               <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
                 <a
                   href={`tel:${COMPANY.phone.raw}`}
-                  className="flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-azure transition duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                  className="flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-white px-5 text-sm font-semibold text-azure transition-colors duration-200 hover:bg-surface-muted active:translate-y-px"
                 >
                   <Phone size={14} />
                   {COMPANY.phone.display}

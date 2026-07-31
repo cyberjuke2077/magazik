@@ -148,7 +148,7 @@ export default function ReturnsPage() {
 
           <Link
             href="/contacts"
-            className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-azure px-6 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
+            className="inline-flex h-11 items-center gap-1.5 rounded-[var(--radius-control)] bg-azure px-6 text-sm font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
           >
             Связаться с отделом возвратов
             <ChevronRight size={14} />

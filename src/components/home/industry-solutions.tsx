@@ -19,7 +19,7 @@ export function IndustrySolutions() {
         <SectionHeader
           eyebrow="Решения по отраслям"
           title="Компоненты под вашу задачу"
-          description="Подбираем элементную базу под требования отрасли — от прототипа до серийной поставки."
+          description="Подбираем элементную базу под требования отрасли: от прототипа до серийной поставки."
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {industries.map((it, i) => (
@@ -38,7 +38,7 @@ export function IndustrySolutions() {
                     </h3>
                     <ArrowUpRight
                       size={18}
-                      className="shrink-0 text-ink-4 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-azure"
+                      className="shrink-0 text-ink-4 transition-colors duration-200 group-hover:text-azure"
                     />
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-ink-3">{it.desc}</p>

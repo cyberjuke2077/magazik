@@ -1,57 +1,31 @@
-import Image from 'next/image'
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
 const guides = [
-  {
-    title: 'Как проверить точный MPN',
-    image: '/storefront/category-mcu.jpg',
-    href: '/contacts',
-  },
-  {
-    title: 'Подбор совместимого аналога',
-    image: '/storefront/category-interfaces.jpg',
-    href: '/request-quote',
-  },
-  {
-    title: 'Корпус и тип монтажа',
-    image: '/storefront/category-amplifiers.jpg',
-    href: '/catalog',
-  },
-  {
-    title: 'Компоненты для серийного BOM',
-    image: '/storefront/hero-components.jpg',
-    href: '/wholesale',
-  },
-  {
-    title: 'Проверка сроков поставки',
-    image: '/storefront/category-power.jpg',
-    href: '/delivery',
-  },
+  { title: 'Как проверить точный MPN', href: '/contacts' },
+  { title: 'Подбор совместимого аналога', href: '/request-quote' },
+  { title: 'Корпус и тип монтажа', href: '/catalog' },
+  { title: 'Компоненты для серийного BOM', href: '/wholesale' },
+  { title: 'Проверка сроков поставки', href: '/delivery' },
 ]
 
 export function CatalogGuideStrip() {
   return (
-    <div className="no-scrollbar mb-3 flex h-[116px] gap-3 overflow-x-auto" data-motion-reveal>
-      {guides.map((guide, index) => (
+    <nav
+      className="no-scrollbar mb-3 flex overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-white"
+      aria-label="Помощь с подбором"
+      data-motion-reveal
+    >
+      {guides.map((guide) => (
         <Link
           key={guide.title}
           href={guide.href}
-          className="group relative min-w-[190px] flex-1 overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)]"
+          className="group flex min-h-16 min-w-[190px] flex-1 items-center justify-between gap-3 border-r border-[var(--border)] px-4 py-3 text-sm font-medium leading-snug text-ink last:border-r-0 hover:bg-surface-muted"
         >
-          <Image
-            src={guide.image}
-            alt=""
-            fill
-            className="object-cover opacity-62 transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
-            sizes="220px"
-            loading={index === 0 ? 'eager' : 'lazy'}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/28" />
-          <div className="relative flex h-full max-w-[17ch] items-center p-4 text-[14px] font-bold leading-[1.2] text-ink">
-            {guide.title}
-          </div>
+          {guide.title}
+          <ArrowUpRight size={15} className="shrink-0 text-ink-4 transition-colors group-hover:text-azure" />
         </Link>
       ))}
-    </div>
+    </nav>
   )
 }

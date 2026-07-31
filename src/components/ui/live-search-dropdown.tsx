@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Clock, ChevronRight, Package, Tag, Building2 } from 'lucide-react'
+import { Search, Clock, ChevronRight, Package, PackageSearch, Tag, Building2 } from 'lucide-react'
 
 interface SearchProduct {
   id: string
@@ -221,7 +221,7 @@ export function LiveSearchDropdown() {
 
   return (
     <div className="flex-1 relative">
-      <form onSubmit={handleSubmit} className="relative h-9 rounded-xl bg-[#f7f7f7] lg:h-16 lg:rounded-2xl">
+      <form onSubmit={handleSubmit} className="relative h-10 rounded-[var(--radius-control)] bg-surface-muted lg:h-12">
         <input
           ref={inputRef}
           type="text"
@@ -238,12 +238,12 @@ export function LiveSearchDropdown() {
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onKeyDown={handleKeyDown}
           placeholder="Поиск по артикулу, названию или производителю"
-          className="h-full w-full rounded-xl border border-transparent bg-transparent pl-4 pr-14 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 lg:rounded-2xl lg:pl-5 lg:text-base"
+          className="h-full w-full rounded-[var(--radius-control)] border border-[var(--border)] bg-transparent pl-4 pr-12 text-sm text-ink outline-none transition-[border-color,background-color,box-shadow] placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 lg:pl-4 lg:text-[15px]"
           autoComplete="off"
         />
         <button
           type="submit"
-          className="absolute right-1 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-white hover:text-azure lg:right-3 lg:size-11"
+          className="absolute right-1 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-white hover:text-azure lg:right-1.5"
           aria-label="Найти"
         >
           <Search size={21} strokeWidth={1.7} />
@@ -254,7 +254,7 @@ export function LiveSearchDropdown() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] lg:top-[72px]"
+          className="absolute left-0 right-0 top-[46px] z-[var(--layer-menu)] overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] lg:top-[56px]"
         >
           {/* Loading skeleton */}
           {isLoading && <SkeletonResults />}
@@ -262,7 +262,7 @@ export function LiveSearchDropdown() {
           {/* No results */}
           {!isLoading && noResults && (
             <div className="px-4 py-8 text-center">
-              <div className="text-gray-300 text-3xl mb-2">¯\_(ツ)_/¯</div>
+              <PackageSearch className="mx-auto mb-3 text-ink-4" size={28} strokeWidth={1.5} />
               <p className="text-sm text-gray-500">
                 Ничего не найдено по запросу «<span className="font-medium text-gray-700">{query}</span>»
               </p>
@@ -273,7 +273,7 @@ export function LiveSearchDropdown() {
           {/* History (when query is empty) */}
           {!isLoading && query.trim().length < 2 && history.length > 0 && (
             <div className="p-2">
-              <div className="px-3 py-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+              <div className="px-3 py-1.5 text-xs font-semibold text-ink-3">
                 Недавние запросы
               </div>
               {history.map((term) => (
@@ -295,7 +295,7 @@ export function LiveSearchDropdown() {
               {/* Products section */}
               {results.products.length > 0 && (
                 <div>
-                  <div className="px-4 py-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 border-b border-[var(--border)] bg-surface-muted px-4 py-2 text-xs font-semibold text-ink-3">
                     <Package size={11} />
                     Товары
                   </div>
@@ -333,7 +333,7 @@ export function LiveSearchDropdown() {
               {/* Categories section */}
               {results.categories.length > 0 && (
                 <div>
-                  <div className="px-4 py-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 border-b border-[var(--border)] bg-surface-muted px-4 py-2 text-xs font-semibold text-ink-3">
                     <Tag size={11} />
                     Категории
                   </div>
@@ -362,7 +362,7 @@ export function LiveSearchDropdown() {
               {/* Manufacturers section */}
               {results.manufacturers.length > 0 && (
                 <div>
-                  <div className="px-4 py-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider bg-gray-50 border-b border-gray-100 flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 border-b border-[var(--border)] bg-surface-muted px-4 py-2 text-xs font-semibold text-ink-3">
                     <Building2 size={11} />
                     Производители
                   </div>

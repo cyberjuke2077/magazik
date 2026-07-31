@@ -96,7 +96,7 @@ export function CompareClient() {
                 </Link>
                 <Link
                   href="/catalog"
-                  className="inline-flex h-11 min-w-[138px] items-center justify-center rounded-xl bg-azure px-5 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98]"
+                  className="inline-flex h-11 min-w-[138px] items-center justify-center rounded-[var(--radius-control)] bg-azure px-5 text-sm font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
                 >
                   В каталог
                 </Link>
@@ -222,7 +222,7 @@ export function CompareClient() {
                   <td key={p.id} className="border-b border-r border-gray-200 last:border-r-0 px-4 py-3">
                     {p.inStock ? (
                       <span className="inline-flex items-center gap-1 text-xs font-semibold text-azure">
-                        <span className="size-1.5 rounded-full bg-azure animate-pulse-dot" />
+                        <span className="size-1.5 rounded-full bg-azure" />
                         {p.stockCount.toLocaleString('ru-RU')} {p.unit}
                       </span>
                     ) : (
@@ -297,7 +297,7 @@ export function CompareClient() {
                     <button
                       onClick={() => handleAddToCart(p)}
                       disabled={!p.inStock && false}
-                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-azure text-xs font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98]"
+                      className="flex h-9 w-full items-center justify-center gap-1.5 rounded-[var(--radius-control)] bg-azure text-xs font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
                     >
                       <ShoppingCart size={12} />В корзину
                     </button>

@@ -154,7 +154,7 @@ export default async function QuoteStatusPage({
               </Link>
               <Link
                 href="/"
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-azure px-6 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-md active:translate-y-0"
+                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-control)] bg-azure px-6 text-sm font-bold text-white transition-colors hover:bg-azure-hover active:translate-y-px"
               >
                 На главную
               </Link>

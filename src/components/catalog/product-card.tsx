@@ -29,7 +29,7 @@ interface ProductCardProps {
 
 // Единая тема - azure (30% палитра)
 const cardTheme = {
-  bg:        'bg-azure-light',
+  bg:        'bg-surface-muted',
   iconColor: 'text-azure',
 }
 
@@ -75,7 +75,7 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
   }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-colors duration-200 hover:border-[var(--border-2)]">
       {/* Image zone */}
       <div
         className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${cardTheme.bg}`}
@@ -115,24 +115,24 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
         {/* Badges top-left */}
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-20">
           {product.featured && (
-            <span className="flex items-center gap-1 rounded-sm bg-azure px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            <span className="flex items-center gap-1 rounded-sm bg-azure px-2 py-0.5 text-[10px] font-bold text-white">
               <Zap size={8} />ХИТ
             </span>
           )}
           {isNew && (
-            <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white">
               <Sparkles size={8} />Новинка
             </span>
           )}
           {showDiscount && discountPercent && (
-            <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
+            <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white">
               -{discountPercent}%
             </span>
           )}
         </div>
 
         {/* Compare button (bottom-right) */}
-        <div className="absolute bottom-2 right-2 z-20 bg-white/90 backdrop-blur-sm rounded">
+        <div className="absolute bottom-2 right-2 z-20 rounded-[var(--radius-control)] border border-[var(--border)] bg-white/94">
           <CompareToggleBtn
             item={{
               id: product.id,
@@ -148,7 +148,7 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
 
       {/* Body */}
       <div className="flex flex-1 flex-col gap-2 p-3">
-        <div className="text-[11px] font-semibold uppercase tracking-wide text-ink-4">
+        <div className="text-xs font-medium text-ink-3">
           {product.manufacturer}
         </div>
 
@@ -218,7 +218,7 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
                 ? 'bg-azure-hover text-white'
                 : inCart
                 ? 'border border-azure/20 bg-azure/10 text-azure'
-                : 'bg-azure text-white hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-md'
+                : 'bg-azure text-white hover:bg-azure-hover'
             }`}
           >
             {justAdded ? (

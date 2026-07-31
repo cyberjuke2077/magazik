@@ -5,29 +5,38 @@ import { BRANDS } from '@/lib/brands'
 export function Manufacturers() {
   const brands = BRANDS.filter((b) => b.featured && b.logo).slice(0, 12)
   if (brands.length === 0) return null
+  const marqueeBrands = [...brands, ...brands]
 
   return (
-    <section className="border-y border-[var(--border)] bg-white py-5 lg:py-7" aria-label="Производители" data-motion-reveal>
-      <div className="no-scrollbar mx-auto flex max-w-[1380px] gap-2.5 overflow-x-auto px-4 lg:gap-3 lg:px-0">
-        {brands.map((brand, index) => (
+    <section className="overflow-hidden border-y border-[var(--border)] bg-surface-muted py-7" aria-label="Производители" data-motion-reveal>
+      <div className="mx-auto mb-5 flex max-w-[1380px] items-center justify-between px-4 lg:px-0">
+        <h2 className="text-sm font-semibold text-ink">Производители</h2>
+        <Link href="/brands" className="text-sm font-medium text-azure hover:text-azure-hover">Все бренды</Link>
+      </div>
+      <div className="overflow-hidden border-y border-[var(--border)] bg-white">
+        <div className="animate-marquee w-max">
+        {marqueeBrands.map((brand, index) => (
           <Link
-            key={brand.id}
+            key={`${brand.id}-${index}`}
             href={brand.id === 'xilinx' ? '/brands#brand-xilinx' : `/catalog?manufacturer=${brand.id}`}
             aria-label={brand.name}
-            className="flex h-[68px] w-[128px] shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-azure/30 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:h-[76px] lg:w-auto lg:min-w-0 lg:flex-1"
+            aria-hidden={index >= brands.length ? true : undefined}
+            tabIndex={index >= brands.length ? -1 : undefined}
+            className={`flex h-[76px] w-[156px] shrink-0 items-center justify-center border-r border-[var(--border)] bg-white px-6 transition-[filter,opacity] hover:opacity-100 hover:grayscale-0 ${index >= brands.length ? 'marquee-duplicate' : ''}`}
           >
-            <span className="relative h-9 w-full">
+            <span className="relative h-8 w-full opacity-72 grayscale transition-[filter,opacity] hover:opacity-100 hover:grayscale-0">
               <Image
                 src={brand.logo!}
                 alt={brand.name}
                 fill
                 loading={index < 3 ? 'eager' : 'lazy'}
                 className="object-contain"
-                sizes="(max-width: 1024px) 128px, 115px"
+                sizes="156px"
               />
             </span>
           </Link>
         ))}
+        </div>
       </div>
     </section>
   )

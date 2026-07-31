@@ -25,7 +25,7 @@ function LogoCard({
     <Link
       id={`brand-${brand.id}`}
       href={`/catalog?manufacturer=${brand.id}`}
-      className={`group relative flex items-center justify-center overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-md)] active:translate-y-0 ${className}`}
+      className={`group relative flex items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white transition-colors duration-200 hover:border-[var(--border-2)] ${className}`}
     >
       {brand.logo ? (
         <div className="relative w-full h-full flex items-center justify-center p-6">
@@ -75,10 +75,10 @@ export default function BrandsPage() {
         {/* Breadcrumb */}
         <div className="border-b border-black/8 bg-white">
           <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
-            <nav className="flex items-center gap-1.5 text-xs text-[#a8a29e]">
-              <Link href="/" className="hover:text-[#78716c] transition-colors">Главная</Link>
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="transition-colors hover:text-ink-2">Главная</Link>
               <ChevronRight size={10} />
-              <span className="text-[#78716c]">Бренды</span>
+              <span className="text-ink-2">Бренды</span>
             </nav>
           </div>
         </div>
@@ -90,11 +90,11 @@ export default function BrandsPage() {
             <div>
               <h1 className="text-2xl font-bold tracking-[-0.035em] text-ink md:text-3xl">
                 Производители
-                <span className="ml-3 text-base font-normal text-[#a8a29e]">
+                <span className="ml-3 text-base font-normal text-ink-4">
                   {brands.length} брендов
                 </span>
               </h1>
-              <p className="text-sm text-[#78716c] mt-1">
+              <p className="mt-1 text-sm text-ink-3">
                 {(totalPositions / 1000).toFixed(0)}к+ позиций в каталоге
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function BrandsPage() {
               Row 5: medium | medium  | medium | medium | medium | medium
             */}
             <div className="grid auto-rows-[112px] grid-flow-dense grid-cols-2 gap-3 md:grid-cols-6">
-              {/* Espressif — large */}
+              {/* Espressif - large */}
               <LogoCard
                 brand={brands.find((b) => b.id === 'espressif')!}
                 className="col-span-2 row-span-2"
@@ -124,7 +124,7 @@ export default function BrandsPage() {
               <LogoCard brand={brands.find((b) => b.id === 'worldsemi')!} className="col-span-1 row-span-1" />
               {/* WCH */}
               <LogoCard brand={brands.find((b) => b.id === 'wch')!} className="col-span-1 row-span-1" />
-              {/* Xilinx — large (НОВЫЙ, ЗАМЕТНЫЙ) */}
+              {/* Xilinx - large */}
               <LogoCard
                 brand={brands.find((b) => b.id === 'xilinx')!}
                 className="col-span-2 row-span-2"
@@ -139,7 +139,7 @@ export default function BrandsPage() {
               <LogoCard brand={brands.find((b) => b.id === 'murata')!} className="col-span-1 row-span-1" />
               {/* STMicro */}
               <LogoCard brand={brands.find((b) => b.id === 'stmicroelectronics')!} className="col-span-1 row-span-1" />
-              {/* Yageo — large */}
+              {/* Yageo - large */}
               <LogoCard
                 brand={brands.find((b) => b.id === 'yageo')!}
                 className="col-span-2 row-span-2"
@@ -169,7 +169,7 @@ export default function BrandsPage() {
             </div>
           </section>
 
-          {/* ── All brands A–Z ── */}
+          {/* All brands A-Z */}
           <section data-motion-reveal>
             <h2 className="mb-5 text-lg font-bold text-ink">
               Все бренды от A до Z
@@ -178,13 +178,13 @@ export default function BrandsPage() {
             {/* Search + alphabet */}
             <div className="flex flex-col sm:flex-row gap-4 mb-6">
               <div className="relative w-full sm:w-72">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8a29e]" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                 <input
                   type="text"
                   placeholder="Поиск по бренду"
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setActiveLetter(null) }}
-                  className="w-full h-9 pl-8 pr-3 text-sm border border-black/12 rounded focus:outline-none focus:border-azure transition-colors"
+                  className="h-10 w-full rounded-[var(--radius-control)] border border-[var(--border)] bg-white pl-8 pr-3 text-sm outline-none transition-colors focus:border-azure"
                 />
               </div>
 
@@ -215,7 +215,7 @@ export default function BrandsPage() {
                   <Link
                     key={brand.id}
                     href={`/catalog?manufacturer=${brand.id}`}
-                    className="group relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0"
+                    className="group relative flex h-28 flex-col items-center justify-center overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-5 transition-colors duration-200 hover:border-[var(--border-2)]"
                   >
                     {brand.logo ? (
                       <div className="relative w-full h-full">
@@ -236,14 +236,14 @@ export default function BrandsPage() {
                 ))}
               </div>
             ) : (
-              <div className="py-16 text-center text-[#a8a29e] text-sm">
+              <div className="py-16 text-center text-sm text-ink-4">
                 Бренды не найдены
               </div>
             )}
           </section>
 
           {/* CTA */}
-          <section className="relative overflow-hidden rounded-2xl bg-azure-dim p-7 text-center" data-motion-reveal>
+          <section className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-7 text-center" data-motion-reveal>
             <div className="relative">
               <h2 className="mb-2 text-xl font-bold text-ink">Нет нужного производителя?</h2>
               <p className="mx-auto mb-5 max-w-md text-sm text-ink-3">
@@ -251,7 +251,7 @@ export default function BrandsPage() {
               </p>
               <a
                 href={`mailto:${COMPANY.email}`}
-                className="inline-flex h-10 items-center gap-2 rounded-xl bg-azure px-6 text-sm font-semibold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
+                className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-azure px-6 text-sm font-semibold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
               >
                 Написать нам
               </a>
