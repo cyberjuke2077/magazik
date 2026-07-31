@@ -25,11 +25,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Electromagaz - электронные компоненты',
+    default: 'Electromagaz — электронные компоненты',
     template: '%s | Electromagaz',
   },
   description:
-    'B2B-каталог электронных компонентов с поиском по MPN и формированием заявки на коммерческое предложение.',
+    'Интернет-магазин электронных компонентов: резисторы, конденсаторы, микросхемы, датчики, контроллеры. Оптом и в розницу. Отправка в день заказа.',
   keywords: ['электронные компоненты', 'резисторы', 'конденсаторы', 'микросхемы', 'Arduino', 'STM32'],
   openGraph: {
     type: 'website',

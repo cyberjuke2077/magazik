@@ -8,7 +8,7 @@ import { COMPANY } from '@/lib/company'
 export const metadata: Metadata = {
   title: 'Реквизиты и правовая информация',
   description:
-    'Реквизиты компании, условия B2B-поставки, политика обработки персональных данных и условия работы Electromagaz.',
+    'Реквизиты компании, публичная оферта, политика обработки персональных данных и условия работы Electromagaz.',
 }
 
 const requisites: { label: string; value: string }[] = [
@@ -29,7 +29,7 @@ const bankRequisites: { label: string; value: string }[] = [
 ]
 
 const documents = [
-  { title: 'Условия B2B-поставки', desc: 'Порядок формирования заявки и согласования сделки', href: '/offer' },
+  { title: 'Публичная оферта', desc: 'Условия поставки электронных компонентов', href: '/offer' },
   { title: 'Политика обработки ПДн', desc: 'Обработка персональных данных по ФЗ-152', href: '/privacy' },
   { title: 'Условия использования', desc: 'Правила работы с сайтом', href: '/terms' },
   { title: 'Возврат и обмен', desc: 'Порядок возврата товара', href: '/returns' },

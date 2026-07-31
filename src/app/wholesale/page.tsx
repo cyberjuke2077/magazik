@@ -24,39 +24,39 @@ import { Footer } from '@/components/layout/footer'
 import { COMPANY } from '@/lib/company'
 import { submitWholesaleLead } from './actions'
 
-const pricingFactors = [
-  { title: 'Количество', description: 'Учитываем объём партии по каждой позиции' },
-  { title: 'Наличие', description: 'Проверяем доступность у выбранного источника' },
-  { title: 'Срок', description: 'Согласуем требуемую дату и вариант поставки' },
-  { title: 'Документы', description: 'Фиксируем доступный комплект до оплаты' },
+const priceTiers = [
+  { from: 1, to: 99, label: 'Розница', discount: 0, color: 'text-ink-3', bg: 'bg-azure-light' },
+  { from: 100, to: 499, label: 'Мелкий опт', discount: 15, color: 'text-accent', bg: 'bg-accent/8' },
+  { from: 500, to: 1999, label: 'Средний опт', discount: 25, color: 'text-azure', bg: 'bg-azure/8' },
+  { from: 2000, to: null, label: 'Крупный опт', discount: 40, color: 'text-azure', bg: 'bg-azure/15' },
 ]
 
 const benefits = [
   {
     icon: TrendingDown,
-    title: 'Цена для заявки',
-    description: 'Цена рассчитывается по составу и объёму конкретной партии',
+    title: 'Скидки до 40%',
+    description: 'Прогрессивная система скидок в зависимости от объёма заказа',
     color: 'text-azure',
     bg: 'bg-azure/8',
   },
   {
     icon: FileText,
-    title: 'Состав документов',
-    description: 'Доступный комплект фиксируется в коммерческом предложении',
+    title: 'Полный пакет документов',
+    description: 'Счёт, накладная, счёт-фактура, сертификаты качества на все позиции',
     color: 'text-accent',
     bg: 'bg-accent/8',
   },
   {
     icon: Package2,
-    title: 'Поставка под проект',
-    description: 'Можно передать перечень MPN и требуемые количества одной заявкой',
+    title: 'Резервирование склада',
+    description: 'Резервируем нужные позиции под ваши регулярные заказы',
     color: 'text-azure',
     bg: 'bg-azure/8',
   },
   {
     icon: Headphones,
-    title: 'Один контакт',
-    description: 'Менеджер уточняет состав заявки и готовит коммерческое предложение',
+    title: 'Персональный менеджер',
+    description: 'Выделенный менеджер для оптовых клиентов, помощь с подбором',
     color: 'text-accent',
     bg: 'bg-accent/8',
   },
@@ -64,10 +64,10 @@ const benefits = [
 
 const conditions = [
   'Работаем с юридическими лицами и ИП',
-  'Цена, наличие и срок подтверждаются в коммерческом предложении',
-  'Способ оплаты и поставки фиксируется в счёте или договоре',
-  'Комплект документов согласуется для конкретных позиций',
-  'Минимальная сумма не заявляется до расчёта партии',
+  'Оплата по счёту, банковской картой или наличными',
+  'Отсрочка платежа для постоянных клиентов',
+  'Доставка по всей России и СНГ',
+  'Минимальная сумма оптового заказа - 10 000 ₽',
   'Возможность заказа под конкретный проект',
 ]
 
@@ -153,8 +153,8 @@ export default function WholesalePage() {
                 Специальные условия<br />для бизнеса
               </h1>
               <p className="text-white/70 text-base max-w-lg">
-                Отправьте перечень MPN и количество. Подготовим условия для конкретной
-                заявки с учётом доступности и требуемых документов.
+                Скидки до 40%, персональный менеджер, полный пакет документов.
+                Работаем с производителями, интеграторами и дистрибьюторами.
               </p>
             </div>
           </div>
@@ -162,18 +162,34 @@ export default function WholesalePage() {
 
         <div className="mx-auto max-w-[1380px] space-y-9 px-3 py-8 sm:px-6">
 
-          {/* Pricing factors */}
+          {/* Price tiers */}
           <section>
-            <h2 className="text-xl font-bold text-ink mb-2">Как рассчитываются условия</h2>
-            <p className="text-sm text-ink-3 mb-6">Итоговые параметры фиксируются в коммерческом предложении</p>
+            <h2 className="text-xl font-bold text-ink mb-2">Ценовые уровни</h2>
+            <p className="text-sm text-ink-3 mb-6">Скидка применяется автоматически при достижении порога</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {pricingFactors.map((factor) => (
+              {priceTiers.map((tier) => (
                 <div
-                  key={factor.title}
-                  className="relative flex flex-col rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                  key={tier.label}
+                  className={`relative flex flex-col rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
+                    tier.discount >= 25 ? 'ring-2 ring-azure/20' : ''
+                  }`}
                 >
-                  <div className="text-sm font-semibold text-ink mb-2">{factor.title}</div>
-                  <div className="text-xs text-ink-3 leading-relaxed">{factor.description}</div>
+                  {tier.discount >= 25 && (
+                    <div className="absolute -top-2.5 left-4 px-2.5 py-0.5 bg-azure text-white text-[10px] font-semibold rounded-sm">
+                      Популярный
+                    </div>
+                  )}
+                  <div className={`inline-flex items-center self-start px-2.5 py-1 rounded text-xs font-semibold mb-3 ${tier.bg} ${tier.color}`}>
+                    {tier.label}
+                  </div>
+                  <div className="text-3xl font-bold text-ink mb-1">
+                    {tier.discount === 0 ? '-' : `-${tier.discount}%`}
+                  </div>
+                  <div className="text-xs text-ink-3">
+                    {tier.to
+                      ? `от ${tier.from} до ${tier.to} шт.`
+                      : `от ${tier.from} шт.`}
+                  </div>
                 </div>
               ))}
             </div>
@@ -212,9 +228,9 @@ export default function WholesalePage() {
               </div>
 
               <div className="mt-6 rounded-2xl bg-azure-light p-5">
-                <h3 className="text-sm font-semibold text-ink mb-2">Нужно обсудить заявку?</h3>
+                <h3 className="text-sm font-semibold text-ink mb-2">Нужна срочная поставка?</h3>
                 <p className="text-xs text-ink-3 mb-3">
-                  Позвоните нам или укажите требования в форме. Условия подтвердим после проверки позиций.
+                  Позвоните нам - обсудим условия и сроки в течение 15 минут.
                 </p>
                 <a
                   href={`tel:${COMPANY.phone.raw}`}
@@ -237,7 +253,7 @@ export default function WholesalePage() {
                     </div>
                     <h3 className="text-base font-bold text-ink mb-2">Заявка отправлена!</h3>
                     <p className="text-sm text-ink-3">
-                      Менеджер обработает данные и свяжется с вами по указанным контактам.
+                      Наш менеджер свяжется с вами в течение 2 часов в рабочее время.
                     </p>
                   </div>
                 ) : (
@@ -327,7 +343,7 @@ export default function WholesalePage() {
                         </Link>{' '}
                         и{' '}
                         <Link href="/offer" className="text-azure hover:underline">
-                          условиями B2B-поставки
+                          условиями оферты
                         </Link>.
                       </span>
                     </label>

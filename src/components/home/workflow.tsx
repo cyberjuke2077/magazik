@@ -4,9 +4,9 @@ import { Reveal } from './reveal'
 
 const steps = [
   { icon: ListChecks, title: 'Корзина или список', desc: 'Пришлите спецификацию или соберите позиции в корзину.' },
-  { icon: Calculator, title: 'Проверка заявки', desc: 'Уточняем позиции, количество и обязательные требования.' },
-  { icon: FileSignature, title: 'Согласование условий', desc: 'Цена, срок, оплата и документы фиксируются в КП или договоре.' },
-  { icon: Truck, title: 'Исполнение поставки', desc: 'Способ передачи товара определяется согласованными условиями.' },
+  { icon: Calculator, title: 'Подбор и расчёт', desc: 'Проверим наличие, предложим аналоги и сформируем КП с ценами.' },
+  { icon: FileSignature, title: 'Договор и оплата', desc: 'Согласуем условия, работаем по безналу с НДС и договором.' },
+  { icon: Truck, title: 'Поставка и документы', desc: 'Отгружаем со склада и передаём полный пакет документов.' },
 ]
 
 export function Workflow() {
@@ -16,9 +16,9 @@ export function Workflow() {
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <div className="ui-eyebrow mb-3 text-azure-light">Как мы работаем</div>
-            <h2 className="section-heading text-white">От заявки до поставки - 4 шага</h2>
+            <h2 className="section-heading text-white">От заявки до поставки — 4 шага</h2>
             <p className="mt-4 text-lg leading-relaxed text-white/70">
-              Параметры сделки согласуются до оплаты и фиксируются в коммерческих документах.
+              Прозрачный процесс без лишней бюрократии: вы получаете расчёт, сроки и документы.
             </p>
           </div>
           <Link
