@@ -8,7 +8,8 @@
  *   Manufacturer, Category, Product, ProductImage, Specification, Datasheet, ProductAnalog
  *
  * Никогда не трогаются в проде:
- *   QuoteRequest, QuoteRequestItem  — заявки клиентов (нет FK на Product — безопасно)
+ *   QuoteRequest, QuoteRequestItem, WholesaleLead - заявки и лиды клиентов
+ *   (нет FK на Product - безопасно)
  *   EnrichmentJournal, ImportProgress — рабочее состояние парсера, в прод не публикуется
  *
  * Запуск:
@@ -21,6 +22,11 @@
  */
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
+import {
+  assertSafePublishUrls,
+  protectedCountsMatch,
+  type ProtectedProductionCounts,
+} from '../src/lib/db-publish-safety'
 
 const CHUNK = 1000
 const dryRun = process.argv.includes('--dry-run')
@@ -32,8 +38,10 @@ if (!sourceUrl || !targetUrl) {
   console.error('Нужны DATABASE_URL (local) и PUBLISH_DATABASE_URL (Supabase) в .env')
   process.exit(1)
 }
-if (/pgbouncer=true|:6543\//.test(targetUrl)) {
-  console.error('PUBLISH_DATABASE_URL должен указывать на session-порт 5432 без pgbouncer (транзакции).')
+try {
+  assertSafePublishUrls(sourceUrl, targetUrl)
+} catch (error) {
+  console.error(error instanceof Error ? error.message : 'Небезопасная конфигурация публикации')
   process.exit(1)
 }
 
@@ -44,6 +52,20 @@ const chunks = <T>(arr: T[]): T[][] => {
   const out: T[][] = []
   for (let i = 0; i < arr.length; i += CHUNK) out.push(arr.slice(i, i + CHUNK))
   return out
+}
+
+async function readProtectedCounts(client: PrismaClient): Promise<ProtectedProductionCounts> {
+  const [quotes, quoteItems, wholesaleLeads] = await Promise.all([
+    client.quoteRequest.count(),
+    client.quoteRequestItem.count(),
+    client.wholesaleLead.count(),
+  ])
+
+  return {
+    QuoteRequest: quotes,
+    QuoteRequestItem: quoteItems,
+    WholesaleLead: wholesaleLeads,
+  }
 }
 
 async function main() {
@@ -87,8 +109,12 @@ async function main() {
   for (const k of Object.keys(localCounts) as (keyof typeof localCounts)[]) {
     console.log(`  ${k.padEnd(16)} ${String(localCounts[k]).padStart(6)} → ${prodCounts[k]}`)
   }
-  const quotes = await prod.quoteRequest.count()
-  console.log(`  (в проде заявок клиентов: ${quotes} — не трогаем)\n`)
+  const protectedBefore = await readProtectedCounts(prod)
+  console.log('  Защищённые production-таблицы (не публикуются):')
+  for (const [table, count] of Object.entries(protectedBefore)) {
+    console.log(`    ${table.padEnd(18)} ${count}`)
+  }
+  console.log()
 
   if (dryRun) {
     console.log('DRY-RUN завершён. Запусти без --dry-run для публикации.')
@@ -146,9 +172,14 @@ async function main() {
     if (!match) ok = false
     console.log(`  ${match ? '✓' : '✗'} ${k.padEnd(16)} prod=${after[k]} ожидалось=${localCounts[k]}`)
   }
-  const quotesAfter = await prod.quoteRequest.count()
-  console.log(`  ${quotesAfter === quotes ? '✓' : '✗'} заявки клиентов: ${quotesAfter} (было ${quotes})`)
-  if (!ok || quotesAfter !== quotes) {
+  const protectedAfter = await readProtectedCounts(prod)
+  for (const table of Object.keys(protectedBefore) as (keyof ProtectedProductionCounts)[]) {
+    const match = protectedAfter[table] === protectedBefore[table]
+    console.log(
+      `  ${match ? '✓' : '✗'} ${table}: ${protectedAfter[table]} (было ${protectedBefore[table]})`,
+    )
+  }
+  if (!ok || !protectedCountsMatch(protectedBefore, protectedAfter)) {
     console.error('\nРасхождение счётчиков — проверь вручную!')
     process.exit(1)
   }

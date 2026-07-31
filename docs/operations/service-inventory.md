@@ -22,7 +22,7 @@
 |---|---|---|---|---|---|
 | GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | Владелец репозитория | Write для разработчика, review для владельца | `verified`: remote настроен | Работать через `codex/*`, PR и review |
 | Vercel | Preview и Production deploy | `[УТОЧНИТЬ]` | Project Developer или выше | `blocked`: CLI отсутствует, checkout не связан с Vercel project | Выдать доступ, связать проект, проверить production deployment и env |
-| Supabase | Production PostgreSQL, заявки и лиды | `[УТОЧНИТЬ]` | Developer без billing и удаления проекта | `partial`: схема актуальна, pooler работает нестабильно | Подтвердить владельца, backup policy и тест восстановления |
+| Supabase | Production PostgreSQL, заявки и лиды | `[УТОЧНИТЬ]` | Developer без billing и удаления проекта | `partial`: 7 миграций актуальны; `DATABASE_URL` и `DIRECT_URL` настроены, `PUBLISH_DATABASE_URL` пуст; read-only проверка session pooler прошла 2026-07-31 | Подтвердить владельца, настроить отдельную publication-цель, backup policy и тест восстановления |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `partial`: конфигурация есть, Docker не был запущен при аудите | Поднять контейнер, проверить health и локальную Prisma-схему |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `not-configured`: локальные R2 env пусты | Подтвердить bucket, public URL и тестовую загрузку |
 | Telegram Bot API | Уведомления менеджеру о заявках | `[УТОЧНИТЬ]` | Bot token и chat ID | `not-configured`: локальные env пусты | Настроить и отправить тестовое уведомление |
@@ -42,6 +42,12 @@
 - Изображения должны храниться в R2, а не в Git или Supabase Storage.
 - Production migrations, deploy, R2 maintenance и публикация каталога требуют
   явной задачи, проверки target environment и нужного доступа.
+- `DATABASE_URL` используется приложением и как источник `db:publish`.
+- `DIRECT_URL` предназначен для Prisma migration без transaction pooler.
+- `PUBLISH_DATABASE_URL` является отдельной целью `db:publish` на session-порту
+  5432. Скрипт отклоняет transaction pooler и совпадение источника с целью.
+- После публикации скрипт сравнивает счётчики `QuoteRequest`,
+  `QuoteRequestItem` и `WholesaleLead` и завершает проверку ошибкой при изменении.
 - У каждого участника должны быть собственные доступы. Credentials владельца
   не копируются между машинами и не передаются в чате.
 
