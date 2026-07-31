@@ -91,7 +91,7 @@ export default function SupportPage() {
           </section>
 
           {/* Contact */}
-          <section className="mb-12 rounded-2xl bg-azure p-8">
+          <section className="mb-12 rounded-2xl bg-azure p-8" data-motion-reveal>
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">Связаться с инженерами</h2>
@@ -103,7 +103,7 @@ export default function SupportPage() {
               <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
                 <a
                   href={`tel:${COMPANY.phone.raw}`}
-                  className="flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-white px-5 text-sm font-semibold text-azure transition-colors duration-200 hover:bg-surface-muted active:translate-y-px"
+                  className="flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-semibold text-azure transition duration-200 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   <Phone size={14} />
                   {COMPANY.phone.display}

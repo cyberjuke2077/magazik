@@ -5,7 +5,7 @@ interface TrustBadgesProps {
   sectionsCount: number
 }
 
-/** Полоса доверия - фактические данные, без рекламных заявлений. */
+/** Полоса доверия — фактические данные, без рекламных заявлений. */
 export function TrustBadges({ totalProducts, sectionsCount }: TrustBadgesProps) {
   const items = [
     { icon: Boxes, value: `${totalProducts.toLocaleString('ru-RU')}`, label: 'позиций в каталоге' },

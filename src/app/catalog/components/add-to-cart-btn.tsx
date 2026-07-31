@@ -39,7 +39,7 @@ export function AddToCartBtn({
   const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    // hydration from localStorage - required after mount
+    // hydration from localStorage — required after mount
     const exists = isInRequestList(productId)
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setInCart(exists)
@@ -80,7 +80,7 @@ export function AddToCartBtn({
       <button
         ref={buttonRef}
         onClick={handleAdd}
-        className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-[var(--radius-control)] px-3 text-xs font-bold transition-colors duration-200 active:translate-y-px ${
+        className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-xs font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] ${
           inCart
             ? 'bg-azure-light text-azure border border-azure/30'
             : 'bg-accent text-white hover:bg-accent-hover'

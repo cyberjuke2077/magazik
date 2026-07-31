@@ -23,7 +23,7 @@ export function RecentlyViewed({ excludeSlug, variant = 'home' }: RecentlyViewed
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // hydration from localStorage - required after mount
+    // hydration from localStorage — required after mount
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
     const list = getRecentlyViewed().filter((i) => i.slug !== excludeSlug)

@@ -28,58 +28,64 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--azure) 12%, transparent);
 }
 
-/* Electromagaz design tokens: quiet technical storefront */
+/* Dense storefront tokens */
 @theme {
-  --color-canvas: #f5f7fa;
+  --color-canvas: #f3f4f6;
   --color-surface: #ffffff;
-  --color-surface-muted: #f7f8fa;
-  --color-azure: #1264d1;
-  --color-azure-hover: #0d51ae;
-  --color-azure-light: #edf4ff;
-  --color-azure-dim: #f4f8fe;
-  --color-accent: #1264d1;
-  --color-accent-hover: #0d51ae;
-  --color-accent-light: #edf4ff;
-  --color-ink: #101828;
-  --color-ink-2: #344054;
-  --color-ink-3: #667085;
-  --color-ink-4: #7d899c;
-  --color-stock: #18794e;
-  --color-stock-bg: #ecf8f1;
+  --color-surface-muted: #f8f9fb;
+  --color-azure: #0969da;
+  --color-azure-hover: #0758b8;
+  --color-azure-light: #eaf3ff;
+  --color-azure-dim: #f3f8ff;
+  --color-accent: #0969da;
+  --color-accent-hover: #0758b8;
+  --color-accent-light: #eaf3ff;
+  --color-ink: #202124;
+  --color-ink-2: #3f4650;
+  --color-ink-3: #6d7480;
+  --color-ink-4: #9ba2ad;
+  --color-stock: #16803c;
+  --color-stock-bg: #eaf8ef;
 
-  --radius-control: 10px;
-  --radius-card: 14px;
-  --radius-panel: 18px;
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-panel: 16px;
   --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-xl: 14px;
-  --radius-2xl: 18px;
-  --radius-3xl: 22px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 20px;
 }
 
 :root {
-  --canvas: #f5f7fa;
+  --canvas: #f3f4f6;
   --surface: #ffffff;
-  --surface-muted: #f7f8fa;
-  --azure: #1264d1;
-  --azure-hover: #0d51ae;
-  --azure-light: #edf4ff;
-  --azure-dim: rgba(18, 100, 209, 0.07);
-  --accent: #1264d1;
-  --accent-hover: #0d51ae;
-  --accent-light: #edf4ff;
-  --text-1: #101828;
-  --text-2: #344054;
-  --text-3: #667085;
-  --text-4: #7d899c;
-  --border: #e4e7ec;
-  --border-2: #d0d5dd;
-  --shadow-xs: 0 0 transparent;
-  --shadow-sm: 0 0 transparent;
-  --shadow-md: 0 4px 14px rgba(16, 24, 40, 0.055);
-  --shadow-lg: 0 14px 34px rgba(16, 24, 40, 0.07);
-  --shadow-xl: 0 22px 50px rgba(16, 24, 40, 0.1);
+  --surface-muted: #f8f9fb;
+  --azure: #0969da;
+  --azure-hover: #0758b8;
+  --azure-light: #eaf3ff;
+  --azure-dim: rgba(9, 105, 218, 0.08);
+  --azure-glow: rgba(9, 105, 218, 0.18);
+  --accent: #0969da;
+  --accent-hover: #0758b8;
+  --accent-light: #eaf3ff;
+  --text-1: #202124;
+  --text-2: #3f4650;
+  --text-3: #6d7480;
+  --text-4: #9ba2ad;
+  --border: #e3e6ea;
+  --border-2: #d4d8de;
+  --shadow-xs: 0 1px 2px rgba(32, 33, 36, 0.04);
+  --shadow-sm: 0 1px 3px rgba(32, 33, 36, 0.06);
+  --shadow-md: 0 4px 12px rgba(32, 33, 36, 0.08);
+  --shadow-lg: 0 8px 24px rgba(32, 33, 36, 0.09);
+  --shadow-xl: 0 14px 36px rgba(32, 33, 36, 0.1);
+  --shadow-azure-sm: 0 2px 8px rgba(9, 105, 218, 0.08);
+  --shadow-azure-md: 0 4px 14px rgba(9, 105, 218, 0.1);
+  --shadow-azure-lg: 0 8px 22px rgba(9, 105, 218, 0.14);
+  --shadow-button: 0 1px 2px rgba(32, 33, 36, 0.12);
+  --shadow-button-hover: 0 5px 16px rgba(9, 105, 218, 0.24);
   --layer-content: 0;
   --layer-sticky: 10;
   --layer-header: 20;
@@ -98,18 +104,26 @@ body {
   font-family: var(--font-ui), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+  line-height: 1.45;
   padding-bottom: 64px;
 }
 
 :where(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid rgba(18, 100, 209, 0.34);
+  outline: 3px solid rgba(9, 105, 218, 0.28);
   outline-offset: 2px;
 }
 
 .storefront-brand-panel {
-  background: white;
-  box-shadow: none;
+  background-color: var(--azure);
+  background-image:
+    radial-gradient(circle at 12% 20%, rgba(255, 255, 255, 0.22), transparent 28%),
+    linear-gradient(115deg, transparent 56%, rgba(255, 255, 255, 0.08) 56% 58%, transparent 58%);
+  box-shadow: 0 12px 26px rgba(9, 105, 218, 0.18);
+}
+
+[data-motion-reveal],
+[data-motion-scale] {
+  will-change: transform, opacity;
 }
 
 h1,
@@ -140,6 +154,13 @@ h4 {
    ANIMATIONS
 ───────────────────────────────────────── */
 
+/* Pulse dot (stock indicator) */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.6); }
+}
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
 /* Skeleton shimmer */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
@@ -150,6 +171,67 @@ h4 {
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
   border-radius: 8px;
+}
+
+/* Fade up */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* Slide down (menus) */
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-slide-down { animation: slide-down 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* Bounce (cart counter) */
+@keyframes bounce-in {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.25); }
+  80%  { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-bounce-in { animation: bounce-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* Float (hero icons) */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+/* Spin slow */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 12s linear infinite; }
+
+/* Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+.animate-shake { animation: shake 0.5s ease-in-out; }
+
+/* Ripple */
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* SVG icon draw */
+@keyframes draw {
+  from { stroke-dashoffset: 200; }
+  to   { stroke-dashoffset: 0; }
+}
+.animate-draw {
+  stroke-dasharray: 200;
+  animation: draw 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ─────────────────────────────────────────
@@ -165,17 +247,56 @@ h4 {
   transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 .card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-lg);
   border-color: var(--border-2);
-  transform: none;
+  transform: translateY(-3px);
 }
 
-/* SVG icon feedback */
+/* Product card image zone hover */
+.product-img-zone {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .product-img-zone {
+  transform: scale(1.05);
+}
+
+/* SVG icon animation on hover */
 .icon-svg {
-  transition: opacity 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
 }
 .group:hover .icon-svg {
-  opacity: 0.82;
+  transform: scale(1.12) rotate(-3deg);
+}
+
+/* Button primary */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.btn-primary:hover::after { opacity: 1; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--azure-glow); }
+.btn-primary:active { transform: scale(0.97); }
+
+/* Ripple button */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn-ripple .ripple-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  animation: ripple 0.6s ease-out forwards;
+  pointer-events: none;
 }
 
 /* Input */
@@ -222,8 +343,43 @@ h4 {
   line-height: 1.1;
 }
 
+/* Gradient text */
+.text-gradient-azure {
+  background: linear-gradient(135deg, var(--azure) 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* Divider */
 .divider { border: none; border-top: 1px solid var(--border); }
+
+/* Glass card */
+.glass {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+/* Glow effect */
+.glow-azure {
+  box-shadow: 0 0 0 1px rgba(0,102,204,0.15), 0 4px 24px rgba(0,102,204,0.15);
+}
+
+/* ─────────────────────────────────────────
+   MARQUEE (brands ticker)
+───────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: flex;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+.animate-marquee:hover { animation-play-state: paused; }
 
 @keyframes mobile-filter-enter {
   from { transform: translateX(100%); }
@@ -237,12 +393,41 @@ h4 {
 /* ─────────────────────────────────────────
    SCAN LINE (hero oscilloscope effect)
 ───────────────────────────────────────── */
+@keyframes scan-line {
+  0%   { top: -4px; opacity: 0; }
+  5%   { opacity: 0.6; }
+  95%  { opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(74,222,128,0.6) 30%, rgba(74,222,128,0.9) 50%, rgba(74,222,128,0.6) 70%, transparent 100%);
+  animation: scan-line 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 15;
+  filter: blur(0.5px);
+}
+
 /* ─────────────────────────────────────────
    SLIDER THUMB ACTIVE
 ───────────────────────────────────────── */
+.slider-thumb-active {
+  outline: 2px solid #0066cc;
+  outline-offset: 2px;
+}
+
 /* ─────────────────────────────────────────
    DELIVERY BANNER
 ───────────────────────────────────────── */
+@keyframes delivery-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+.delivery-dot { animation: delivery-pulse 2s ease-in-out infinite; }
+
 /* ─────────────────────────────────────────
    HEADER STICKY ROW 2
    Ряд 2 (Каталог/Поиск) всегда виден
@@ -312,6 +497,7 @@ h4 {
 }
 .ui-btn-primary:hover {
   background: var(--color-accent-hover);
+  box-shadow: var(--shadow-button-hover);
 }
 .ui-btn-secondary {
   background: #fff;
@@ -328,7 +514,7 @@ h4 {
 }
 .ui-btn-accent:hover { background: var(--color-accent-hover); }
 
-/* Stock badge - статусный, pill-исключение (задокументировано в Shape Lock) */
+/* Stock badge — статусный, pill-исключение (задокументировано в Shape Lock) */
 .stock-badge {
   display: inline-flex;
   align-items: center;
@@ -367,7 +553,7 @@ h4 {
   transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 .ui-card-hover:hover {
-  box-shadow: none;
+  box-shadow: var(--shadow-sm);
   border-color: var(--border-2);
 }
 
@@ -390,7 +576,7 @@ h4 {
 .section-pad { padding-block: clamp(32px, 4vw, 56px); }
 .section-pad-sm { padding-block: clamp(24px, 3vw, 40px); }
 
-/* FAQ-аккордеон - плавное раскрытие через grid-rows */
+/* FAQ-аккордеон — плавное раскрытие через grid-rows */
 .ui-accordion-panel {
   display: grid;
   grid-template-rows: 0fr;
@@ -401,13 +587,13 @@ h4 {
 
 .reveal { opacity: 1; transform: none; }
 
-/* Reduced motion - гасим инфинит-лупы и reveal */
+/* Reduced motion — гасим инфинит-лупы и reveal */
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee, .skeleton,
+  .animate-float, .animate-spin-slow, .animate-marquee,
+  .animate-pulse-dot, .scan-line, .delivery-dot, .skeleton,
   .mobile-filter-enter {
     animation: none !important;
   }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
-  .marquee-duplicate { display: none !important; }
   html { scroll-behavior: auto; }
 }

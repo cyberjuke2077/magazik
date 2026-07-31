@@ -56,7 +56,7 @@ export default function ContactsPage() {
             Свяжитесь с нами удобным способом - ответим в течение 24 часов в рабочие дни
           </p>
 
-          <div className="mb-6 grid gap-3 lg:grid-cols-3">
+          <div className="mb-6 grid gap-3 lg:grid-cols-3" data-motion-reveal>
             {/* Phone */}
             <div className="rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)]">
               <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">
@@ -125,7 +125,7 @@ export default function ContactsPage() {
                   href={COMPANY.messengers.telegram}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition-colors duration-200 hover:bg-surface-muted"
+                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                 >
                   <Send size={16} className="text-[#0088cc]" />
                   <div>
@@ -137,7 +137,7 @@ export default function ContactsPage() {
                   href={`https://wa.me/${COMPANY.phone.raw.replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition-colors duration-200 hover:bg-surface-muted"
+                  className="flex items-center gap-3 rounded-xl bg-white p-3 transition duration-200 hover:-translate-y-0.5 hover:shadow-sm"
                 >
                   <MessageCircle size={16} className="text-[#25D366]" />
                   <div>

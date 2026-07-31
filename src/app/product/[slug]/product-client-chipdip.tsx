@@ -103,7 +103,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           </div>
 
           {/* Product Main Section */}
-          <div className="mb-8 grid gap-5 rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-6 lg:min-h-[687px] lg:grid-cols-[640px_minmax(0,1fr)]">
+          <div className="mb-8 grid gap-5 rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-6 lg:min-h-[687px] lg:grid-cols-[640px_minmax(0,1fr)]" data-motion-reveal>
             {/* Photo Gallery */}
             <div className="flex-shrink-0 lg:row-span-2">
               <div className="flex gap-3 lg:gap-6">
@@ -163,7 +163,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
 
                 {/* Main Photo */}
                 <div className="min-w-0 flex-1">
-                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden rounded-2xl bg-white sm:h-[420px] lg:h-[548px] lg:max-w-[484px]">
+                  <div className="relative mb-3 flex h-[320px] w-full max-w-[440px] cursor-pointer items-center justify-center overflow-hidden rounded-2xl bg-white sm:h-[420px] lg:h-[548px] lg:max-w-[484px]" data-motion-scale>
                     <Image
                       src={photos[activePhoto]}
                       alt={`${product.name} - фото ${activePhoto + 1}`}

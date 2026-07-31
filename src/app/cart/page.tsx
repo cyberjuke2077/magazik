@@ -90,7 +90,7 @@ export default function CartPage() {
         <main className="flex-1">
           <div className="mx-auto max-w-[1380px] px-4 pb-7 pt-7 lg:px-0">
             <h1 className="mb-3 text-[30px] font-bold leading-tight tracking-[-0.035em] text-ink">Корзина</h1>
-            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]">
+            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]" data-motion-reveal>
               <Image
                 src="/storefront/empty-request-list.png"
                 alt="Пустая корзина Electromagaz"
@@ -209,7 +209,7 @@ export default function CartPage() {
 
             {/* Right: summary */}
             <div className="w-full lg:sticky lg:top-24">
-              <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white">
+              <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-azure-sm)]">
                 {/* Header */}
                 <div className="px-4 py-3 bg-[#f8fafc] border-b border-[var(--border)]">
                   <span className="text-sm font-semibold text-ink">Итого</span>
@@ -246,7 +246,7 @@ export default function CartPage() {
                 <div className="px-4 pb-4">
                   <Link
                     href="/request-quote"
-                    className="flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] bg-azure text-sm font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
+                    className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-azure text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-[var(--shadow-azure-md)] active:translate-y-0 active:scale-[0.98]"
                   >
                     Перейти к оформлению
                     <ArrowRight size={14} />

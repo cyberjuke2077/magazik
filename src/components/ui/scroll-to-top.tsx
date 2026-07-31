@@ -23,7 +23,7 @@ export function ScrollToTop() {
     <button
       onClick={handleClick}
       aria-label="Прокрутить вверх"
-      className={`fixed bottom-6 right-6 z-[150] flex size-11 items-center justify-center rounded-full bg-azure text-white transition-colors duration-200 hover:bg-azure-hover ${
+      className={`fixed bottom-6 right-6 z-[150] flex items-center justify-center size-11 rounded-full bg-azure text-white shadow-lg hover:bg-azure-hover hover:scale-110 transition-all duration-300 ${
         visible
           ? 'opacity-100 translate-y-0 pointer-events-auto'
           : 'opacity-0 translate-y-3 pointer-events-none'

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { FileText } from 'lucide-react'
-import { formatPrice } from '@/lib/catalog-utils'
+import { FileText, Sparkles } from 'lucide-react'
+import { formatPrice, isNewProduct } from '@/lib/catalog-utils'
 import { fallbackImageForProduct } from '@/lib/enrichment/images/package-image'
 import { CompareToggleBtn } from '@/components/catalog/compare-toggle-btn'
 import { AddToCartBtn } from './add-to-cart-btn'
@@ -29,7 +29,7 @@ interface ProductRowData {
 
 export function ProductRow({ product }: { product: ProductRowData }) {
   return (
-    <article className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-3 transition-colors duration-200 hover:border-[var(--border-2)] sm:min-h-[224px] sm:grid-cols-[190px_minmax(0,1fr)_210px] sm:gap-6 sm:p-5">
+    <article className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl bg-white p-3 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-md)] sm:min-h-[240px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5">
       <ProductImage product={product} />
       <ProductDetails product={product} />
       <ProductCommerce product={product} />
@@ -47,13 +47,13 @@ function ProductImage({ product }: { product: ProductRowData }) {
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="relative flex aspect-square items-center justify-center overflow-hidden rounded-[var(--radius-control)] bg-surface-muted"
+      className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-surface-muted"
     >
       <Image
         src={image}
         alt={product.name}
         fill
-        className="object-contain p-3 transition-transform duration-500 ease-out motion-reduce:transition-none group-hover:scale-[1.025]"
+        className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
         sizes="(max-width: 640px) 76px, 192px"
       />
     </Link>
@@ -62,16 +62,24 @@ function ProductImage({ product }: { product: ProductRowData }) {
 
 function ProductDetails({ product }: { product: ProductRowData }) {
   const specs = Object.entries(product.specs).slice(0, 4)
+  const isNew = isNewProduct(product.lastEnrichedAt)
+
   return (
     <div className="min-w-0">
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-3">
-        <span className="font-medium">{product.manufacturer}</span>
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-ink-3">
+        <span>{product.manufacturer}</span>
         <span className="mpn font-semibold text-azure">{product.partNumber}</span>
+        {isNew && (
+          <span className="inline-flex items-center gap-1 rounded bg-stock-bg px-1.5 py-0.5 font-semibold text-stock">
+            <Sparkles size={10} />
+            Новинка
+          </span>
+        )}
         {product.lifecycle && <LifecycleBadge lifecycle={product.lifecycle} />}
       </div>
       <Link
         href={`/product/${product.slug}`}
-        className="mt-1.5 block text-[15px] font-semibold leading-snug text-ink transition-colors hover:text-azure sm:text-base"
+        className="mt-1 block text-sm font-semibold leading-snug text-ink transition-colors hover:text-azure sm:text-[15px]"
       >
         {product.name}
       </Link>

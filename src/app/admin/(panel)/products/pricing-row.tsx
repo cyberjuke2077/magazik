@@ -67,7 +67,7 @@ export function ProductPricingRow({ product }: { product: PricingRowProduct }) {
         <input
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          placeholder="-"
+          placeholder="—"
           inputMode="decimal"
           className={inputCls}
           aria-label="Розничная цена"
@@ -77,7 +77,7 @@ export function ProductPricingRow({ product }: { product: PricingRowProduct }) {
         <input
           value={wholesale}
           onChange={(e) => setWholesale(e.target.value)}
-          placeholder="-"
+          placeholder="—"
           inputMode="decimal"
           className={inputCls}
           aria-label="Оптовая цена"

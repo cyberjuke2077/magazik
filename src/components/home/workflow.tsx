@@ -16,7 +16,7 @@ export function Workflow() {
         <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <div className="ui-eyebrow mb-3 text-azure-light">Как мы работаем</div>
-            <h2 className="section-heading text-white">От заявки до поставки за 4 шага</h2>
+            <h2 className="section-heading text-white">От заявки до поставки — 4 шага</h2>
             <p className="mt-4 text-lg leading-relaxed text-white/70">
               Прозрачный процесс без лишней бюрократии: вы получаете расчёт, сроки и документы.
             </p>

@@ -6,6 +6,7 @@ import { ToastProvider } from '@/components/ui/toast'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
+import { StorefrontMotion } from '@/components/motion/storefront-motion'
 
 const geist = Geist({
   variable: '--font-ui',
@@ -24,7 +25,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Electromagaz - электронные компоненты',
+    default: 'Electromagaz — электронные компоненты',
     template: '%s | Electromagaz',
   },
   description:
@@ -51,6 +52,7 @@ export default function RootLayout({
     <html lang="ru" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-canvas antialiased">
         <ToastProvider>
+          <StorefrontMotion />
           <Suspense fallback={null}>
             <NavProgress />
           </Suspense>

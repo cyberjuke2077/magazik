@@ -431,7 +431,7 @@ export default function RequestQuotePage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex h-11 flex-1 items-center justify-center gap-2 rounded-[var(--radius-control)] bg-azure text-sm font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px disabled:cursor-not-allowed disabled:bg-gray-300"
+                className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-azure text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300"
               >
                 {isSubmitting ? (
                   <>

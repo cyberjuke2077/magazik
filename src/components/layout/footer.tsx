@@ -1,5 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, FileCheck2, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowRight, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const footerLinks = [
@@ -34,27 +35,27 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-[var(--border)] bg-surface-muted text-ink">
-      <div className="border-b border-[var(--border)] bg-white">
-        <div className="mx-auto flex max-w-[1380px] flex-col items-start justify-between gap-5 px-4 py-8 md:flex-row md:items-center lg:px-0">
+    <footer className="mt-auto border-t border-[var(--border)] bg-white text-ink">
+      <div className="bg-azure text-white">
+        <div className="mx-auto flex max-w-[1380px] flex-col items-start justify-between gap-5 px-4 py-7 md:flex-row md:items-center lg:px-0">
           <div>
-            <h2 className="text-xl font-bold tracking-[-0.025em] text-ink md:text-2xl">Соберите корзину по спецификации</h2>
-            <p className="mt-1 max-w-[62ch] text-sm text-ink-3">Добавьте позиции по MPN. Цены и сроки подтвердим в коммерческом предложении.</p>
+            <h2 className="text-xl font-bold tracking-[-0.02em] md:text-2xl">Соберите корзину по спецификации</h2>
+            <p className="mt-1 text-sm text-white/78">Добавьте позиции по MPN. Цены и сроки подтвердим в коммерческом предложении.</p>
           </div>
-          <Link href="/cart" className="group flex h-11 shrink-0 items-center gap-2 rounded-[var(--radius-control)] bg-azure px-5 text-sm font-semibold text-white transition-colors hover:bg-azure-hover active:translate-y-px">
+          <Link href="/cart" className="group flex h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-azure transition duration-200 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.98]">
             Перейти в корзину
-            <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            <ArrowRight size={17} className="transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1380px] px-4 py-10 lg:px-0">
-        <div className="grid gap-9 sm:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr]">
+      <div className="mx-auto max-w-[1380px] px-4 py-9 lg:px-0">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="inline-flex text-2xl font-extrabold tracking-[-0.055em] text-ink">
               electro<span className="text-azure">magaz.</span>
             </Link>
-            <p className="mt-4 max-w-[42ch] text-sm leading-relaxed text-ink-3">
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-3">
               Электронные компоненты для разработки и серийного производства. Подбор по MPN, документы и поставка по России.
             </p>
             <div className="mt-5 grid gap-2.5 text-sm text-ink-2">
@@ -66,7 +67,7 @@ export function Footer() {
 
           {footerLinks.map((section) => (
             <nav key={section.title} aria-label={section.title}>
-              <h3 className="mb-4 text-sm font-semibold text-ink">{section.title}</h3>
+              <h3 className="mb-4 text-sm font-bold text-ink">{section.title}</h3>
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.href}><Link href={link.href} className="text-sm text-ink-3 transition-colors hover:text-azure">{link.label}</Link></li>
@@ -76,12 +77,14 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-9 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex max-w-md items-start gap-3">
-            <FileCheck2 size={20} className="mt-0.5 shrink-0 text-azure" />
+        <div className="mt-8 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="rounded-lg border border-[var(--border)] bg-white p-2">
+              <Image src="/rst-quality.svg" alt="Знак качества РСТ" width={104} height={30} className="h-7 w-auto" />
+            </div>
             <div>
-              <div className="text-sm font-semibold text-ink">Документы к поставке</div>
-              <p className="mt-0.5 text-xs leading-relaxed text-ink-4">Состав сопроводительных документов фиксируем в коммерческом предложении и договоре.</p>
+              <div className="flex items-center gap-1.5 text-sm font-semibold text-ink"><ShieldCheck size={15} className="text-azure" />Сертифицированная продукция</div>
+              <p className="mt-0.5 text-xs text-ink-4">Документы предоставляются при оформлении поставки.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-ink-4">
@@ -92,7 +95,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 text-xs text-ink-4">
+        <div className="mt-5 text-xs text-ink-4">
           © {new Date().getFullYear()} {COMPANY.brand}. {COMPANY.legalName.replace(/\s*\[ЗАПОЛНИТЬ\]/g, '')}
         </div>
       </div>

@@ -1,168 +1,384 @@
+'use client'
+
 import Link from 'next/link'
-import { ArrowRight, ChevronDown } from 'lucide-react'
+import {
+  ChevronRight,
+  Truck,
+  Clock,
+  Building,
+  FileText,
+  Phone,
+  CheckCircle2,
+  AlertCircle,
+  Package,
+  Calculator,
+} from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
-import { MIN_ORDER_AMOUNT, REQUEST_PROCESSING_TIME } from '@/lib/constants'
+import { MIN_ORDER_AMOUNT, CONTACT_PHONE, REQUEST_PROCESSING_TIME } from '@/lib/constants'
 import { formatPrice } from '@/lib/utils'
 
-const steps = [
-  ['Запрос', 'Добавьте позиции в корзину или отправьте список с MPN и количеством.'],
-  ['Проверка', `Мы проверим запрос и подготовим ответ в течение ${REQUEST_PROCESSING_TIME} в рабочие дни.`],
-  ['Согласование', 'Цена, срок, способ отгрузки и состав документов фиксируются в коммерческом предложении.'],
-  ['Оплата и поставка', 'После согласования выставляется счёт. Отгрузка проходит на условиях подтверждённого заказа.'],
-] as const
-
-const deliveryOptions = [
+const workflowSteps = [
   {
-    title: 'До терминала транспортной компании',
-    description: 'Перевозчик, терминал, стоимость и страхование согласуются для конкретной поставки.',
+    icon: FileText,
+    title: 'Сбор корзины',
+    desc: 'Вы добавляете товары в корзину и переходите к оформлению заказа',
   },
   {
-    title: 'До адреса получателя',
-    description: 'Адресная доставка рассчитывается после уточнения города, веса и габаритов отправления.',
+    icon: Calculator,
+    title: 'Согласование КП',
+    desc: 'Мы связываемся с вами в течение 24 часов, согласовываем цену, сроки и условия поставки',
   },
   {
-    title: 'Самовывоз',
-    description: 'Возможность, адрес и время выдачи подтверждаются менеджером до приезда.',
+    icon: Building,
+    title: 'Выставление счёта',
+    desc: 'После согласования выставляем счёт на оплату с полным пакетом документов',
+  },
+  {
+    icon: Truck,
+    title: 'Закупка и доставка',
+    desc: 'После оплаты закупаем товар у поставщиков и организуем доставку до вашего склада',
   },
 ]
 
-const questions = [
+const deliveryOptions = [
   {
-    question: 'Когда будет известна точная стоимость доставки?',
-    answer: 'После проверки состава заказа, города получения и выбранного способа отгрузки. Стоимость указывается до оплаты.',
+    icon: Truck,
+    name: 'Транспортная компания',
+    description: 'Организуем доставку через проверенные ТК (Деловые Линии, ПЭК, Байкал-Сервис). Стоимость и сроки рассчитываются индивидуально.',
+    features: ['Доставка до терминала или склада', 'Страхование груза', 'Трекинг отправления'],
   },
   {
-    question: 'Какие сроки поставки?',
-    answer: 'Срок зависит от доступности каждой позиции и маршрута. Подтверждённая дата указывается в коммерческом предложении.',
+    icon: Package,
+    name: 'Курьерская доставка',
+    description: 'Для срочных заказов организуем курьерскую доставку по Москве и МО. Доставка в день готовности заказа.',
+    features: ['Доставка до двери', 'Гибкий график', 'Только Москва и МО'],
   },
   {
-    question: 'Как проходит оплата?',
-    answer: 'Для юридических лиц и ИП основной способ оплаты - безналичный расчёт по выставленному счёту. Остальные условия фиксируются в договоре.',
+    icon: Building,
+    name: 'Самовывоз',
+    description: 'Вы можете забрать заказ самостоятельно после согласования готовности. Предварительный звонок обязателен.',
+    features: ['Бесплатно', 'По предварительной договорённости', 'Москва'],
+  },
+]
+
+const paymentMethods = [
+  {
+    icon: Building,
+    name: 'Безналичный расчёт',
+    description: 'Основной способ оплаты для юридических лиц и ИП. Работаем по договору поставки.',
+    badge: 'Рекомендуем',
+    badgeColor: 'text-azure bg-azure/8 border-azure/15',
+    features: [
+      'Оплата по счёту',
+      'Полный пакет документов (счёт, УПД, счёт-фактура)',
+      'Отсрочка платежа для постоянных клиентов',
+      'НДС 20%',
+    ],
   },
   {
-    question: 'Какие документы будут у поставки?',
-    answer: 'Состав бухгалтерских и сопроводительных документов согласуется для заказа и перечисляется в коммерческом предложении или договоре.',
+    icon: FileText,
+    name: 'Предоплата 100%',
+    description: 'Для новых клиентов требуется полная предоплата. После оплаты начинаем закупку товара.',
+    badge: 'Для новых клиентов',
+    badgeColor: 'text-accent bg-accent/8 border-accent/15',
+    features: [
+      'Оплата после согласования КП',
+      'Закупка начинается после поступления средств',
+      'Все документы предоставляются',
+    ],
+  },
+]
+
+const documents = [
+  'Счёт на оплату',
+  'Договор поставки (при необходимости)',
+  'Товарная накладная (ТОРГ-12)',
+  'Счёт-фактура',
+  'УПД (универсальный передаточный документ)',
+  'Сертификаты соответствия (по запросу)',
+]
+
+const faq = [
+  {
+    q: 'Какая минимальная сумма заказа?',
+    a: `Минимальная сумма заказа - ${formatPrice(MIN_ORDER_AMOUNT)}. Мы работаем только с оптовыми заказами для юридических лиц и ИП.`,
+  },
+  {
+    q: 'Как быстро вы отвечаете на запрос?',
+    a: `Мы обрабатываем запросы в течение ${REQUEST_PROCESSING_TIME} в рабочие дни. Вы получите коммерческое предложение с ценами и сроками поставки.`,
+  },
+  {
+    q: 'Откуда вы закупаете товар?',
+    a: 'Мы работаем напрямую с официальными дистрибьюторами и производителями. Все компоненты оригинальные, с сертификатами.',
+  },
+  {
+    q: 'Какие сроки поставки?',
+    a: 'Сроки зависят от наличия товара у поставщиков. Обычно 7-21 день с момента оплаты. Точные сроки согласовываем в коммерческом предложении.',
+  },
+  {
+    q: 'Можно ли получить отсрочку платежа?',
+    a: 'Да, для постоянных клиентов возможна отсрочка платежа до 30 дней. Условия обсуждаются индивидуально.',
+  },
+  {
+    q: 'Работаете ли вы с физическими лицами?',
+    a: 'Нет, мы специализируемся на B2B поставках и работаем только с юридическими лицами и индивидуальными предпринимателями.',
+  },
+  {
+    q: 'Какие документы нужны для работы?',
+    a: 'Для оформления заказа нужны: название компании, ИНН, контактное лицо, телефон и email. Договор поставки заключаем при необходимости.',
+  },
+  {
+    q: 'Возможен ли возврат товара?',
+    a: 'Возврат возможен в течение 14 дней, если товар ненадлежащего качества или не соответствует заказу. Товар должен быть в оригинальной упаковке, без следов монтажа.',
   },
 ]
 
 export default function DeliveryPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
       <StickyNav />
 
-      <main className="flex-1">
-        <div className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-[1180px] px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-xs text-ink-4" aria-label="Хлебные крошки">
-              <Link href="/" className="transition-colors hover:text-azure">Главная</Link>
-              <span aria-hidden="true">/</span>
-              <span className="text-ink-2">Условия работы и доставка</span>
+      <main>
+        {/* Breadcrumb */}
+        <div className="bg-white">
+          <div className="mx-auto max-w-[1440px] px-3 py-2 sm:px-6">
+            <nav className="flex items-center gap-1.5 text-xs text-ink-4">
+              <Link href="/" className="hover:text-ink-3 transition-colors">Главная</Link>
+              <ChevronRight size={10} />
+              <span className="text-ink-3">Условия работы</span>
             </nav>
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1180px] px-4 py-10 sm:py-14 lg:py-16">
-          <section className="grid gap-10 border-b border-[var(--border)] pb-12 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-end lg:gap-16 lg:pb-16">
-            <div>
-              <p className="mb-4 text-sm font-semibold text-azure">B2B-поставка</p>
-              <h1 className="max-w-[14ch] text-[38px] font-bold leading-[1.03] tracking-[-0.045em] text-ink sm:text-[52px]">
-                Условия работы и доставка
-              </h1>
-              <p className="mt-5 max-w-[64ch] text-base leading-relaxed text-ink-3 sm:text-lg">
-                Работаем с юридическими лицами и ИП. Конкретные цены, сроки, документы и маршрут подтверждаются для каждого заказа.
+        {/* Hero */}
+        <div className="bg-white py-8">
+          <div className="mx-auto max-w-[1380px] px-3 sm:px-6">
+            <h1 className="mb-2 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Условия работы и доставка</h1>
+            <p className="text-ink-3 max-w-2xl text-lg">
+              Работаем под заказ с юридическими лицами и ИП. Минимальная сумма заказа - {formatPrice(MIN_ORDER_AMOUNT)}.
+              Подтверждаем заказ в течение {REQUEST_PROCESSING_TIME}.
+            </p>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-[1380px] space-y-10 px-3 pb-12 sm:px-6">
+
+          {/* Key info banner */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {[
+              { icon: Building, label: 'Только для бизнеса', sub: 'Юр. лица и ИП', color: 'text-azure', bg: 'bg-azure-light' },
+              { icon: Calculator, label: `Минимальный заказ ${formatPrice(MIN_ORDER_AMOUNT)}`, sub: 'Оптовые поставки', color: 'text-azure', bg: 'bg-azure-light' },
+              { icon: Clock, label: 'Ответ за 24 часа', sub: 'Быстрое формирование КП', color: 'text-azure', bg: 'bg-azure-light' },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-4 rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                <div className={`flex size-12 items-center justify-center rounded-lg ${item.bg} shrink-0`}>
+                  <item.icon size={22} className={item.color} />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-ink">{item.label}</div>
+                  <div className="text-xs text-ink-3 mt-1">{item.sub}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Workflow */}
+          <section>
+            <h2 className="text-2xl font-bold text-ink mb-6">Как мы работаем</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {workflowSteps.map((step, i) => (
+                <div key={i} className="relative">
+                  <div className="h-full rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
+                        <step.icon size={22} className="text-azure" />
+                      </div>
+                      <span className="text-2xl font-bold text-gray-200">{i + 1}</span>
+                    </div>
+                    <h3 className="text-sm font-bold text-ink mb-2">{step.title}</h3>
+                    <p className="text-xs text-ink-3 leading-relaxed">{step.desc}</p>
+                  </div>
+                  {i < workflowSteps.length - 1 && (
+                    <div className="hidden md:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gray-200 -translate-y-1/2" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Delivery options */}
+          <section>
+            <h2 className="text-2xl font-bold text-ink mb-6">Варианты доставки</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {deliveryOptions.map((option) => (
+                <div key={option.name} className="rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
+                      <option.icon size={22} className="text-azure" />
+                    </div>
+                    <h3 className="text-base font-bold text-ink">{option.name}</h3>
+                  </div>
+                  <p className="text-sm text-ink-3 leading-relaxed mb-4">{option.description}</p>
+                  <ul className="space-y-2">
+                    {option.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-xs text-ink-2">
+                        <CheckCircle2 size={14} className="text-green-600 shrink-0 mt-0.5" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 rounded-2xl bg-azure-light p-5">
+              <p className="text-sm text-blue-800">
+                <strong>Важно:</strong> Стоимость и сроки доставки рассчитываются индивидуально и включаются в коммерческое предложение.
+                Мы организуем доставку до вашего склада или терминала ТК в вашем городе.
               </p>
             </div>
-
-            <dl className="border-l-2 border-azure pl-5 text-sm">
-              <div className="border-b border-[var(--border)] pb-3">
-                <dt className="text-ink-4">Минимальный заказ</dt>
-                <dd className="mt-1 font-semibold text-ink">{formatPrice(MIN_ORDER_AMOUNT)}</dd>
-              </div>
-              <div className="pt-3">
-                <dt className="text-ink-4">Первичный ответ</dt>
-                <dd className="mt-1 font-semibold text-ink">В течение {REQUEST_PROCESSING_TIME} в рабочие дни</dd>
-              </div>
-            </dl>
           </section>
 
-          <section className="py-12 lg:py-16">
-            <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-16">
-              <div>
-                <h2 className="text-2xl font-bold tracking-[-0.03em] text-ink">Порядок работы</h2>
-                <p className="mt-3 text-sm leading-relaxed text-ink-3">Четыре этапа, на которых условия становятся конкретнее.</p>
-              </div>
-              <ol className="border-t border-[var(--border)]">
-                {steps.map(([title, description], index) => (
-                  <li key={title} className="grid gap-3 border-b border-[var(--border)] py-5 sm:grid-cols-[44px_170px_minmax(0,1fr)] sm:gap-5">
-                    <span className="font-mono text-xs text-azure">{String(index + 1).padStart(2, '0')}</span>
-                    <h3 className="font-semibold text-ink">{title}</h3>
-                    <p className="text-sm leading-relaxed text-ink-3">{description}</p>
-                  </li>
-                ))}
-              </ol>
+          {/* Payment methods */}
+          <section>
+            <h2 className="text-2xl font-bold text-ink mb-6">Способы оплаты</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {paymentMethods.map((method) => (
+                <div key={method.name} className="rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex size-12 items-center justify-center rounded-lg bg-azure-light">
+                      <method.icon size={20} className="text-azure" />
+                    </div>
+                    <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${method.badgeColor}`}>
+                      {method.badge}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-bold text-ink mb-2">{method.name}</h3>
+                  <p className="text-sm text-ink-3 leading-relaxed mb-4">{method.description}</p>
+                  <ul className="space-y-2">
+                    {method.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-xs text-ink-2">
+                        <CheckCircle2 size={14} className="text-green-600 shrink-0 mt-0.5" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </section>
 
-          <section className="border-y border-[var(--border)] py-12 lg:py-16">
-            <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-16">
-              <div>
-                <h2 className="text-2xl font-bold tracking-[-0.03em] text-ink">Варианты доставки</h2>
-                <p className="mt-3 text-sm leading-relaxed text-ink-3">Выбираем маршрут после проверки заказа, а не обещаем универсальные сроки заранее.</p>
-              </div>
-              <div className="border-t border-[var(--border)]">
-                {deliveryOptions.map((option) => (
-                  <div key={option.title} className="grid gap-2 border-b border-[var(--border)] py-5 sm:grid-cols-[230px_minmax(0,1fr)] sm:gap-8">
-                    <h3 className="font-semibold text-ink">{option.title}</h3>
-                    <p className="text-sm leading-relaxed text-ink-3">{option.description}</p>
+          {/* Documents */}
+          <section id="documents" className="scroll-mt-40">
+            <h2 className="text-2xl font-bold text-ink mb-6">Документы</h2>
+            <div className="rounded-2xl bg-white p-8 shadow-sm">
+              <p className="text-sm text-ink-3 mb-6">
+                Мы предоставляем полный пакет документов для бухгалтерии. Все документы оформляются в соответствии с требованиями законодательства РФ.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {documents.map((doc) => (
+                  <div key={doc} className="flex items-start gap-3 p-4 bg-[#f8fafc] rounded-lg">
+                    <FileText size={18} className="text-azure shrink-0 mt-0.5" />
+                    <span className="text-sm text-ink">{doc}</span>
                   </div>
                 ))}
               </div>
             </div>
           </section>
 
-          <section className="grid gap-10 py-12 lg:grid-cols-2 lg:gap-16 lg:py-16">
-            <div>
-              <h2 className="text-2xl font-bold tracking-[-0.03em] text-ink">Оплата и документы</h2>
-              <p className="mt-4 text-sm leading-relaxed text-ink-3">
-                Счёт выставляется после согласования коммерческого предложения. Набор бухгалтерских и сопроводительных документов зависит от условий поставки и требований к партии.
-              </p>
-              <Link href="/legal" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-azure hover:text-azure-hover">
-                Реквизиты компании
-                <ArrowRight size={15} />
-              </Link>
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold tracking-[-0.03em] text-ink">Возврат и расхождения</h2>
-              <p className="mt-4 text-sm leading-relaxed text-ink-3">
-                Если товар повреждён, не соответствует согласованной позиции или есть вопрос к качеству, зафиксируйте состояние партии и свяжитесь с нами. Порядок рассмотрения описан отдельно.
-              </p>
-              <Link href="/returns" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-azure hover:text-azure-hover">
-                Условия возврата
-                <ArrowRight size={15} />
-              </Link>
-            </div>
-          </section>
-
-          <section className="border-t border-[var(--border)] pt-12 lg:pt-16">
-            <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-16">
-              <h2 className="text-2xl font-bold tracking-[-0.03em] text-ink">Частые вопросы</h2>
-              <div className="border-t border-[var(--border)]">
-                {questions.map((item) => (
-                  <details key={item.question} className="group border-b border-[var(--border)]">
-                    <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 font-semibold text-ink">
-                      {item.question}
-                      <ChevronDown size={18} className="shrink-0 text-ink-4 transition-transform group-open:rotate-180" />
-                    </summary>
-                    <p className="max-w-[70ch] pb-5 pr-8 text-sm leading-relaxed text-ink-3">{item.answer}</p>
-                  </details>
-                ))}
+          {/* Return policy */}
+          <section>
+            <h2 className="text-2xl font-bold text-ink mb-6">Возврат и обмен</h2>
+            <div className="rounded-2xl bg-white p-8 shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
+                    <CheckCircle2 size={20} className="text-green-600" />
+                    Принимаем возврат
+                  </h3>
+                  <ul className="space-y-3">
+                    {[
+                      'Товар ненадлежащего качества',
+                      'Товар не соответствует заказу',
+                      'Брак или дефект компонента',
+                      'Повреждение при транспортировке',
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm text-ink-2">
+                        <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-ink mb-4 flex items-center gap-2">
+                    <AlertCircle size={20} className="text-accent" />
+                    Не принимаем возврат
+                  </h3>
+                  <ul className="space-y-3">
+                    {[
+                      'Товар надлежащего качества',
+                      'Товар со следами монтажа или пайки',
+                      'Нарушена заводская упаковка',
+                      'Прошло более 14 дней с момента получения',
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm text-ink-2">
+                        <AlertCircle size={16} className="text-accent shrink-0 mt-0.5" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-6 pt-6 border-t border-[var(--border)] text-sm text-ink-3">
+                Для оформления возврата свяжитесь с нами в течение 14 дней с момента получения заказа.
+                Возврат денежных средств осуществляется в течение 10 рабочих дней после получения товара.
               </div>
             </div>
           </section>
 
+          {/* FAQ */}
+          <section>
+            <h2 className="text-2xl font-bold text-ink mb-6">Частые вопросы</h2>
+            <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+              {faq.map((item, i) => (
+                <div
+                  key={i}
+                  className={`px-8 py-6 ${i !== 0 ? 'border-t border-[var(--border)]' : ''} hover:bg-[#fafafa] transition-colors`}
+                >
+                  <h3 className="text-sm font-bold text-ink mb-2">{item.q}</h3>
+                  <p className="text-sm text-ink-3 leading-relaxed">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Contact */}
+          <section className="rounded-2xl bg-azure p-8 text-white shadow-sm" data-motion-reveal>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div>
+                <h2 className="mb-2 text-xl font-bold text-white">Готовы оформить заказ?</h2>
+                <p className="text-sm text-white/75">Соберите товары в корзину или свяжитесь с нами напрямую</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+                <Link
+                  href="/catalog"
+                  className="flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-bold text-azure transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
+                >
+                  Выбрать товары
+                </Link>
+                <a
+                  href={`tel:${CONTACT_PHONE.replace(/\s/g, '')}`}
+                  className="flex h-11 items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white transition-all hover:bg-white/20"
+                >
+                  <Phone size={16} />
+                  Позвонить
+                </a>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
 

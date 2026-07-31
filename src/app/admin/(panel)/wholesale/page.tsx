@@ -60,7 +60,7 @@ export default async function AdminWholesalePage() {
                       {l.message ? (
                         <span className="whitespace-pre-wrap">{l.message}</span>
                       ) : (
-                        <span className="text-gray-300">-</span>
+                        <span className="text-gray-300">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">

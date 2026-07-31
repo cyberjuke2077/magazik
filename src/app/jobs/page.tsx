@@ -98,7 +98,7 @@ export default function JobsPage() {
               {positions.map((p) => (
                 <div
                   key={p.title}
-                  className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6 transition-colors duration-200 hover:border-[var(--border-2)]"
+                  className="rounded-2xl bg-white p-6 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)]"
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start gap-4">
                     <div className="flex-1">
@@ -130,7 +130,7 @@ export default function JobsPage() {
                       <div className="text-sm font-bold text-ink mb-3">{p.salary}</div>
                       <a
                         href={`mailto:${COMPANY.hrEmail}?subject=Вакансия: ${p.title}`}
-                        className="flex h-9 items-center justify-center gap-1.5 rounded-[var(--radius-control)] bg-azure px-4 text-xs font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
+                        className="flex h-9 items-center justify-center gap-1.5 rounded-xl bg-azure px-4 text-xs font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
                       >
                         Откликнуться
                         <ChevronRight size={12} />
@@ -143,14 +143,14 @@ export default function JobsPage() {
           </section>
 
           {/* Generic CTA */}
-          <section className="rounded-2xl bg-azure-light p-8 text-center">
+          <section className="rounded-2xl bg-azure-light p-8 text-center" data-motion-reveal>
             <h2 className="text-lg font-bold text-ink mb-2">Не нашли подходящую вакансию?</h2>
             <p className="text-sm text-ink-3 mb-5 max-w-xl mx-auto leading-relaxed">
               Пришлите резюме на {COMPANY.hrEmail} - рассмотрим и свяжемся, когда появится релевантная позиция.
             </p>
             <a
               href={`mailto:${COMPANY.hrEmail}`}
-              className="inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-azure px-6 text-sm font-bold text-white transition-colors duration-200 hover:bg-azure-hover active:translate-y-px"
+              className="inline-flex h-11 items-center gap-2 rounded-xl bg-azure px-6 text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0"
             >
               <Mail size={14} />
               Отправить резюме

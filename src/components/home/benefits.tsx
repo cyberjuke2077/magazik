@@ -3,7 +3,7 @@ import { SectionHeader } from './section-header'
 import { Reveal } from './reveal'
 
 const benefits = [
-  { icon: Replace, title: 'Подбор аналогов', desc: 'Найдём замену под нужные параметры, корпус и бюджет с учётом доступности.' },
+  { icon: Replace, title: 'Подбор аналогов', desc: 'Найдём замену под нужные параметры, корпус и бюджет — с учётом доступности.' },
   { icon: PackageCheck, title: 'Поставка под заказ', desc: 'Привезём позиции, которых нет в наличии, и согласуем сроки заранее.' },
   { icon: FileText, title: 'Документы для юрлиц', desc: 'Работаем по безналу с НДС, выдаём полный пакет закрывающих документов.' },
   { icon: Headset, title: 'Коммерческое предложение', desc: 'Сформируем КП по вашему списку позиций и просчитаем опт.' },
@@ -15,7 +15,7 @@ export function Benefits() {
       <div className="mx-auto max-w-[1400px] px-4">
         <SectionHeader
           eyebrow="Почему мы"
-          title="Не просто склад, а инженерный сервис"
+          title="Не просто склад — инженерный сервис"
           description="Помогаем закрыть спецификацию целиком: от подбора аналога до документов и поставки."
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">

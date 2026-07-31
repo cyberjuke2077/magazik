@@ -20,7 +20,7 @@ export function App({ mode, stateApi, bus }: AppProps) {
   return (
     <Box flexDirection="column" padding={1}>
       <Text bold>
-        Enrichment {mode} - {state.runId ?? 'no run'} - {state.phase}
+        Enrichment {mode} — {state.runId ?? 'no run'} — {state.phase}
       </Text>
       <ProgressBar
         processed={state.processedInQueue}

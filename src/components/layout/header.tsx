@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Check, Mail, MapPin, Phone, Search, X } from 'lucide-react'
+import { Check, Mail, MapPin, Phone, Search } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const cities = [
@@ -73,15 +73,6 @@ export function Header() {
     }
   }, [cityModalOpen])
 
-  useEffect(() => {
-    if (!cityModalOpen) return
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setCityModalOpen(false)
-    }
-    window.addEventListener('keydown', closeOnEscape)
-    return () => window.removeEventListener('keydown', closeOnEscape)
-  }, [cityModalOpen])
-
   const filteredCities = cities.filter(city =>
     city.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     city.region.toLowerCase().includes(searchQuery.toLowerCase())
@@ -95,20 +86,21 @@ export function Header() {
 
   return (
     <header className="w-full bg-white">
-      <div className="hidden h-9 border-b border-[var(--border)] lg:block">
+      <div className="hidden h-[49px] lg:block">
         <div className="mx-auto flex h-full max-w-[1380px] items-center">
-          <div className="flex w-[260px] shrink-0 items-center gap-5">
+          <div className="flex w-[280px] shrink-0 items-center gap-5">
+            <span className="text-xs font-semibold text-ink-3">RU</span>
             <div className="flex items-center">
               <button 
                 onClick={() => setCityModalOpen(true)}
-                className="flex min-h-9 items-center gap-1.5 text-xs font-medium text-ink-3 transition-colors hover:text-azure"
+                className="flex items-center gap-1.5 text-sm font-medium text-ink-2 transition-colors hover:text-azure"
               >
                 <MapPin size={14} />
                 {selectedCity}
               </button>
             </div>
           </div>
-          <nav className="flex items-center gap-6 text-xs font-medium text-ink-3">
+          <nav className="flex items-center gap-6 text-sm font-medium text-ink-2">
             <Link href="/catalog" className="transition-colors hover:text-azure">Каталог компонентов</Link>
             <Link href="/delivery" className="transition-colors hover:text-azure">Доставка</Link>
             <Link href="/brands" className="transition-colors hover:text-azure">Бренды</Link>
@@ -120,7 +112,7 @@ export function Header() {
           </nav>
           <a
             href={`tel:${COMPANY.phone.raw}`}
-            className="ml-auto flex min-h-9 items-center gap-1.5 text-xs font-medium text-ink-3 transition-colors hover:text-azure"
+            className="ml-auto flex items-center gap-1.5 text-sm font-medium text-ink-2 transition-colors hover:text-azure"
           >
             <Phone size={14} />
             {COMPANY.phone.display}
@@ -128,7 +120,7 @@ export function Header() {
         </div>
       </div>
 
-      <div className="flex h-12 items-center justify-between border-b border-[var(--border)] px-4 lg:hidden">
+      <div className="flex h-11 items-center justify-between px-4 lg:hidden">
         <Link href="/" className="text-[21px] font-extrabold leading-none tracking-[-0.045em] text-ink">
           electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
         </Link>
@@ -148,24 +140,8 @@ export function Header() {
             className="fixed inset-0 z-[var(--layer-overlay)] bg-black/45"
             onClick={() => setCityModalOpen(false)}
           />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="city-dialog-title"
-            className="fixed left-1/2 top-1/2 z-[var(--layer-overlay)] max-h-[min(620px,90dvh)] w-[calc(100%-24px)] max-w-4xl -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border)] bg-white shadow-[var(--shadow-xl)]"
-          >
-            <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
-              <h2 id="city-dialog-title" className="text-base font-semibold text-ink">Выберите город</h2>
-              <button
-                type="button"
-                onClick={() => setCityModalOpen(false)}
-                className="flex size-10 items-center justify-center rounded-[var(--radius-control)] text-ink-3 hover:bg-surface-muted hover:text-ink"
-                aria-label="Закрыть выбор города"
-              >
-                <X size={18} />
-              </button>
-            </div>
-            <div className="border-b border-[var(--border)] p-4">
+          <div className="fixed left-1/2 top-1/2 z-[var(--layer-overlay)] max-h-[min(620px,90dvh)] w-[calc(100%-24px)] max-w-4xl -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[var(--radius-panel)] bg-white shadow-[var(--shadow-xl)]">
+            <div className="p-4 border-b border-[var(--border)]">
               <div className="relative">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                 <input
@@ -185,7 +161,7 @@ export function Header() {
                     <button
                       key={city.name}
                       onClick={() => handleCitySelect(city.name)}
-                      className={`flex min-h-12 items-center justify-between rounded-[var(--radius-control)] px-4 py-3 text-left transition-colors ${
+                      className={`flex items-center justify-between px-4 py-3 rounded-lg text-left transition-all ${
                         selectedCity === city.name
                           ? 'bg-azure-light text-azure font-semibold ring-2 ring-azure'
                           : 'hover:bg-[#fafafa] text-ink-2'

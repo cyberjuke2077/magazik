@@ -95,7 +95,7 @@ export default function LegalPage() {
                 <Link
                   key={d.href}
                   href={d.href}
-                  className="block rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-5 transition-colors hover:border-[var(--border-2)]"
+                  className="block rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                 >
                   <div className="font-semibold text-ink">{d.title}</div>
                   <div className="text-xs text-ink-3 mt-0.5">{d.desc}</div>

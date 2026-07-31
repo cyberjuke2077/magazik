@@ -62,7 +62,7 @@ export function ProductTable({ products }: ProductTableProps) {
   function handleSort(key: SortKey) {
     const params = new URLSearchParams(searchParams.toString())
     if (currentSort === key) {
-      // Already sorted by this - reset to default
+      // Already sorted by this — reset to default
       params.delete('sort')
     } else {
       params.set('sort', key)

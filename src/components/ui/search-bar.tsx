@@ -30,15 +30,15 @@ export function SearchBar() {
     <div className="relative w-full max-w-2xl mx-auto">
       <form onSubmit={handleSearch}>
         <div
-          className={`relative flex items-center rounded-[var(--radius-control)] border bg-white transition-colors duration-200 ${
+          className={`relative flex items-center rounded border transition-all duration-300 ${
             focused
-              ? 'border-azure'
-              : 'border-[var(--border-2)] hover:border-ink-4'
+              ? 'border-azure/40 shadow-[0_0_0_4px_rgba(0,102,204,0.08)] bg-white'
+              : 'border-black/10 bg-white hover:border-black/15 shadow-sm'
           }`}
         >
           <Search
             size={18}
-            className={`absolute left-4 transition-colors ${focused ? 'text-azure' : 'text-ink-4'}`}
+            className={`absolute left-4 transition-colors ${focused ? 'text-azure' : 'text-[#a8a29e]'}`}
           />
           <input
             ref={inputRef}
@@ -48,12 +48,12 @@ export function SearchBar() {
             onFocus={() => setFocused(true)}
             onBlur={() => setTimeout(() => setFocused(false), 150)}
             placeholder="Артикул, наименование или производитель..."
-            className="h-14 w-full bg-transparent pl-12 pr-32 text-base text-ink outline-none placeholder:text-ink-4"
+            className="w-full h-14 pl-12 pr-32 text-base bg-transparent text-[#1c1917] placeholder-[#a8a29e] outline-none"
             autoComplete="off"
           />
           <button
             type="submit"
-            className="absolute right-2 flex h-10 items-center gap-2 rounded-[var(--radius-control)] bg-azure px-4 text-sm font-semibold text-white transition-colors hover:bg-azure-hover"
+            className="absolute right-2 flex items-center gap-2 h-10 px-4 text-sm font-medium text-white bg-azure hover:bg-azure-hover rounded transition-all shadow-sm"
           >
             Найти
             <ArrowRight size={14} />
@@ -61,11 +61,11 @@ export function SearchBar() {
         </div>
       </form>
 
-      {/* Dropdown - popular searches */}
+      {/* Dropdown — popular searches */}
       {focused && !query.trim() && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-[var(--radius-panel)] border border-[var(--border)] bg-white shadow-[var(--shadow-lg)]">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-black/8 rounded shadow-xl shadow-black/10 overflow-hidden z-50">
           <div className="px-4 pt-4 pb-2">
-            <div className="mb-3 flex items-center gap-2 text-xs font-semibold text-ink-3">
+            <div className="flex items-center gap-2 text-xs text-[#a8a29e] uppercase tracking-wider mb-3">
               <Zap size={10} className="text-azure" />
               Популярные запросы
             </div>
@@ -75,7 +75,7 @@ export function SearchBar() {
                   key={term}
                   type="button"
                   onMouseDown={() => handlePopular(term)}
-                  className="flex items-center gap-1 rounded-[var(--radius-control)] border border-[var(--border)] bg-white px-2.5 py-1 text-xs text-ink-2 transition-colors hover:border-azure/30 hover:text-azure"
+                  className="flex items-center gap-1 px-2.5 py-1 text-xs text-[#44403c] bg-azure-light hover:bg-[#e0f2fe] hover:text-azure rounded border border-black/6 hover:border-azure/20 transition-all"
                 >
                   <Clock size={9} className="opacity-50" />
                   {term}
@@ -84,7 +84,7 @@ export function SearchBar() {
             </div>
           </div>
           <div className="px-4 pb-4 pt-2 border-t border-black/6 mt-2">
-            <p className="text-xs text-ink-4">
+            <p className="text-xs text-[#a8a29e]">
               Введите артикул или наименование для поиска в каталоге
             </p>
           </div>

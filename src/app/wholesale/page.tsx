@@ -142,10 +142,10 @@ export default function WholesalePage() {
             className="object-cover object-center"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-[#0b315f]/82" />
-          <div className="relative mx-auto max-w-[1380px] px-3 py-10 sm:px-6 sm:py-12">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#064a9a]/98 via-[#075fbd]/88 to-[#0969da]/25" />
+          <div className="relative mx-auto max-w-[1380px] px-3 py-10 sm:px-6 sm:py-12" data-motion-reveal>
             <div className="max-w-2xl">
-              <div className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-white/82">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/15 border border-white/20 rounded-sm text-xs text-white font-medium mb-5">
                 <Package2 size={11} />
                 Оптовые поставки
               </div>
@@ -170,8 +170,8 @@ export default function WholesalePage() {
               {priceTiers.map((tier) => (
                 <div
                   key={tier.label}
-                  className={`relative flex flex-col rounded-[var(--radius-card)] border bg-white p-5 ${
-                    tier.discount >= 25 ? 'border-azure/35' : 'border-[var(--border)]'
+                  className={`relative flex flex-col rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
+                    tier.discount >= 25 ? 'ring-2 ring-azure/20' : ''
                   }`}
                 >
                   {tier.discount >= 25 && (
@@ -200,8 +200,8 @@ export default function WholesalePage() {
             <h2 className="text-xl font-bold text-ink mb-6">Преимущества оптовых клиентов</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {benefits.map((b) => (
-                <div key={b.title} className="flex flex-col gap-3 border-t border-[var(--border)] py-5">
-                  <div className={`flex size-10 items-center justify-center rounded-[var(--radius-control)] ${b.bg}`}>
+                <div key={b.title} className="flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                  <div className={`flex size-10 items-center justify-center rounded ${b.bg}`}>
                     <b.icon size={18} className={b.color} />
                   </div>
                   <h3 className="text-sm font-semibold text-ink">{b.title}</h3>
@@ -216,7 +216,7 @@ export default function WholesalePage() {
             {/* Conditions */}
             <section>
               <h2 className="text-xl font-bold text-ink mb-6">Условия сотрудничества</h2>
-              <div className="space-y-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6">
+              <div className="space-y-3 rounded-2xl bg-white p-6 shadow-sm">
                 {conditions.map((c) => (
                   <div key={c} className="flex items-start gap-3">
                     <div className="flex size-5 items-center justify-center rounded-sm bg-azure/10 shrink-0 mt-0.5">
@@ -227,7 +227,7 @@ export default function WholesalePage() {
                 ))}
               </div>
 
-              <div className="mt-6 rounded-[var(--radius-card)] border border-azure/14 bg-azure-light p-5">
+              <div className="mt-6 rounded-2xl bg-azure-light p-5">
                 <h3 className="text-sm font-semibold text-ink mb-2">Нужна срочная поставка?</h3>
                 <p className="text-xs text-ink-3 mb-3">
                   Позвоните нам - обсудим условия и сроки в течение 15 минут.
@@ -245,7 +245,7 @@ export default function WholesalePage() {
             {/* Form */}
             <section>
               <h2 className="text-xl font-bold text-ink mb-6">Оставить заявку</h2>
-              <div className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-6">
+              <div className="rounded-2xl bg-white p-6 shadow-sm">
                 {submitted ? (
                   <div className="text-center py-8">
                     <div className="inline-flex items-center justify-center size-14 rounded bg-azure/10 mb-4">
@@ -358,7 +358,7 @@ export default function WholesalePage() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="h-11 w-full rounded-[var(--radius-control)] bg-azure text-sm font-bold text-white transition-colors hover:bg-azure-hover active:translate-y-px disabled:translate-y-0 disabled:opacity-60"
+                      className="h-11 w-full rounded-xl bg-azure text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-azure-hover hover:shadow-md active:translate-y-0 disabled:translate-y-0 disabled:opacity-60"
                     >
                       {loading ? 'Отправляем...' : 'Отправить заявку'}
                     </button>
