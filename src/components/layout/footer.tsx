@@ -1,6 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, Mail, MapPin, Phone, ShieldCheck } from 'lucide-react'
+import { ArrowRight, FileCheck2, Mail, MapPin, Phone } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const footerLinks = [
@@ -78,13 +77,11 @@ export function Footer() {
         </div>
 
         <div className="mt-9 flex flex-col gap-5 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="rounded-[var(--radius-control)] border border-[var(--border)] bg-white p-2">
-              <Image src="/rst-quality.svg" alt="Знак качества РСТ" width={104} height={30} className="h-7 w-auto" />
-            </div>
+          <div className="flex max-w-md items-start gap-3">
+            <FileCheck2 size={20} className="mt-0.5 shrink-0 text-azure" />
             <div>
-              <div className="flex items-center gap-1.5 text-sm font-semibold text-ink"><ShieldCheck size={15} className="text-azure" />Сертифицированная продукция</div>
-              <p className="mt-0.5 text-xs text-ink-4">Документы предоставляются при оформлении поставки.</p>
+              <div className="text-sm font-semibold text-ink">Документы к поставке</div>
+              <p className="mt-0.5 text-xs leading-relaxed text-ink-4">Состав сопроводительных документов фиксируем в коммерческом предложении и договоре.</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-ink-4">

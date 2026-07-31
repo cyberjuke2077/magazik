@@ -112,11 +112,6 @@ body {
   box-shadow: none;
 }
 
-[data-motion-reveal],
-[data-motion-scale] {
-  will-change: transform, opacity;
-}
-
 h1,
 h2,
 h3,
@@ -229,20 +224,6 @@ h4 {
 
 /* Divider */
 .divider { border: none; border-top: 1px solid var(--border); }
-
-/* ─────────────────────────────────────────
-   MARQUEE (brands ticker)
-───────────────────────────────────────── */
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.animate-marquee {
-  display: flex;
-  animation: marquee 28s linear infinite;
-  will-change: transform;
-}
-.animate-marquee:hover { animation-play-state: paused; }
 
 @keyframes mobile-filter-enter {
   from { transform: translateX(100%); }

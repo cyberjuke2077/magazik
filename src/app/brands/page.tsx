@@ -101,7 +101,7 @@ export default function BrandsPage() {
           </div>
 
           {/* ── Top brands mosaic ── */}
-          <section data-motion-reveal>
+          <section>
             <h2 className="mb-5 text-lg font-bold text-ink">
               Топ {featuredBrands.length} брендов
             </h2>
@@ -170,7 +170,7 @@ export default function BrandsPage() {
           </section>
 
           {/* All brands A-Z */}
-          <section data-motion-reveal>
+          <section>
             <h2 className="mb-5 text-lg font-bold text-ink">
               Все бренды от A до Z
             </h2>
@@ -243,7 +243,7 @@ export default function BrandsPage() {
           </section>
 
           {/* CTA */}
-          <section className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-7 text-center" data-motion-reveal>
+          <section className="rounded-[var(--radius-card)] border border-[var(--border)] bg-white p-7 text-center">
             <div className="relative">
               <h2 className="mb-2 text-xl font-bold text-ink">Нет нужного производителя?</h2>
               <p className="mx-auto mb-5 max-w-md text-sm text-ink-3">

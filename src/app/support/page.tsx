@@ -91,7 +91,7 @@ export default function SupportPage() {
           </section>
 
           {/* Contact */}
-          <section className="mb-12 rounded-2xl bg-azure p-8" data-motion-reveal>
+          <section className="mb-12 rounded-2xl bg-azure p-8">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">Связаться с инженерами</h2>

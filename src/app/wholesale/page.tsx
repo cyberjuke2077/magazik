@@ -143,7 +143,7 @@ export default function WholesalePage() {
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-[#0b315f]/82" />
-          <div className="relative mx-auto max-w-[1380px] px-3 py-10 sm:px-6 sm:py-12" data-motion-reveal>
+          <div className="relative mx-auto max-w-[1380px] px-3 py-10 sm:px-6 sm:py-12">
             <div className="max-w-2xl">
               <div className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-white/82">
                 <Package2 size={11} />

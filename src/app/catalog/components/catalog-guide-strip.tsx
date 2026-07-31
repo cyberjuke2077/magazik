@@ -14,7 +14,6 @@ export function CatalogGuideStrip() {
     <nav
       className="no-scrollbar mb-3 flex overflow-x-auto rounded-[var(--radius-card)] border border-[var(--border)] bg-white"
       aria-label="Помощь с подбором"
-      data-motion-reveal
     >
       {guides.map((guide) => (
         <Link

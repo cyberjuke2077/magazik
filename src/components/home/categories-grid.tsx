@@ -23,7 +23,7 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
   if (featuredSections.length === 0) return null
 
   return (
-    <section className="bg-white py-12 lg:py-16" data-motion-reveal>
+    <section className="bg-white py-12 lg:py-16">
       <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
         <div className="mb-8 flex items-end justify-between gap-5">
           <div>

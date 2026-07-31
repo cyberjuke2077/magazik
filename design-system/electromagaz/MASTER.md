@@ -16,7 +16,7 @@
 2. Information hierarchy comes from type, spacing and borders, not stacked cards.
 3. Use one blue accent. Status colors are reserved for semantic states.
 4. Keep real product and storefront images. Do not create fake product UI or decorative data.
-5. Motion communicates entry, hover feedback or state change. No decorative loops except the single manufacturer marquee.
+5. Motion is limited to direct interaction feedback. Page content does not wait for scroll reveals and no element moves in a decorative loop.
 6. Use plain Russian copy. No version stamps, fake metrics, decorative labels or em dashes.
 
 ## Tokens
@@ -79,9 +79,8 @@
 
 ## Motion
 
-- Standard duration: 150-300ms for controls, up to 420ms for section entry.
+- Standard duration: 150-300ms for controls.
 - Animate only opacity and transform.
-- Section reveal offset: 10px maximum.
 - Product image hover scale: 1.025 maximum.
 - Respect `prefers-reduced-motion`; all essential content remains visible without JavaScript motion.
 

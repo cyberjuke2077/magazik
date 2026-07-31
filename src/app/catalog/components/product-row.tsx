@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { FileText, Sparkles } from 'lucide-react'
-import { formatPrice, isNewProduct } from '@/lib/catalog-utils'
+import { FileText } from 'lucide-react'
+import { formatPrice } from '@/lib/catalog-utils'
 import { fallbackImageForProduct } from '@/lib/enrichment/images/package-image'
 import { CompareToggleBtn } from '@/components/catalog/compare-toggle-btn'
 import { AddToCartBtn } from './add-to-cart-btn'
@@ -62,19 +62,11 @@ function ProductImage({ product }: { product: ProductRowData }) {
 
 function ProductDetails({ product }: { product: ProductRowData }) {
   const specs = Object.entries(product.specs).slice(0, 4)
-  const isNew = isNewProduct(product.lastEnrichedAt)
-
   return (
     <div className="min-w-0">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-3">
         <span className="font-medium">{product.manufacturer}</span>
         <span className="mpn font-semibold text-azure">{product.partNumber}</span>
-        {isNew && (
-          <span className="inline-flex items-center gap-1 rounded bg-stock-bg px-1.5 py-0.5 font-semibold text-stock">
-            <Sparkles size={10} />
-            Новинка
-          </span>
-        )}
         {product.lifecycle && <LifecycleBadge lifecycle={product.lifecycle} />}
       </div>
       <Link

@@ -56,7 +56,7 @@ export default function ContactsPage() {
             Свяжитесь с нами удобным способом - ответим в течение 24 часов в рабочие дни
           </p>
 
-          <div className="mb-6 grid gap-3 lg:grid-cols-3" data-motion-reveal>
+          <div className="mb-6 grid gap-3 lg:grid-cols-3">
             {/* Phone */}
             <div className="rounded-2xl bg-white p-5 shadow-[var(--shadow-xs)]">
               <div className="flex size-10 items-center justify-center bg-azure-light mb-4 rounded">

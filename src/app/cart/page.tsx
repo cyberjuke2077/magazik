@@ -90,7 +90,7 @@ export default function CartPage() {
         <main className="flex-1">
           <div className="mx-auto max-w-[1380px] px-4 pb-7 pt-7 lg:px-0">
             <h1 className="mb-3 text-[30px] font-bold leading-tight tracking-[-0.035em] text-ink">Корзина</h1>
-            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]" data-motion-reveal>
+            <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]">
               <Image
                 src="/storefront/empty-request-list.png"
                 alt="Пустая корзина Electromagaz"

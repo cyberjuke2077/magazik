@@ -143,7 +143,7 @@ export default function JobsPage() {
           </section>
 
           {/* Generic CTA */}
-          <section className="rounded-2xl bg-azure-light p-8 text-center" data-motion-reveal>
+          <section className="rounded-2xl bg-azure-light p-8 text-center">
             <h2 className="text-lg font-bold text-ink mb-2">Не нашли подходящую вакансию?</h2>
             <p className="text-sm text-ink-3 mb-5 max-w-xl mx-auto leading-relaxed">
               Пришлите резюме на {COMPANY.hrEmail} - рассмотрим и свяжемся, когда появится релевантная позиция.

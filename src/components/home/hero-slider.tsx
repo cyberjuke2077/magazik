@@ -13,7 +13,7 @@ const quickLinks = [
 
 export function HeroSlider() {
   return (
-    <section className="border-b border-[var(--border)] bg-white" data-motion-reveal>
+    <section className="border-b border-[var(--border)] bg-white">
       <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
         <div className="grid overflow-hidden border-x border-[var(--border)] lg:min-h-[430px] lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)]">
           <div className="flex flex-col justify-center px-5 py-9 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
@@ -40,13 +40,12 @@ export function HeroSlider() {
             href="/catalog"
             className="group relative min-h-[240px] overflow-hidden border-t border-[var(--border)] bg-[#dfe6ed] sm:min-h-[300px] lg:min-h-full lg:border-l lg:border-t-0"
             aria-label="Перейти в каталог электронных компонентов"
-            data-motion-scale
           >
             <Image
               src="/storefront/hero-components.jpg"
               alt="Электронные компоненты и печатные платы для серийного производства"
               fill
-              priority
+              preload
               className="object-cover object-center saturate-[0.82] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-[1.02]"
               sizes="(max-width: 1024px) 100vw, 58vw"
             />

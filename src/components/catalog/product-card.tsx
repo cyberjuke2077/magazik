@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { ShoppingCart, Plus, Minus, Check, Zap, Sparkles } from 'lucide-react'
+import { ShoppingCart, Plus, Minus, Check, Zap } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { type Product } from '@/types'
 import { formatPrice } from '@/lib/utils'
@@ -11,16 +11,6 @@ import { CategoryIcon } from '@/components/ui/component-icons'
 import { packageSvgForProduct } from '@/lib/enrichment/images/package-image'
 import { CompareToggleBtn } from './compare-toggle-btn'
 import { flyToCart } from '@/lib/fly-to-cart'
-
-const NEW_THRESHOLD_DAYS = 14
-const NEW_THRESHOLD_MS = NEW_THRESHOLD_DAYS * 24 * 60 * 60 * 1000
-
-function isNewProduct(createdAt?: string): boolean {
-  if (!createdAt) return false
-  const ts = Date.parse(createdAt)
-  if (Number.isNaN(ts)) return false
-  return Date.now() - ts < NEW_THRESHOLD_MS
-}
 
 interface ProductCardProps {
   product: Product
@@ -45,7 +35,6 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
   const [localQty, setLocalQty] = useState(product.minOrder)
   const displayQty = inCart ? cartQty : localQty
   const btnRef = useRef<HTMLButtonElement>(null)
-  const isNew = isNewProduct(product.createdAt)
 
   // Каскад изображения: реальное фото → generic-SVG корпуса → иконка категории
   const packageSvg = packageSvgForProduct({
@@ -117,11 +106,6 @@ export function ProductCard({ product, showDiscount = true }: ProductCardProps) 
           {product.featured && (
             <span className="flex items-center gap-1 rounded-sm bg-azure px-2 py-0.5 text-[10px] font-bold text-white">
               <Zap size={8} />ХИТ
-            </span>
-          )}
-          {isNew && (
-            <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white">
-              <Sparkles size={8} />Новинка
             </span>
           )}
           {showDiscount && discountPercent && (

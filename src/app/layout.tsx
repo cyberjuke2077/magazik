@@ -6,7 +6,6 @@ import { ToastProvider } from '@/components/ui/toast'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
-import { StorefrontMotion } from '@/components/motion/storefront-motion'
 
 const geist = Geist({
   variable: '--font-ui',
@@ -52,7 +51,6 @@ export default function RootLayout({
     <html lang="ru" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="min-h-screen bg-canvas antialiased">
         <ToastProvider>
-          <StorefrontMotion />
           <Suspense fallback={null}>
             <NavProgress />
           </Suspense>

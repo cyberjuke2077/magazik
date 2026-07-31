@@ -74,7 +74,7 @@ export function CompareClient() {
     return (
       <main className="flex-1">
         <div className="mx-auto max-w-[1380px] px-4 pb-2 pt-6 lg:px-0">
-          <div className="grid min-h-[300px] items-center rounded-2xl bg-white px-6 py-5 shadow-[var(--shadow-xs)] sm:grid-cols-[380px_minmax(0,1fr)] sm:px-10" data-motion-reveal>
+          <div className="grid min-h-[300px] items-center rounded-2xl bg-white px-6 py-5 shadow-[var(--shadow-xs)] sm:grid-cols-[380px_minmax(0,1fr)] sm:px-10">
             <Image
               src="/storefront/empty-compare.png"
               alt="Пустой список сравнения Electromagaz"
