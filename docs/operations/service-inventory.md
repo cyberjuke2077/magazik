@@ -1,6 +1,6 @@
 # Реестр внешних сервисов Electromagaz
 
-Дата проверки: 2026-07-31
+Дата проверки: 2026-08-05
 
 ## Назначение
 
@@ -21,8 +21,8 @@
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
 | GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | Владелец репозитория | Write для разработчика, review для владельца | `verified`: remote настроен | Работать через `codex/*`, PR и review |
-| Vercel | Preview и Production deploy | `[УТОЧНИТЬ]` | Project Developer или выше | `blocked`: CLI отсутствует, checkout не связан с Vercel project | Выдать доступ, связать проект, проверить production deployment и env |
-| Supabase | Production PostgreSQL, заявки и лиды | `[УТОЧНИТЬ]` | Developer без billing и удаления проекта | `partial`: на 2026-07-31 подтверждены 7 production-миграций; 8-я миграция rate limiting пока только локальная; `PUBLISH_DATABASE_URL` пуст | Применить новую миграцию сначала к Preview, затем к Production по release checklist; подтвердить backup policy |
+| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: GitHub `cyberjuke2077/magazik`, production branch `main`, deployment `dpl_FyjqgLJpAmKxBy4p8SEUA8ZFRC8z` Ready, `magazik-94yr.vercel.app` отвечает 200 | Не подключать Preview к production DB; для Preview использовать отдельную Supabase branch после решения по стоимости |
+| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Administrator без смены credentials | `verified`: GitHub `cyberjuke2077/magazik` и Vercel `magazik-94yr` подключены; runtime Prisma использует env официальной Vercel-интеграции | Отдельно проверить backup policy, RLS и стратегию Preview branches |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `not-configured`: локальные R2 env пусты | Подтвердить bucket, public URL и тестовую загрузку |
 | Telegram Bot API | Уведомления менеджеру о заявках | `[УТОЧНИТЬ]` | Bot token и chat ID | `not-configured`: локальные env пусты | Настроить и отправить тестовое уведомление |
@@ -76,8 +76,8 @@ NEXT_PUBLIC_SITE_URL
 
 ## Что нужно заполнить владельцу
 
-- [ ] Владелец Vercel project.
-- [ ] Владелец Supabase project и backup policy.
+- [x] Владелец нового Vercel project - аккаунт `cyberjuke2077`, team `cyberjuke2077s-projects`.
+- [x] Владелец Supabase project - `37Lunar`; backup policy пока не подтверждена.
 - [ ] Владелец домена и регистратора.
 - [ ] Владелец Cloudflare account и R2 bucket.
 - [ ] Получатель Telegram-уведомлений.
