@@ -19,6 +19,10 @@
 
 Полный runbook для нового разработчика: [docs/developer-onboarding.md](docs/developer-onboarding.md).
 
+Совместная работа Lunar и `cyberjuke2077`:
+[docs/codex-collaboration.md](docs/codex-collaboration.md). Актуальные GitHub,
+Vercel и Supabase targets: [docs/operations/service-inventory.md](docs/operations/service-inventory.md).
+
 ### 1. Установка
 
 ```bash
@@ -156,7 +160,7 @@ npm run db:publish                 # опубликовать каталог в 
 - **Заявки клиентов** (`QuoteRequest`/`QuoteRequestItem`) живут только в проде и при публикации не трогаются.
 - **Картинки** хранятся в Cloudflare R2 — общие для local и prod, публикация не нужна.
 
-Прод: https://electromagaz.vercel.app
+Прод: https://magazik-94yr.vercel.app
 
 ## БД
 

@@ -11,15 +11,14 @@
 
 Для локальной разработки каталога достаточно Docker PostgreSQL. Production access не нужен и не выдаётся по умолчанию.
 
-Для совместной работы владелец приглашает разработчика в `37Lunar's Org`
-в Supabase с ролью `Developer`. После принятия приглашения разработчик
-сверяет organization и project ref, получает строку Session Pooler из
-Supabase Dashboard и добавляет её в свой локальный `.env` как `DATABASE_URL`
-и `DIRECT_URL`. Пароль и полный URL не отправляются в Git, чат, issue или PR.
+Текущий production target - `37Lunar's Org / 37Lunar's Project`, ref
+`dbumwpnbtvixfusxnggn`. Owner проекта - `37Lunar`, `cyberjuke2077` имеет роль
+Administrator. Каждый участник использует свой Supabase account.
 
-Общая облачная БД предназначена для интеграции команды. Она не заменяет
-отдельное подтверждение production-настроек в Vercel и не даёт права менять
-биллинг или настройки организации.
+Production Supabase не используется как локальная БД. Для обычной разработки
+достаточно Docker PostgreSQL. Доступ к Supabase нужен только для согласованной
+production-задачи, а connection string, пароль и полный URL не отправляются в
+Git, чат, issue или PR.
 
 ## 2. Клонирование и установка
 
@@ -104,7 +103,7 @@ npm run check:db-failure:local
 git fetch origin
 git switch main
 git pull --ff-only
-git switch -c codex/короткое-название-задачи
+git switch -c feat/короткое-название-задачи
 ```
 
 Дальше:
@@ -113,10 +112,10 @@ git switch -c codex/короткое-название-задачи
 git status
 git add src/конкретный-файл.ts
 git commit -m "feat: короткое описание"
-git push -u origin codex/короткое-название-задачи
+git push -u origin feat/короткое-название-задачи
 ```
 
-Не используй `git add .` и не пушь незнакомые чужие изменения. Для большой, рискованной или визуальной задачи открой PR в `main`, проверь preview и только потом сливай. Подробное правило - в [docs/github-workflow.md](github-workflow.md).
+Не используй `git add .` и не пушь незнакомые чужие изменения. Человек использует ветки `feat/*`, `fix/*` или `docs/*`, Codex - `codex/*`. Для каждой задачи открывай PR в `main`. Текущий Vercel Hobby блокирует private-repo deploy от автора commit, которого нет в Vercel team, поэтому PR Lunar сливает `cyberjuke2077` через merge commit. Подробное правило - в [docs/codex-collaboration.md](codex-collaboration.md).
 
 ## 7. Миграции и каталог
 
@@ -146,7 +145,8 @@ npm run enrichment:status
 | --- | --- | --- |
 | Локальная разработка | Docker PostgreSQL и локальный `.env` | Без production credentials |
 | Публикация каталога | `PUBLISH_DATABASE_URL` и подтверждённый diff | Сначала `npm run db:publish -- --dry-run` |
-| Vercel deploy | Доступ к Vercel project и его Environment Variables | Push сам по себе не доказывает production deploy |
+| Vercel deploy | `cyberjuke2077s-projects/magazik-94yr` | Merge в `main`, затем проверить статус `Ready` и smoke-test |
+| Supabase production | `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Сначала подтвердить organization и ref |
 | R2 maintenance | Отдельные R2 credentials | Не хранить в Git |
 | Telegram notifications | Отдельный bot token и chat ID | Опционально для local |
 
@@ -174,6 +174,13 @@ Build зависит от сети для шрифтов и может обра�
 ### Нужны production данные или доступы
 
 Не ищи и не копируй чужой `.env`. Создай sandbox или запроси минимальный доступ к конкретному сервису. Для задач без production access используй локальную БД и безопасные тестовые данные.
+
+### Vercel Preview падает без `DATABASE_URL`
+
+Сейчас это ожидаемо: официальная Supabase integration выдаёт database env только
+Production, а Preview отключен от production DB. Не копируй production
+credentials в Preview. Для рабочих Preview нужна отдельная Supabase branch или
+sandbox и отдельный набор Preview env.
 
 ## 10. Что считать готовой задачей
 

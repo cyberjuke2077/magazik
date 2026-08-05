@@ -20,9 +20,9 @@
 
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
-| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | Владелец репозитория | Write для разработчика, review для владельца | `verified`: remote настроен | Работать через `codex/*`, PR и review |
-| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: GitHub `cyberjuke2077/magazik`, production branch `main`, deployment `dpl_FyjqgLJpAmKxBy4p8SEUA8ZFRC8z` Ready, `magazik-94yr.vercel.app` отвечает 200 | Не подключать Preview к production DB; для Preview использовать отдельную Supabase branch после решения по стоимости |
-| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Administrator без смены credentials | `verified`: GitHub `cyberjuke2077/magazik` и Vercel `magazik-94yr` подключены; runtime Prisma использует env официальной Vercel-интеграции | Отдельно проверить backup policy, RLS и стратегию Preview branches |
+| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: remote и `main` настроены | Lunar работает через `feat/*`, `fix/*` или `docs/*`; Codex через `codex/*`; всё сливается PR |
+| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: GitHub `cyberjuke2077/magazik`, production branch `main`, deployment `dpl_GAe5zaVhXPfdHyUykdrAfHUBc22s` Ready; `/`, `/best`, `/catalog`, `/api/catalog/categories` отвечают 200 | PR Lunar сливает `cyberjuke2077` merge commit; Preview не подключать к production DB |
+| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: GitHub `cyberjuke2077/magazik` и Vercel `magazik-94yr` подключены; env официальной Vercel-интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `not-configured`: локальные R2 env пусты | Подтвердить bucket, public URL и тестовую загрузку |
 | Telegram Bot API | Уведомления менеджеру о заявках | `[УТОЧНИТЬ]` | Bot token и chat ID | `not-configured`: локальные env пусты | Настроить и отправить тестовое уведомление |
@@ -50,6 +50,10 @@
   `QuoteRequestItem` и `WholesaleLead` и завершает проверку ошибкой при изменении.
 - У каждого участника должны быть собственные доступы. Credentials владельца
   не копируются между машинами и не передаются в чате.
+- Vercel Hobby блокирует private-repo deployment от автора commit, которого нет
+  в Vercel team. Lunar открывает PR, а `cyberjuke2077` сливает его merge commit
+  в `main` и проверяет Production deployment.
+- Preview сейчас намеренно не получает production database credentials.
 
 ## Проверка без вывода секретов
 
