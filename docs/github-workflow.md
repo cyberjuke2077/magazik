@@ -18,8 +18,26 @@ git switch -c feat/короткое-название-задачи
 2. Делай маленькие осмысленные коммиты: `feat`, `fix`, `docs`, `test`, `chore`.
 3. Перед push запускай подходящие проверки.
 4. Добавляй файлы поимённо: `git add src/нужный-файл.ts`. Не используй `git add .`.
-5. Пушь ветку и открывай Pull Request в `main`, если нужен review, preview или безопасное слияние.
+5. Пушь ветку и открывай Pull Request в `main` для каждой задачи. Человек использует `feat/*`, `fix/*` или `docs/*`, Codex использует `codex/*`.
 6. После merge удали ветку и начни следующую задачу от свежего `main`.
+
+## Совместная работа Lunar и cyberjuke2077
+
+Lunar работает в своей ветке и открывает PR. `cyberjuke2077` проверяет изменения
+и сливает PR в `main` через GitHub merge commit. Прямой push в `main` и force
+push не используются.
+
+Такой merge обязателен для текущего Vercel Hobby: deployment private repo от
+commit, автор которого не входит в Vercel team, блокируется. Merge commit от
+`cyberjuke2077` запускает Production deployment из `main`.
+
+Preview сейчас не подключён к БД: Supabase integration выдаёт credentials
+только Production. Не выдавай Preview доступ к production DB. Для рабочей
+Preview-среды сначала нужна отдельная Supabase branch или sandbox.
+
+Точные targets и smoke-test перечислены в
+[протоколе совместной работы](codex-collaboration.md) и
+[реестре сервисов](operations/service-inventory.md).
 
 ## Что не класть в Git
 

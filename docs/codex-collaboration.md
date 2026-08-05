@@ -15,6 +15,19 @@
 3. Соразработчик входит в Codex под своим аккаунтом и открывает именно корень папки `magazik` в Codex App либо запускает `codex` из этого каталога.
 4. Для Git push используется личная авторизация GitHub соразработчика. Если push получает `403`, это не проблема Codex - нужно выдать или проверить GitHub write access.
 
+## Текущий командный контур
+
+Перед любой production-задачей сверяй не только название, но и точный target:
+
+| Контур | Текущий target | Права |
+| --- | --- | --- |
+| GitHub | `cyberjuke2077/magazik`, ветка `main` | `cyberjuke2077` - владелец, Lunar - соразработчик |
+| Vercel | `cyberjuke2077s-projects/magazik-94yr`, project ID `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | аккаунт `cyberjuke2077`, Hobby team |
+| Supabase | `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | `37Lunar` - Owner, `cyberjuke2077` - Administrator |
+| Production | `https://magazik-94yr.vercel.app` | deploy только из `main` |
+
+Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория.
+
 ## Первый prompt для Codex
 
 В новом task сначала отправь Codex это сообщение:
@@ -36,12 +49,12 @@ git status -sb
 git fetch origin
 git switch main
 git pull --ff-only
-git switch -c codex/короткое-название-задачи
+git switch -c feat/короткое-название-задачи
 ```
 
 Во время работы:
 
-1. Одна задача - одна ветка `codex/<задача>`.
+1. Одна задача - одна ветка. Разработчик использует `feat/*`, `fix/*` или `docs/*`. Codex использует `codex/*`.
 2. Добавляй файлы только поимённо, например `git add src/app/page.tsx`.
 3. Делай небольшие Conventional Commits: `feat:`, `fix:`, `docs:`, `test:`, `chore:`.
 4. Запускай релевантные проверки. Перед обычным code push нужны как минимум `npm run lint` и `npm run build`, если окружение позволяет. Причину непройденной проверки надо явно передать в handoff.
@@ -52,10 +65,29 @@ git switch -c codex/короткое-название-задачи
 ```bash
 git status -sb
 git log origin/main..HEAD --oneline
-git push -u origin codex/короткое-название-задачи
+git push -u origin feat/короткое-название-задачи
 ```
 
-После push открывай Pull Request из своей ветки в `main`. `main` сливает владелец после review и preview. Прямой push в `main` допустим только если владелец дал явное указание для конкретной операции.
+После push открывай Pull Request из своей ветки в `main`. `main` сливает владелец после review и локальных проверок. Прямой push в `main` допустим только если владелец дал явное указание для конкретной операции.
+
+## Как Lunar работает с репозиторием
+
+1. Перед новой задачей Lunar обновляет локальный `main` через `git pull --ff-only` и создаёт новую ветку.
+2. В ветку попадают только файлы текущей задачи. `.env`, токены, дампы БД и чужие незакоммиченные изменения не трогаются.
+3. Lunar запускает релевантные тесты, `npm run lint` и `npm run build:local`, затем открывает PR в `main` с кратким handoff.
+4. `cyberjuke2077` делает review и сливает PR через GitHub merge commit. Это важно для текущего Vercel Hobby: private-repo deployment от commit, автор которого не входит в Vercel team, блокируется.
+5. Merge в `main` запускает Production deployment. После статуса `Ready` проверяются `/`, `/best`, `/catalog` и `/api/catalog/categories`.
+6. Если production deployment упал, PR не переписывают force push. Сначала читают build log и исправляют причину отдельным commit или PR.
+
+Preview для PR сейчас не является acceptance-средой: Supabase credentials выданы только Production, а Supabase Preview отключен. Это ожидаемая конфигурация. Нельзя подключать Preview напрямую к production DB. Если команде нужны рабочие Preview, сначала создаётся отдельная Supabase branch или sandbox и отдельные Preview env.
+
+## Правила работы с Supabase
+
+- Обычная разработка и тесты идут на локальном PostgreSQL из Docker.
+- Перед production-операцией надо вслух подтвердить `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn`.
+- Каждый участник входит под своим аккаунтом. Connection strings, пароли и токены не передаются через Git, чат, issue или PR.
+- Изменения schema идут через `prisma/schema.prisma` и migration-файл. Порядок применения production migration описан в `AGENTS.md` и требует отдельной задачи.
+- `npm run db:publish` не является проверкой кода. Его запускают только после dry-run, проверки diff и явного согласования.
 
 ## Что Codex не делает сам
 
@@ -88,4 +120,5 @@ Git push означает только, что коммиты попали на 
 | `git pull --ff-only` не проходит | Не делать merge или rebase наугад, сначала синхронизироваться с владельцем. |
 | `git push` получает `403` | Проверить, что GitHub account соразработчика добавлен в private repo с правом записи. |
 | Не хватает переменной окружения | Запросить минимально необходимый доступ или использовать sandbox. Не искать чужой `.env`. |
+| Vercel блокирует автора commit | Не добавлять production DB в Preview. Владелец сливает PR merge commit в `main`, затем проверяет Production deployment. |
 | Нужны production-данные | Не копировать базу и credentials. Согласовать sandbox-дамп или отдельный доступ. |
