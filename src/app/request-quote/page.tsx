@@ -114,6 +114,9 @@ export default function RequestQuotePage() {
 
     if (result.success) {
       clearCart()
+      // Полная навигация не даёт пустой корзине перерисовать страницу раньше
+      // перехода на статус успешно сохранённой заявки.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign(`/request-quote/status/${result.requestId}`)
     } else {
       setSubmitError(result.error)

@@ -1,6 +1,7 @@
 import { getProductBySlug, getProductsByCategory } from '@/lib/queries/products'
 import { ProductClientChipDip } from './product-client-chipdip'
 import { ProductJsonLd, BreadcrumbJsonLd } from '@/components/seo/product-jsonld'
+import { getProductMetaDescription } from '@/lib/product-seo'
 import { notFound } from 'next/navigation'
 import { type Metadata } from 'next'
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${product.name} (${product.partNumber})`,
-    description: product.description || `${product.name} от ${product.manufacturer}. Артикул: ${product.partNumber}. ${product.inStock ? 'В наличии' : 'Под заказ'}.`,
+    description: getProductMetaDescription(product),
     openGraph: {
       title: `${product.name} (${product.partNumber})`,
       description: product.description || `${product.name} от ${product.manufacturer}`,

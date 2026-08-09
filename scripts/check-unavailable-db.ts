@@ -64,7 +64,13 @@ async function main(): Promise<void> {
   let browser: Browser | null = null
   try {
     await waitForServer(baseUrl, server)
-    browser = await chromium.launch({ headless: true })
+    const localChromiumExecutable = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+    browser = await chromium.launch({
+      headless: true,
+      ...(localChromiumExecutable
+        ? { executablePath: localChromiumExecutable }
+        : { channel: 'chromium' }),
+    })
     const page = await browser.newPage()
     await page.goto(`${baseUrl}/catalog?q=DB-FAILURE-${Date.now()}`, {
       waitUntil: 'networkidle',

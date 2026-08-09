@@ -7,11 +7,7 @@ interface ProductJsonLdProps {
   product: Product
 }
 
-/**
- * Schema.org Product structured data (JSON-LD) for SEO.
- * Renders an inline <script> with serialized JSON.
- */
-export function ProductJsonLd({ product }: ProductJsonLdProps) {
+export function buildProductJsonLd(product: Product): Record<string, unknown> {
   const url = `${SITE_URL}/product/${product.slug}`
 
   const data: Record<string, unknown> = {
@@ -28,13 +24,8 @@ export function ProductJsonLd({ product }: ProductJsonLdProps) {
     category: product.category,
   }
 
-  if (product.description) {
-    data.description = product.description
-  }
-
-  if (product.images && product.images.length > 0) {
-    data.image = product.images
-  }
+  if (product.description) data.description = product.description
+  if (product.images.length > 0) data.image = product.images
 
   if (product.price > 0) {
     data.offers = {
@@ -42,9 +33,6 @@ export function ProductJsonLd({ product }: ProductJsonLdProps) {
       url,
       priceCurrency: product.currency || 'RUB',
       price: product.price,
-      availability: product.inStock
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/PreOrder',
       seller: {
         '@type': 'Organization',
         name: 'Electromagaz',
@@ -52,10 +40,24 @@ export function ProductJsonLd({ product }: ProductJsonLdProps) {
     }
   }
 
+  return data
+}
+
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c')
+}
+
+/**
+ * Schema.org Product structured data (JSON-LD) for SEO.
+ * Renders an inline <script> with serialized JSON.
+ */
+export function ProductJsonLd({ product }: ProductJsonLdProps) {
+  const data = buildProductJsonLd(product)
+
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   )
 }
@@ -79,7 +81,7 @@ export function BreadcrumbJsonLd({ items }: BreadcrumbJsonLdProps) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   )
 }
@@ -108,7 +110,7 @@ export function OrganizationJsonLd({ url }: OrganizationJsonLdProps = {}) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }}
     />
   )
 }

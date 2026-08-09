@@ -30,6 +30,15 @@ function assertLocalDatabase(): void {
   }
 }
 
+test('health endpoint confirms application and database readiness', async ({ request }) => {
+  assertLocalDatabase()
+
+  const response = await request.get('/api/health')
+  expect(response.status()).toBe(200)
+  await expect(response.json()).resolves.toEqual({ status: 'ok', database: 'ok' })
+  expect(response.headers()['cache-control']).toContain('no-store')
+})
+
 async function loginAdmin(page: Page, destination: '/admin/requests' | '/admin/wholesale') {
   await page.goto(destination)
   await expect(page).toHaveURL(/\/admin\/login/)

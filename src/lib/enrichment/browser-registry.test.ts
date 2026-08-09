@@ -101,8 +101,10 @@ describe('browser-registry', () => {
       await expect(closeAllBrowsers(100)).resolves.toBeUndefined()
 
       expect(hanging._killSpy).not.toHaveBeenCalled()
-      const warnedAboutPid = warnSpy.mock.calls.some((args) =>
-        args.some((arg) => typeof arg === 'string' && arg.includes('could not SIGKILL: no pid')),
+      const warnedAboutPid = warnSpy.mock.calls.some((args: unknown[]) =>
+        args.some(
+          (arg: unknown) => typeof arg === 'string' && arg.includes('could not SIGKILL: no pid'),
+        ),
       )
       expect(warnedAboutPid).toBe(true)
     })
@@ -116,8 +118,10 @@ describe('browser-registry', () => {
       expect(failing.close).toHaveBeenCalledTimes(1)
       // Реджект трактуется как «закрылся», SIGKILL не нужен.
       expect(failing._killSpy).not.toHaveBeenCalled()
-      const warnedAboutClose = warnSpy.mock.calls.some((args) =>
-        args.some((arg) => typeof arg === 'string' && arg.includes('browser.close() failed')),
+      const warnedAboutClose = warnSpy.mock.calls.some((args: unknown[]) =>
+        args.some(
+          (arg: unknown) => typeof arg === 'string' && arg.includes('browser.close() failed'),
+        ),
       )
       expect(warnedAboutClose).toBe(true)
     })

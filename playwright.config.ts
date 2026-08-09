@@ -1,6 +1,10 @@
 import { defineConfig } from '@playwright/test'
 
 const baseURL = 'http://127.0.0.1:3000'
+const localChromiumExecutable = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+const chromiumRuntime = localChromiumExecutable
+  ? { launchOptions: { executablePath: localChromiumExecutable } }
+  : { channel: 'chromium' as const }
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -30,6 +34,7 @@ export default defineConfig({
       name: 'desktop',
       use: {
         browserName: 'chromium',
+        ...chromiumRuntime,
         viewport: { width: 1440, height: 1100 },
         deviceScaleFactor: 1,
       },
@@ -38,6 +43,7 @@ export default defineConfig({
       name: 'mobile',
       use: {
         browserName: 'chromium',
+        ...chromiumRuntime,
         viewport: { width: 390, height: 844 },
         deviceScaleFactor: 1,
         isMobile: true,

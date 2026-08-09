@@ -31,6 +31,7 @@
     "db:stats:local": "tsx scripts/with-local-db.ts npm run db:stats",
     "db:check:local-mvp": "tsx scripts/with-local-db.ts npm exec tsx -- scripts/check-local-mvp.ts",
     "check:db-failure:local": "tsx scripts/check-unavailable-db.ts",
+    "check:production-config": "tsx scripts/check-production-config.ts",
     "db:publish": "tsx scripts/db-publish.ts",
     "catalog:rebuild-tree": "tsx scripts/rebuild-category-tree.ts",
     "catalog:restore-tree": "tsx scripts/restore-category-backup.ts",
@@ -42,7 +43,6 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1055.0",
     "@gsap/react": "^2.1.2",
-    "@imgly/background-removal-node": "^1.4.5",
     "@prisma/client": "^5.22.0",
     "cheerio": "^1.2.0",
     "cloakbrowser": "^0.3.29",
@@ -51,12 +51,11 @@
     "gsap": "^3.15.0",
     "ink": "^7.0.3",
     "lucide-react": "^1.0.1",
-    "next": "16.2.1",
+    "next": "16.3.0",
     "playwright-core": "^1.60.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "sharp": "^0.34.5",
-    "xlsx": "^0.18.5"
+    "sharp": "0.35.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
@@ -64,18 +63,19 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitest/coverage-v8": "^2.0.0",
-    "@vitest/ui": "^2.0.0",
+    "@vitest/coverage-v8": "4.1.10",
+    "@vitest/ui": "4.1.10",
     "eslint": "^9",
-    "eslint-config-next": "16.2.1",
+    "eslint-config-next": "16.3.0",
     "fast-check": "^4.8.0",
-    "happy-dom": "^15.0.0",
+    "happy-dom": "20.11.2",
     "ink-testing-library": "^4.0.0",
     "playwright": "^1.59.1",
     "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "tsx": "^4.7.0",
     "typescript": "^5",
-    "vitest": "^2.0.0"
+    "vitest": "4.1.10",
+    "xlsx": "0.18.5"
   }
 }
