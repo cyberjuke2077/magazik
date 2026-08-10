@@ -37,6 +37,21 @@ describe('production config validation', () => {
     expect(issues.map((issue) => issue.name)).not.toContain('R2_BUCKET')
   })
 
+  it('rejects database URIs without a hostname', () => {
+    const issues = validateProductionConfig(
+      {
+        ...runtimeEnvironment,
+        DATABASE_URL: 'postgresql:garbage',
+      },
+      'runtime',
+    )
+
+    expect(issues).toContainEqual({
+      name: 'DATABASE_URL',
+      reason: 'не содержит имя хоста',
+    })
+  })
+
   it('never returns configuration values inside issues', () => {
     const sensitiveValue = 'do-not-print-this-value'
     const issues = validateProductionConfig({ DIRECT_URL: sensitiveValue }, 'migration')
