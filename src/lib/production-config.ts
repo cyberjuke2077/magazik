@@ -51,6 +51,9 @@ function requireUrl(
     if (!protocols.includes(url.protocol)) {
       issues.push({ name, reason: `ожидается протокол ${protocols.join(' или ')}` })
     }
+    if (!url.hostname) {
+      issues.push({ name, reason: 'не содержит имя хоста' })
+    }
     if (options.forbidLocal && LOCAL_HOSTS.has(url.hostname)) {
       issues.push({ name, reason: 'указывает на локальный хост' })
     }
