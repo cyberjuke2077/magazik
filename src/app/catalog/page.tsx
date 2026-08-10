@@ -24,6 +24,7 @@ import { CopyLinkBtn } from './components/copy-link-btn'
 import { BulkSelectWrapper } from './components/bulk-select-panel'
 import { MobileFilterDrawer } from './components/mobile-filter-drawer'
 import { CatalogGuideStrip } from './components/catalog-guide-strip'
+import { CatalogQuickFilters } from './components/catalog-quick-filters'
 
 interface CatalogPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -175,6 +176,19 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
           <div className="mt-4 flex gap-4">
             {/* Sidebar */}
             <aside className="sticky top-[112px] hidden h-fit w-[280px] shrink-0 overflow-hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] lg:block">
+              <div className="mb-4 rounded-xl bg-[#eef9f2] p-3">
+                <div className="text-[10px] font-semibold text-stock">Инженерная поддержка</div>
+                <div className="mt-1 text-sm font-bold text-ink">Нужен совместимый аналог?</div>
+                <p className="mt-1 text-[11px] leading-[1.4] text-ink-3">
+                  Пришлите MPN и требования. Проверим замену и сроки поставки.
+                </p>
+                <Link
+                  href="/request-quote"
+                  className="mt-3 inline-flex h-8 items-center rounded-lg bg-white px-3 text-xs font-bold text-ink shadow-[var(--shadow-button)] transition-colors hover:bg-azure hover:text-white"
+                >
+                  Подобрать компонент
+                </Link>
+              </div>
               <Suspense fallback={<div className="h-40 skeleton rounded" />}>
                 <CategoryTree
                   categories={categories}
@@ -189,39 +203,43 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
             {/* Main content */}
             <div className="flex-1 min-w-0">
-              {/* Toolbar */}
-              <div className="mb-3 flex min-h-14 flex-wrap items-center gap-2 rounded-2xl bg-white p-2.5 shadow-[var(--shadow-xs)]">
-                {parsed.query && (
-                  <span className="mr-auto min-w-0 truncate text-sm text-ink-3">
-                    Результаты для «<span className="font-medium text-ink-2">{parsed.query}</span>»
-                  </span>
-                )}
-                <div className={`${parsed.query ? '' : 'ml-auto'} flex flex-wrap items-center gap-2`}>
-                  <MobileFilterDrawer>
-                    <CategoryTree
-                      categories={categories}
-                      activeSlug={parsed.categorySlug}
-                    />
-                    <ManufacturerFilter
-                      manufacturers={manufacturers}
-                      activeSlug={parsed.manufacturerSlug}
-                    />
-                  </MobileFilterDrawer>
-                  <CopyLinkBtn />
-                  <a
-                    href={`/api/catalog/export${baseParams ? `?${baseParams}` : ''}`}
-                    className="flex items-center gap-1.5 h-8 px-3 text-sm text-ink-3 border border-[var(--border)] rounded-[var(--radius-control)] hover:border-azure/40 hover:text-ink transition-colors"
-                    title="Экспорт CSV"
-                  >
-                    <Download size={14} />
-                    <span className="hidden sm:inline">CSV</span>
-                  </a>
-                  <Suspense fallback={null}>
-                    <ViewToggle />
-                  </Suspense>
-                  <Suspense fallback={null}>
-                    <SortSelect />
-                  </Suspense>
+              <div className="mb-3 overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)]">
+                <CatalogQuickFilters categories={categories} activeSlug={parsed.categorySlug} />
+
+                {/* Toolbar */}
+                <div className="flex min-h-14 flex-wrap items-center gap-2 border-t border-[var(--border)] p-2.5">
+                  {parsed.query && (
+                    <span className="mr-auto min-w-0 truncate text-sm text-ink-3">
+                      Результаты для «<span className="font-medium text-ink-2">{parsed.query}</span>»
+                    </span>
+                  )}
+                  <div className={`${parsed.query ? '' : 'ml-auto'} flex flex-wrap items-center gap-2`}>
+                    <MobileFilterDrawer>
+                      <CategoryTree
+                        categories={categories}
+                        activeSlug={parsed.categorySlug}
+                      />
+                      <ManufacturerFilter
+                        manufacturers={manufacturers}
+                        activeSlug={parsed.manufacturerSlug}
+                      />
+                    </MobileFilterDrawer>
+                    <CopyLinkBtn />
+                    <a
+                      href={`/api/catalog/export${baseParams ? `?${baseParams}` : ''}`}
+                      className="flex h-8 items-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--border)] px-3 text-sm text-ink-3 transition-colors hover:border-azure/40 hover:text-ink"
+                      title="Экспорт CSV"
+                    >
+                      <Download size={14} />
+                      <span className="hidden sm:inline">CSV</span>
+                    </a>
+                    <Suspense fallback={null}>
+                      <ViewToggle />
+                    </Suspense>
+                    <Suspense fallback={null}>
+                      <SortSelect />
+                    </Suspense>
+                  </div>
                 </div>
               </div>
 

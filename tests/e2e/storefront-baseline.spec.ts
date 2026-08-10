@@ -50,6 +50,16 @@ async function expectVisualReady(page: Page, route: '/' | '/catalog' | '/cart' |
 }
 
 test.describe('public storefront contracts', () => {
+  test('home starts with a DNS-like service shelf', async ({ page }) => {
+    await openStable(page, '/')
+
+    await expect(
+      page.getByRole('heading', { name: 'Соберем корзину по спецификации' }),
+    ).toBeVisible()
+    await expect(page.getByRole('link', { name: /Поиск по MPN/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Подбор аналогов/ })).toBeVisible()
+  })
+
   test('keyboard skip link moves focus to the main content', async ({ page }) => {
     await page.goto('/')
     await page.keyboard.press('Tab')
@@ -108,8 +118,12 @@ test.describe('public storefront contracts', () => {
 
     await expect(list).toBeVisible()
     await expect(firstProduct).toBeVisible()
+    await expect(page.locator('[data-catalog-quick-filters]')).toBeVisible()
     await expect(page.getByText('Артикул', { exact: true })).toHaveCount(0)
     await expect(page.getByText('Наименование', { exact: true })).toHaveCount(0)
+    await expect(firstProduct.locator('button[title="Добавить в сравнение"]')).toContainText(
+      'Сравнить',
+    )
 
     const productCode = firstProduct.locator('[data-catalog-product-code]')
     if (testInfo.project.name === 'desktop') {

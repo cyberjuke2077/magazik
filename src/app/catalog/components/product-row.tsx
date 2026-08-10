@@ -31,7 +31,7 @@ export function ProductRow({ product, priority = false }: { product: ProductRowD
   return (
     <article
       data-catalog-product-row
-      className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl border border-transparent bg-white p-3 shadow-[var(--shadow-xs)] transition-[border-color,box-shadow] duration-300 hover:border-azure/10 hover:shadow-[var(--shadow-azure-md)] sm:min-h-[250px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5"
+      className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl border border-transparent bg-white p-3 shadow-[var(--shadow-xs)] transition-colors duration-300 hover:border-azure/15 sm:min-h-[250px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5"
     >
       <ProductImage product={product} priority={priority} />
       <ProductDetails product={product} />
@@ -116,7 +116,18 @@ function ProductDetails({ product }: { product: ProductRowData }) {
       ) : (
         <p className="mt-2 text-xs text-ink-4">Характеристики уточняются</p>
       )}
-      <div className="mt-2 flex items-center gap-3 text-[11px] text-ink-3">
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-ink-3">
+        <CompareToggleBtn
+          variant="compact"
+          item={{
+            id: product.id,
+            slug: product.slug,
+            name: product.name,
+            partNumber: product.partNumber,
+            manufacturer: product.manufacturer,
+            categorySlug: product.categorySlug || '',
+          }}
+        />
         {product.package && <span>Корпус: {product.package}</span>}
         {product.datasheets?.[0] && (
           <a
@@ -157,16 +168,6 @@ function ProductCommerce({ product }: { product: ProductRowData }) {
         <div className="mt-1 text-ink-4">Срок подтвердим в КП</div>
       </div>
       <div className="flex items-center justify-end gap-2">
-        <CompareToggleBtn
-          item={{
-            id: product.id,
-            slug: product.slug,
-            name: product.name,
-            partNumber: product.partNumber,
-            manufacturer: product.manufacturer,
-            categorySlug: product.categorySlug || '',
-          }}
-        />
         <AddToCartBtn
           productId={product.id}
           partNumber={product.partNumber}
