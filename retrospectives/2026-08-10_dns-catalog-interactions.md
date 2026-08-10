@@ -51,6 +51,11 @@ DNS Shop вернул `403` обычному автоматическому Chro
 пользователя и сохраненному июльскому аудиту. Это не блокирует текущую реализацию,
 но для нового live-аудита DNS понадобится отдельный доступ к stealth-режиму.
 
+Vercel Preview для commit `132ac85` дошел до prerender, затем упал на `/best`:
+Preview-переменная `DATABASE_URL` не начинается с `postgresql://` или `postgres://`.
+Код и TypeScript в Vercel прошли. Production не менялся; для зеленого Preview нужен
+отдельный Preview Postgres или Supabase branch, а не production credentials.
+
 В документации BrowserAct 1.1 указан несуществующий в установленной версии 1.2.2
 подкомандный путь `browser real open`. Перед первым вызовом стоило проверить CLI help.
 
