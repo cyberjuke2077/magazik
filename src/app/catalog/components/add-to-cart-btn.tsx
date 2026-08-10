@@ -18,6 +18,7 @@ interface AddToCartBtnProps {
   manufacturer: string
   minOrder: number
   price: number | null
+  highlightOnCardHover?: boolean
 }
 
 /**
@@ -33,6 +34,7 @@ export function AddToCartBtn({
   manufacturer,
   minOrder,
   price,
+  highlightOnCardHover = false,
 }: AddToCartBtnProps) {
   const [quantity, setQuantity] = useState(minOrder)
   const [inCart, setInCart] = useState(false)
@@ -80,11 +82,14 @@ export function AddToCartBtn({
       <button
         ref={buttonRef}
         onClick={handleAdd}
+        data-catalog-cart-button={highlightOnCardHover ? true : undefined}
         aria-label={inCart ? 'Товар в корзине' : 'Добавить в корзину'}
         className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-xs font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] ${
           inCart
             ? 'bg-azure-light text-azure border border-azure/30'
-            : 'bg-accent text-white hover:bg-accent-hover'
+            : highlightOnCardHover
+              ? 'border border-[var(--border-2)] bg-white text-ink-2 shadow-[var(--shadow-button)] hover:border-azure hover:bg-azure hover:text-white group-hover:border-azure group-hover:bg-azure group-hover:text-white group-hover:shadow-[var(--shadow-button-hover)]'
+              : 'bg-accent text-white hover:bg-accent-hover'
         }`}
       >
         {inCart ? (

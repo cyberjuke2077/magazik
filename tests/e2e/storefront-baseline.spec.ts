@@ -100,6 +100,31 @@ test.describe('public storefront contracts', () => {
     }
   })
 
+  test('catalog list uses card hierarchy and desktop hover states', async ({ page }, testInfo) => {
+    await openStable(page, '/catalog')
+
+    const list = page.locator('[data-catalog-product-list]')
+    const firstProduct = list.locator('[data-catalog-product-row]').first()
+
+    await expect(list).toBeVisible()
+    await expect(firstProduct).toBeVisible()
+    await expect(page.getByText('Артикул', { exact: true })).toHaveCount(0)
+    await expect(page.getByText('Наименование', { exact: true })).toHaveCount(0)
+
+    const productCode = firstProduct.locator('[data-catalog-product-code]')
+    if (testInfo.project.name === 'desktop') {
+      await expect(productCode).toHaveCSS('opacity', '0')
+      await firstProduct.hover()
+      await expect(productCode).toHaveCSS('opacity', '1')
+      await expect(firstProduct.locator('[data-catalog-cart-button]')).toHaveCSS(
+        'background-color',
+        'rgb(9, 105, 218)',
+      )
+    } else {
+      await expect(productCode).toBeHidden()
+    }
+  })
+
   test('localStorage keys survive storefront navigation', async ({ page }) => {
     await seedStorefrontStorage(page)
 

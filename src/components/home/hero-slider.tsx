@@ -50,13 +50,13 @@ const quickLinks = [
   },
   {
     image: '/storefront/category-converters.jpg',
-    title: 'АЦП и ЦАП',
+    title: 'АЦП / ЦАП',
     description: 'Преобразователи',
     href: '/catalog?category=atsp-tsap',
   },
   {
     image: '/storefront/category-interfaces.jpg',
-    title: 'Интерфейсы',
+    title: 'Логика',
     description: 'Логика и драйверы',
     href: '/catalog?category=interfeysy',
   },
@@ -95,7 +95,7 @@ export function HeroSlider() {
     <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6" data-motion-reveal>
       <div className="mx-auto max-w-[1380px] overflow-hidden px-4 lg:flex lg:gap-4 lg:px-0">
         <div
-          className="relative h-[180px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[250px] lg:w-[360px]"
+          className="relative h-[200px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[280px] lg:w-[520px]"
           role="region"
           aria-roledescription="карусель"
           aria-label="Подборки компонентов"
@@ -153,10 +153,10 @@ export function HeroSlider() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/72">
                     {slide.eyebrow}
                   </span>
-                  <h1 className="mt-1.5 max-w-6xl text-[21px] font-bold leading-[1.05] tracking-[-0.025em] text-balance lg:text-[24px]">
+                  <h1 className="mt-1.5 max-w-[16ch] text-[24px] font-bold leading-[1.02] tracking-[-0.035em] text-balance lg:text-[32px]">
                     {slide.title}
                   </h1>
-                  <p className="mt-2 max-w-[30ch] text-[12px] leading-[1.35] text-white/78 lg:text-[13px]">
+                  <p className="mt-3 max-w-[42ch] text-[12px] leading-[1.45] text-white/78 lg:text-[14px]">
                     {slide.description}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ export function HeroSlider() {
             <Link
               key={item.href}
               href={item.href}
-              className="group relative h-[128px] w-[116px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[250px] lg:w-auto lg:flex-1 lg:hover:flex-[1.24] lg:hover:shadow-[var(--shadow-azure-md)]"
+              className="group relative h-[128px] w-[116px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[280px] lg:w-auto lg:flex-1 lg:hover:flex-[1.18] lg:hover:shadow-[var(--shadow-azure-md)]"
               data-motion-scale
             >
               <Image

@@ -278,7 +278,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   </BulkSelectWrapper>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-3" data-catalog-product-list>
                   <BulkSelectWrapper
                     products={result.items.map((p) => ({
                       id: p.id,

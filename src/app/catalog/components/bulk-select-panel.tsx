@@ -32,8 +32,6 @@ interface BulkSelectWrapperProps {
 export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
-  const allSelected = products.length > 0 && selectedIds.size === products.length
-
   const toggle = useCallback((id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev)
@@ -45,14 +43,6 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
       return next
     })
   }, [])
-
-  const toggleAll = useCallback(() => {
-    if (allSelected) {
-      setSelectedIds(new Set())
-    } else {
-      setSelectedIds(new Set(products.map((p) => p.id)))
-    }
-  }, [allSelected, products])
 
   const clearSelection = useCallback(() => {
     setSelectedIds(new Set())
@@ -78,28 +68,6 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
   return (
     <BulkSelectContext.Provider value={{ selectedIds, toggle }}>
       <div className="relative">
-        {/* Select all header row */}
-        <div className="hidden h-[40px] items-center gap-4 border-b border-[var(--border)] bg-gray-50 px-4 text-xs font-semibold uppercase tracking-wide text-ink-3 sm:flex">
-          <button
-            onClick={toggleAll}
-            className="shrink-0 text-ink-4 hover:text-azure transition-colors"
-            title={allSelected ? 'Снять выделение' : 'Выбрать все на странице'}
-          >
-            {allSelected ? (
-              <CheckSquare size={16} className="text-azure" />
-            ) : (
-              <Square size={16} />
-            )}
-          </button>
-          <div className="w-[140px] shrink-0">Артикул</div>
-          <div className="flex-1 min-w-0">Наименование</div>
-          <div className="w-[140px] shrink-0 hidden md:block">Производитель</div>
-          <div className="w-[30px] shrink-0 hidden lg:block" />
-          <div className="w-[70px] shrink-0 hidden lg:block">Срок</div>
-          <div className="w-[130px] shrink-0 text-right">Цена</div>
-          <div className="w-[180px] shrink-0" />
-        </div>
-
         {/* Product rows (rendered by parent, with context available) */}
         {children}
 
@@ -147,6 +115,8 @@ export function BulkSelectCheckbox({ productId }: { productId: string }) {
         e.stopPropagation()
         toggle(productId)
       }}
+      aria-label={isSelected ? 'Снять выделение товара' : 'Выбрать товар'}
+      aria-pressed={isSelected}
       className="shrink-0 text-ink-4 hover:text-azure transition-colors"
     >
       {isSelected ? (
