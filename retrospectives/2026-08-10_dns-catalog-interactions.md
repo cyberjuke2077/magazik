@@ -61,9 +61,10 @@
 вместо большого hero, быстрые категории, боковой helper, guide-полка и спокойный
 hover карточки с артикулом под фото.
 
-Vercel Preview для commit `132ac85` дошел до prerender, затем упал на `/best`:
-Preview-переменная `DATABASE_URL` не начинается с `postgresql://` или `postgres://`.
-Код и TypeScript в Vercel прошли. Production не менялся; для зеленого Preview нужен
+Vercel Preview повторно проверен для commit `ff8b17e`, deployment
+`dpl_Hd6VvFBnthqGP3ECYkxqxgrGMcbj`. Он скомпилировал код и прошел TypeScript, затем
+упал при prerender `/best`: Preview-переменная `DATABASE_URL` не начинается с
+`postgresql://` или `postgres://`. Production не менялся; для зеленого Preview нужен
 отдельный Preview Postgres или Supabase branch, а не production credentials.
 
 В документации BrowserAct 1.1 указан несуществующий в установленной версии 1.2.2
