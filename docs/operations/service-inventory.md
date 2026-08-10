@@ -1,6 +1,6 @@
 # Реестр внешних сервисов Electromagaz
 
-Дата проверки: 2026-08-05
+Дата проверки: 2026-08-10
 
 ## Назначение
 
@@ -20,9 +20,9 @@
 
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
-| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: remote и `main` настроены | Lunar работает через `feat/*`, `fix/*` или `docs/*`; Codex через `codex/*`; всё сливается PR |
-| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: GitHub `cyberjuke2077/magazik`, production branch `main`, deployment `dpl_GAe5zaVhXPfdHyUykdrAfHUBc22s` Ready; `/`, `/best`, `/catalog`, `/api/catalog/categories` отвечают 200 | PR Lunar сливает `cyberjuke2077` merge commit; Preview не подключать к production DB |
-| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: GitHub `cyberjuke2077/magazik` и Vercel `magazik-94yr` подключены; env официальной Vercel-интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
+| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: `main` на merge commit `18166e5`, PR #9 слит владельцем | Lunar работает через `feat/*`, `fix/*` или `docs/*`; Codex через `codex/*`; всё сливается PR |
+| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: production deployment `dpl_2y7e8iC3HL1ZojtJxBC575yteRc2` для `18166e5` Ready; `/`, `/best`, `/catalog`, `/api/catalog/categories`, `/api/health` отвечают 200 | PR Lunar сливает `cyberjuke2077` merge commit; Preview не подключать к production DB |
+| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: Vercel production подключён; `/api/health` вернул `database: ok` без записи данных; env официальной интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `deferred`: владелец отложил подключение 2026-08-09 | Не включать в текущий бесплатный пакет; вернуться перед наполнением каталога |
 | Telegram Bot API | Уведомления менеджеру о заявках | Владелец Electromagaz | Bot token и chat ID | `deferred`: владелец настроит самостоятельно позже | После настройки выполнить безопасное тестовое уведомление без данных покупателя |
