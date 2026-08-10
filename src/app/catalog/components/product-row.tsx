@@ -138,7 +138,10 @@ function ProductCommerce({ product }: { product: ProductRowData }) {
   const displayPrice = product.price === 0 ? null : product.price
 
   return (
-    <div className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+    <div
+      data-product-commerce
+      className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-t-0 sm:pl-5 sm:pt-0"
+    >
       <div className="sm:text-right">
         <div className={displayPrice ? 'price text-xl' : 'text-base font-bold text-ink'}>
           {formatPrice(displayPrice)}

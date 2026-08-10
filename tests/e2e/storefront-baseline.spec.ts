@@ -113,6 +113,10 @@ test.describe('public storefront contracts', () => {
 
     const productCode = firstProduct.locator('[data-catalog-product-code]')
     if (testInfo.project.name === 'desktop') {
+      await expect(firstProduct.locator('[data-product-commerce]')).toHaveCSS(
+        'border-left-width',
+        '0px',
+      )
       await expect(productCode).toHaveCSS('opacity', '0')
       await firstProduct.hover()
       await expect(productCode).toHaveCSS('opacity', '1')
