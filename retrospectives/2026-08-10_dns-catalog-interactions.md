@@ -37,8 +37,9 @@
 
 ## 3. Результат
 
-Частично. Реализация и локальная проверка завершены, но визуальная работа не считается
-принятой до просмотра владельцем. Production не менялся до merge PR.
+Да. Владелец принял публикацию, PR #11 слит в `main` merge-коммитом `fd042cf`.
+Vercel Production deployment `dpl_y6TViwh3DSJDvsGJsdBdZDX3vxMX` получил статус
+`Ready` и обслуживает `https://magazik-94yr.vercel.app`.
 
 Проверки:
 
@@ -59,6 +60,9 @@
 - Цветовая итерация - 8 desktop/mobile visual baseline и 4 целевых интерактивных
   E2E пройдены; BrowserAct desktop QA и просмотр mobile baseline выполнены;
   `npm run build:local`, lint и TypeScript прошли.
+- Production BrowserAct smoke - `/`, `/best`, `/catalog` и
+  `/api/catalog/categories` вернули 200; новая сервисная полка и быстрые фильтры
+  присутствуют; каталог отрисовал 50 строк, API вернул 8 корневых категорий.
 
 ## 4. Что можно было лучше
 
@@ -80,6 +84,11 @@ Vercel Preview повторно проверен для commit `ff8b17e`, deploy
 `--update-snapshots`. Для выборочного обновления нужен прямой вызов
 `playwright test <file> --update-snapshots=all`.
 
+`/best` работает и возвращает 200, но остается пустым по данным: страница отбирает
+только товары с `priceWholesale`, а в текущем production-каталоге таких позиций нет.
+Это не блокирует главную, каталог, корзину или API, но требует отдельного продуктового
+решения: заполнить оптовые цены или определить fallback и empty state.
+
 ## 5. Изменения во втором мозге
 
 - Создан исполнимый план `plans/2026-08-10-dns-catalog-interactions.md`.
@@ -89,5 +98,6 @@ Vercel Preview повторно проверен для commit `ff8b17e`, deploy
 - Зафиксирован актуальный live-референс: главная строится вокруг компактных сервисных
   карточек, а каталог - вокруг быстрых категорий, бокового helper и guide-полки.
 - Добавлено правило для безопасного выборочного обновления Playwright baseline.
+- Зафиксированы merge SHA, Vercel Production deployment и результаты live smoke.
 - Бизнес-логика, архитектура и публичные контракты не изменились, поэтому профильные
   файлы `docs/business/` не обновлялись.
