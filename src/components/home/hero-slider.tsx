@@ -1,195 +1,104 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
-const AUTOPLAY_DELAY_MS = 6000
-
-const slides = [
-  {
-    image: '/storefront/hero-components.jpg',
-    href: '/catalog',
-    alt: 'Катушки с электронными компонентами и платы для серийного производства',
-    eyebrow: 'Поставка электронных компонентов',
-    title: 'Найдём компонент по точному MPN',
-    description: 'Проверяем наличие, сроки поставки и документацию для разработки и серийного производства.',
-  },
-  {
-    image: '/storefront/hero-xilinx.jpg',
-    href: '/brands#brand-xilinx',
-    alt: 'FPGA на профессиональной отладочной плате',
-    eyebrow: 'Программируемая логика',
-    title: 'FPGA и решения Xilinx',
-    description: 'Компоненты для цифровой обработки сигналов, телекоммуникаций и встраиваемых систем.',
-    logo: '/storefront/xilinx-logo.png',
-  },
-  {
-    image: '/storefront/hero-embedded.jpg',
-    href: '/catalog?category=mikrokontrollery',
-    alt: 'Микроконтроллеры, радиомодули и компоненты в инженерной лаборатории',
-    eyebrow: 'Для embedded-разработки',
-    title: 'MCU, DSP и беспроводные модули',
-    description: 'Подбор элементной базы от прототипа до устойчивой серийной поставки.',
-    align: 'right' as const,
-  },
-]
-
-const quickLinks = [
+const serviceCards = [
   {
     image: '/storefront/category-mcu.jpg',
-    title: 'MCU и DSP',
-    description: 'MCU и DSP',
-    href: '/catalog?category=mikrokontrollery',
-  },
-  {
-    image: '/storefront/category-power.jpg',
-    title: 'Питание',
-    description: 'DC-DC и PMIC',
-    href: '/catalog?category=pitanie',
-  },
-  {
-    image: '/storefront/category-converters.jpg',
-    title: 'АЦП и ЦАП',
-    description: 'Преобразователи',
-    href: '/catalog?category=atsp-tsap',
+    href: '/catalog',
+    title: 'Поиск по MPN',
+    description: 'Точный артикул, корпус и производитель',
+    tone: 'bg-[#e6efff]',
   },
   {
     image: '/storefront/category-interfaces.jpg',
-    title: 'Интерфейсы',
-    description: 'Логика и драйверы',
-    href: '/catalog?category=interfeysy',
+    href: '/request-quote',
+    title: 'Подбор аналогов',
+    description: 'Совместимая замена для дефицитной позиции',
+    tone: 'bg-[#e4f8ef]',
   },
   {
-    image: '/storefront/category-rf.jpg',
-    title: 'RF-модули',
-    description: 'RF и беспроводная связь',
-    href: '/catalog?category=rch',
+    image: '/storefront/category-converters.jpg',
+    href: '/catalog?category=atsp-tsap',
+    title: 'Документация',
+    description: 'Характеристики, корпуса и datasheet',
+    tone: 'bg-[#fff0cf]',
   },
   {
-    image: '/storefront/category-sensors.jpg',
-    title: 'Датчики',
-    description: 'Сенсоры и измерения',
-    href: '/catalog?category=datchiki',
+    image: '/storefront/hero-embedded.jpg',
+    href: '/wholesale',
+    title: 'Серийные поставки',
+    description: 'Комплектация BOM и коммерческое предложение',
+    tone: 'bg-[#eee5ff]',
+  },
+  {
+    image: '/storefront/hero-xilinx.jpg',
+    href: '/brands',
+    title: 'Производители',
+    description: 'Компоненты ведущих мировых брендов',
+    tone: 'bg-[#e2f4fb]',
   },
 ]
 
 export function HeroSlider() {
-  const [activeSlide, setActiveSlide] = useState(0)
-  const [paused, setPaused] = useState(false)
-
-  useEffect(() => {
-    if (paused) return
-
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (media.matches) return
-
-    const timer = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % slides.length)
-    }, AUTOPLAY_DELAY_MS)
-
-    return () => window.clearInterval(timer)
-  }, [paused])
-
   return (
-    <section className="bg-white pb-5 pt-[3px] lg:pb-8 lg:pt-6" data-motion-reveal>
-      <div className="mx-auto max-w-[1380px] overflow-hidden px-4 lg:flex lg:gap-4 lg:px-0">
-        <div
-          className="relative h-[180px] w-full shrink-0 overflow-hidden rounded-2xl bg-[#0a2b58] shadow-[var(--shadow-azure-md)] lg:h-[250px] lg:w-[360px]"
-          role="region"
-          aria-roledescription="карусель"
-          aria-label="Подборки компонентов"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocusCapture={() => setPaused(true)}
-          onBlurCapture={() => setPaused(false)}
+    <section className="bg-white pb-6 pt-5 lg:pb-8 lg:pt-6" data-motion-reveal>
+      <div className="no-scrollbar mx-auto flex max-w-[1380px] gap-3 overflow-x-auto px-4 pb-1 lg:gap-4 lg:px-0">
+        <Link
+          href="/request-quote"
+          className="group relative h-[238px] w-[292px] shrink-0 overflow-hidden rounded-2xl bg-[#dcecff] p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:w-[310px]"
         >
-          {slides.map((slide, index) => {
-            const isActive = index === activeSlide
-            const contentOnRight = slide.align === 'right'
+          <Image
+            src="/storefront/hero-components.jpg"
+            alt="Электронные компоненты для комплектации спецификации"
+            fill
+            loading="eager"
+            fetchPriority="high"
+            className="object-cover opacity-38 saturate-[1.08] transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="310px"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#dcecff] via-[#dcecff]/90 to-[#dcecff]/12" />
+          <div className="relative flex h-full flex-col">
+            <span className="text-[11px] font-semibold text-azure">Для инженеров и снабжения</span>
+            <h1 className="mt-2 max-w-[14ch] text-[25px] font-bold leading-[1.02] tracking-[-0.035em] text-ink text-balance">
+              Соберем корзину по спецификации
+            </h1>
+            <p className="mt-3 max-w-[30ch] text-[13px] leading-[1.45] text-ink-3">
+              Пришлите список MPN. Проверим наличие, сроки и предложим аналоги.
+            </p>
+            <span className="mt-auto inline-flex h-9 w-fit items-center rounded-xl bg-azure px-4 text-xs font-bold text-white shadow-[var(--shadow-button)] transition-colors group-hover:bg-azure-hover">
+              Отправить список
+            </span>
+          </div>
+        </Link>
 
-            return (
-              <Link
-                key={slide.image}
-                href={slide.href}
-                className={`absolute inset-0 transition-opacity duration-[400ms] motion-reduce:transition-none ${
-                  isActive ? 'z-[1] opacity-100' : 'pointer-events-none opacity-0'
-                }`}
-                aria-hidden={!isActive}
-                tabIndex={isActive ? 0 : -1}
-              >
-                <Image
-                  src={slide.image}
-                  alt={slide.alt}
-                  fill
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  fetchPriority={index === 0 ? 'high' : 'auto'}
-                  className="object-cover saturate-[1.2] contrast-[1.05] brightness-[1.08]"
-                  sizes="(max-width: 1024px) 100vw, 1050px"
-                />
-                <div
-                  className={`absolute inset-0 ${
-                    contentOnRight
-                      ? 'bg-gradient-to-l from-[#08172c]/88 via-[#08172c]/62 to-[#08172c]/5'
-                      : 'bg-gradient-to-r from-[#08172c]/88 via-[#08172c]/60 to-transparent'
-                  }`}
-                />
-                <div
-                  className={`relative flex h-full flex-col justify-center p-4 text-white lg:p-5 ${
-                    contentOnRight ? 'ml-auto items-start' : ''
-                  }`}
-                >
-                  {slide.logo && (
-                    <span className="mb-2 flex h-7 w-[108px] items-center rounded-md bg-white px-2.5">
-                      <Image
-                        src={slide.logo}
-                        alt="Xilinx"
-                        width={92}
-                        height={28}
-                        className="h-4 w-auto object-contain"
-                      />
-                    </span>
-                  )}
-                  <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/72">
-                    {slide.eyebrow}
-                  </span>
-                  <h1 className="mt-1.5 max-w-6xl text-[21px] font-bold leading-[1.05] tracking-[-0.025em] text-balance lg:text-[24px]">
-                    {slide.title}
-                  </h1>
-                  <p className="mt-2 max-w-[30ch] text-[12px] leading-[1.35] text-white/78 lg:text-[13px]">
-                    {slide.description}
-                  </p>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        <div className="no-scrollbar mt-4 flex gap-2.5 overflow-x-auto lg:mt-0 lg:min-w-0 lg:flex-1 lg:gap-3 lg:overflow-visible">
-          {quickLinks.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="group relative h-[128px] w-[116px] shrink-0 overflow-hidden rounded-xl bg-white transition-[flex,transform,box-shadow] duration-500 ease-out hover:-translate-y-1 active:translate-y-0 lg:h-[250px] lg:w-auto lg:flex-1 lg:hover:flex-[1.24] lg:hover:shadow-[var(--shadow-azure-md)]"
-              data-motion-scale
-            >
+        {serviceCards.map((card, index) => (
+          <Link
+            key={card.title}
+            href={card.href}
+            className={`group relative h-[238px] w-[210px] shrink-0 overflow-hidden rounded-2xl p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:min-w-0 lg:flex-1 ${card.tone}`}
+          >
+            <div className="relative z-[1]">
+              <h2 className="max-w-[13ch] text-[18px] font-bold leading-[1.08] tracking-[-0.02em] text-ink">
+                {card.title}
+              </h2>
+              <p className="mt-2 max-w-[20ch] text-[12px] leading-[1.35] text-ink-3">
+                {card.description}
+              </p>
+            </div>
+            <div className="absolute inset-x-0 bottom-0 h-[53%] overflow-hidden">
               <Image
-                src={item.image}
-                alt={item.title}
+                src={card.image}
+                alt={card.title}
                 fill
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchPriority={index === 0 ? 'high' : 'auto'}
-                className="object-cover saturate-[1.25] contrast-[1.06] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
-                sizes="(max-width: 1024px) 116px, 180px"
+                loading={index < 2 ? 'eager' : 'lazy'}
+                fetchPriority={index < 2 ? 'high' : 'auto'}
+                className="object-cover opacity-95 saturate-[1.08] contrast-[1.03] transition-transform duration-700 ease-out group-hover:scale-105"
+                sizes="210px"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-white/12 via-transparent to-[#071b33]/88" />
-              <div className="absolute inset-x-0 bottom-0 p-3 text-white lg:p-5">
-                <div className="font-display text-[13px] font-bold leading-[1.08] drop-shadow-sm lg:text-[18px]">{item.title}</div>
-                <div className="mt-1 hidden text-[13px] leading-tight text-white/82 lg:block">{item.description}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              <div className={`absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/10 ${card.tone} opacity-10`} />
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   )

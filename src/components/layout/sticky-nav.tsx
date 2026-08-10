@@ -18,8 +18,8 @@ export function StickyNav() {
   return (
     <div className="sticky top-0 z-[var(--layer-header)] bg-white shadow-[var(--shadow-xs)]">
       <div className="relative mx-auto max-w-[1380px]">
-        <div className="flex h-12 items-center gap-2 px-4 lg:grid lg:h-24 lg:grid-cols-[280px_minmax(0,1fr)_327px] lg:gap-4 lg:px-0">
-          <div className="storefront-brand-panel hidden h-16 items-center overflow-hidden rounded-2xl bg-azure lg:flex">
+        <div className="flex h-12 items-center gap-2 px-4 lg:grid lg:h-[76px] lg:grid-cols-[280px_minmax(0,1fr)_327px] lg:gap-4 lg:px-0">
+          <div className="storefront-brand-panel hidden h-14 items-center overflow-hidden rounded-2xl bg-azure lg:flex">
             <Link href="/" className="flex h-full w-36 shrink-0 items-center px-4">
               <span className="text-[21px] font-extrabold leading-none tracking-[-0.055em] text-white">
                 electro<span className="text-white/88">magaz</span><span className="text-white">.</span>
@@ -46,7 +46,7 @@ export function StickyNav() {
             <MessageSquare size={18} strokeWidth={1.7} />
           </Link>
 
-          <div className="hidden h-16 grid-cols-[90px_90px_90px_57px] lg:grid">
+          <div className="hidden h-14 grid-cols-[90px_90px_90px_57px] lg:grid">
             <HeaderAction href="/compare" label="Сравнение" icon={GitCompareArrows} active={pathname === '/compare'} />
             <HeaderAction href="/account" label="Профиль" icon={UserRound} active={pathname.startsWith('/account')} />
             <HeaderAction
@@ -95,7 +95,7 @@ function HeaderAction({
       href={href}
       data-cart-icon={cart ? true : undefined}
       aria-current={active ? 'page' : undefined}
-      className={`relative flex h-16 flex-col items-center justify-center gap-1 text-xs font-medium transition duration-200 hover:-translate-y-0.5 hover:bg-surface-muted hover:text-azure active:translate-y-0 ${
+      className={`relative flex h-14 flex-col items-center justify-center gap-1 text-[11px] font-medium transition duration-200 hover:-translate-y-0.5 hover:bg-surface-muted hover:text-azure active:translate-y-0 ${
         active ? 'bg-azure-light text-azure' : 'text-ink-2'
       } ${
         compact ? 'w-[57px]' : 'w-[90px]'

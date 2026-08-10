@@ -29,7 +29,10 @@ interface ProductRowData {
 
 export function ProductRow({ product, priority = false }: { product: ProductRowData; priority?: boolean }) {
   return (
-    <article className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl bg-white p-3 shadow-[var(--shadow-xs)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-md)] sm:min-h-[240px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5">
+    <article
+      data-catalog-product-row
+      className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl border border-transparent bg-white p-3 shadow-[var(--shadow-xs)] transition-colors duration-300 hover:border-azure/15 sm:min-h-[250px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5"
+    >
       <ProductImage product={product} priority={priority} />
       <ProductDetails product={product} />
       <ProductCommerce product={product} />
@@ -45,32 +48,44 @@ function ProductImage({ product, priority }: { product: ProductRowData; priority
   })
 
   return (
-    <Link
-      href={`/product/${product.slug}`}
-      className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-surface-muted"
-    >
-      <Image
-        src={image}
-        alt={product.name}
-        fill
-        loading={priority ? 'eager' : 'lazy'}
-        fetchPriority={priority ? 'high' : 'auto'}
-        className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
-        sizes="(max-width: 640px) 76px, 192px"
-      />
-    </Link>
+    <div className="min-w-0">
+      <Link
+        href={`/product/${product.slug}`}
+        className="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl bg-surface-muted"
+      >
+        <Image
+          src={image}
+          alt={product.name}
+          fill
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          className="object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-105"
+          sizes="(max-width: 640px) 76px, 192px"
+        />
+      </Link>
+      <div
+        data-catalog-product-code
+        className="mpn mt-2 hidden truncate px-1 text-[10px] text-ink-4 opacity-0 transition-[opacity,transform,color] duration-200 group-hover:translate-y-0 group-hover:text-ink-3 group-hover:opacity-100 sm:block sm:-translate-y-1"
+      >
+        Код товара {product.partNumber}
+      </div>
+    </div>
   )
 }
 
 function ProductDetails({ product }: { product: ProductRowData }) {
-  const specs = Object.entries(product.specs).slice(0, 4)
+  const specs = Object.entries(product.specs)
+    .filter(([key, value]) => key.trim().toLowerCase() !== 'нет данных' && value.trim().length > 0)
+    .slice(0, 4)
+  const description = product.description?.trim()
+  const hasUsefulDescription = Boolean(description && description.toLowerCase() !== 'нет данных')
   const isNew = isNewProduct(product.lastEnrichedAt)
 
   return (
     <div className="min-w-0">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-ink-3">
-        <span>{product.manufacturer}</span>
-        <span className="mpn font-semibold text-azure">{product.partNumber}</span>
+        <span className="font-medium">{product.manufacturer}</span>
+        <span className="mpn font-semibold text-azure sm:hidden">{product.partNumber}</span>
         {isNew && (
           <span className="inline-flex items-center gap-1 rounded bg-stock-bg px-1.5 py-0.5 font-semibold text-stock">
             <Sparkles size={10} />
@@ -81,7 +96,7 @@ function ProductDetails({ product }: { product: ProductRowData }) {
       </div>
       <Link
         href={`/product/${product.slug}`}
-        className="mt-1 block text-sm font-semibold leading-snug text-ink transition-colors hover:text-azure sm:text-[15px]"
+        className="mt-1 block text-sm font-semibold leading-snug tracking-[-0.01em] text-ink transition-colors hover:text-azure sm:text-[17px]"
       >
         {product.name}
       </Link>
@@ -94,12 +109,25 @@ function ProductDetails({ product }: { product: ProductRowData }) {
             </div>
           ))}
         </dl>
-      ) : product.description ? (
+      ) : hasUsefulDescription ? (
         <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-ink-3">
-          {product.description}
+          {description}
         </p>
-      ) : null}
-      <div className="mt-2 flex items-center gap-3 text-[11px] text-ink-3">
+      ) : (
+        <p className="mt-2 text-xs text-ink-4">Характеристики уточняются</p>
+      )}
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-ink-3">
+        <CompareToggleBtn
+          variant="compact"
+          item={{
+            id: product.id,
+            slug: product.slug,
+            name: product.name,
+            partNumber: product.partNumber,
+            manufacturer: product.manufacturer,
+            categorySlug: product.categorySlug || '',
+          }}
+        />
         {product.package && <span>Корпус: {product.package}</span>}
         {product.datasheets?.[0] && (
           <a
@@ -121,24 +149,25 @@ function ProductCommerce({ product }: { product: ProductRowData }) {
   const displayPrice = product.price === 0 ? null : product.price
 
   return (
-    <div className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0">
+    <div
+      data-product-commerce
+      className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-t-0 sm:pl-5 sm:pt-0"
+    >
       <div className="sm:text-right">
-        <div className={displayPrice ? 'price text-lg' : 'text-sm font-semibold text-ink-3'}>
+        <div className={displayPrice ? 'price text-xl' : 'text-base font-bold text-ink'}>
           {formatPrice(displayPrice)}
         </div>
         <div className="text-[10px] text-ink-4">Минимум: {product.minOrder} {product.unit}</div>
       </div>
+      <div className="mt-auto hidden text-right text-xs sm:block">
+        <div className={product.inStock ? 'font-medium text-stock' : 'font-medium text-ink-3'}>
+          {product.inStock
+            ? `В наличии${product.stockCount > 0 ? `: ${product.stockCount} ${product.unit}` : ''}`
+            : 'Поставка под заказ'}
+        </div>
+        <div className="mt-1 text-ink-4">Срок подтвердим в КП</div>
+      </div>
       <div className="flex items-center justify-end gap-2">
-        <CompareToggleBtn
-          item={{
-            id: product.id,
-            slug: product.slug,
-            name: product.name,
-            partNumber: product.partNumber,
-            manufacturer: product.manufacturer,
-            categorySlug: product.categorySlug || '',
-          }}
-        />
         <AddToCartBtn
           productId={product.id}
           partNumber={product.partNumber}
@@ -146,6 +175,7 @@ function ProductCommerce({ product }: { product: ProductRowData }) {
           manufacturer={product.manufacturer}
           minOrder={product.minOrder}
           price={displayPrice}
+          highlightOnCardHover
         />
       </div>
     </div>

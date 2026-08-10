@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/toast'
 
 interface CompareToggleBtnProps {
   item: CompareItem
-  variant?: 'icon' | 'full'
+  variant?: 'icon' | 'compact' | 'full'
 }
 
 /**
@@ -68,6 +68,25 @@ export function CompareToggleBtn({ item, variant = 'icon' }: CompareToggleBtnPro
         suppressHydrationWarning
       >
         {mounted && active ? <Check size={14} /> : <GitCompareArrows size={14} />}
+        {mounted && active ? 'В сравнении' : 'Сравнить'}
+      </button>
+    )
+  }
+
+  if (variant === 'compact') {
+    return (
+      <button
+        onClick={handleClick}
+        className={`flex h-7 items-center gap-1.5 rounded-lg px-2.5 text-[11px] font-medium transition-colors ${
+          active
+            ? 'bg-azure-light text-azure'
+            : 'bg-surface-muted text-ink-3 hover:bg-azure-light hover:text-azure'
+        }`}
+        title={active ? 'Убрать из сравнения' : 'Добавить в сравнение'}
+        aria-pressed={active}
+        suppressHydrationWarning
+      >
+        {mounted && active ? <Check size={12} /> : <GitCompareArrows size={12} />}
         {mounted && active ? 'В сравнении' : 'Сравнить'}
       </button>
     )

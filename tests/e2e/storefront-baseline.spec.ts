@@ -50,6 +50,16 @@ async function expectVisualReady(page: Page, route: '/' | '/catalog' | '/cart' |
 }
 
 test.describe('public storefront contracts', () => {
+  test('home starts with a DNS-like service shelf', async ({ page }) => {
+    await openStable(page, '/')
+
+    await expect(
+      page.getByRole('heading', { name: 'Соберем корзину по спецификации' }),
+    ).toBeVisible()
+    await expect(page.getByRole('link', { name: /Поиск по MPN/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Подбор аналогов/ })).toBeVisible()
+  })
+
   test('keyboard skip link moves focus to the main content', async ({ page }) => {
     await page.goto('/')
     await page.keyboard.press('Tab')
@@ -97,6 +107,39 @@ test.describe('public storefront contracts', () => {
 
     for (const [key, value] of params) {
       expect(new URL(page.url()).searchParams.get(key)).toBe(value)
+    }
+  })
+
+  test('catalog list uses card hierarchy and desktop hover states', async ({ page }, testInfo) => {
+    await openStable(page, '/catalog')
+
+    const list = page.locator('[data-catalog-product-list]')
+    const firstProduct = list.locator('[data-catalog-product-row]').first()
+
+    await expect(list).toBeVisible()
+    await expect(firstProduct).toBeVisible()
+    await expect(page.locator('[data-catalog-quick-filters]')).toBeVisible()
+    await expect(page.getByText('Артикул', { exact: true })).toHaveCount(0)
+    await expect(page.getByText('Наименование', { exact: true })).toHaveCount(0)
+    await expect(firstProduct.locator('button[title="Добавить в сравнение"]')).toContainText(
+      'Сравнить',
+    )
+
+    const productCode = firstProduct.locator('[data-catalog-product-code]')
+    if (testInfo.project.name === 'desktop') {
+      await expect(firstProduct.locator('[data-product-commerce]')).toHaveCSS(
+        'border-left-width',
+        '0px',
+      )
+      await expect(productCode).toHaveCSS('opacity', '0')
+      await firstProduct.hover()
+      await expect(productCode).toHaveCSS('opacity', '1')
+      await expect(firstProduct.locator('[data-catalog-cart-button]')).toHaveCSS(
+        'background-color',
+        'rgb(9, 105, 218)',
+      )
+    } else {
+      await expect(productCode).toBeHidden()
     }
   })
 

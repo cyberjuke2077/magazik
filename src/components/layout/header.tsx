@@ -86,8 +86,8 @@ export function Header() {
 
   return (
     <header className="w-full bg-white">
-      <div className="hidden h-[49px] lg:block">
-        <div className="mx-auto flex h-full max-w-[1380px] items-center">
+      <div className="hidden h-[42px] border-b border-[var(--border)]/70 lg:block">
+        <div className="mx-auto flex h-full max-w-[1380px] items-center px-1">
           <div className="flex w-[280px] shrink-0 items-center gap-5">
             <span className="text-xs font-semibold text-ink-3">RU</span>
             <div className="flex items-center">
@@ -100,7 +100,7 @@ export function Header() {
               </button>
             </div>
           </div>
-          <nav className="flex items-center gap-6 text-sm font-medium text-ink-2">
+          <nav className="flex items-center gap-5 text-[13px] font-medium text-ink-2">
             <Link href="/catalog" className="transition-colors hover:text-azure">Каталог компонентов</Link>
             <Link href="/delivery" className="transition-colors hover:text-azure">Доставка</Link>
             <Link href="/brands" className="transition-colors hover:text-azure">Бренды</Link>

@@ -221,7 +221,7 @@ export function LiveSearchDropdown() {
 
   return (
     <div className="flex-1 relative">
-      <form onSubmit={handleSubmit} className="relative h-9 rounded-xl bg-[#f7f7f7] lg:h-16 lg:rounded-2xl">
+      <form onSubmit={handleSubmit} className="relative h-9 rounded-xl bg-[#f7f7f7] lg:h-14 lg:rounded-2xl">
         <input
           ref={inputRef}
           type="text"
@@ -254,7 +254,7 @@ export function LiveSearchDropdown() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] lg:top-[72px]"
+          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] lg:top-[64px]"
         >
           {/* Loading skeleton */}
           {isLoading && <SkeletonResults />}
