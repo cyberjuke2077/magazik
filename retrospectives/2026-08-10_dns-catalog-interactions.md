@@ -74,8 +74,9 @@ hover карточки с артикулом под фото.
 Vercel Preview повторно проверен для commit `ff8b17e`, deployment
 `dpl_Hd6VvFBnthqGP3ECYkxqxgrGMcbj`. Он скомпилировал код и прошел TypeScript, затем
 упал при prerender `/best`: Preview-переменная `DATABASE_URL` не начинается с
-`postgresql://` или `postgres://`. Production не менялся; для зеленого Preview нужен
-отдельный Preview Postgres или Supabase branch, а не production credentials.
+`postgresql://` или `postgres://`. Это не блокировало последующий Production release;
+для зеленого Preview нужен отдельный Preview Postgres или Supabase branch, а не
+production credentials.
 
 В документации BrowserAct 1.1 указан несуществующий в установленной версии 1.2.2
 подкомандный путь `browser real open`. Перед первым вызовом стоило проверить CLI help.
@@ -99,5 +100,20 @@ Vercel Preview повторно проверен для commit `ff8b17e`, deploy
   карточек, а каталог - вокруг быстрых категорий, бокового helper и guide-полки.
 - Добавлено правило для безопасного выборочного обновления Playwright baseline.
 - Зафиксированы merge SHA, Vercel Production deployment и результаты live smoke.
-- Бизнес-логика, архитектура и публичные контракты не изменились, поэтому профильные
-  файлы `docs/business/` не обновлялись.
+- Синхронизированы business UX, marketing reference, goals, architecture,
+  service inventory, live snapshot и customer handoff roadmap.
+- Runtime-бизнес-логика, схема БД и публичные контракты на финальном handoff не
+  изменялись; обновлялись только их актуальные описания и release-факты.
+
+## 6. Финальный handoff
+
+- Runtime commit: `770416a`.
+- Merge PR #11 в `main`: `fd042cf`.
+- Проверенный production alias: `https://magazik-94yr.vercel.app`.
+- Проверенные deployments: `dpl_y6TViwh3DSJDvsGJsdBdZDX3vxMX` и docs-only
+  `dpl_FqedX7gvJaqTZpDxjqEK6hS2eMYK`, оба `Ready`.
+- Локальные BrowserAct и Next.js QA-сессии закрыты.
+- Следующий старт: обновить `main`, создать новую ветку и выбрать один хвост из
+  `plans/2026-08-09-customer-handoff-roadmap.md`.
+- Стоп: не менять production DB, Preview env, R2, Telegram, DNS или каталог без
+  отдельной задачи и проверки точного target.

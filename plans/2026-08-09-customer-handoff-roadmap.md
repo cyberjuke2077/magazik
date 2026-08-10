@@ -1,7 +1,8 @@
 # Роадмап сдачи Electromagaz заказчику
 
 Дата: 2026-08-09
-Статус: `[x]` бесплатный технический рубеж выполнен, production release не выполнен
+Статус: `[x]` бесплатный технический рубеж и storefront production release выполнены;
+полная коммерческая сдача заблокирована P0 ниже
 Цель: передать заказчику не просто исходный код, а проверенный рабочий B2B-сайт,
 который доступен на основном домене, принимает заявки и может обслуживаться
 после передачи.
@@ -60,8 +61,12 @@
   админ-панель.
 - [x] Реквизиты централизованы в `src/lib/company.ts`, функция
   `hasPlaceholders()` не должна находить плейсхолдеры.
-- [x] Production для merge commit `18166e5` получил статус `Ready`; `/`, `/best`,
-  `/catalog`, `/api/catalog/categories` и `/api/health` отвечают 200.
+- [x] DNS-подобный storefront PR #11 слит merge-коммитом `fd042cf`; runtime commit
+  `770416a` находится в `main`.
+- [x] Vercel storefront deployment `dpl_y6TViwh3DSJDvsGJsdBdZDX3vxMX` и следующий
+  docs-only deployment `dpl_FqedX7gvJaqTZpDxjqEK6hS2eMYK` получили `Ready`.
+- [x] `/`, `/best`, `/catalog` и `/api/catalog/categories` отвечают 200; каталог
+  отрисовал 50 строк, API вернул 8 корневых категорий.
 
 ## 3. P0-блокеры полной коммерческой сдачи
 

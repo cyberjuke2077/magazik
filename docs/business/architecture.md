@@ -228,8 +228,10 @@ lock-файл: `package-lock.json`.
 
 ## Vercel для деплоя
 
-Push в `main` → Vercel автоматически собирает и деплоит.
-env-переменные прописаны в Vercel UI для production/preview/development.
+Push в `main` запускает Vercel Production deployment.
+Production получает PostgreSQL-переменные через официальную Supabase integration.
+Preview намеренно не получает production database credentials. Для функционального
+Preview нужна отдельная Supabase branch или sandbox и отдельные Preview env.
 
 `build` в `package.json`:
 ```bash
