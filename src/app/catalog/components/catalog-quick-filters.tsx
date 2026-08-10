@@ -62,7 +62,7 @@ export function CatalogQuickFilters({
         className={`shrink-0 rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors ${
           context.allActive
             ? 'bg-azure text-white'
-            : 'bg-surface-muted text-ink-2 hover:bg-azure-light hover:text-azure'
+            : 'bg-[#edf3fb] text-ink-2 hover:bg-azure-light hover:text-azure'
         }`}
       >
         {context.allLabel}
@@ -77,7 +77,7 @@ export function CatalogQuickFilters({
             className={`shrink-0 rounded-xl px-3.5 py-2 text-xs font-semibold transition-colors ${
               active
                 ? 'bg-azure text-white'
-                : 'bg-surface-muted text-ink-2 hover:bg-azure-light hover:text-azure'
+                : 'bg-[#edf3fb] text-ink-2 hover:bg-azure-light hover:text-azure'
             }`}
           >
             {category.name}

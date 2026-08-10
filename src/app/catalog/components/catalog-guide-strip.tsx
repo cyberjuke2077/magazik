@@ -6,31 +6,31 @@ const guides = [
     title: 'Как проверить точный MPN',
     image: '/storefront/category-mcu.jpg',
     href: '/contacts',
-    tone: 'bg-[#eaf8f3]',
+    tone: 'bg-[#dcf4ea]',
   },
   {
     title: 'Подбор совместимого аналога',
     image: '/storefront/category-interfaces.jpg',
     href: '/request-quote',
-    tone: 'bg-[#f2f4ff]',
+    tone: 'bg-[#e6eaff]',
   },
   {
     title: 'Корпус и тип монтажа',
     image: '/storefront/category-amplifiers.jpg',
     href: '/catalog',
-    tone: 'bg-[#fff7dc]',
+    tone: 'bg-[#fff0bd]',
   },
   {
     title: 'Компоненты для серийного BOM',
     image: '/storefront/hero-components.jpg',
     href: '/wholesale',
-    tone: 'bg-[#eff9e9]',
+    tone: 'bg-[#e6f5dc]',
   },
   {
     title: 'Проверка сроков поставки',
     image: '/storefront/category-power.jpg',
     href: '/delivery',
-    tone: 'bg-[#fff0f3]',
+    tone: 'bg-[#ffe0e6]',
   },
 ]
 
@@ -48,7 +48,7 @@ export function CatalogGuideStrip() {
               src={guide.image}
               alt=""
               fill
-              className="object-cover opacity-75 transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
+              className="object-cover opacity-86 saturate-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
               sizes="120px"
               loading={index < 4 ? 'eager' : 'lazy'}
               fetchPriority={index < 4 ? 'high' : 'auto'}
