@@ -77,15 +77,15 @@ export function HeroSlider() {
             href={card.href}
             className={`group relative h-[238px] w-[210px] shrink-0 overflow-hidden rounded-2xl p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:min-w-0 lg:flex-1 ${card.tone}`}
           >
-            <div className="relative z-[1]">
-              <h2 className="max-w-[13ch] text-[18px] font-bold leading-[1.08] tracking-[-0.02em] text-ink">
+            <div className="relative z-[1] grid grid-rows-[2.5rem_auto]">
+              <h2 className="max-w-[13ch] self-start text-[18px] font-bold leading-[1.08] tracking-[-0.02em] text-ink">
                 {card.title}
               </h2>
-              <p className="mt-2 max-w-[20ch] text-[12px] leading-[1.35] text-ink-3">
+              <p className="mt-2 max-w-[20ch] self-start text-[12px] leading-[1.35] text-ink-3">
                 {card.description}
               </p>
             </div>
-            <div className="absolute inset-x-0 bottom-0 h-[53%] overflow-hidden">
+            <div className="absolute inset-x-0 bottom-0 h-[47%] overflow-hidden">
               <Image
                 src={card.image}
                 alt={card.title}
