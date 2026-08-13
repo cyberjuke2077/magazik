@@ -29,6 +29,9 @@
   опаснее по диску, чем по RAM.
 - Зафиксировали обязательный конец сессии: второй мозг, commit, push ветки и
   один draft PR. Для docs-only commit добавлен Vercel ignored build step.
+- Ветка опубликована, открыт draft PR #13. Его Preview скомпилировал код и упал
+  только на prerender `/best` из-за невалидного Preview `DATABASE_URL`.
+  Production credentials в Preview не копировали.
 
 ## Результат
 
