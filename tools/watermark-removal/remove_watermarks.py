@@ -2,9 +2,9 @@
 """
 Batch watermark removal: Florence-2 (детекция) + LaMa (inpainting).
 
-Удаляет watermark ЛЮБОГО цвета и в любом месте — Florence-2 находит знак
-по смыслу (open-vocabulary detection с промптом "watermark"), без ручной
-маски, а LaMa аккуратно зарисовывает область (реальный inpaint, не закраска).
+Удаляет подтвержденный watermark ChipDip в правой нижней части изображения.
+Florence-2 предлагает область, защитные фильтры отсекают опасные ложные
+детекты, а LaMa зарисовывает только прошедшую проверку область.
 
 Логика детекции/inpaint основана на проекте D-Ogi/WatermarkRemover-AI (MIT).
 
@@ -40,6 +40,10 @@ from pathlib import Path
 os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+MIN_CENTER_X_RATIO = 0.65
+MIN_CENTER_Y_RATIO = 0.60
+MIN_LIGHT_PIXEL_RATIO = 0.80
+LIGHT_PIXEL_THRESHOLD = 160
 
 
 def pick_device(requested: str) -> str:
@@ -100,19 +104,47 @@ def detect_boxes(model, processor, device, dtype, image, prompt: str):
     return result.get("bboxes", []) or []
 
 
+def light_pixel_ratio(image, box) -> float:
+    """Доля светлых пикселей внутри bbox предполагаемой белой подписи."""
+    x1, y1, x2, y2 = [int(v) for v in box]
+    x1, y1 = max(0, x1), max(0, y1)
+    x2, y2 = min(image.width, x2), min(image.height, y2)
+    if x2 <= x1 or y2 <= y1:
+        return 0.0
+    gray = image.crop((x1, y1, x2, y2)).convert("L")
+    histogram = gray.histogram()
+    light = sum(histogram[LIGHT_PIXEL_THRESHOLD:])
+    return light / (gray.width * gray.height)
+
+
+def is_safe_chipdip_box(image, box, max_bbox_percent: float) -> bool:
+    """Разрешает inpaint только для проверенного паттерна watermark ChipDip."""
+    x1, y1, x2, y2 = [int(v) for v in box]
+    width = max(0, x2 - x1)
+    height = max(0, y2 - y1)
+    total = image.width * image.height
+    if not total or not width or not height:
+        return False
+    if (width * height / total) * 100 > max_bbox_percent:
+        return False
+    center_x = (x1 + x2) / (2 * image.width)
+    center_y = (y1 + y2) / (2 * image.height)
+    if center_x < MIN_CENTER_X_RATIO or center_y < MIN_CENTER_Y_RATIO:
+        return False
+    return light_pixel_ratio(image, box) >= MIN_LIGHT_PIXEL_RATIO
+
+
 def build_mask(image, boxes, max_bbox_percent: float):
-    """Чёрная L-маска с белыми прямоугольниками под боксы watermark."""
+    """Маска только для безопасных bbox watermark ChipDip."""
     from PIL import Image, ImageDraw
 
     mask = Image.new("L", image.size, 0)
     draw = ImageDraw.Draw(mask)
-    total = image.width * image.height
     drawn = 0
     for box in boxes:
+        if not is_safe_chipdip_box(image, box, max_bbox_percent):
+            continue
         x1, y1, x2, y2 = [int(v) for v in box]
-        area = max(0, x2 - x1) * max(0, y2 - y1)
-        if total and (area / total) * 100 > max_bbox_percent:
-            continue  # слишком большой бокс — вероятно ложная детекция
         # небольшое расширение, чтобы захватить кромку текста
         pad = 3
         draw.rectangle([x1 - pad, y1 - pad, x2 + pad, y2 + pad], fill=255)
