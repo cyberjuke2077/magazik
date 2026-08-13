@@ -71,6 +71,8 @@ data/progress.db
 data/progress.db-journal
 data/progress.db-wal
 data/progress.db-shm
+data/supplier-input/*
+!data/supplier-input/README.md
 
 # storage (local artifacts; whitelist source dir)
 storage/

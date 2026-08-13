@@ -25,6 +25,7 @@ import {
 } from '../types'
 import { shouldOverwrite } from './provenance-merger'
 import { generateSlug } from './slug-generator'
+import { resolveManufacturerName } from './manufacturer-resolver'
 import {
   FALLBACK_SECTION_SLUG,
   classifyProduct,
@@ -157,13 +158,14 @@ async function persistItem(
 ): Promise<void> {
   const source: DataSource = result?.source ?? 'supplier-stub'
   const now = new Date()
+  const manufacturerName = resolveManufacturerName(identity, result)
 
   // 1. Upsert Manufacturer
-  const mfgSlug = manufacturerSlug(identity.canonicalBrand)
+  const mfgSlug = manufacturerSlug(manufacturerName)
   const manufacturer = await tx.manufacturer.upsert({
     where: { slug: mfgSlug },
     create: {
-      name: identity.canonicalBrand,
+      name: manufacturerName,
       slug: mfgSlug,
     },
     update: {},
@@ -173,7 +175,7 @@ async function persistItem(
   const categoryId = await resolveCategory(tx, identity, result, source)
 
   // 3. Upsert Product
-  const slug = generateSlug(identity.canonicalBrand, identity.canonicalMpn)
+  const slug = generateSlug(manufacturerName, identity.canonicalMpn)
   const enrichmentStatus = determineEnrichmentStatus(result)
 
   // Check existing product for provenance merge
@@ -215,7 +217,7 @@ async function persistItem(
   }
 
   // Determine field values with provenance checks
-  const productName = result?.name ?? `${identity.canonicalBrand} ${identity.originalMpn}`
+  const productName = result?.name ?? `${manufacturerName} ${identity.originalMpn}`
   const productDescription = result?.description ?? (result ? undefined : 'Нет данных')
 
   // Apply provenance for name

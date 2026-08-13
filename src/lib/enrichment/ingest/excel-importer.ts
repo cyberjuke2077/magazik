@@ -38,15 +38,21 @@ const MPN_PATTERN = /^[A-Za-z][A-Za-z0-9\-+/.]{2,29}$/
 /** Chinese character range — used to exclude non-MPN first cells */
 const CHINESE_CHAR_PATTERN = /[\u4e00-\u9fff]/
 
-/**
- * Chinese header patterns for column detection.
- * Each entry maps a field to a substring that must appear in the header cell.
- */
-const HEADER_PATTERNS = {
-  mpn: '型号',
-  brand: '品牌',
-  package: '封装',
-  dateCode: '批号',
+/** Header aliases accepted in customer and supplier files. */
+const HEADER_ALIASES = {
+  mpn: [
+    '型号',
+    'mpn',
+    'partnumber',
+    'manufacturerpartnumber',
+    'артикул',
+    'партномер',
+    'номердетали',
+    'маркировка',
+  ],
+  brand: ['品牌', 'brand', 'manufacturer', 'бренд', 'производитель'],
+  package: ['封装', 'package', 'case', 'корпус'],
+  dateCode: ['批号', 'datecode', 'batch', 'партия', 'датапартии'],
 } as const
 
 type ColumnMapping = {
@@ -180,7 +186,7 @@ function processFileRows(
     return null
   }
 
-  // Try to detect Chinese headers in the first row
+  // Detect customer/supplier headers in the first row.
   const headerMapping = detectHeaders(firstRow)
 
   if (headerMapping) {
@@ -210,7 +216,7 @@ function processFileRows(
 }
 
 /**
- * Detects Chinese header patterns in the first row.
+ * Detects supported header aliases in the first row.
  * Returns column mapping if headers are found, null otherwise.
  */
 function detectHeaders(row: string[]): ColumnMapping | null {
@@ -220,16 +226,16 @@ function detectHeaders(row: string[]): ColumnMapping | null {
   let dateCodeCol: number | undefined
 
   for (let i = 0; i < row.length; i++) {
-    const cell = (row[i] || '').trim()
+    const cell = normalizeHeader(row[i] || '')
     if (!cell) continue
 
-    if (cell.includes(HEADER_PATTERNS.mpn)) {
+    if (hasAlias(HEADER_ALIASES.mpn, cell)) {
       mpnCol = i
-    } else if (cell.includes(HEADER_PATTERNS.brand)) {
+    } else if (hasAlias(HEADER_ALIASES.brand, cell)) {
       brandCol = i
-    } else if (cell.includes(HEADER_PATTERNS.package)) {
+    } else if (hasAlias(HEADER_ALIASES.package, cell)) {
       packageCol = i
-    } else if (cell.includes(HEADER_PATTERNS.dateCode)) {
+    } else if (hasAlias(HEADER_ALIASES.dateCode, cell)) {
       dateCodeCol = i
     }
   }
@@ -243,6 +249,17 @@ function detectHeaders(row: string[]): ColumnMapping | null {
     package: packageCol,
     dateCode: dateCodeCol,
   }
+}
+
+function hasAlias(aliases: readonly string[], value: string): boolean {
+  return aliases.includes(value)
+}
+
+function normalizeHeader(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_./\\()-]+/g, '')
 }
 
 /**

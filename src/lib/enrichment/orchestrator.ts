@@ -27,6 +27,7 @@ import {
   createNoopEnrichmentEvents,
 } from './observability/event-bus'
 import { filterFreshProducts } from './queue/fresh-product-filter'
+import { hasResolvedManufacturer } from './persistence/manufacturer-resolver'
 
 export interface OrchestratorConfig extends EnrichmentConfig {
   resume?: boolean
@@ -157,6 +158,22 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
 
     // Step 2: Deduplicate
     const deduplicatedParts = deduplicate(rows)
+
+    // A dry run validates only the input contract. It must not query the
+    // freshness cache, initialize a journal, call sources, or write data.
+    if (config.dryRun) {
+      const dryRunParts = config.limit === undefined
+        ? deduplicatedParts
+        : deduplicatedParts.slice(0, config.limit)
+      console.log(`   Уникальных артикулов: ${deduplicatedParts.length}`)
+      if (config.limit !== undefined) {
+        console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${dryRunParts.length})`)
+      }
+      logger.info({ event: 'dry_run_complete' })
+      console.log(`\n🏁 Dry run завершён. Без обращения к БД и внешним источникам.`)
+      return
+    }
+
     const cacheResult =
       config.skipFreshProducts && !config.forceRefresh
         ? await filterFreshProducts(deduplicatedParts, config.freshnessDays)
@@ -169,13 +186,6 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     console.log(`   Пропущено свежих карточек: ${cacheResult.skipped}`)
     if (config.limit !== undefined) {
       console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${parts.length})`)
-    }
-
-    // Step 3: Dry run — log stats and exit
-    if (config.dryRun) {
-      logger.info({ event: 'dry_run_complete' })
-      console.log(`\n🏁 Dry run завершён. Без записи в БД.`)
-      return
     }
 
     if (parts.length === 0) {
@@ -702,9 +712,13 @@ async function runMouserLoop(
             timestamp: Date.now(),
           })
         } else {
-          // Not found or brand mismatch — create stub
-          const persisted = await persistBeforeStatusUpdate(part, null, logger)
-          if (!persisted) continue
+          // A stub is safe only when the customer supplied a manufacturer.
+          // For an MPN-only input, keep the journal result without inventing
+          // a manufacturer or creating a misleading product card.
+          if (hasResolvedManufacturer(part, null)) {
+            const persisted = await persistBeforeStatusUpdate(part, null, logger)
+            if (!persisted) continue
+          }
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'mouser_not_found')
 
           logger.info({
@@ -813,10 +827,10 @@ async function persistBeforeStatusUpdate(
 
 /**
  * Finalizer loop — runs when Mouser is disabled. Picks up MPNs that
- * exhausted ChipDip and LCSC (status `lcsc_not_found`), persists a stub
- * Product entry so the item exists in the catalogue, and promotes the
- * journal status to `unresolved`. Without this loop those MPNs would sit
- * forever in `lcsc_not_found` and the catalog would silently drop them.
+ * exhausted ChipDip and LCSC (status `lcsc_not_found`). It persists a stub
+ * only when the input has a known manufacturer, then promotes the journal
+ * status to `unresolved`. MPN-only misses stay in the journal without a
+ * misleading product card.
  */
 async function runUnresolvedFinalizerLoop(
   runId: string,
@@ -841,8 +855,10 @@ async function runUnresolvedFinalizerLoop(
 
     for (const part of batch) {
       if (isShutdown()) break
-      const persisted = await persistBeforeStatusUpdate(part, null, logger)
-      if (!persisted) continue
+      if (hasResolvedManufacturer(part, null)) {
+        const persisted = await persistBeforeStatusUpdate(part, null, logger)
+        if (!persisted) continue
+      }
       await journal.updateStatus(
         runId, part.canonicalBrand, part.canonicalMpn, 'unresolved',
       )

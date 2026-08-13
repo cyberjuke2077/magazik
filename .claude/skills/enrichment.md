@@ -19,7 +19,10 @@ npm run enrichment:status
 npm run enrichment:watch
 ```
 
-Входная директория с Excel-файлами задаётся через `ENRICHMENT_INPUT_DIR` в `.env`.
+Входная директория с `.csv`, `.xlsx` или `.xls` задаётся через
+`ENRICHMENT_INPUT_DIR` в `.env`. Минимальный вход заказчика - один столбец `MPN`.
+Заголовки `Артикул`, `Part Number` и `型号` также поддерживаются. Бренд
+необязателен и определяется по точно совпавшей карточке источника.
 
 ## Безопасность входных файлов
 
@@ -28,11 +31,11 @@ npm run enrichment:watch
 - Не подключать `xlsx`-парсер к публичной форме загрузки: у npm-пакета `xlsx` нет исправленной версии для опубликованных advisory по prototype pollution и ReDoS.
 - Для неизвестных файлов использовать изолированное окружение или предварительно конвертировать их в проверенный CSV.
 
-## Источники данных (приоритет)
+## Источники данных (текущий каскад)
 
-1. **Mouser API** - REST API, быстрый, надёжный, требует `MOUSER_API_KEY`. Квота: один запрос/сек, 1000/сутки.
-2. **LCSC** - scraping через Axios + cheerio. Может давать soft-rate-limit (~17 запросов подряд). Источник реализует `isBlocked()` и early-stop heuristic.
-3. **ChipDip** - stealth Chromium через cloakbrowser. Самый медленный, используется как fallback.
+1. **ChipDip** - stealth Chromium через cloakbrowser, русскоязычные карточки.
+2. **LCSC** - Chromium и JSON-LD, подхватывает не найденные или заблокированные в ChipDip MPN.
+3. **Mouser API** - подхватывает не найденные в LCSC MPN, требует `MOUSER_API_KEY`.
 
 ## Расположение кода
 
@@ -61,10 +64,10 @@ src/lib/enrichment/
 1. Читает Excel-файлы из `ENRICHMENT_INPUT_DIR`
 2. Нормализует MPN через `mpn-normalizer.ts`
 3. Для каждого уникального (brand, mpn) создаёт запись в `EnrichmentJournal`
-4. Прогоняет по источникам в порядке приоритета (Mouser → LCSC → ChipDip)
-5. При успехе обновляет `Product` в Postgres и помечает запись в журнале как `resolved`
-6. При ошибке помечает `failed` с `errorMessage`, увеличивает `attempts`
-7. Флаг `--resume` пропускает уже `resolved` записи текущего `runId`
+4. Запускает каскад очередей ChipDip -> LCSC -> Mouser
+5. Требует точного совпадения нормализованного MPN и определяет бренд из карточки источника
+6. При успехе обновляет `Product` в Postgres, при неоднозначном результате оставляет `unresolved`
+7. Флаг `--resume` продолжает незавершённый `runId`
 
 ## EnrichmentJournal (модель в Prisma)
 

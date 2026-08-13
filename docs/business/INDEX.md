@@ -65,9 +65,9 @@ Meilisearch не входит в production-контур MVP. Вернуться
 Парсер (локально, Mac) → Docker PostgreSQL → npm run db:publish → Supabase (прод)
 ```
 
-1. Парсер запускается локально на Mac разработчика (вне этого репо)
-2. Парсер наполняет локальную PostgreSQL в Docker
-3. Enrichment-пайплайн обогащает данные из Mouser/LCSC/ChipDip
+1. Заказчик передаёт утверждённый список MPN, бренд необязателен
+2. Парсер и enrichment из этого репозитория запускаются локально на Mac
+3. Пайплайн ищет производителя и данные карточки в ChipDip, LCSC и Mouser
 4. `npm run db:publish` зеркалирует каталог в Supabase прод
 
 Подробности:

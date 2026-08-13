@@ -611,7 +611,7 @@ export async function createChipDipClient(config: ChipDipClientConfig): Promise<
         const result: EnrichmentResult = {
           source: 'chipdip',
           mpn,
-          brand: canonicalBrand,
+          brand: parsed.manufacturer || canonicalBrand,
           name: parsed.name || undefined,
           description: buildChipDipDescription(parsed),
           descriptionLanguage: 'ru',
