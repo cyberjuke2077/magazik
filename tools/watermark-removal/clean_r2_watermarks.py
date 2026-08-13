@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-R2-обёртка watermark-removal: чистит ProductImage прямо в каталоге.
+LEGACY recovery tool for images that are already stored in R2.
+
+Новый pipeline не использует этот порядок. Для обычной обработки запускать
+process_catalog_images.py: он очищает и проверяет изображение до загрузки в R2.
 
 Поток на каждую картинку:
   1. читает ProductImage из Postgres (R2-hosted, ещё не -wmclean);
@@ -115,7 +118,21 @@ def main() -> None:
     ap.add_argument("--passes", type=int, default=2, help="раундов detect→inpaint (multi-watermark)")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument(
+        "--legacy-existing-r2",
+        action="store_true",
+        help="явно разрешить ремонт уже загруженных в R2 старых изображений",
+    )
     args = ap.parse_args()
+
+    if not args.dry_run and not args.legacy_existing_r2:
+        print(
+            "ERROR: legacy post-upload cleaning is disabled. "
+            "Use process_catalog_images.py, or pass --legacy-existing-r2 "
+            "only to repair old R2 objects.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
 
     import psycopg
 

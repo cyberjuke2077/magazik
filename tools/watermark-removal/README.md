@@ -61,26 +61,29 @@ uv pip install -r requirements.txt
 - watermark не найден → картинка копируется как есть (фото не портится);
 - найден → область зарисовывается LaMa, результат сохраняется в PNG.
 
-## Интеграция с каталогом: `clean_r2_watermarks.py`
+## Интеграция с каталогом: `process_catalog_images.py`
 
-Обёртка, которая чистит watermark прямо в каталоге (БД + R2), не трогая
-исходный код магазина:
+Enrichment сохраняет в `Product.enrichmentMeta.imageCandidates` только URL
+кандидатов. Бинарные изображения в PostgreSQL не пишутся. Worker скачивает
+кандидат локально, удаляет watermark, повторно проверяет результат, конвертирует
+его в WebP и только после этого загружает в R2.
+
+Старый порядок `upstream -> R2 -> очистка` запрещён: он оставлял в bucket
+неочищенные оригиналы и требовал второй проход по опубликованным данным.
 
 ```bash
 # предпросмотр: что будет обработано (без запуска модели и записей)
-.venv/bin/python clean_r2_watermarks.py --device cpu --limit 20 --dry-run
+.venv/bin/python process_catalog_images.py --limit 20 --dry-run
 
 # локальный прогон малого объёма (Mac, CPU)
-.venv/bin/python clean_r2_watermarks.py --device cpu --limit 50
+.venv/bin/python process_catalog_images.py --device auto --limit 10
 ```
 
-Поток на картинку: читает `ProductImage` из Postgres (R2-hosted, ещё не
-`-wmclean`) → скачивает → Florence-2 detect + LaMa inpaint → WebP 600px →
-заливает `<sha1>-wmclean.webp` в R2 → обновляет `ProductImage.imageUrl`.
-
-Идемпотентно: `-wmclean.webp` пропускаются; фото без watermark тоже
-помечаются `-wmclean` (чтобы повторный прогон их не трогал). Берёт
-`DATABASE_URL` и `R2_*` из `.env.local`/`.env` корня проекта.
+При успехе worker атомарно заменяет `ProductImage`, удаляет очередь кандидатов
+и ставит `imagePipeline.status=complete`. При ошибке кандидаты сохраняются,
+статус становится `failed`, поэтому запуск можно повторить. По умолчанию
+сохраняется одно главное изображение на товар. Берёт `DATABASE_URL` и `R2_*`
+из `.env.local`/`.env` корня проекта.
 
 ## Массовый прогон на RTX 2080 Ti (Windows)
 
@@ -100,15 +103,15 @@ uv pip install -r requirements.txt
 #    DATABASE_URL должен указывать на ту же БД (Postgres доступен по сети).
 
 # 5. массовый прогон на GPU:
-python clean_r2_watermarks.py --device cuda --passes 2
+python process_catalog_images.py --device cuda --passes 3
 ```
 
-`--passes N` — сколько раундов detect→inpaint на картинку (default 2).
+`--passes N` — сколько раундов detect→inpaint на картинку (default 3).
 Florence-2 за проход находит один знак; 2+ прохода снимают множественные
 watermark (например два логотипа на одном фото).
 
-Скрипт коммитит каждую картинку отдельной транзакцией — прогон можно
-прерывать и возобновлять, уже обработанные (`-wmclean`) пропускаются.
+Скрипт коммитит каждый товар отдельной транзакцией - прогон можно
+прерывать и возобновлять, уже обработанные позиции не попадают в очередь.
 Скорость на 2080 Ti ~0.5–1.5 сек/картинка.
 
 > Примечание: БД (Postgres) и R2 — общие для Mac и Windows-ПК, поэтому
