@@ -77,6 +77,9 @@ Enrichment сохраняет в `Product.enrichmentMeta.imageCandidates` тол
 
 # локальный прогон малого объёма (Mac, CPU)
 .venv/bin/python process_catalog_images.py --device auto --limit 10
+
+# полный пилот модели без R2 и записей в БД
+.venv/bin/python process_catalog_images.py --limit 1 --local-output /tmp/media-pilot
 ```
 
 При успехе worker атомарно заменяет `ProductImage`, удаляет очередь кандидатов

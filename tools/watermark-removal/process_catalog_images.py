@@ -14,7 +14,7 @@ import uuid
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import parse_qsl, urlencode, urljoin, urlparse, urlsplit, urlunsplit
 
 import requests
 from botocore.exceptions import ClientError
@@ -43,6 +43,7 @@ WEBP_QUALITY = 84
 BLUE_WM_MAX = 0.12
 EDGE_BLUE_MAX = 0.04
 REDIRECT_CODES = {301, 302, 303, 307, 308}
+PRISMA_ONLY_QUERY_PARAMS = {"schema", "pgbouncer", "connection_limit", "pool_timeout"}
 Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
 
 
@@ -55,6 +56,16 @@ def env(name: str) -> str:
     if not value:
         raise RuntimeError(f"env {name} is not set")
     return value
+
+
+def psycopg_url(value: str) -> str:
+    parsed = urlsplit(value)
+    query = [
+        (key, item)
+        for key, item in parse_qsl(parsed.query, keep_blank_values=True)
+        if key not in PRISMA_ONLY_QUERY_PARAMS
+    ]
+    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, urlencode(query), parsed.fragment))
 
 
 def validate_public_url(value: str) -> str:
@@ -311,6 +322,29 @@ def process_candidate(candidate: dict, models, args, r2) -> dict:
     return {"url": public_url, "source": source, "removed": removed}
 
 
+def run_local_pilot(rows, models, args, output_dir: Path) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    processed = 0
+    for _, part_number, meta in rows:
+        for candidate in (meta or {}).get("imageCandidates") or []:
+            source = candidate.get("source")
+            url = candidate.get("url")
+            if source not in ("chipdip", "lcsc", "mouser") or not isinstance(url, str):
+                continue
+            raw = download_image(url)
+            image = open_rgb(raw)
+            if source == "lcsc" and has_lcsc_blue_watermark(image):
+                continue
+            cleaned, removed = clean_candidate(models, image, args)
+            content = to_webp(cleaned)
+            name = f"{hashlib.sha256(content).hexdigest()}.webp"
+            (output_dir / name).write_bytes(content)
+            print(f"  {part_number}: {source}, removed={removed}, output={name}")
+            processed += 1
+            break
+    print(f"LOCAL PILOT - processed {processed}, no R2 or database writes")
+
+
 def process_product(conn, row, models, args, r2) -> tuple[bool, int]:
     product_id, part_number, original_meta = row
     meta = mark_processing(conn, product_id, original_meta or {})
@@ -344,6 +378,11 @@ def parse_args():
     parser.add_argument("--limit", type=int)
     parser.add_argument("--retry-processing", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--local-output",
+        type=Path,
+        help="очистить кандидаты в локальную папку без R2 и записей в БД",
+    )
     return parser.parse_args()
 
 
@@ -352,7 +391,7 @@ def main() -> None:
     args = parse_args()
     if args.max_images < 1 or args.max_images > 10:
         raise RuntimeError("--max-images must be between 1 and 10")
-    conn = psycopg.connect(env("DATABASE_URL"))
+    conn = psycopg.connect(psycopg_url(env("DATABASE_URL")))
     rows = fetch_products(conn, args.limit, args.retry_processing)
     print(f"products with pending images: {len(rows)}")
     if args.dry_run:
@@ -366,6 +405,10 @@ def main() -> None:
     model, processor, dtype = load_florence(args.device_resolved)
     lama = load_lama(args.device_resolved)
     models = (model, processor, dtype, lama)
+    if args.local_output:
+        run_local_pilot(rows, models, args, args.local_output)
+        conn.close()
+        return
     r2 = (create_r2_client(), env("R2_BUCKET"), env("R2_PUBLIC_URL"))
     completed = failed = cleaned = 0
     for index, row in enumerate(rows, start=1):

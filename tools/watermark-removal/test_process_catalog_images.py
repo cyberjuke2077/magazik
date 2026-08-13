@@ -6,6 +6,7 @@ from PIL import Image
 from process_catalog_images import (
     has_lcsc_blue_watermark,
     open_rgb,
+    psycopg_url,
     storage_key,
     to_webp,
     validate_public_url,
@@ -16,6 +17,13 @@ class MediaPipelineTest(unittest.TestCase):
     def test_rejects_private_candidate_url(self):
         with self.assertRaises(ValueError):
             validate_public_url("http://127.0.0.1/image.jpg")
+
+    def test_removes_only_prisma_query_parameters(self):
+        value = "postgresql://user:pass@localhost/db?schema=public&sslmode=require&connection_limit=5"
+        self.assertEqual(
+            psycopg_url(value),
+            "postgresql://user:pass@localhost/db?sslmode=require",
+        )
 
     def test_detects_lcsc_blue_background(self):
         blue = Image.new("RGB", (64, 64), (30, 90, 190))
