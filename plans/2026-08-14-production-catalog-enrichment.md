@@ -28,7 +28,7 @@
 - [ ] Локализовать английские fallback-карточки и снять `translation_pending`.
 - [x] Перестроить media pipeline: download -> classify -> clean -> verify -> WebP -> R2.
 - [ ] Подготовить новый Cloudflare R2 bucket и ограниченный S3 token.
-- [ ] Выполнить пилотную запись в локальную PostgreSQL и проверить карточки.
+- [x] Выполнить пилотную запись в локальную PostgreSQL и проверить карточки.
 - [ ] Выполнить resumable-прогон полного списка.
 - [ ] Опубликовать подтвержденный каталог через `db:publish`.
 
