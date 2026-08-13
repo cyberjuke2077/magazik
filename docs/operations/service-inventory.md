@@ -24,7 +24,7 @@
 | Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: storefront deployment `dpl_y6TViwh3DSJDvsGJsdBdZDX3vxMX` и следующий docs-only deployment `dpl_FqedX7gvJaqTZpDxjqEK6hS2eMYK` получили `Ready`; production alias `https://magazik-94yr.vercel.app`; `/`, `/best`, `/catalog`, `/api/catalog/categories` отвечают 200 | PR Lunar сливает `cyberjuke2077` merge commit; Preview не подключать к production DB |
 | Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: Vercel production подключён; `/api/health` вернул `database: ok` без записи данных; env официальной интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
-| Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `deferred`: владелец отложил подключение 2026-08-09 | Не включать в текущий бесплатный пакет; вернуться перед наполнением каталога |
+| Cloudflare R2 | Изображения товаров и документы | Владелец Electromagaz | Новый bucket и ограниченный S3 token | `blocked`: доступ к прежнему bucket потерян, нужен новый target | Создать новый bucket, выдать token только на него, настроить public domain и выполнить smoke-тест |
 | Telegram Bot API | Уведомления менеджеру о заявках | Владелец Electromagaz | Bot token и chat ID | `deferred`: владелец настроит самостоятельно позже | После настройки выполнить безопасное тестовое уведомление без данных покупателя |
 | Email-провайдер | Подтверждения покупателю и статусы заявки | `[УТОЧНИТЬ]` | API или SMTP, доступ к DNS домена | `blocked`: провайдер не выбран | Выбрать провайдера, настроить SPF, DKIM и DMARC |
 | DNS и регистратор `electromagaz.ru` | Основной домен | `[УТОЧНИТЬ]` | Управление DNS | `blocked`: DNS-записи отсутствуют | Указать владельца, добавить записи Vercel, проверить HTTPS |
@@ -35,9 +35,9 @@
 | ChipDip | Источник enrichment | Оператор enrichment | Прокси, браузер и rate limit | `not-configured`: локальный proxy env пуст | Настроить перед пилотом, не выполнять массовый сбор |
 | CAPTCHA provider | Поддержка enrichment при challenge | `[УТОЧНИТЬ]` | API key и бюджет | `not-configured`: URL есть, ключ пуст | Подключать только при подтверждённой необходимости |
 
-Решение владельца от 2026-08-09: Cloudflare R2, Telegram и наполнение
-production-каталога не входят в текущий бесплатный пакет сдачи. Это не означает,
-что сервисы настроены или больше не нужны для финального коммерческого запуска.
+Решение владельца от 2026-08-14: для наполнения каталога нужен новый Cloudflare
+R2 bucket, потому что доступ к прежнему потерян. Создание и подключение нового
+target выполняется отдельным контролируемым шагом после локального media-пилота.
 
 ## Подтверждённые границы
 
