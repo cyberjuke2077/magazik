@@ -36,6 +36,8 @@
   Production credentials в Preview не копировали.
 - Следующий docs-only commit `bcfd2ca` подтвердил `ignoreCommand`: Vercel build
   получил `Canceled` за 0ms, а GitHub check завершился успешно.
+- `/best` переведен на request-time rendering через Next.js 16 `connection()`,
+  чтобы Preview build не обращался к PostgreSQL во время prerender.
 
 ## Результат
 

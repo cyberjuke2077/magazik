@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { connection } from 'next/server'
 import { ChevronRight } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
@@ -7,6 +8,7 @@ import { ProductCard } from '@/components/catalog/product-card'
 import { getProducts } from '@/lib/queries/products'
 
 export default async function BestPage() {
+  await connection()
   const products = await getProducts()
   const bestProducts = products.filter((p) => p.priceWholesale).slice(0, 20)
   return (

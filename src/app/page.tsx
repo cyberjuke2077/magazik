@@ -1,3 +1,4 @@
+import { connection } from 'next/server'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
@@ -10,6 +11,7 @@ import { RecentProducts } from '@/components/home/recent-products'
 import { getCatalogSections } from '@/lib/queries/categories'
 
 export default async function HomePage() {
+  await connection()
   const sections = await getCatalogSections()
 
   return (
