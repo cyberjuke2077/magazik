@@ -47,14 +47,15 @@ export interface PersistBatchResult {
  * - 'partial': has some fields but not all three
  * - 'unresolved': no result at all
  */
-function determineEnrichmentStatus(result: EnrichmentResult | null): string {
+export function determineEnrichmentStatus(result: EnrichmentResult | null): string {
   if (!result) return 'unresolved'
 
   const hasName = !!result.name
   const hasDescription = !!result.description
   const hasSpecs = !!result.specs && result.specs.length > 0
 
-  if (hasName && hasDescription && hasSpecs) return 'complete'
+  const hasRussianDescription = result.descriptionLanguage !== 'en'
+  if (hasName && hasDescription && hasSpecs && hasRussianDescription) return 'complete'
   if (hasName || hasDescription || hasSpecs) return 'partial'
   return 'unresolved'
 }
@@ -185,6 +186,7 @@ async function persistItem(
 
   // Build new enrichment meta
   const newMeta: EnrichmentMeta = { ...(existingMeta ?? {}) }
+  const flags = new Set(newMeta.flags ?? [])
 
   const sourceCategoryPath = [
     ...(result?.categoryPath ?? []),
@@ -199,14 +201,19 @@ async function persistItem(
       mpn: identity.canonicalMpn,
       package: result?.package,
     })
-    const flags = new Set(newMeta.flags ?? [])
     if (classifiedSection === FALLBACK_SECTION_SLUG) {
       flags.add('category_needs_review')
     } else {
       flags.delete('category_needs_review')
     }
-    newMeta.flags = Array.from(flags)
   }
+
+  if (result?.description && result.descriptionLanguage === 'en') {
+    flags.add('translation_pending')
+  } else if (result?.descriptionLanguage === 'ru') {
+    flags.delete('translation_pending')
+  }
+  newMeta.flags = Array.from(flags)
 
   // Determine field values with provenance checks
   const productName = result?.name ?? `${manufacturerName} ${identity.originalMpn}`

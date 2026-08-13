@@ -20,4 +20,10 @@ describe('parseRunArgs', () => {
       forceRefresh: true,
     })
   })
+
+  it('parses a fast pass without ChipDip', () => {
+    expect(parseRunArgs(['node', 'enrichment-run.ts', '--skip-chipdip'])).toMatchObject({
+      skipChipdip: true,
+    })
+  })
 })

@@ -34,6 +34,7 @@ export interface OrchestratorConfig extends EnrichmentConfig {
   dryRun?: boolean
   skipMouser?: boolean
   skipLcsc?: boolean
+  skipChipdip?: boolean
   mouserOnly?: boolean
   forceRefresh?: boolean
   /** Maximum number of deduplicated MPNs to process, for controlled trial runs. */
@@ -229,7 +230,7 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     progress.start(runId, parts.length)
 
     // Step 6: Health-check ChipDip (skip if mouserOnly)
-    if (!config.mouserOnly) {
+    if (!config.mouserOnly && !config.skipChipdip) {
       chipdipClient = await createChipDipClient({
         proxyTemplate: config.chipdipProxyTemplate,
         proxyUrl: config.chipdipProxyUrl,
@@ -242,14 +243,23 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       const healthy = await chipdipClient.healthCheck()
       if (!healthy) {
         logger.error({ event: 'chipdip_healthcheck_failed', source: 'chipdip' })
-        console.error('\n❌ ChipDip health-check не пройден. Рекомендация: перезапустить через 24 часа.')
-        progress.stop()
         await chipdipClient.close()
-        return
+        chipdipClient = null
+        const skipped = await journal.skipPendingChipDip(
+          runId,
+          'ChipDip health-check failed; moved to LCSC fallback',
+        )
+        console.warn(`\n⚠️  ChipDip недоступен. Передано в LCSC: ${skipped}`)
+      } else {
+        logger.info({ event: 'chipdip_healthcheck_ok', source: 'chipdip' })
+        console.log(`\n✅ ChipDip health-check пройден`)
       }
-
-      logger.info({ event: 'chipdip_healthcheck_ok', source: 'chipdip' })
-      console.log(`\n✅ ChipDip health-check пройден`)
+    } else if (config.skipChipdip && !config.mouserOnly) {
+      const skipped = await journal.skipPendingChipDip(
+        runId,
+        'ChipDip skipped by operator for fast LCSC pass',
+      )
+      console.log(`\n⏭️  ChipDip пропущен. Передано в LCSC: ${skipped}`)
     }
 
     // Init LCSC client (if needed)
@@ -264,9 +274,9 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     // Step 7: Start parallel processing loops
     console.log(`\n⚡ Запуск параллельных очередей...`)
 
-    if (!config.mouserOnly) {
+    if (!config.mouserOnly && chipdipClient) {
       activeLoops.push(
-        runChipDipLoop(runId, journal, chipdipClient!, logger, progress, config, bus, () => shutdownRequested),
+        runChipDipLoop(runId, journal, chipdipClient, logger, progress, config, bus, () => shutdownRequested),
       )
     }
 

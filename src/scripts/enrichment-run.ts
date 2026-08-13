@@ -15,6 +15,7 @@
  *   --dry-run            Only import/normalize, no API calls
  *   --skip-mouser        Skip Mouser queue
  *   --skip-lcsc          Skip LCSC queue
+ *   --skip-chipdip       Skip slow ChipDip pass and start from LCSC
  *   --mouser-only        Only process Mouser queue
  *   --force-refresh      Re-fetch even recently completed products
  *   --no-tui             Disable TUI dashboard (legacy JSON mode)
@@ -62,6 +63,7 @@ async function main(): Promise<void> {
     dryRun: cliArgs.dryRun,
     skipMouser: cliArgs.skipMouser,
     skipLcsc: cliArgs.skipLcsc,
+    skipChipdip: cliArgs.skipChipdip,
     mouserOnly: cliArgs.mouserOnly,
     forceRefresh: cliArgs.forceRefresh,
     bus,
