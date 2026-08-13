@@ -1,5 +1,6 @@
 import io
 import unittest
+from unittest.mock import patch
 
 from PIL import Image
 
@@ -10,6 +11,7 @@ from process_catalog_images import (
     storage_key,
     to_webp,
     validate_public_url,
+    verify_no_watermark,
 )
 
 
@@ -43,6 +45,13 @@ class MediaPipelineTest(unittest.TestCase):
         buffer = io.BytesIO()
         source.save(buffer, format="PNG")
         self.assertEqual(open_rgb(buffer.getvalue()).getpixel((0, 0)), (255, 255, 255))
+
+    @patch("process_catalog_images.detect_boxes", return_value=[[70, 75, 95, 90]])
+    def test_rejects_unsafe_model_detection(self, _detect):
+        image = Image.new("RGB", (100, 100), "#202020")
+
+        with self.assertRaisesRegex(RuntimeError, "unsafe watermark detection rejected"):
+            verify_no_watermark(None, None, "cpu", None, image, "watermark", 12)
 
 
 if __name__ == "__main__":

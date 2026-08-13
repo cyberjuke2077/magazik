@@ -157,6 +157,10 @@ def verify_no_watermark(model, processor, device, dtype, image, prompt, max_perc
     _, remaining = build_mask(image, boxes, max_percent)
     if remaining > 0:
         raise RuntimeError(f"watermark remains after cleaning: {remaining} region(s)")
+    if boxes:
+        raise RuntimeError(
+            f"unsafe watermark detection rejected: {len(boxes)} region(s)",
+        )
     if has_lcsc_blue_watermark(image):
         raise RuntimeError("blue watermark or placeholder remains after cleaning")
 
