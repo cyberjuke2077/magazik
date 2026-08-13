@@ -32,6 +32,8 @@
 - Ветка опубликована, открыт draft PR #13. Его Preview скомпилировал код и упал
   только на prerender `/best` из-за невалидного Preview `DATABASE_URL`.
   Production credentials в Preview не копировали.
+- Следующий docs-only commit `bcfd2ca` подтвердил `ignoreCommand`: Vercel build
+  получил `Canceled` за 0ms, а GitHub check завершился успешно.
 
 ## Результат
 
