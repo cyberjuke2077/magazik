@@ -1,6 +1,6 @@
 # Реестр внешних сервисов Electromagaz
 
-Дата проверки: 2026-08-10
+Дата проверки: 2026-08-14
 
 ## Назначение
 
@@ -24,7 +24,7 @@
 | Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: storefront deployment `dpl_y6TViwh3DSJDvsGJsdBdZDX3vxMX` и следующий docs-only deployment `dpl_FqedX7gvJaqTZpDxjqEK6hS2eMYK` получили `Ready`; production alias `https://magazik-94yr.vercel.app`; `/`, `/best`, `/catalog`, `/api/catalog/categories` отвечают 200 | PR Lunar сливает `cyberjuke2077` merge commit; Preview не подключать к production DB |
 | Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: Vercel production подключён; `/api/health` вернул `database: ok` без записи данных; env официальной интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
-| Cloudflare R2 | Изображения товаров и документы | Владелец Electromagaz | Новый bucket и ограниченный S3 token | `blocked`: доступ к прежнему bucket потерян, нужен новый target | Создать новый bucket, выдать token только на него, настроить public domain и выполнить smoke-тест |
+| Cloudflare R2 bucket `electromagaz` | Изображения товаров и документы | Владелец Electromagaz | Ограниченный S3 token на bucket | `verified`: S3 endpoint `https://a292a72a6ac36f3b7a95e68c9f69d132.r2.cloudflarestorage.com`, public URL `https://pub-9740932b35ea44a892e012558a4d802d.r2.dev`; ListObjects, PutObject, публичное чтение через Playwright MCP и DeleteObject прошли 2026-08-14 | Выполнить ограниченный media-пилот и проверить очищенные WebP перед массовым enrichment |
 | Telegram Bot API | Уведомления менеджеру о заявках | Владелец Electromagaz | Bot token и chat ID | `deferred`: владелец настроит самостоятельно позже | После настройки выполнить безопасное тестовое уведомление без данных покупателя |
 | Email-провайдер | Подтверждения покупателю и статусы заявки | `[УТОЧНИТЬ]` | API или SMTP, доступ к DNS домена | `blocked`: провайдер не выбран | Выбрать провайдера, настроить SPF, DKIM и DMARC |
 | DNS и регистратор `electromagaz.ru` | Основной домен | `[УТОЧНИТЬ]` | Управление DNS | `blocked`: DNS-записи отсутствуют | Указать владельца, добавить записи Vercel, проверить HTTPS |
@@ -32,12 +32,13 @@
 | Meilisearch | Возможный post-MVP поиск | Не требуется для MVP | Нет | `deferred`: зависимости и runtime отсутствуют, production-контур не создаётся | Возвращаться только по LIVE-метрикам качества и задержки PostgreSQL FTS |
 | Mouser API | Третий источник enrichment | `[УТОЧНИТЬ]` | Рабочий Search API key | `blocked`: локальное значение является dummy-заглушкой, контрольный запрос вернул 403 | Получить рабочий key и повторить пилот одного MPN |
 | LCSC | Источник enrichment | Оператор enrichment | Публичный источник и разрешённая частота | `partial`: клиент реализован | Проверить health перед пилотом, остановиться при блокировке |
-| ChipDip | Источник enrichment | Оператор enrichment | Прокси, браузер и rate limit | `not-configured`: локальный proxy env пуст | Настроить перед пилотом, не выполнять массовый сбор |
+| ChipDip | Основной русскоязычный источник enrichment | Оператор enrichment | Chromium, rate limit, proxy только при блокировке | `partial`: прямой read-only health-check и пилот одного MPN прошли 2026-08-14; proxy env пуст | Выполнить ограниченный media-пилот, измерить блокировки и скорость до массового сбора |
 | CAPTCHA provider | Поддержка enrichment при challenge | `[УТОЧНИТЬ]` | API key и бюджет | `not-configured`: URL есть, ключ пуст | Подключать только при подтверждённой необходимости |
 
-Решение владельца от 2026-08-14: для наполнения каталога нужен новый Cloudflare
-R2 bucket, потому что доступ к прежнему потерян. Создание и подключение нового
-target выполняется отдельным контролируемым шагом после локального media-пилота.
+Решение владельца от 2026-08-14: новый Cloudflare R2 bucket `electromagaz`
+подключен и проверен. В Git зафиксированы только несекретные endpoint и public URL.
+Access key и secret остаются только в локальном env. Следующий контролируемый шаг -
+ограниченный media-пилот после локальной очистки watermark.
 
 ## Подтверждённые границы
 
@@ -90,7 +91,7 @@ NEXT_PUBLIC_SITE_URL
 - [x] Владелец нового Vercel project - аккаунт `cyberjuke2077`, team `cyberjuke2077s-projects`.
 - [x] Владелец Supabase project - `37Lunar`; backup policy пока не подтверждена.
 - [ ] Владелец домена и регистратора.
-- [ ] Владелец Cloudflare account и R2 bucket.
+- [ ] Владелец Cloudflare account; bucket `electromagaz` и доступ к нему проверены.
 - [ ] Получатель Telegram-уведомлений.
 - [ ] Выбранный email-провайдер.
 - [ ] Ответственный за enrichment и внешние API.
