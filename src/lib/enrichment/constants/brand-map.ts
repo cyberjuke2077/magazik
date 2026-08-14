@@ -28,6 +28,7 @@ export const BRAND_MAP: Record<string, string> = {
 
   // Analog Devices
   'ADI': 'Analog Devices',
+  'AD1': 'Analog Devices',
   'ANALOG DEVICES': 'Analog Devices',
 
   // AMD (Xilinx) — acquired by AMD

@@ -7,7 +7,7 @@ export function resolveManufacturerName(
 ): string {
   const sourceBrand = result?.brand.trim() ?? ''
   const inputBrand = identity.canonicalBrand.trim()
-  const manufacturer = sourceBrand || inputBrand
+  const manufacturer = inputBrand || sourceBrand
 
   if (!manufacturer) {
     throw new Error(

@@ -25,6 +25,11 @@ export type EnrichmentJournalStatus =
   | 'unresolved'
 
 export interface EnrichmentEventMap {
+  run_initialized: {
+    runId: string
+    total: number
+    startedAt: number
+  }
   mpn_started: {
     mpn: string
     brand: string

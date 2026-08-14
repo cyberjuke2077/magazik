@@ -607,13 +607,17 @@ export async function createChipDipClient(config: ChipDipClientConfig): Promise<
 
         const parsed = parseResult.data
         if (!isMatchingChipDipProduct(mpn, parsed.partNumber)) continue
+        const resolvedBrand = canonicalBrand || parsed.manufacturer || ''
 
         const result: EnrichmentResult = {
           source: 'chipdip',
           mpn,
-          brand: parsed.manufacturer || canonicalBrand,
+          brand: resolvedBrand,
           name: parsed.name || undefined,
-          description: buildChipDipDescription(parsed),
+          description: buildChipDipDescription({
+            ...parsed,
+            manufacturer: resolvedBrand,
+          }),
           descriptionLanguage: 'ru',
           sku: parsed.sku || undefined,
           weight: parsed.weight ?? undefined,

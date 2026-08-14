@@ -25,6 +25,29 @@ it('uses and normalizes a manufacturer discovered by an enrichment source', () =
   expect(resolveManufacturerName(identity, result)).toBe('Analog Devices')
 })
 
+it('keeps the customer manufacturer when a source returns an internal brand code', () => {
+  const result: EnrichmentResult = {
+    source: 'chipdip',
+    mpn: 'AD1940YSTZRL',
+    brand: 'AD1',
+  }
+
+  expect(resolveManufacturerName(
+    { ...identity, canonicalBrand: 'Analog Devices' },
+    result,
+  )).toBe('Analog Devices')
+})
+
+it('maps the ChipDip AD1 code when the customer did not supply a brand', () => {
+  const result: EnrichmentResult = {
+    source: 'chipdip',
+    mpn: 'AD1940YSTZRL',
+    brand: 'AD1',
+  }
+
+  expect(resolveManufacturerName(identity, result)).toBe('Analog Devices')
+})
+
 it('rejects persistence when no source resolved the manufacturer', () => {
   expect(() => resolveManufacturerName(identity, null)).toThrow(
     'manufacturer was not resolved',

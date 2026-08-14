@@ -84,6 +84,7 @@ export interface DashboardStateAPI {
   setStartedAt(ts: number | null): void
   setExcelTotal(total: number): void
   setQueueTotal(total: number): void
+  getVersion(): number
   subscribe(listener: () => void): () => void
 }
 
@@ -105,9 +106,15 @@ const ALL_STATUSES: EnrichmentJournalStatus[] = [
 
 const FINAL_STATUSES = new Set<EnrichmentJournalStatus>([
   'chipdip_done',
+  'chipdip_blocked',
   'lcsc_done',
+  'lcsc_blocked',
   'mouser_done',
+  'mouser_not_found',
+  'mouser_failed',
+  'mouser_brand_mismatch',
   'done',
+  'unresolved',
 ])
 
 const NOT_FOUND_STATUSES = new Set<EnrichmentJournalStatus>([
@@ -155,8 +162,10 @@ export function createDashboardState(initial?: {
 
   const listeners = new Set<() => void>()
   let pendingNotify = false
+  let version = 0
 
   function scheduleNotify(): void {
+    version += 1
     if (pendingNotify) return
     pendingNotify = true
     setImmediate(() => {
@@ -192,6 +201,15 @@ export function createDashboardState(initial?: {
     getState: () => state,
     applyEvent(event, payload) {
       switch (event) {
+        case 'run_initialized': {
+          const p = payload as EnrichmentEventMap['run_initialized']
+          state.runId = p.runId
+          state.startedAt = p.startedAt
+          state.totalInQueue = p.total
+          state.excelTotal = p.total
+          state.excelRemaining = p.total
+          break
+        }
         case 'mpn_started': {
           const p = payload as EnrichmentEventMap['mpn_started']
           state.currentMpn = {
@@ -200,12 +218,15 @@ export function createDashboardState(initial?: {
             source: p.source,
             startedAt: p.timestamp,
           }
+          state.phase = `${p.source}-queue`
           break
         }
         case 'mpn_completed': {
           const p = payload as EnrichmentEventMap['mpn_completed']
           state.statusCounts[p.status] = (state.statusCounts[p.status] ?? 0) + 1
-          state.processedInQueue += 1
+          if (FINAL_STATUSES.has(p.status)) {
+            state.processedInQueue += 1
+          }
           state.recentEvents.push({
             mpn: p.mpn,
             brand: p.brand,
@@ -223,7 +244,10 @@ export function createDashboardState(initial?: {
           }
           bumpBrand(p.brand, FINAL_STATUSES.has(p.status))
           state.currentMpn = null
-          state.excelRemaining = Math.max(0, state.excelTotal - state.processedInQueue)
+          state.excelRemaining = Math.max(
+            0,
+            state.excelTotal - state.processedInQueue,
+          )
           break
         }
         case 'phase_changed': {
@@ -295,12 +319,14 @@ export function createDashboardState(initial?: {
     },
     setExcelTotal(total) {
       state.excelTotal = total
+      state.excelRemaining = Math.max(0, total - state.processedInQueue)
       scheduleNotify()
     },
     setQueueTotal(total) {
       state.totalInQueue = total
       scheduleNotify()
     },
+    getVersion: () => version,
     subscribe(listener) {
       listeners.add(listener)
       return () => {

@@ -42,6 +42,8 @@ export interface OrchestratorConfig extends EnrichmentConfig {
   bus?: EnrichmentEvents
   loggerSilent?: boolean
   progressSilentConsole?: boolean
+  /** Prefix used to isolate integration-test run records. */
+  runIdPrefix?: string
 }
 
 /** Pause duration when ChipDip is blocked (no proxy): 2-4 hours */
@@ -66,9 +68,9 @@ function sleep(ms: number): Promise<void> {
 /**
  * Generates a unique run ID based on current timestamp.
  */
-function generateRunId(): string {
+function generateRunId(prefix = 'run'): string {
   const now = new Date()
-  return `run-${now.toISOString().slice(0, 19).replace(/[T:]/g, '-')}`
+  return `${prefix}-${now.toISOString().slice(0, 19).replace(/[T:]/g, '-')}`
 }
 
 /**
@@ -139,6 +141,12 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
 
   process.on('SIGINT', () => handleShutdown('SIGINT'))
   process.on('SIGTERM', () => handleShutdown('SIGTERM'))
+  const unsubscribeHotkeyShutdown = bus.on(
+    'shutdown_initiated',
+    ({ source }) => {
+      if (source === 'hotkey') handleShutdown('SIGINT')
+    },
+  )
 
   try {
     // Step 1: Import and deduplicate
@@ -196,7 +204,9 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     }
 
     // Step 4: Create ImportProgress record
-    const runId = config.resume ? await findExistingRunId() : generateRunId()
+    const runId = config.resume
+      ? await findExistingRunId()
+      : generateRunId(config.runIdPrefix)
 
     if (!config.resume) {
       await prisma.importProgress.create({
@@ -227,6 +237,11 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     }
 
     // Start progress reporter
+    bus.emit('run_initialized', {
+      runId,
+      total: parts.length,
+      startedAt: Date.now(),
+    })
     progress.start(runId, parts.length)
 
     // Step 6: Health-check ChipDip (skip if mouserOnly)
@@ -295,7 +310,7 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       // with a stub Product, so MPNs aren't lost.
       activeLoops.push(
         runUnresolvedFinalizerLoop(
-          runId, journal, logger, progress, () => shutdownRequested,
+          runId, journal, logger, progress, bus, () => shutdownRequested,
         ),
       )
     }
@@ -321,7 +336,9 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     logger.error({ event: 'pipeline_error', error: errorMsg })
     console.error(`\n❌ Ошибка пайплайна: ${errorMsg}`)
     progress.stop()
+    throw err
   } finally {
+    unsubscribeHotkeyShutdown()
     // Cleanup
     if (chipdipClient) {
       await chipdipClient.close().catch(() => {})
@@ -340,7 +357,10 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
  */
 async function findExistingRunId(): Promise<string> {
   const existing = await prisma.importProgress.findFirst({
-    where: { status: { in: ['running', 'paused'] } },
+    where: {
+      status: { in: ['running', 'paused'] },
+      completedAt: null,
+    },
     orderBy: { createdAt: 'desc' },
   })
 
@@ -847,6 +867,7 @@ async function runUnresolvedFinalizerLoop(
   journal: StatusJournal,
   logger: EnrichmentLogger,
   progress: ProgressReporter,
+  bus: EnrichmentEvents,
   isShutdown: () => boolean,
 ): Promise<void> {
   while (!isShutdown()) {
@@ -876,6 +897,14 @@ async function runUnresolvedFinalizerLoop(
         event: 'finalized_unresolved',
         mpn: part.canonicalMpn,
         brand: part.canonicalBrand,
+      })
+      bus.emit('mpn_completed', {
+        mpn: part.canonicalMpn,
+        brand: part.canonicalBrand,
+        source: 'lcsc',
+        status: 'unresolved',
+        durationMs: 0,
+        timestamp: Date.now(),
       })
 
       await updateProgressStats(runId, journal, progress)
