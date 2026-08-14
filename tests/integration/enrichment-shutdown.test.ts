@@ -83,6 +83,8 @@ import { join, resolve } from 'node:path'
 import fc from 'fast-check'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
+import { prisma } from '../../src/lib/prisma'
+
 import {
   describeProcessPids,
   diffOrphans,
@@ -90,7 +92,7 @@ import {
 } from './helpers/process-snapshot'
 
 const REPO_ROOT = resolve(__dirname, '../..')
-const ENRICHMENT_SCRIPT = 'src/scripts/enrichment-run.ts'
+const ENRICHMENT_SCRIPT = 'src/scripts/enrichment-run.mts'
 
 function npmExecTsx(args: string[]): { command: string; args: string[] } {
   const npmArgs = ['exec', 'tsx', '--', ...args]
@@ -123,6 +125,7 @@ const EXIT_TIMEOUT_MS = 60_000
 // Реальные MPN — chipdip их ищет. Не критично попадание (любой не-blocked HTTP
 // 200 годится), важно что page.goto уйдёт по сети.
 const TEST_MPNS = ['LM7805', 'NE555P']
+const TEST_RUN_PREFIX = `shutdown-it-${process.pid}-${Date.now()}`
 
 let tmpInputDir: string
 
@@ -133,10 +136,25 @@ beforeAll(() => {
   writeFileSync(join(tmpInputDir, 'parts.csv'), csv, 'utf-8')
 })
 
-afterAll(() => {
+afterAll(async () => {
   if (tmpInputDir) {
     rmSync(tmpInputDir, { recursive: true, force: true })
   }
+  const runIds = (
+    await prisma.importProgress.findMany({
+      where: { id: { startsWith: TEST_RUN_PREFIX } },
+      select: { id: true },
+    })
+  ).map((run) => run.id)
+  if (runIds.length > 0) {
+    await prisma.enrichmentJournal.deleteMany({
+      where: { runId: { in: runIds } },
+    })
+    await prisma.importProgress.deleteMany({
+      where: { id: { in: runIds } },
+    })
+  }
+  await prisma.$disconnect()
 })
 
 interface RunArgs {
@@ -176,6 +194,7 @@ async function runAndSignal(args: RunArgs): Promise<RunResult> {
       env: {
         ...process.env,
         ENRICHMENT_INPUT_DIR: tmpInputDir,
+        ENRICHMENT_TEST_RUN_PREFIX: TEST_RUN_PREFIX,
         FORCE_COLOR: '0',
       },
     },

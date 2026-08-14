@@ -22,6 +22,7 @@ export interface StatusJournal {
   ): Promise<PartIdentity[]>
   getResumableItems(runId: string): Promise<number>
   requeueBlockedItems(runId: string, maxRetries?: number): Promise<number>
+  skipPendingChipDip(runId: string, reason: string): Promise<number>
   getMouserQuotaToday(): Promise<number>
   getChipDipNotFound(runId: string, limit: number): Promise<PartIdentity[]>
   getLcscNotFound(runId: string, limit: number): Promise<PartIdentity[]>
@@ -128,6 +129,14 @@ export function createStatusJournal(): StatusJournal {
 
       void exhausted
       return requeued.count
+    },
+
+    async skipPendingChipDip(runId, reason) {
+      const updated = await prisma.enrichmentJournal.updateMany({
+        where: { runId, status: 'pending' },
+        data: { status: 'chipdip_not_found', errorMessage: reason },
+      })
+      return updated.count
     },
 
     async getMouserQuotaToday() {

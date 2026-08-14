@@ -27,12 +27,14 @@ import {
   createNoopEnrichmentEvents,
 } from './observability/event-bus'
 import { filterFreshProducts } from './queue/fresh-product-filter'
+import { hasResolvedManufacturer } from './persistence/manufacturer-resolver'
 
 export interface OrchestratorConfig extends EnrichmentConfig {
   resume?: boolean
   dryRun?: boolean
   skipMouser?: boolean
   skipLcsc?: boolean
+  skipChipdip?: boolean
   mouserOnly?: boolean
   forceRefresh?: boolean
   /** Maximum number of deduplicated MPNs to process, for controlled trial runs. */
@@ -40,6 +42,8 @@ export interface OrchestratorConfig extends EnrichmentConfig {
   bus?: EnrichmentEvents
   loggerSilent?: boolean
   progressSilentConsole?: boolean
+  /** Prefix used to isolate integration-test run records. */
+  runIdPrefix?: string
 }
 
 /** Pause duration when ChipDip is blocked (no proxy): 2-4 hours */
@@ -64,9 +68,9 @@ function sleep(ms: number): Promise<void> {
 /**
  * Generates a unique run ID based on current timestamp.
  */
-function generateRunId(): string {
+function generateRunId(prefix = 'run'): string {
   const now = new Date()
-  return `run-${now.toISOString().slice(0, 19).replace(/[T:]/g, '-')}`
+  return `${prefix}-${now.toISOString().slice(0, 19).replace(/[T:]/g, '-')}`
 }
 
 /**
@@ -137,6 +141,12 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
 
   process.on('SIGINT', () => handleShutdown('SIGINT'))
   process.on('SIGTERM', () => handleShutdown('SIGTERM'))
+  const unsubscribeHotkeyShutdown = bus.on(
+    'shutdown_initiated',
+    ({ source }) => {
+      if (source === 'hotkey') handleShutdown('SIGINT')
+    },
+  )
 
   try {
     // Step 1: Import and deduplicate
@@ -157,6 +167,22 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
 
     // Step 2: Deduplicate
     const deduplicatedParts = deduplicate(rows)
+
+    // A dry run validates only the input contract. It must not query the
+    // freshness cache, initialize a journal, call sources, or write data.
+    if (config.dryRun) {
+      const dryRunParts = config.limit === undefined
+        ? deduplicatedParts
+        : deduplicatedParts.slice(0, config.limit)
+      console.log(`   Уникальных артикулов: ${deduplicatedParts.length}`)
+      if (config.limit !== undefined) {
+        console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${dryRunParts.length})`)
+      }
+      logger.info({ event: 'dry_run_complete' })
+      console.log(`\n🏁 Dry run завершён. Без обращения к БД и внешним источникам.`)
+      return
+    }
+
     const cacheResult =
       config.skipFreshProducts && !config.forceRefresh
         ? await filterFreshProducts(deduplicatedParts, config.freshnessDays)
@@ -171,13 +197,6 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${parts.length})`)
     }
 
-    // Step 3: Dry run — log stats and exit
-    if (config.dryRun) {
-      logger.info({ event: 'dry_run_complete' })
-      console.log(`\n🏁 Dry run завершён. Без записи в БД.`)
-      return
-    }
-
     if (parts.length === 0) {
       logger.info({ event: 'pipeline_nothing_to_do' })
       console.log(`\n🏁 Все карточки свежие. Запросы к источникам не выполнялись.`)
@@ -185,7 +204,9 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     }
 
     // Step 4: Create ImportProgress record
-    const runId = config.resume ? await findExistingRunId() : generateRunId()
+    const runId = config.resume
+      ? await findExistingRunId()
+      : generateRunId(config.runIdPrefix)
 
     if (!config.resume) {
       await prisma.importProgress.create({
@@ -216,10 +237,15 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     }
 
     // Start progress reporter
+    bus.emit('run_initialized', {
+      runId,
+      total: parts.length,
+      startedAt: Date.now(),
+    })
     progress.start(runId, parts.length)
 
     // Step 6: Health-check ChipDip (skip if mouserOnly)
-    if (!config.mouserOnly) {
+    if (!config.mouserOnly && !config.skipChipdip) {
       chipdipClient = await createChipDipClient({
         proxyTemplate: config.chipdipProxyTemplate,
         proxyUrl: config.chipdipProxyUrl,
@@ -232,14 +258,23 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       const healthy = await chipdipClient.healthCheck()
       if (!healthy) {
         logger.error({ event: 'chipdip_healthcheck_failed', source: 'chipdip' })
-        console.error('\n❌ ChipDip health-check не пройден. Рекомендация: перезапустить через 24 часа.')
-        progress.stop()
         await chipdipClient.close()
-        return
+        chipdipClient = null
+        const skipped = await journal.skipPendingChipDip(
+          runId,
+          'ChipDip health-check failed; moved to LCSC fallback',
+        )
+        console.warn(`\n⚠️  ChipDip недоступен. Передано в LCSC: ${skipped}`)
+      } else {
+        logger.info({ event: 'chipdip_healthcheck_ok', source: 'chipdip' })
+        console.log(`\n✅ ChipDip health-check пройден`)
       }
-
-      logger.info({ event: 'chipdip_healthcheck_ok', source: 'chipdip' })
-      console.log(`\n✅ ChipDip health-check пройден`)
+    } else if (config.skipChipdip && !config.mouserOnly) {
+      const skipped = await journal.skipPendingChipDip(
+        runId,
+        'ChipDip skipped by operator for fast LCSC pass',
+      )
+      console.log(`\n⏭️  ChipDip пропущен. Передано в LCSC: ${skipped}`)
     }
 
     // Init LCSC client (if needed)
@@ -254,9 +289,9 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     // Step 7: Start parallel processing loops
     console.log(`\n⚡ Запуск параллельных очередей...`)
 
-    if (!config.mouserOnly) {
+    if (!config.mouserOnly && chipdipClient) {
       activeLoops.push(
-        runChipDipLoop(runId, journal, chipdipClient!, logger, progress, config, bus, () => shutdownRequested),
+        runChipDipLoop(runId, journal, chipdipClient, logger, progress, config, bus, () => shutdownRequested),
       )
     }
 
@@ -275,7 +310,7 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       // with a stub Product, so MPNs aren't lost.
       activeLoops.push(
         runUnresolvedFinalizerLoop(
-          runId, journal, logger, progress, () => shutdownRequested,
+          runId, journal, logger, progress, bus, () => shutdownRequested,
         ),
       )
     }
@@ -301,7 +336,9 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     logger.error({ event: 'pipeline_error', error: errorMsg })
     console.error(`\n❌ Ошибка пайплайна: ${errorMsg}`)
     progress.stop()
+    throw err
   } finally {
+    unsubscribeHotkeyShutdown()
     // Cleanup
     if (chipdipClient) {
       await chipdipClient.close().catch(() => {})
@@ -320,7 +357,10 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
  */
 async function findExistingRunId(): Promise<string> {
   const existing = await prisma.importProgress.findFirst({
-    where: { status: { in: ['running', 'paused'] } },
+    where: {
+      status: { in: ['running', 'paused'] },
+      completedAt: null,
+    },
     orderBy: { createdAt: 'desc' },
   })
 
@@ -702,9 +742,13 @@ async function runMouserLoop(
             timestamp: Date.now(),
           })
         } else {
-          // Not found or brand mismatch — create stub
-          const persisted = await persistBeforeStatusUpdate(part, null, logger)
-          if (!persisted) continue
+          // A stub is safe only when the customer supplied a manufacturer.
+          // For an MPN-only input, keep the journal result without inventing
+          // a manufacturer or creating a misleading product card.
+          if (hasResolvedManufacturer(part, null)) {
+            const persisted = await persistBeforeStatusUpdate(part, null, logger)
+            if (!persisted) continue
+          }
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'mouser_not_found')
 
           logger.info({
@@ -813,16 +857,17 @@ async function persistBeforeStatusUpdate(
 
 /**
  * Finalizer loop — runs when Mouser is disabled. Picks up MPNs that
- * exhausted ChipDip and LCSC (status `lcsc_not_found`), persists a stub
- * Product entry so the item exists in the catalogue, and promotes the
- * journal status to `unresolved`. Without this loop those MPNs would sit
- * forever in `lcsc_not_found` and the catalog would silently drop them.
+ * exhausted ChipDip and LCSC (status `lcsc_not_found`). It persists a stub
+ * only when the input has a known manufacturer, then promotes the journal
+ * status to `unresolved`. MPN-only misses stay in the journal without a
+ * misleading product card.
  */
 async function runUnresolvedFinalizerLoop(
   runId: string,
   journal: StatusJournal,
   logger: EnrichmentLogger,
   progress: ProgressReporter,
+  bus: EnrichmentEvents,
   isShutdown: () => boolean,
 ): Promise<void> {
   while (!isShutdown()) {
@@ -841,8 +886,10 @@ async function runUnresolvedFinalizerLoop(
 
     for (const part of batch) {
       if (isShutdown()) break
-      const persisted = await persistBeforeStatusUpdate(part, null, logger)
-      if (!persisted) continue
+      if (hasResolvedManufacturer(part, null)) {
+        const persisted = await persistBeforeStatusUpdate(part, null, logger)
+        if (!persisted) continue
+      }
       await journal.updateStatus(
         runId, part.canonicalBrand, part.canonicalMpn, 'unresolved',
       )
@@ -850,6 +897,14 @@ async function runUnresolvedFinalizerLoop(
         event: 'finalized_unresolved',
         mpn: part.canonicalMpn,
         brand: part.canonicalBrand,
+      })
+      bus.emit('mpn_completed', {
+        mpn: part.canonicalMpn,
+        brand: part.canonicalBrand,
+        source: 'lcsc',
+        status: 'unresolved',
+        durationMs: 0,
+        timestamp: Date.now(),
       })
 
       await updateProgressStats(runId, journal, progress)

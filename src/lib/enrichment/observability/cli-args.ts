@@ -7,6 +7,7 @@ export interface RunCliFlags {
   dryRun?: boolean
   skipMouser?: boolean
   skipLcsc?: boolean
+  skipChipdip?: boolean
   mouserOnly?: boolean
   forceRefresh?: boolean
 }
@@ -45,6 +46,9 @@ export function parseRunArgs(argv: string[]): RunCliFlags {
         break
       case '--skip-lcsc':
         flags.skipLcsc = true
+        break
+      case '--skip-chipdip':
+        flags.skipChipdip = true
         break
       case '--mouser-only':
         flags.mouserOnly = true

@@ -2,11 +2,15 @@ import { type DataSource, type EnrichmentMeta, type FieldProvenance, SOURCE_PRIO
 
 /**
  * Fields in EnrichmentMeta that carry provenance information.
- * Excludes operational fields like `flags` and `descriptionLanguage`.
+ * Excludes operational fields that do not contain FieldProvenance.
  */
 type ProvenanceField = keyof Omit<
   EnrichmentMeta,
-  'flags' | 'descriptionLanguage' | 'sourceCategoryPath'
+  | 'flags'
+  | 'descriptionLanguage'
+  | 'sourceCategoryPath'
+  | 'imageCandidates'
+  | 'imagePipeline'
 >
 
 /**

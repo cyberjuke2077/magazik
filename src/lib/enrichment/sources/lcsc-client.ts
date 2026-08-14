@@ -23,6 +23,7 @@ import type { Browser, BrowserContext, Page } from 'playwright-core'
 
 import { type EnrichmentResult } from '../types'
 import { registerBrowser, unregisterBrowser } from '../browser-registry'
+import { normalizeMpn } from '../ingest/mpn-normalizer'
 
 export type LcscClientConfig = Record<string, never>
 
@@ -203,6 +204,14 @@ function mapProductToResult(
   }
 }
 
+export function isMatchingLcscProduct(
+  requestedMpn: string,
+  parsedMpn: string | undefined,
+): boolean {
+  if (!parsedMpn?.trim()) return false
+  return normalizeMpn(parsedMpn) === normalizeMpn(requestedMpn)
+}
+
 /**
  * Create an LCSC client backed by a single CloakBrowser session.
  * The client is sequential — call sites must not invoke searchMpn in parallel.
@@ -230,7 +239,7 @@ export async function createLcscClient(): Promise<LcscClient> {
     mpn: string,
     canonicalBrand: string,
   ): Promise<EnrichmentResult | null> {
-    if (isBlocked) return null
+    if (isBlocked) throw new Error('LCSC blocked: client is paused after HTTP 403/429')
     if (!mpn || mpn.trim().length === 0) return null
 
     await jitter()
@@ -245,7 +254,7 @@ export async function createLcscClient(): Promise<LcscClient> {
     if (!resp) return null
     if (resp.status() === 403 || resp.status() === 429) {
       isBlocked = true
-      return null
+      throw new Error(`LCSC blocked: HTTP ${resp.status()} on search`)
     }
 
     const outcome = await waitForSearchResolution(page)
@@ -261,7 +270,7 @@ export async function createLcscClient(): Promise<LcscClient> {
       if (!pdpResp) return null
       if (pdpResp.status() === 403 || pdpResp.status() === 429) {
         isBlocked = true
-        return null
+        throw new Error(`LCSC blocked: HTTP ${pdpResp.status()} on product page`)
       }
     } catch {
       return null
@@ -272,6 +281,7 @@ export async function createLcscClient(): Promise<LcscClient> {
     const html = await page.content()
     const product = extractJsonLdProduct(html)
     if (!product) return null
+    if (!isMatchingLcscProduct(mpn, product.mpn)) return null
 
     return mapProductToResult(product, mpn, canonicalBrand)
   }

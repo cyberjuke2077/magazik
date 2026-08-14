@@ -127,6 +127,39 @@ export interface FieldProvenance {
   fetchedAt: string
 }
 
+export interface ImageCandidate {
+  url: string
+  source: Exclude<DataSource, 'supplier-stub'>
+}
+
+export interface ImagePipelineState {
+  status: 'pending' | 'processing' | 'complete' | 'failed'
+  source: Exclude<DataSource, 'supplier-stub'>
+  queuedAt: string
+  startedAt?: string
+  completedAt?: string
+  uploaded?: number
+  cleaned?: number
+  error?: string
+}
+
+export interface DatasheetCandidate {
+  url: string
+  source: DataSource
+  title?: string
+  language: 'ru' | 'en'
+}
+
+export interface DatasheetPipelineState {
+  status: 'pending' | 'processing' | 'complete' | 'failed'
+  source: DataSource
+  queuedAt: string
+  startedAt?: string
+  completedAt?: string
+  uploaded?: number
+  error?: string
+}
+
 /**
  * Field-level provenance metadata stored in Product.enrichmentMeta (JSON).
  * Tracks the origin of each enriched field for conflict resolution.
@@ -152,6 +185,14 @@ export interface EnrichmentMeta {
   sourceCategoryPath?: string[]
   /** Language of the stored description */
   descriptionLanguage?: 'ru' | 'en'
+  /** Upstream URLs waiting for local validation and watermark removal */
+  imageCandidates?: ImageCandidate[]
+  /** State of the local image processing pipeline */
+  imagePipeline?: ImagePipelineState
+  /** Upstream PDF URLs waiting for validation and upload to R2 */
+  datasheetCandidates?: DatasheetCandidate[]
+  /** State of the datasheet storage pipeline */
+  datasheetPipeline?: DatasheetPipelineState
 }
 
 /**

@@ -155,7 +155,8 @@ model ProductImage {
 }
 ```
 
-**Why store URLs only?** Initial implementation uses ChipDip CDN URLs. No local storage needed for 100-product test. Can migrate to local storage later if needed.
+**Why store URLs only?** Проверенные изображения хранятся в Cloudflare R2.
+PostgreSQL хранит только публичный URL и метаданные, а не бинарный файл.
 
 **order field**: Maintains image sequence for product galleries.
 
@@ -187,7 +188,7 @@ Rigid columns would require hundreds of nullable fields. Key-value is flexible a
 **Index on key**: Enables filtering by specific specs (e.g., "all products with Flash >= 64KB").
 
 ### Datasheet
-PDF datasheet links (multiple per product).
+PDF datasheet metadata and stable Cloudflare R2 links (multiple per product).
 
 ```prisma
 model Datasheet {
@@ -205,6 +206,11 @@ model Datasheet {
 ```
 
 **Why separate model?** Products often have multiple datasheets (different languages, revisions, application notes).
+
+PDF bytes в PostgreSQL не хранятся. Внешняя ссылка от источника сначала живёт
+в очереди `Product.enrichmentMeta.datasheetCandidates`. После проверки формата
+и загрузки файла worker атомарно заменяет её на публичный R2 URL. Если загрузка
+не удалась, существующая ссылка не удаляется.
 
 ### SubmissionRateLimit
 
