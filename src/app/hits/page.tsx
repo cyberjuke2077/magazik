@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { connection } from 'next/server'
 import { ChevronRight } from 'lucide-react'
 import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
@@ -7,6 +8,7 @@ import { ProductCard } from '@/components/catalog/product-card'
 import { getFeaturedProducts } from '@/lib/queries/products'
 
 export default async function HitsPage() {
+  await connection()
   const featuredProducts = await getFeaturedProducts()
   return (
     <div className="flex min-h-screen flex-col bg-canvas">

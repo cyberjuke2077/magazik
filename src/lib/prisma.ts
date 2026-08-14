@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client'
+import { applyPrismaEnvironmentFallbacks } from './prisma-environment'
 
 // Supabase's Vercel integration uses POSTGRES_* names. Keep the existing
 // DATABASE_URL/DIRECT_URL contract for local development and other providers.
-process.env.DATABASE_URL ??= process.env.POSTGRES_PRISMA_URL
-process.env.DIRECT_URL ??= process.env.POSTGRES_URL_NON_POOLING
+applyPrismaEnvironmentFallbacks(process.env)
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
