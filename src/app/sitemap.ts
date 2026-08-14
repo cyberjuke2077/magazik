@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 
+// Catalog entries come from PostgreSQL and must be resolved at request time.
+export const dynamic = 'force-dynamic'
+
 /**
  * Dynamic sitemap covering static pages, categories, and products.
  * Next.js auto-splits into multiple files when entries exceed 50,000.
