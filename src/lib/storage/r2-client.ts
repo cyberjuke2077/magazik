@@ -41,6 +41,13 @@ export function isR2PublicUrlConfigured(): boolean {
   return Boolean(PUBLIC_URL)
 }
 
+export function requireR2PublicUrl(): string {
+  if (!PUBLIC_URL) {
+    throw new Error('R2 public URL is not configured. Set R2_PUBLIC_URL.')
+  }
+  return PUBLIC_URL.replace(/\/+$/, '')
+}
+
 function requireConfig(): {
   endpoint: string
   accessKeyId: string
@@ -100,6 +107,13 @@ export interface UploadedImage {
   alreadyExisted: boolean
 }
 
+export interface UploadedObject {
+  key: string
+  url: string
+  bytes: number
+  alreadyExisted: boolean
+}
+
 /**
  * Check whether an object already exists. R2 returns 404 → throws
  * NoSuchKey / NotFound; we map that to false. Anything else propagates.
@@ -115,6 +129,26 @@ async function objectExists(bucket: string, key: string): Promise<boolean> {
     if (name === 'NotFound' || name === 'NoSuchKey') return false
     throw err
   }
+}
+
+export async function uploadObjectBuffer(
+  key: string,
+  body: Buffer,
+  contentType: string,
+): Promise<UploadedObject> {
+  const { bucket } = requireConfig()
+  if (await objectExists(bucket, key)) {
+    return { key, url: publicUrl(key), bytes: body.length, alreadyExisted: true }
+  }
+
+  await client().send(new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: body,
+    ContentType: contentType,
+    CacheControl: 'public, max-age=31536000, immutable',
+  }))
+  return { key, url: publicUrl(key), bytes: body.length, alreadyExisted: false }
 }
 
 interface FetchOptions {

@@ -20,7 +20,7 @@ describe('Windows parser launcher', () => {
     expect(installer).toContain('& npm.cmd run db:migrate:local')
   })
 
-  it('offers dry-run, controlled batches, resume and status', () => {
+  it('offers dry-run, controlled batches, resume, status and datasheet storage', () => {
     const menu = read('windows/parser-menu.ps1')
 
     expect(menu).toContain("@('--dry-run', '--no-tui')")
@@ -30,6 +30,9 @@ describe('Windows parser launcher', () => {
     expect(menu).toContain("@('--resume')")
     expect(menu).toContain('enrichment:status:local')
     expect(menu).toContain('$LASTEXITCODE -eq 130')
+    expect(menu).toContain("'datasheets:process:local'")
+    expect(menu).toContain("'9' { Invoke-Datasheets -DryRun }")
+    expect(menu).toContain("$confirmation -ceq 'ЗАГРУЗИТЬ PDF'")
   })
 
   it('does not embed database or R2 credentials', () => {
@@ -38,6 +41,8 @@ describe('Windows parser launcher', () => {
       read('windows/parser-menu.ps1'),
       read('windows/INSTALL.cmd'),
       read('windows/RUN-PARSER.cmd'),
+      read('windows/configure-r2.ps1'),
+      read('windows/SETUP-R2.cmd'),
     ].join('\n')
 
     expect(scripts).not.toMatch(/R2_SECRET_ACCESS_KEY\s*=/)

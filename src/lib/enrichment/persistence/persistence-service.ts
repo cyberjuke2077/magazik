@@ -13,6 +13,10 @@ import {
   canReplacePendingImageSource,
   normalizeImageCandidates,
 } from '../images/image-candidates'
+import {
+  canReplacePendingDatasheetSource,
+  normalizeDatasheetCandidates,
+} from '../datasheets/datasheet-candidates'
 import { extractPackageFamily } from '../images/package-extractor'
 import {
   type DataSource,
@@ -92,7 +96,7 @@ function buildProvenance(source: DataSource): FieldProvenance {
  * 3. Upserts Product by (manufacturerId, mpnNormalized)
  * 4. Applies provenance merge before writing fields
  * 5. Replaces Specifications if provenance allows
- * 6. Replaces Datasheets with language based on source
+ * 6. Queues Datasheets for validation and R2 storage
  * 7. Queues upstream image URLs for the local media worker
  *
  * @param items - Array of identity + result pairs to persist
@@ -351,27 +355,31 @@ async function persistItem(
     })
   }
 
-  // 6. Replace Datasheets (if result has datasheets AND provenance allows)
+  // 6. Queue upstream PDF URLs. Existing Datasheet rows remain readable until
+  // the worker has validated and uploaded at least one replacement to R2.
   if (
     result?.datasheetUrls &&
     result.datasheetUrls.length > 0 &&
-    shouldOverwrite(existingMeta, 'datasheets', source)
+    shouldOverwrite(existingMeta, 'datasheets', source) &&
+    canReplacePendingDatasheetSource(existingMeta?.datasheetPipeline?.source, source)
   ) {
-    const language = source === 'chipdip' ? 'ru' : 'en'
-    await tx.datasheet.deleteMany({ where: { productId: product.id } })
-    await tx.datasheet.createMany({
-      data: result.datasheetUrls.map((url) => ({
-        productId: product.id,
-        title: `${identity.canonicalMpn} Datasheet`,
-        url,
-        language,
-      })),
-    })
-    newMeta.datasheets = buildProvenance(source)
-    await tx.product.update({
-      where: { id: product.id },
-      data: { enrichmentMeta: newMeta as unknown as JsonValue },
-    })
+    const candidates = normalizeDatasheetCandidates(
+      result.datasheetUrls,
+      source,
+      identity.canonicalMpn,
+    )
+    if (candidates.length > 0) {
+      newMeta.datasheetCandidates = candidates
+      newMeta.datasheetPipeline = {
+        status: 'pending',
+        source,
+        queuedAt: now.toISOString(),
+      }
+      await tx.product.update({
+        where: { id: product.id },
+        data: { enrichmentMeta: newMeta as unknown as JsonValue },
+      })
+    }
   }
 
   // 7. Queue upstream URLs. ProductImage remains untouched until the local
