@@ -28,6 +28,8 @@
 - [ ] Локализовать английские fallback-карточки и снять `translation_pending`.
 - [x] Перестроить media pipeline: download -> classify -> clean -> verify -> WebP -> R2.
 - [x] Подготовить новый Cloudflare R2 bucket и ограниченный S3 token.
+- [x] Перевести PDF-даташиты на проверяемую очередь и content-addressed R2.
+- [x] Проверить один реальный PDF: источник -> R2 -> локальная PostgreSQL.
 - [x] Закрыть ложный Florence-2 детект на чистом фото защитным bbox-фильтром.
 - [ ] Проверить persistent CloakBrowser context с residential proxy на малой партии.
 - [ ] Провести ручной QA выборки очищенных ChipDip-фото перед массовым worker.
@@ -69,8 +71,13 @@
   фото не удалено, три новых кандидата поставлены в media-очередь.
 - Новый R2 bucket `electromagaz` прошёл ListObjects, PutObject, публичное чтение
   через Playwright MCP и DeleteObject. Временные probe-объекты удалены.
+- Datasheet worker валидирует HTTPS, DNS, redirects, размер, Content-Type и
+  сигнатуру PDF. В БД хранятся только метаданные и публичный R2 URL.
+- Пилот `TLV70033DCKR` сохранил PDF размером 1 294 728 байт в R2. Публичный URL
+  повторно проверен через HTTP HEAD: `200 application/pdf`.
 
 ## Осталось
 
 - Завершить фазы выше и записать фактические метрики пилота и полного прогона.
 - Не запускать полный media-worker до ручного QA реальной выборки.
+- Не запускать массовый PDF-backfill до dry-run и малого пакета на Windows.

@@ -20,11 +20,11 @@
 
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
-| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: ветка `codex/mpn-catalog-enrichment` опубликована; draft PR #13 открыт; общий контекст versioned вместе с кодом | Проверить PR #13, перевести из draft и слить в `main`, затем обоим разработчикам выполнить `git pull --ff-only` |
-| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: production `dpl_6cphQs6G2ohq1vpQ2WACYRxEuiad` имеет статус `Ready`; `/`, `/best`, `/catalog`, `/api/health` отвечают. Docs-only commit `bcfd2ca` дал build 0ms. После перевода DB-страниц на request-time PR #13 Preview `dpl_8jKmHyy8r179BKEp2EqJmLhj2YFL` получил `Ready` без Preview DB | После merge проверить новый Production runtime и `/api/health`; Preview DB подключать только отдельным sandbox |
+| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: ветка `codex/mpn-catalog-enrichment` опубликована; draft PR #13 открыт, mergeable; implementation head `76d0a07`; общий контекст versioned вместе с кодом | Проверить PR #13, перевести из draft и слить в `main`, затем обоим разработчикам выполнить `git pull --ff-only` |
+| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: production `dpl_6cphQs6G2ohq1vpQ2WACYRxEuiad` имеет статус `Ready`; `/`, `/best`, `/catalog`, `/api/health` отвечают. Vercel check PR #13 для `76d0a07` завершился `SUCCESS`; Supabase Preview ожидаемо `SKIPPED` | После merge проверить новый Production runtime и `/api/health`; Preview DB подключать только отдельным sandbox |
 | Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: Vercel production подключён; `/api/health` вернул `database: ok` без записи данных; env официальной интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
-| Cloudflare R2 bucket `electromagaz` | Изображения товаров и документы | Владелец Electromagaz | Ограниченный S3 token на bucket | `verified`: S3 endpoint `https://a292a72a6ac36f3b7a95e68c9f69d132.r2.cloudflarestorage.com`, public URL `https://pub-9740932b35ea44a892e012558a4d802d.r2.dev`; ListObjects, PutObject, публичное чтение через Playwright MCP и DeleteObject прошли 2026-08-14 | После ручного QA выполнить ограниченный worker-пилот с записью очищенных WebP |
+| Cloudflare R2 bucket `electromagaz` | Изображения товаров и документы | Владелец Electromagaz | Ограниченный S3 token на bucket | `verified`: S3 endpoint `https://a292a72a6ac36f3b7a95e68c9f69d132.r2.cloudflarestorage.com`, public URL `https://pub-9740932b35ea44a892e012558a4d802d.r2.dev`; read/write/delete smoke прошел; PDF-пилот `TLV70033DCKR` отдается как `200 application/pdf`, 1 294 728 байт | На Windows сначала выполнить dry-run очереди PDF; image worker запускать только после ручного QA очищенных WebP |
 | Telegram Bot API | Уведомления менеджеру о заявках | Владелец Electromagaz | Bot token и chat ID | `deferred`: владелец настроит самостоятельно позже | После настройки выполнить безопасное тестовое уведомление без данных покупателя |
 | Email-провайдер | Подтверждения покупателю и статусы заявки | `[УТОЧНИТЬ]` | API или SMTP, доступ к DNS домена | `blocked`: провайдер не выбран | Выбрать провайдера, настроить SPF, DKIM и DMARC |
 | DNS и регистратор `electromagaz.ru` | Основной домен | `[УТОЧНИТЬ]` | Управление DNS | `blocked`: DNS-записи отсутствуют | Указать владельца, добавить записи Vercel, проверить HTTPS |
@@ -37,8 +37,10 @@
 
 Решение владельца от 2026-08-14: новый Cloudflare R2 bucket `electromagaz`
 подключен и проверен. В Git зафиксированы только несекретные endpoint и public URL.
-Access key и secret остаются только в локальном env. Следующий контролируемый шаг -
-ограниченный media-пилот после локальной очистки watermark.
+Access key и secret остаются только в локальном env. Пилот одного даташита
+успешно завершен. Следующий контролируемый шаг для PDF - dry-run очереди на
+Windows. Следующий шаг для изображений - ограниченный media-пилот после ручного
+QA локальной очистки watermark.
 
 ## Подтверждённые границы
 
