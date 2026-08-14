@@ -22,11 +22,11 @@
 | Контур | Текущий target | Права |
 | --- | --- | --- |
 | GitHub | `cyberjuke2077/magazik`, ветка `main` | `cyberjuke2077` - владелец, Lunar - соразработчик |
-| Vercel | `cyberjuke2077s-projects/magazik-94yr`, project ID `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | аккаунт `cyberjuke2077`, Hobby team |
+| Vercel | `cyberjuke2077s-projects/magazik`, project ID `prj_dkYS0wmbtfKB5XR6mGECxbtSAuBQ` | аккаунт `cyberjuke2077`, Hobby team |
 | Supabase | `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | `37Lunar` - Owner, `cyberjuke2077` - Administrator |
-| Production | `https://magazik-94yr.vercel.app` | deploy только из `main` |
+| Production | `https://magazik-cyberjuke2077s-projects.vercel.app` | deploy только из `main`; acceptance приостановлен до подключения Supabase env |
 
-Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория.
+Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Удалённый 2026-08-14 проект `magazik-94yr`, старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория. После пересоздания Vercel project интеграции и env нужно подключать заново: GitHub-репозиторий сам их не восстанавливает.
 
 ## Первый prompt для Codex
 

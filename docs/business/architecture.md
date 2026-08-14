@@ -233,6 +233,15 @@ Production получает PostgreSQL-переменные через офиц�
 Preview намеренно не получает production database credentials. Для функционального
 Preview нужна отдельная Supabase branch или sandbox и отдельные Preview env.
 
+Текущий target после пересоздания 2026-08-14 - Vercel project
+`cyberjuke2077s-projects/magazik`, ID `prj_dkYS0wmbtfKB5XR6mGECxbtSAuBQ`.
+Удаление старого project не переносит env и Supabase integration. Их нужно
+подключать к новому target отдельно, не копируя credentials в Git.
+
+Каталожные страницы и `sitemap.xml` читают PostgreSQL только во время запроса,
+а не во время `next build`. Отсутствие database env не должно ломать сборку,
+но database routes без env должны завершаться явной runtime-ошибкой.
+
 `build` в `package.json`:
 ```bash
 prisma generate && next build
