@@ -120,5 +120,6 @@ Git push означает только, что коммиты попали на 
 | `git pull --ff-only` не проходит | Не делать merge или rebase наугад, сначала синхронизироваться с владельцем. |
 | `git push` получает `403` | Проверить, что GitHub account соразработчика добавлен в private repo с правом записи. |
 | Не хватает переменной окружения | Запросить минимально необходимый доступ или использовать sandbox. Не искать чужой `.env`. |
+| Supabase не находит Vercel project | Сначала владелец ставит team-level integration командой `vercel integration accept-terms supabase --scope cyberjuke2077s-projects`. Не запускать `integration add`: она создаст новую базу. Затем связать существующий Supabase project только с Production. |
 | Vercel блокирует автора commit | Не добавлять production DB в Preview. Владелец сливает PR merge commit в `main`, затем проверяет Production deployment. |
 | Нужны production-данные | Не копировать базу и credentials. Согласовать sandbox-дамп или отдельный доступ. |
