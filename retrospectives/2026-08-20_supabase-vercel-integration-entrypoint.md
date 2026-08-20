@@ -10,29 +10,29 @@
 - Проверили точные Vercel team и project, Supabase ref и текущую авторизацию CLI.
 - Подтвердили, что в `cyberjuke2077s-projects` нет Marketplace installations и resources.
 - Сверили текущую документацию Supabase и справку Vercel CLI 59.3.0.
-- Отделили установку team-level integration от создания нового database resource.
-- Запустили безопасную команду `integration accept-terms`; Vercel подтвердил, что
-  AI-агент не может принять Marketplace terms за владельца.
+- Подтвердили, что production database уже общая с Lunar и находится в
+  `37Lunar's Org`, поэтому Marketplace provisioning к ней неприменим.
+- Попытка `integration accept-terms` была остановлена самим Vercel до каких-либо
+  изменений. После уточнения владельца этот путь исключён.
 
 ## 3. Результат: частично
 
-Причина найдена. Supabase не мог показать Vercel project, потому что integration
-не была установлена на Vercel team. Никакая новая база не создана, env и production
-данные не изменены.
+Никакая новая база, organization или Marketplace resource не созданы, env и
+production данные не изменены. Общий Supabase project остаётся единственной
+production-базой.
 
-Один внешний шаг остаётся за владельцем: выполнить в терминале
-`vercel integration accept-terms supabase --scope cyberjuke2077s-projects`
-и лично подтвердить terms. После этого Codex проверяет installation, подключение
-существующего project `dbumwpnbtvixfusxnggn`, production env и deployment.
+Остаётся восстановить external Vercel connection для существующего project либо
+вручную добавить его connection strings только в Production env нового Vercel
+project. Выбор зависит от доступности connection в Supabase Dashboard.
 
 ## 4. Что можно было лучше
 
-Агент дал неверный порядок действий и отправил владельца в Supabase Dashboard
-до установки интеграции в Vercel. Перед UI-инструкцией надо было сначала проверить
-`vercel integration installations` и актуальную CLI-справку.
+Агент не удержал главное ограничение: база общая с Lunar и не должна переходить
+в Vercel Marketplace lifecycle. Сначала был дан неверный порядок действий, затем
+предложен `accept-terms`, который тоже относится к чужому recovery-пути.
 
 ## 5. Изменения во втором мозге
 
-- В service inventory записан правильный порядок подключения.
+- В service inventory записана граница общей Supabase-базы.
 - В collaboration protocol добавлен отдельный troubleshooting-сценарий.
-- Добавлен feedback, запрещающий `integration add` для уже существующей базы.
+- Добавлен feedback, запрещающий Marketplace provisioning для общей базы.

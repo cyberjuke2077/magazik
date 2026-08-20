@@ -21,8 +21,8 @@
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
 | GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: `origin/main` на `41569a5`; hotfix `2be3067` запушен в `codex/fix-new-vercel-deploy`, draft PR #14; большой enrichment PR #13 остаётся отдельным | Сначала слить минимальный PR #14 после review; PR #13 не смешивать с восстановлением deploy |
-| Vercel `cyberjuke2077s-projects/magazik`, project `prj_dkYS0wmbtfKB5XR6mGECxbtSAuBQ` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `partial`: PR #14 Preview получил `Ready`; на 2026-08-20 команда `integration installations` вернула `No marketplace installations found`, а production env отсутствуют | Владелец принимает Supabase Marketplace terms командой `vercel integration accept-terms supabase --scope cyberjuke2077s-projects`, затем подключает существующий Supabase project только к Production |
-| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: project `ACTIVE_HEALTHY`; Vercel integration не установлена на team, поэтому Supabase закономерно не находит Vercel project | Сначала установить integration на стороне Vercel без создания ресурса, затем в Supabase Dashboard связать project с `cyberjuke2077s-projects/magazik` |
+| Vercel `cyberjuke2077s-projects/magazik`, project `prj_dkYS0wmbtfKB5XR6mGECxbtSAuBQ` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `partial`: PR #14 Preview получил `Ready`; production env отсутствуют; Marketplace resources не создавались | Подключить существующий внешний Supabase project через organization integration либо вручную задать его connection strings только в Production |
+| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Общая Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: общая с Lunar база `ACTIVE_HEALTHY`, контрольный SQL выполнен 2026-08-20; project не является новым Vercel Marketplace resource | Сохранить текущую organization и project ref; переподключить внешний Vercel project или использовать ручные Production env без переноса данных |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `deferred`: владелец отложил подключение 2026-08-09 | Не включать в текущий бесплатный пакет; вернуться перед наполнением каталога |
 | Telegram Bot API | Уведомления менеджеру о заявках | Владелец Electromagaz | Bot token и chat ID | `deferred`: владелец настроит самостоятельно позже | После настройки выполнить безопасное тестовое уведомление без данных покупателя |
@@ -62,13 +62,14 @@ production-каталога не входят в текущий бесплатн
   а database routes до подключения отдельного sandbox ожидаемо отвечают 503.
 - Удаление Vercel project удаляет его env и привязки интеграций. Репозиторий GitHub
   их не хранит и не восстанавливает. Новый project нужно сверять по project ID.
-- Для существующего Supabase project сначала устанавливается team-level integration
-  на стороне Vercel через `integration accept-terms`. Только после этого Supabase
-  Dashboard увидит Vercel team и project для внешнего подключения.
-- `vercel integration add supabase` здесь запрещён: команда создаёт новый Supabase
-  resource. Нужный production project `dbumwpnbtvixfusxnggn` уже существует.
-- Vercel CLI запрещает AI-агенту принимать Marketplace terms. Эту команду один раз
-  выполняет владелец в своём терминале, остальные проверки продолжает Codex.
+- Production database уже существует в `37Lunar's Org` и используется совместно
+  с Lunar. Не создавать для неё Vercel Marketplace organization, project или resource.
+- `vercel integration add supabase` и `vercel integration accept-terms supabase`
+  не являются текущим recovery-путём. Первый создаёт resource, второй относится
+  к Marketplace installation и может создать отдельную Vercel-managed organization.
+- Допустимы два пути: переподключить существующий project через внешнюю Vercel
+  connection в Supabase organization settings или вручную выдать новому Vercel
+  project минимальные connection strings только для Production.
 
 ## Проверка без вывода секретов
 
