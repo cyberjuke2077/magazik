@@ -38,6 +38,9 @@ Supabase-базу без создания второй базы и без пер
   упёрся в sandbox bind restriction, контрольный `next build --webpack` прошёл.
 - Supabase advisors после DDL не нашли security warnings или errors. Остались
   только INFO для закрытых служебных таблиц и неиспользованных индексов.
+- Versioned RLS migration слита PR #15 merge commit `5d10ecf`. Итоговый
+  Production deployment `dpl_AXPeVvrC9c9seZzoJBgYQjGTPnFw` получил `Ready`;
+  post-merge smoke повторил категории, 51 товар, карточку и database health.
 
 ## 3. Результат: да
 
