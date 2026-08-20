@@ -7,13 +7,18 @@
 
 ## Последний подтвержденный публичный snapshot
 
-Проверено 2026-08-10 после merge PR #11:
+Проверено 2026-08-20 после merge PR #14 и применения runtime RLS policies:
 
-- Vercel Production `https://magazik-94yr.vercel.app` имеет статус `Ready`;
+- Vercel Production `https://electromagaz-production.vercel.app` имеет статус `Ready`;
 - `/`, `/best`, `/catalog` и `/api/catalog/categories` вернули HTTP 200;
 - первая страница каталога отрисовала 50 товарных строк;
-- API категорий вернул 8 корневых категорий;
+- CSV export вернул 51 товар, карточка `AD1580ARTZ-REEL7` вернула HTTP 200;
+- API категорий вернул 8 корневых и 14 дочерних категорий;
 - `/best` не отрисовал товары, потому что его выборка требует `priceWholesale`.
+- `/api/health` вернул `status: ok` и `database: ok`;
+- SQL snapshot: 51 товар, 22 категории, 8 производителей, 10 изображений,
+  97 datasheet, 4 товара с розничной ценой, 0 с оптовой ценой и 0 в наличии;
+- заявки и оптовые лиды: 0.
 
 Это публичный smoke, а не полный снимок БД. Актуальные totals, покрытие ценами,
 заявки и enrichment получать SQL-запросами ниже.

@@ -24,7 +24,7 @@
 | GitHub | `cyberjuke2077/magazik`, ветка `main` | `cyberjuke2077` - владелец, Lunar - соразработчик |
 | Vercel | `cyberjuke2077s-projects/electromagaz-production`, project ID `prj_RkTeKu3bIIkImfBTfU11zTzpw8bm` | аккаунт `cyberjuke2077`, Hobby team |
 | Supabase | `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | `37Lunar` - Owner, `cyberjuke2077` - Administrator |
-| Production | `https://electromagaz-production.vercel.app` | deploy только из `main`; новый target настроен, acceptance завершается после merge PR #14 и smoke-test |
+| Production | `https://electromagaz-production.vercel.app` | deploy только из `main`; deployment `dpl_GPLkoK9mKAPkFeg72qGJgpzJ87QM` принят smoke-test 2026-08-20 |
 
 Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Старые проекты `magazik-94yr` и `magazik`, старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория. Новый target создан 2026-08-20. GitHub подключён заново, а Production env выданы вручную для отдельной runtime-роли общей Supabase-базы.
 
