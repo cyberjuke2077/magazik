@@ -22,11 +22,11 @@
 | Контур | Текущий target | Права |
 | --- | --- | --- |
 | GitHub | `cyberjuke2077/magazik`, ветка `main` | `cyberjuke2077` - владелец, Lunar - соразработчик |
-| Vercel | `cyberjuke2077s-projects/magazik-94yr`, project ID `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | аккаунт `cyberjuke2077`, Hobby team |
+| Vercel | `cyberjuke2077s-projects/electromagaz-production`, project ID `prj_RkTeKu3bIIkImfBTfU11zTzpw8bm` | аккаунт `cyberjuke2077`, Hobby team |
 | Supabase | `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | `37Lunar` - Owner, `cyberjuke2077` - Administrator |
-| Production | `https://magazik-94yr.vercel.app` | deploy только из `main` |
+| Production | `https://electromagaz-production.vercel.app` | deploy только из `main`; новый target настроен, acceptance завершается после merge PR #14 и smoke-test |
 
-Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория.
+Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Старые проекты `magazik-94yr` и `magazik`, старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория. Новый target создан 2026-08-20. GitHub подключён заново, а Production env выданы вручную для отдельной runtime-роли общей Supabase-базы.
 
 ## Первый prompt для Codex
 
@@ -120,5 +120,6 @@ Git push означает только, что коммиты попали на 
 | `git pull --ff-only` не проходит | Не делать merge или rebase наугад, сначала синхронизироваться с владельцем. |
 | `git push` получает `403` | Проверить, что GitHub account соразработчика добавлен в private repo с правом записи. |
 | Не хватает переменной окружения | Запросить минимально необходимый доступ или использовать sandbox. Не искать чужой `.env`. |
+| Supabase не находит Vercel project | Не создавать Marketplace resource: production-база уже общая с Lunar. Переподключить существующий project через external Vercel connection либо вручную добавить его connection strings только в Production env. |
 | Vercel блокирует автора commit | Не добавлять production DB в Preview. Владелец сливает PR merge commit в `main`, затем проверяет Production deployment. |
 | Нужны production-данные | Не копировать базу и credentials. Согласовать sandbox-дамп или отдельный доступ. |

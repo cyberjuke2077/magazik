@@ -1,6 +1,6 @@
 # Реестр внешних сервисов Electromagaz
 
-Дата проверки: 2026-08-10
+Дата проверки: 2026-08-20
 
 ## Назначение
 
@@ -20,9 +20,9 @@
 
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
-| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: storefront PR #11 слит владельцем merge-коммитом `fd042cf`; runtime commit `770416a` находится в `main`; docs handoff дошел до `246e121` | Lunar работает через `feat/*`, `fix/*` или `docs/*`; Codex через `codex/*`; всё сливается PR |
-| Vercel `cyberjuke2077s-projects/magazik-94yr`, project `prj_zfRDrMz1kwxJ7JPvt1xx84BeGZVy` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: storefront deployment `dpl_y6TViwh3DSJDvsGJsdBdZDX3vxMX` и следующий docs-only deployment `dpl_FqedX7gvJaqTZpDxjqEK6hS2eMYK` получили `Ready`; production alias `https://magazik-94yr.vercel.app`; `/`, `/best`, `/catalog`, `/api/catalog/categories` отвечают 200 | PR Lunar сливает `cyberjuke2077` merge commit; Preview не подключать к production DB |
-| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: Vercel production подключён; `/api/health` вернул `database: ok` без записи данных; env официальной интеграции выданы только Production | Отдельно проверить backup policy, RLS и стратегию Preview branches |
+| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: `origin/main` на `41569a5`; PR #14 содержит минимальное восстановление deploy; большой enrichment PR #13 остаётся отдельным | Слить PR #14 merge commit владельца и проверить новый Production deployment; PR #13 не смешивать с восстановлением deploy |
+| Vercel `cyberjuke2077s-projects/electromagaz-production`, project `prj_RkTeKu3bIIkImfBTfU11zTzpw8bm` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `partial`: project создан 2026-08-20, GitHub подключён, Next.js определён; шесть Production env заданы без вывода значений; deploy из `main` и smoke-test ожидают merge PR #14 | Слить PR #14, дождаться `Ready`, проверить публичные страницы и `/api/health` |
+| Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Общая Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: база `ACTIVE_HEALTHY`; применена отсутствовавшая миграция `20260731190000_add_submission_rate_limit`; роль `electromagaz_app` подключилась через Prisma | Сохранить текущую organization и project ref; будущие таблицы выдавать runtime-роли только явным GRANT после миграции |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `deferred`: владелец отложил подключение 2026-08-09 | Не включать в текущий бесплатный пакет; вернуться перед наполнением каталога |
 | Telegram Bot API | Уведомления менеджеру о заявках | Владелец Electromagaz | Bot token и chat ID | `deferred`: владелец настроит самостоятельно позже | После настройки выполнить безопасное тестовое уведомление без данных покупателя |
@@ -57,10 +57,22 @@ production-каталога не входят в текущий бесплатн
 - Vercel Hobby блокирует private-repo deployment от автора commit, которого нет
   в Vercel team. Lunar открывает PR, а `cyberjuke2077` сливает его merge commit
   в `main` и проверяет Production deployment.
-- Preview сейчас намеренно не получает production database credentials.
-- Красный PR Preview из-за невалидного `DATABASE_URL` не является падением
-  Production. Не исправлять его подключением боевой БД; создать отдельный sandbox,
-  если Preview станет acceptance-средой.
+- Preview сейчас намеренно не получает production database credentials. Код
+  не обращается к каталогу во время build, поэтому Preview может получить `Ready`,
+  а database routes до подключения отдельного sandbox ожидаемо отвечают 503.
+- Удаление Vercel project удаляет его env и привязки интеграций. Репозиторий GitHub
+  их не хранит и не восстанавливает. Новый project нужно сверять по project ID.
+- Production database уже существует в `37Lunar's Org` и используется совместно
+  с Lunar. Не создавать для неё Vercel Marketplace organization, project или resource.
+- `vercel integration add supabase` и `vercel integration accept-terms supabase`
+  не являются текущим recovery-путём. Первый создаёт resource, второй относится
+  к Marketplace installation и может создать отдельную Vercel-managed organization.
+- Новый Vercel project подключён вручную к существующей базе через отдельную роль
+  `electromagaz_app`. В Production заданы sensitive `DATABASE_URL` и `DIRECT_URL`.
+  Роль не является superuser, не имеет DDL и получает права только на нужные
+  текущие таблицы. Новые таблицы не доступны ей автоматически.
+- Пароль runtime-роли и готовые connection strings хранятся только в Vercel
+  Production env. Общий пароль роли `postgres` сайту не передаётся.
 
 ## Проверка без вывода секретов
 
