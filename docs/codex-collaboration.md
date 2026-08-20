@@ -22,11 +22,11 @@
 | Контур | Текущий target | Права |
 | --- | --- | --- |
 | GitHub | `cyberjuke2077/magazik`, ветка `main` | `cyberjuke2077` - владелец, Lunar - соразработчик |
-| Vercel | `cyberjuke2077s-projects/magazik`, project ID `prj_dkYS0wmbtfKB5XR6mGECxbtSAuBQ` | аккаунт `cyberjuke2077`, Hobby team |
+| Vercel | `cyberjuke2077s-projects/electromagaz-production`, project ID `prj_RkTeKu3bIIkImfBTfU11zTzpw8bm` | аккаунт `cyberjuke2077`, Hobby team |
 | Supabase | `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | `37Lunar` - Owner, `cyberjuke2077` - Administrator |
-| Production | `https://magazik-cyberjuke2077s-projects.vercel.app` | deploy только из `main`; acceptance приостановлен до подключения Supabase env |
+| Production | `https://electromagaz-production.vercel.app` | deploy только из `main`; новый target настроен, acceptance завершается после merge PR #14 и smoke-test |
 
-Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Удалённый 2026-08-14 проект `magazik-94yr`, старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория. После пересоздания Vercel project интеграции и env нужно подключать заново: GitHub-репозиторий сам их не восстанавливает.
+Подробный живой реестр находится в [service-inventory.md](operations/service-inventory.md). Старые проекты `magazik-94yr` и `magazik`, старые названия `electromagaz`, другие Supabase organization или похожие Vercel projects не считаются target этого репозитория. Новый target создан 2026-08-20. GitHub подключён заново, а Production env выданы вручную для отдельной runtime-роли общей Supabase-базы.
 
 ## Первый prompt для Codex
 

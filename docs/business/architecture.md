@@ -103,9 +103,14 @@ production URL, PostgreSQL и сильные admin credentials. R2 и Telegram �
 `Developer` достаточна для работы с проектом, но не даёт доступ к биллингу и
 настройкам организации.
 
-Строки подключения хранятся только в локальных `.env`. В Git не попадают ни
-пароль БД, ни готовые URL. Локальный Docker PostgreSQL остаётся изолированной
-средой для экспериментов без доступа к общей БД.
+Строки подключения хранятся только в локальных `.env` и Vercel Production env.
+В Git не попадают ни пароль БД, ни готовые URL. Локальный Docker PostgreSQL
+остаётся изолированной средой для экспериментов без доступа к общей БД.
+
+Production-сайт подключается отдельной ролью `electromagaz_app`. Она не имеет
+DDL и superuser-прав: читает каталог и изменяет только таблицы заявок, rate limit
+и разрешённые поля товара. Доступ к новым таблицам выдаётся отдельным GRANT после
+проверки миграции. Общий пароль `postgres` в Vercel не используется.
 
 Перед миграцией, enrichment или аудитом безопасности обязательно сверять
 organization, project ref и назначение среды. Доступ к одноимённому проекту
@@ -229,12 +234,14 @@ lock-файл: `package-lock.json`.
 ## Vercel для деплоя
 
 Push в `main` запускает Vercel Production deployment.
-Production получает PostgreSQL-переменные через официальную Supabase integration.
+Production получает sensitive `DATABASE_URL` и `DIRECT_URL`, настроенные вручную
+для отдельной runtime-роли общей Supabase-базы.
 Preview намеренно не получает production database credentials. Для функционального
 Preview нужна отдельная Supabase branch или sandbox и отдельные Preview env.
 
-Текущий target после пересоздания 2026-08-14 - Vercel project
-`cyberjuke2077s-projects/magazik`, ID `prj_dkYS0wmbtfKB5XR6mGECxbtSAuBQ`.
+Текущий target после пересоздания 2026-08-20 - Vercel project
+`cyberjuke2077s-projects/electromagaz-production`, ID
+`prj_RkTeKu3bIIkImfBTfU11zTzpw8bm`.
 Удаление старого project не переносит env и Supabase integration. Их нужно
 подключать к новому target отдельно, не копируя credentials в Git.
 
