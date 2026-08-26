@@ -19,9 +19,12 @@
 
 ## 3. Результат: да
 
-Кодовый срез готов в ветке `codex/harden-enrichment-fallbacks`. Прошли 287
+Кодовый срез `ffdeec2` слит через PR #19 merge-коммитом `e4ab6f9`. Прошли 287
 unit-тестов, TypeScript, lint, input-only dry-run на трёх MPN и production build
-через Webpack. БД, внешние источники, R2, `db:publish` и production не менялись.
+через Webpack. Целевой Vercel deployment `3NbdaF7ZtJcrWvcBPaKxojvZqrL5`
+завершился успешно. Публичный smoke подтвердил root, catalog, health, categories,
+CSV export и карточку товара. Реальные enrichment-источники, запись в БД, R2 и
+`db:publish` не запускались.
 
 ## 4. Что можно было лучше
 
@@ -36,3 +39,4 @@ unit-тестов, TypeScript, lint, input-only dry-run на трёх MPN и pro
 - Зафиксированы реальный порядок источников и правила fallback-переходов.
 - Зафиксирован контракт MPN-only производителя и английской локализации.
 - План PR #13 переведён к следующему отдельному срезу media/datasheet/R2.
+- Service inventory и live metrics обновлены по merge и production smoke PR #19.

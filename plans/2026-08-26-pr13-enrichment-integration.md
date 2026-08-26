@@ -53,6 +53,10 @@ watermark worker, Windows launcher и Vercel build.
 
 ## Результат второго среза
 
+- PR #19 слит в `main` merge-коммитом
+  `e4ab6f9a9dc72a69a48dfb5bf368f72342d8e94e`.
+- Vercel check целевого `electromagaz-production` для merge завершился
+  `success`: deployment `3NbdaF7ZtJcrWvcBPaKxojvZqrL5`.
 - Source fallback перенесён вручную без cherry-pick старого смешанного коммита.
 - Каскад ChipDip -> LCSC -> Mouser продолжает работу при health-check failure,
   runtime-block и явном пропуске источника.
@@ -63,5 +67,7 @@ watermark worker, Windows launcher и Vercel build.
   unresolved MPN без производителя не создаёт пустую товарную карточку.
 - Английский fallback остаётся `partial` с флагом `translation_pending`.
 - 287 unit-тестов, TypeScript, lint, input-only dry-run и Webpack build прошли.
-- Реальные источники, БД, R2, `db:publish` и production не вызывались.
+- Реальные enrichment-источники, запись в БД, R2 и `db:publish` не вызывались.
+- Публичный production smoke подтвердил root, catalog, health, categories,
+  CSV export и карточку `ADUC7061BCPZ32-RL`.
 - Следующая точка - отдельный аудит media/datasheet/R2 pipeline.
