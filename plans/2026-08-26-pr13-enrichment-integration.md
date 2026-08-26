@@ -87,6 +87,9 @@ watermark worker, Windows launcher и Vercel build.
 - Python watermark worker, datasheet worker, реальные R2/БД операции и Windows
   launcher в этот срез не входят.
 - Целевые тесты, 294 unit-теста, TypeScript, lint и production build через
-  Webpack прошли. Git handoff фиксируется после завершения среза.
+  Webpack прошли.
+- Commit `52e120b` слит через PR #21 merge-коммитом `9c0c585`.
+- Vercel Production deployment `SrVU71EuwKXSn7pj7T93YVXGBRH6` завершился
+  `success`; root, health, catalog и карточка товара прошли публичный smoke.
 - Следующая точка - отдельный перенос worker-части с безопасной проверкой файлов
   до R2 upload.
