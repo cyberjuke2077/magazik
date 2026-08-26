@@ -48,7 +48,9 @@ async function main(): Promise<void> {
     : createNoopEnrichmentEvents()
 
   // Load base config from environment
-  const baseConfig = loadEnrichmentConfig()
+  const baseConfig = loadEnrichmentConfig({
+    requireDatabase: !cliArgs.dryRun,
+  })
 
   // Build orchestrator config with CLI overrides
   // loggerSilent and progressSilentConsole start as false — they are

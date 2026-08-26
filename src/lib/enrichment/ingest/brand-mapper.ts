@@ -37,6 +37,13 @@ export function mapBrand(raw: string): BrandMapResult {
     return { name: mapped, unmapped: false }
   }
 
+  // Supplier exports often append a Chinese brand label after a slash.
+  // Reuse the known Latin part instead of growing aliases for every spelling.
+  const latinPart = key.split(/[\/／]/, 1)[0]?.trim()
+  if (latinPart && BRAND_MAP[latinPart]) {
+    return { name: BRAND_MAP[latinPart], unmapped: false }
+  }
+
   // If input is empty after trim, return original raw value to avoid empty name
   if (trimmed === '') {
     return { name: raw, unmapped: true }

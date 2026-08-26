@@ -190,6 +190,6 @@ export interface EnrichmentConfig {
   batchSize: number
   /** Number of items per DB write transaction (default 50) */
   persistBatchSize: number
-  /** PostgreSQL connection string */
-  databaseUrl: string
+  /** PostgreSQL connection string, not required for input-only dry runs */
+  databaseUrl?: string
 }
