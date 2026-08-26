@@ -25,6 +25,7 @@ import {
 } from '../types'
 import { shouldOverwrite } from './provenance-merger'
 import { generateSlug } from './slug-generator'
+import { resolveManufacturerName } from './manufacturer-resolver'
 import {
   FALLBACK_SECTION_SLUG,
   classifyProduct,
@@ -48,14 +49,17 @@ export interface PersistBatchResult {
  * - 'partial': has some fields but not all three
  * - 'unresolved': no result at all
  */
-function determineEnrichmentStatus(result: EnrichmentResult | null): string {
+export function determineEnrichmentStatus(result: EnrichmentResult | null): string {
   if (!result) return 'unresolved'
 
   const hasName = !!result.name
   const hasDescription = !!result.description
   const hasSpecs = !!result.specs && result.specs.length > 0
 
-  if (hasName && hasDescription && hasSpecs) return 'complete'
+  const hasLocalizedDescription = result.descriptionLanguage !== 'en'
+  if (hasName && hasDescription && hasSpecs && hasLocalizedDescription) {
+    return 'complete'
+  }
   if (hasName || hasDescription || hasSpecs) return 'partial'
   return 'unresolved'
 }
@@ -157,13 +161,14 @@ async function persistItem(
 ): Promise<void> {
   const source: DataSource = result?.source ?? 'supplier-stub'
   const now = new Date()
+  const manufacturerName = resolveManufacturerName(identity, result)
 
   // 1. Upsert Manufacturer
-  const mfgSlug = manufacturerSlug(identity.canonicalBrand)
+  const mfgSlug = manufacturerSlug(manufacturerName)
   const manufacturer = await tx.manufacturer.upsert({
     where: { slug: mfgSlug },
     create: {
-      name: identity.canonicalBrand,
+      name: manufacturerName,
       slug: mfgSlug,
     },
     update: {},
@@ -173,7 +178,7 @@ async function persistItem(
   const categoryId = await resolveCategory(tx, identity, result, source)
 
   // 3. Upsert Product
-  const slug = generateSlug(identity.canonicalBrand, identity.canonicalMpn)
+  const slug = generateSlug(manufacturerName, identity.canonicalMpn)
   const enrichmentStatus = determineEnrichmentStatus(result)
 
   // Check existing product for provenance merge
@@ -191,6 +196,7 @@ async function persistItem(
 
   // Build new enrichment meta
   const newMeta: EnrichmentMeta = { ...(existingMeta ?? {}) }
+  const flags = new Set(newMeta.flags ?? [])
 
   const sourceCategoryPath = [
     ...(result?.categoryPath ?? []),
@@ -205,17 +211,22 @@ async function persistItem(
       mpn: identity.canonicalMpn,
       package: result?.package,
     })
-    const flags = new Set(newMeta.flags ?? [])
     if (classifiedSection === FALLBACK_SECTION_SLUG) {
       flags.add('category_needs_review')
     } else {
       flags.delete('category_needs_review')
     }
-    newMeta.flags = Array.from(flags)
   }
 
+  if (result?.description && result.descriptionLanguage === 'en') {
+    flags.add('translation_pending')
+  } else if (result?.descriptionLanguage === 'ru') {
+    flags.delete('translation_pending')
+  }
+  newMeta.flags = Array.from(flags)
+
   // Determine field values with provenance checks
-  const productName = result?.name ?? `${identity.canonicalBrand} ${identity.originalMpn}`
+  const productName = result?.name ?? `${manufacturerName} ${identity.originalMpn}`
   const productDescription = result?.description ?? (result ? undefined : 'Нет данных')
 
   // Apply provenance for name

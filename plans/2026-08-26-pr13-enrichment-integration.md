@@ -1,8 +1,7 @@
 # Разбиение PR #13 и перенос enrichment
 
 Дата: 2026-08-26
-Статус: первый безопасный срез завершён; дальнейший parser/enrichment отложен
-до отдельной сессии
+Статус: importer/dry-run и source fallbacks перенесены отдельными срезами
 
 ## Цель
 
@@ -26,7 +25,7 @@ watermark worker, Windows launcher и Vercel build.
   sandbox-ошибке Turbopack.
 - [x] Зафиксировать commit `5b321b4` и открыть PR #17 только для importer/dry-run.
 - [x] Слить PR #17 merge-коммитом `71381a6` и проверить Production.
-- [ ] Отдельно оценить перенос source fallbacks.
+- [x] Отдельно оценить и перенести source fallbacks без media/R2 зависимостей.
 - [ ] Отдельно оценить media/datasheet/R2 pipeline.
 - [ ] Отдельно оценить Windows launcher.
 
@@ -51,3 +50,18 @@ watermark worker, Windows launcher и Vercel build.
 - Реальный enrichment, запись в БД/R2 и `db:publish` не запускались.
 - Следующая точка - новый task по parser/enrichment, начиная с отдельного аудита
   source fallbacks из старого draft PR #13.
+
+## Результат второго среза
+
+- Source fallback перенесён вручную без cherry-pick старого смешанного коммита.
+- Каскад ChipDip -> LCSC -> Mouser продолжает работу при health-check failure,
+  runtime-block и явном пропуске источника.
+- `--skip-chipdip`, `--skip-lcsc` и `--mouser-only` переводят записи журнала на
+  следующий этап без зависания между очередями.
+- LCSC и Mouser требуют точного совпадения нормализованного MPN.
+- MPN-only карточка получает производителя только из однозначного результата;
+  unresolved MPN без производителя не создаёт пустую товарную карточку.
+- Английский fallback остаётся `partial` с флагом `translation_pending`.
+- 287 unit-тестов, TypeScript, lint, input-only dry-run и Webpack build прошли.
+- Реальные источники, БД, R2, `db:publish` и production не вызывались.
+- Следующая точка - отдельный аудит media/datasheet/R2 pipeline.

@@ -64,6 +64,7 @@ npm run enrichment:run -- --input-dir /path/to/supplier-files --limit 3 --no-tui
 npm run enrichment:run -- --resume
 npm run enrichment:run -- --dry-run         # без API-вызовов
 npm run enrichment:run -- --force-refresh   # обновить даже свежие карточки
+npm run enrichment:run -- --skip-chipdip    # начать каскад с LCSC
 npm run enrichment:run -- --skip-mouser     # отключить Mouser
 npm run enrichment:run -- --mouser-only     # только Mouser
 npm run enrichment:run -- --no-tui          # legacy-логи вместо Ink TUI
@@ -88,7 +89,7 @@ src/
 ├── lib/
 │   ├── enrichment/
 │   │   ├── ingest/               # Excel-импортер, MPN-нормализатор, brand-mapper
-│   │   ├── sources/              # mouser-api, lcsc-client, chipdip-client
+│   │   ├── sources/              # mouser-client, lcsc-client, chipdip-client
 │   │   ├── persistence/          # запись в Postgres (Product, EnrichmentJournal)
 │   │   ├── observability/        # event-bus, dashboard-state, logger
 │   │   ├── orchestrator.ts       # главный пайплайн

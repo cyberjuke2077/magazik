@@ -20,4 +20,19 @@ describe('parseRunArgs', () => {
       forceRefresh: true,
     })
   })
+
+  it('parses a fast pass without ChipDip', () => {
+    expect(parseRunArgs(['node', 'enrichment-run.ts', '--skip-chipdip'])).toMatchObject({
+      skipChipdip: true,
+    })
+  })
+
+  it('rejects mutually exclusive Mouser flags', () => {
+    expect(() => parseRunArgs([
+      'node',
+      'enrichment-run.ts',
+      '--mouser-only',
+      '--skip-mouser',
+    ])).toThrow(CliUsageError)
+  })
 })

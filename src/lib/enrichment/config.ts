@@ -35,7 +35,7 @@ export function loadEnrichmentConfig(
   if (!inputDir) missing.push('ENRICHMENT_INPUT_DIR')
 
   // Mouser API key is optional — if absent, Mouser source is skipped at runtime.
-  const mouserApiKey = process.env.MOUSER_API_KEY ?? ''
+  const mouserApiKey = normalizeMouserApiKey(process.env.MOUSER_API_KEY)
 
   const databaseUrl = process.env.DATABASE_URL
   if (requireDatabase && !databaseUrl) missing.push('DATABASE_URL')
@@ -109,6 +109,20 @@ export function loadEnrichmentConfig(
     persistBatchSize,
     ...(databaseUrl && { databaseUrl }),
   }
+}
+
+export function normalizeMouserApiKey(raw: string | undefined): string {
+  const value = raw?.trim() ?? ''
+  if (!value) return ''
+  if (
+    /^(?:dummy|placeholder|changeme|change[-_ ]?me|your[-_ ]?|example|test(?:[-_ ]?key)?|todo|x{3,})/i.test(
+      value,
+    )
+  ) {
+    return ''
+  }
+  if (/^\[.+\]$/.test(value)) return ''
+  return value
 }
 
 function parseBoolean(raw: string, varName: string): boolean {

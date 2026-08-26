@@ -7,12 +7,21 @@
  */
 
 import { prisma } from '../prisma'
-import { type EnrichmentConfig, type EnrichmentResult, type PartIdentity } from './types'
+import {
+  type EnrichmentConfig,
+  type EnrichmentItemStatus,
+  type EnrichmentResult,
+  type PartIdentity,
+} from './types'
 import { importSupplierFiles } from './ingest/excel-importer'
 import { deduplicate } from './ingest/deduplicator'
 import { createStatusJournal, type StatusJournal } from './queue/status-journal'
 import { createChipDipClient, type ChipDipClient } from './sources/chipdip-client'
-import { createLcscClient, type LcscClient } from './sources/lcsc-client'
+import {
+  createLcscClient,
+  LcscBlockedError,
+  type LcscClient,
+} from './sources/lcsc-client'
 import {
   createMouserClient,
   QuotaExhaustedError,
@@ -27,12 +36,14 @@ import {
   createNoopEnrichmentEvents,
 } from './observability/event-bus'
 import { filterFreshProducts } from './queue/fresh-product-filter'
+import { hasResolvedManufacturer } from './persistence/manufacturer-resolver'
 
 export interface OrchestratorConfig extends EnrichmentConfig {
   resume?: boolean
   dryRun?: boolean
   skipMouser?: boolean
   skipLcsc?: boolean
+  skipChipdip?: boolean
   mouserOnly?: boolean
   forceRefresh?: boolean
   /** Maximum number of deduplicated MPNs to process, for controlled trial runs. */
@@ -41,12 +52,6 @@ export interface OrchestratorConfig extends EnrichmentConfig {
   loggerSilent?: boolean
   progressSilentConsole?: boolean
 }
-
-/** Pause duration when ChipDip is blocked (no proxy): 2-4 hours */
-const CHIPDIP_BLOCK_PAUSE_MS = 2 * 60 * 60 * 1000 // 2 hours minimum
-
-/** Pause duration when LCSC is blocked: 1 hour */
-const LCSC_BLOCK_PAUSE_MS = 60 * 60 * 1000
 
 /** Polling interval when waiting for items from upstream queue */
 const QUEUE_POLL_INTERVAL_MS = 30_000
@@ -78,7 +83,7 @@ function generateRunId(): string {
  * 3. If dryRun: log stats and exit
  * 4. Create ImportProgress record in DB
  * 5. Init StatusJournal (or resume from existing)
- * 6. Run health-check on ChipDip (if fails → exit with error)
+ * 6. Initialize enabled sources and route skipped or blocked stages forward
  * 7. Start THREE parallel processing loops
  * 8. After all loops complete: generate final report
  * 9. Graceful shutdown on SIGINT/SIGTERM
@@ -227,34 +232,89 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     // Start progress reporter
     progress.start(runId, parts.length)
 
-    // Step 6: Health-check ChipDip (skip if mouserOnly)
-    if (!config.mouserOnly) {
-      chipdipClient = await createChipDipClient({
-        proxyTemplate: config.chipdipProxyTemplate,
-        proxyUrl: config.chipdipProxyUrl,
-        proxyUserRange: config.chipdipProxyUserRange,
-        concurrency: config.chipdipConcurrency,
-        requestDelayRange: config.chipdipRequestDelayRange,
-        pageDelayRange: config.chipdipPageDelayRange,
-      })
+    const runChipDip = !config.mouserOnly && !config.skipChipdip
+    const runLcsc = !config.mouserOnly && !config.skipLcsc
+    let lcscAvailable = runLcsc
 
-      const healthy = await chipdipClient.healthCheck()
-      if (!healthy) {
+    if (!runChipDip) {
+      const skipped = await journal.skipPendingChipDip(
+        runId,
+        config.mouserOnly
+          ? 'ChipDip skipped by --mouser-only'
+          : 'ChipDip skipped by operator',
+      )
+      console.log(`\n⏭️  ChipDip пропущен. Передано дальше: ${skipped}`)
+    }
+
+    if (!runLcsc) {
+      const skipped = await journal.routePendingLcsc(
+        runId,
+        'lcsc_not_found',
+        config.mouserOnly
+          ? 'LCSC skipped by --mouser-only'
+          : 'LCSC skipped by operator',
+      )
+      console.log(`⏭️  LCSC пропущен. Передано дальше: ${skipped}`)
+    }
+
+    // Step 6: Health-check ChipDip. A failed source must not stop the cascade.
+    if (runChipDip) {
+      try {
+        chipdipClient = await createChipDipClient({
+          proxyTemplate: config.chipdipProxyTemplate,
+          proxyUrl: config.chipdipProxyUrl,
+          proxyUserRange: config.chipdipProxyUserRange,
+          concurrency: config.chipdipConcurrency,
+          requestDelayRange: config.chipdipRequestDelayRange,
+          pageDelayRange: config.chipdipPageDelayRange,
+        })
+
+        const healthy = await chipdipClient.healthCheck()
+        if (!healthy) {
+          throw new Error('ChipDip health-check failed')
+        }
+        logger.info({ event: 'chipdip_healthcheck_ok', source: 'chipdip' })
+        console.log(`\n✅ ChipDip health-check пройден`)
+      } catch (err) {
+        const errorMsg = err instanceof Error ? err.message : String(err)
         logger.error({ event: 'chipdip_healthcheck_failed', source: 'chipdip' })
-        console.error('\n❌ ChipDip health-check не пройден. Рекомендация: перезапустить через 24 часа.')
-        progress.stop()
-        await chipdipClient.close()
-        return
+        await chipdipClient?.close().catch(() => {})
+        chipdipClient = null
+        const skipped = await journal.skipPendingChipDip(
+          runId,
+          `${errorMsg}; routed to fallback`,
+        )
+        if (!lcscAvailable) {
+          await journal.routePendingLcsc(
+            runId,
+            'lcsc_not_found',
+            'LCSC unavailable after ChipDip health-check failure',
+          )
+        }
+        console.warn(`\n⚠️  ChipDip недоступен. Передано дальше: ${skipped}`)
       }
-
-      logger.info({ event: 'chipdip_healthcheck_ok', source: 'chipdip' })
-      console.log(`\n✅ ChipDip health-check пройден`)
     }
 
     // Init LCSC client (if needed)
-    if (!config.skipLcsc && !config.mouserOnly) {
-      lcscClient = await createLcscClient()
-      logger.info({ event: 'lcsc_client_ready', source: 'lcsc' })
+    if (runLcsc) {
+      try {
+        lcscClient = await createLcscClient()
+        logger.info({ event: 'lcsc_client_ready', source: 'lcsc' })
+      } catch (err) {
+        lcscAvailable = false
+        const errorMsg = err instanceof Error ? err.message : String(err)
+        const skipped = await journal.routePendingLcsc(
+          runId,
+          'lcsc_not_found',
+          `LCSC initialization failed: ${errorMsg}`,
+        )
+        logger.error({
+          event: 'lcsc_init_failed',
+          source: 'lcsc',
+          error: errorMsg,
+        })
+        console.warn(`\n⚠️  LCSC не запущен. Передано в Mouser: ${skipped}`)
+      }
     }
 
     // Init Mouser client
@@ -263,15 +323,35 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     // Step 7: Start parallel processing loops
     console.log(`\n⚡ Запуск параллельных очередей...`)
 
-    if (!config.mouserOnly) {
+    if (chipdipClient) {
       activeLoops.push(
-        runChipDipLoop(runId, journal, chipdipClient!, logger, progress, config, bus, () => shutdownRequested),
+        runChipDipLoop(
+          runId,
+          journal,
+          chipdipClient,
+          logger,
+          progress,
+          bus,
+          () => lcscAvailable,
+          () => shutdownRequested,
+        ),
       )
     }
 
-    if (!config.skipLcsc && !config.mouserOnly && lcscClient) {
+    if (lcscClient) {
       activeLoops.push(
-        runLcscLoop(runId, journal, lcscClient, logger, progress, config, bus, () => shutdownRequested),
+        runLcscLoop(
+          runId,
+          journal,
+          lcscClient,
+          logger,
+          progress,
+          bus,
+          () => {
+            lcscAvailable = false
+          },
+          () => shutdownRequested,
+        ),
       )
     }
 
@@ -310,6 +390,7 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     logger.error({ event: 'pipeline_error', error: errorMsg })
     console.error(`\n❌ Ошибка пайплайна: ${errorMsg}`)
     progress.stop()
+    throw err
   } finally {
     // Cleanup
     if (chipdipClient) {
@@ -347,8 +428,8 @@ async function runChipDipLoop(
   client: ChipDipClient,
   logger: EnrichmentLogger,
   progress: ProgressReporter,
-  config: OrchestratorConfig,
   bus: EnrichmentEvents,
+  isLcscAvailable: () => boolean,
   isShutdown: () => boolean,
 ): Promise<void> {
   while (!isShutdown()) {
@@ -377,6 +458,9 @@ async function runChipDipLoop(
       try {
         const result = await client.searchMpn(part.canonicalMpn, part.canonicalBrand)
         const durationMs = Date.now() - startMs
+        const missStatus: EnrichmentItemStatus = isLcscAvailable()
+          ? 'chipdip_not_found'
+          : 'lcsc_not_found'
 
         if (result) {
           const persisted = await persistBeforeStatusUpdate(part, result, logger)
@@ -400,7 +484,12 @@ async function runChipDipLoop(
             timestamp: Date.now(),
           })
         } else {
-          await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'chipdip_not_found')
+          await journal.updateStatus(
+            runId,
+            part.canonicalBrand,
+            part.canonicalMpn,
+            missStatus,
+          )
 
           logger.info({
             event: 'chipdip_not_found',
@@ -414,7 +503,7 @@ async function runChipDipLoop(
             mpn: part.canonicalMpn,
             brand: part.canonicalBrand,
             source: 'chipdip',
-            status: 'chipdip_not_found',
+            status: missStatus,
             durationMs,
             timestamp: Date.now(),
           })
@@ -425,7 +514,16 @@ async function runChipDipLoop(
 
         // Check if REALLY blocked (403/CAPTCHA) - only exact match from ChipDip client
         if (errorMsg.includes('ChipDip blocked (403/CAPTCHA)')) {
-          await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'chipdip_blocked')
+          const blockedStatus: EnrichmentItemStatus = isLcscAvailable()
+            ? 'chipdip_blocked'
+            : 'lcsc_not_found'
+          await journal.updateStatus(
+            runId,
+            part.canonicalBrand,
+            part.canonicalMpn,
+            blockedStatus,
+            errorMsg,
+          )
 
           logger.warn({
             event: 'chipdip_blocked',
@@ -440,15 +538,24 @@ async function runChipDipLoop(
             mpn: part.canonicalMpn,
             brand: part.canonicalBrand,
             source: 'chipdip',
-            status: 'chipdip_blocked',
+            status: blockedStatus,
             durationMs,
             timestamp: Date.now(),
           })
 
-          // Pause ChipDip queue for 2-4 hours
-          const pauseMs = CHIPDIP_BLOCK_PAUSE_MS + Math.random() * CHIPDIP_BLOCK_PAUSE_MS
-          console.log(`\n⏸️  ChipDip заблокирован (403/CAPTCHA). Пауза ${Math.round(pauseMs / 60_000)} мин...`)
-          await sleep(pauseMs)
+          const skipped = await journal.skipPendingChipDip(
+            runId,
+            'ChipDip blocked during run; routed to fallback',
+          )
+          if (!isLcscAvailable()) {
+            await journal.routePendingLcsc(
+              runId,
+              'lcsc_not_found',
+              'LCSC disabled after ChipDip block',
+            )
+          }
+          console.warn(`\n⚠️  ChipDip заблокирован. Передано дальше: ${skipped}`)
+          break
         } else {
           // Other errors (network, timeout, etc.) — increment attempts.
           // After 3 failures mark as chipdip_not_found so it moves to LCSC.
@@ -457,9 +564,12 @@ async function runChipDipLoop(
           )
 
           if (attempts >= 3) {
+            const missStatus: EnrichmentItemStatus = isLcscAvailable()
+              ? 'chipdip_not_found'
+              : 'lcsc_not_found'
             await journal.updateStatus(
               runId, part.canonicalBrand, part.canonicalMpn,
-              'chipdip_not_found', errorMsg,
+              missStatus, errorMsg,
             )
             logger.warn({
               event: 'chipdip_max_retries',
@@ -473,7 +583,7 @@ async function runChipDipLoop(
               mpn: part.canonicalMpn,
               brand: part.canonicalBrand,
               source: 'chipdip',
-              status: 'chipdip_not_found',
+              status: missStatus,
               durationMs,
               timestamp: Date.now(),
             })
@@ -506,8 +616,8 @@ async function runLcscLoop(
   client: LcscClient,
   logger: EnrichmentLogger,
   progress: ProgressReporter,
-  config: OrchestratorConfig,
   bus: EnrichmentEvents,
+  onBlocked: () => void,
   isShutdown: () => boolean,
 ): Promise<void> {
   while (!isShutdown()) {
@@ -585,7 +695,8 @@ async function runLcscLoop(
         const errorMsg = err instanceof Error ? err.message : String(err)
         const durationMs = Date.now() - startMs
 
-        if (errorMsg.includes('blocked') || errorMsg.includes('403')) {
+        if (err instanceof LcscBlockedError) {
+          onBlocked()
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'lcsc_blocked')
 
           logger.warn({
@@ -606,12 +717,23 @@ async function runLcscLoop(
             timestamp: Date.now(),
           })
 
-          // Pause LCSC queue for 1 hour
-          console.log(`\n⏸️  LCSC заблокирован. Пауза 60 мин...`)
-          await sleep(LCSC_BLOCK_PAUSE_MS)
+          const skipped = await journal.routePendingLcsc(
+            runId,
+            'lcsc_blocked',
+            errorMsg,
+          )
+          console.warn(`\n⚠️  LCSC заблокирован. Передано в Mouser: ${skipped}`)
+          break
         } else {
+          await journal.updateStatus(
+            runId,
+            part.canonicalBrand,
+            part.canonicalMpn,
+            'lcsc_not_found',
+            errorMsg,
+          )
           logger.error({
-            event: 'lcsc_error',
+            event: 'lcsc_error_fallback',
             mpn: part.canonicalMpn,
             brand: part.canonicalBrand,
             source: 'lcsc',
@@ -711,9 +833,11 @@ async function runMouserLoop(
             timestamp: Date.now(),
           })
         } else {
-          // Not found or brand mismatch — create stub
-          const persisted = await persistBeforeStatusUpdate(part, null, logger)
-          if (!persisted) continue
+          // Never invent an empty manufacturer for an MPN-only miss.
+          if (hasResolvedManufacturer(part, null)) {
+            const persisted = await persistBeforeStatusUpdate(part, null, logger)
+            if (!persisted) continue
+          }
           await journal.updateStatus(runId, part.canonicalBrand, part.canonicalMpn, 'mouser_not_found')
 
           logger.info({
@@ -850,8 +974,10 @@ async function runUnresolvedFinalizerLoop(
 
     for (const part of batch) {
       if (isShutdown()) break
-      const persisted = await persistBeforeStatusUpdate(part, null, logger)
-      if (!persisted) continue
+      if (hasResolvedManufacturer(part, null)) {
+        const persisted = await persistBeforeStatusUpdate(part, null, logger)
+        if (!persisted) continue
+      }
       await journal.updateStatus(
         runId, part.canonicalBrand, part.canonicalMpn, 'unresolved',
       )

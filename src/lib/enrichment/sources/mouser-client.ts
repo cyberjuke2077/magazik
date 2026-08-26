@@ -1,4 +1,5 @@
 import { type DataSource, type EnrichmentResult } from '../types'
+import { normalizeMpn } from '../ingest/mpn-normalizer'
 
 /**
  * Configuration for the Mouser API client.
@@ -56,7 +57,7 @@ function delay(ms: number): Promise<void> {
 /**
  * Mouser API part result shape (subset of fields we use).
  */
-interface MouserPart {
+export interface MouserPart {
   Manufacturer: string
   ManufacturerPartNumber: string
   MouserPartNumber: string
@@ -66,6 +67,29 @@ interface MouserPart {
   LifecycleStatus?: string
   Category?: string
   ProductDetailUrl?: string
+}
+
+export function selectMouserPart(
+  parts: MouserPart[],
+  mpn: string,
+  canonicalBrand: string,
+): MouserPart | null {
+  const requestedMpn = normalizeMpn(mpn)
+  const exactParts = parts.filter(
+    (part) => normalizeMpn(part.ManufacturerPartNumber) === requestedMpn,
+  )
+
+  const brand = canonicalBrand.trim().toLowerCase()
+  if (brand) {
+    return exactParts.find(
+      (part) => part.Manufacturer.trim().toLowerCase() === brand,
+    ) ?? null
+  }
+
+  const manufacturers = new Set(
+    exactParts.map((part) => part.Manufacturer.trim().toLowerCase()),
+  )
+  return manufacturers.size === 1 ? exactParts[0] ?? null : null
 }
 
 /**
@@ -150,10 +174,6 @@ export function createMouserClient(config: MouserClientConfig): MouserClient {
     )
   }
 
-  function matchesBrand(manufacturer: string, canonicalBrand: string): boolean {
-    return manufacturer.trim().toLowerCase() === canonicalBrand.toLowerCase()
-  }
-
   function mapToEnrichmentResult(part: MouserPart, mpn: string): EnrichmentResult {
     const result: EnrichmentResult = {
       source: 'mouser' as DataSource,
@@ -221,7 +241,7 @@ export function createMouserClient(config: MouserClientConfig): MouserClient {
       return null
     }
 
-    const matched = parts.find((part) => matchesBrand(part.Manufacturer, canonicalBrand))
+    const matched = selectMouserPart(parts, mpn, canonicalBrand)
 
     if (!matched) {
       return null
