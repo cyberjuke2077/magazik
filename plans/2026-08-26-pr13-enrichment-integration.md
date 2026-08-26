@@ -1,7 +1,8 @@
 # Разбиение PR #13 и перенос enrichment
 
 Дата: 2026-08-26
-Статус: importer/dry-run и source fallbacks перенесены отдельными срезами
+Статус: importer/dry-run, source fallbacks и media candidate queue перенесены
+отдельными срезами
 
 ## Цель
 
@@ -26,7 +27,8 @@ watermark worker, Windows launcher и Vercel build.
 - [x] Зафиксировать commit `5b321b4` и открыть PR #17 только для importer/dry-run.
 - [x] Слить PR #17 merge-коммитом `71381a6` и проверить Production.
 - [x] Отдельно оценить и перенести source fallbacks без media/R2 зависимостей.
-- [ ] Отдельно оценить media/datasheet/R2 pipeline.
+- [x] Отделить media/datasheet candidate queue от сетевых и R2-операций.
+- [ ] Отдельно оценить и перенести image/datasheet workers и R2 upload.
 - [ ] Отдельно оценить Windows launcher.
 
 ## Стоп-условия
@@ -71,3 +73,20 @@ watermark worker, Windows launcher и Vercel build.
 - Публичный production smoke подтвердил root, catalog, health, categories,
   CSV export и карточку `ADUC7061BCPZ32-RL`.
 - Следующая точка - отдельный аудит media/datasheet/R2 pipeline.
+
+## Результат третьего среза
+
+- Persistence больше не скачивает изображения и не пишет в R2 во время
+  enrichment.
+- Upstream URL изображений и datasheet нормализуются и записываются только как
+  кандидаты со статусом `pending` в `Product.enrichmentMeta`.
+- Существующие строки `ProductImage` и `Datasheet` не удаляются до успешной
+  проверки и загрузки замены отдельным worker.
+- Приоритет pending-кандидатов соответствует источникам ChipDip -> LCSC ->
+  Mouser -> supplier-stub.
+- Python watermark worker, datasheet worker, реальные R2/БД операции и Windows
+  launcher в этот срез не входят.
+- Целевые тесты, 294 unit-теста, TypeScript, lint и production build через
+  Webpack прошли. Git handoff фиксируется после завершения среза.
+- Следующая точка - отдельный перенос worker-части с безопасной проверкой файлов
+  до R2 upload.
