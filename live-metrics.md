@@ -7,13 +7,14 @@
 
 ## Последний подтвержденный публичный snapshot
 
-Проверено 2026-08-26 после merge PR #17 (`71381a6`) на deployment
-`FLnRR4ZaPMsqxWAuLjgds85AyWYc`:
+Проверено 2026-08-27 после merge PR #19 (`e4ab6f9`) на deployment
+`3NbdaF7ZtJcrWvcBPaKxojvZqrL5`:
 
 - Vercel Production `https://electromagaz-production.vercel.app` имеет статус `Ready`;
-- `/`, `/catalog`, `/api/health` и `/api/catalog/categories` вернули HTTP 200;
-- каталог отрисовал 51 позицию и 50 товарных карточек на первой странице;
-- CSV export вернул заголовок и 51 товар, карточка `ADUC7061BCPZ32-RL` вернула HTTP 200;
+- `/` и `/catalog` успешно загрузились через BrowserAct;
+- каталог отрисовал 50 уникальных ссылок на товарные карточки на первой странице;
+- CSV export вернул HTTP 200, заголовок и 51 товар;
+- карточка `ADUC7061BCPZ32-RL` вернула HTTP 200 и содержит ожидаемый MPN;
 - API категорий вернул 8 корневых и 14 дочерних категорий;
 - `/best` не отрисовал товары, потому что его выборка требует `priceWholesale`.
 - `/api/health` вернул `status: ok` и `database: ok`;

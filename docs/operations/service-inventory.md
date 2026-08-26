@@ -1,6 +1,6 @@
 # Реестр внешних сервисов Electromagaz
 
-Дата проверки: 2026-08-26
+Дата проверки: 2026-08-27
 
 ## Назначение
 
@@ -20,8 +20,8 @@
 
 | Сервис | Назначение | Владелец доступа | Нужный доступ | Текущее состояние | Следующий шаг |
 |---|---|---|---|---|---|
-| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: MPN importer/dry-run выделен из draft PR #13 в PR #17 и слит merge-коммитом `71381a6`; старый PR #13 остаётся отдельным конфликтующим draft | Следующие parser/enrichment части переносить отдельными task branch и PR; не сливать PR #13 целиком |
-| Vercel `cyberjuke2077s-projects/electromagaz-production`, project `prj_RkTeKu3bIIkImfBTfU11zTzpw8bm` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: deployment `FLnRR4ZaPMsqxWAuLjgds85AyWYc` для merge `71381a6` завершился `success`; root, catalog, health, categories, карточка и export проверены 2026-08-26 | Сохранять Production env только на этом target; старый `magazik` не удалять до отдельной cleanup-задачи |
+| GitHub `cyberjuke2077/magazik` | Исходный код, ветки, PR | `cyberjuke2077` | Write для Lunar, review и merge для владельца | `verified`: MPN importer/dry-run слит через PR #17 (`71381a6`), source fallbacks через PR #19 (`e4ab6f9`); старый PR #13 остаётся отдельным конфликтующим draft | Следующие parser/enrichment части переносить отдельными task branch и PR; не сливать PR #13 целиком |
+| Vercel `cyberjuke2077s-projects/electromagaz-production`, project `prj_RkTeKu3bIIkImfBTfU11zTzpw8bm` | Production deploy | Аккаунт `cyberjuke2077` | Owner текущего Hobby team | `verified`: deployment `3NbdaF7ZtJcrWvcBPaKxojvZqrL5` для merge `e4ab6f9` завершился `success`; root, catalog, health, categories, карточка и export проверены 2026-08-27 | Сохранять Production env только на этом target; старый `magazik` не удалять до отдельной cleanup-задачи |
 | Supabase `37Lunar's Org / 37Lunar's Project`, ref `dbumwpnbtvixfusxnggn` | Общая Production PostgreSQL, заявки и лиды | Owner `37Lunar`, Administrator `cyberjuke2077` | Свои аккаунты без передачи credentials | `verified`: база `ACTIVE_HEALTHY`; применены миграции rate limit и RLS; роль `electromagaz_app` без superuser и bypass RLS видит 51 товар и 22 категории | Будущие таблицы выдавать runtime-роли только явным GRANT и RLS policy после миграции |
 | Локальный PostgreSQL | Источник правды каталога перед публикацией | Оператор enrichment | Локальный Docker | `verified`: 8 миграций применены; детерминированный MVP seed содержит 3 товара, 6 характеристик и 2 datasheet | Использовать `dev:local`, `build:local`, `test:e2e:local` и не подменять локальную БД Supabase |
 | Cloudflare R2 | Изображения товаров и документы | `[УТОЧНИТЬ]` | Ограниченный S3 token для целевого bucket | `deferred`: владелец отложил подключение 2026-08-09 | Не включать в текущий бесплатный пакет; вернуться перед наполнением каталога |
