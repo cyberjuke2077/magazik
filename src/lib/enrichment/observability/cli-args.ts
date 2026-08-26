@@ -7,6 +7,7 @@ export interface RunCliFlags {
   dryRun?: boolean
   skipMouser?: boolean
   skipLcsc?: boolean
+  skipChipdip?: boolean
   mouserOnly?: boolean
   forceRefresh?: boolean
 }
@@ -46,6 +47,9 @@ export function parseRunArgs(argv: string[]): RunCliFlags {
       case '--skip-lcsc':
         flags.skipLcsc = true
         break
+      case '--skip-chipdip':
+        flags.skipChipdip = true
+        break
       case '--mouser-only':
         flags.mouserOnly = true
         break
@@ -53,6 +57,9 @@ export function parseRunArgs(argv: string[]): RunCliFlags {
         flags.forceRefresh = true
         break
     }
+  }
+  if (flags.mouserOnly && flags.skipMouser) {
+    throw new CliUsageError('--mouser-only cannot be combined with --skip-mouser')
   }
   return flags
 }

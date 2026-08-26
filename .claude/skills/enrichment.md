@@ -9,9 +9,12 @@ npm run enrichment:run
 # С опциями
 npm run enrichment:run -- --input-dir /path/to/excels --batch-size 50
 npm run enrichment:run -- --resume           # продолжить с места остановки
-npm run enrichment:run -- --dry-run          # без реальных API-вызовов
+npm run enrichment:run -- --dry-run --limit 3 --no-tui # только вход, без БД/API
+npm run enrichment:run -- --skip-chipdip     # начать с LCSC
+npm run enrichment:run -- --skip-lcsc        # после ChipDip перейти в Mouser
 npm run enrichment:run -- --skip-mouser      # пропустить Mouser
 npm run enrichment:run -- --mouser-only      # только Mouser
+npm run enrichment:run -- --force-refresh    # игнорировать freshness cache
 npm run enrichment:run -- --no-tui           # legacy-логи вместо Ink TUI
 
 # Статус и мониторинг
@@ -19,7 +22,10 @@ npm run enrichment:status
 npm run enrichment:watch
 ```
 
-Входная директория с Excel-файлами задаётся через `ENRICHMENT_INPUT_DIR` в `.env`.
+Входная директория с `.xlsx`, `.xls` и `.csv` задаётся через
+`ENRICHMENT_INPUT_DIR` в `.env`. Обязателен MPN, бренд необязателен. Dry-run
+завершается после import, normalization и deduplication, не требует
+`DATABASE_URL` и не обращается к источникам.
 
 ## Безопасность входных файлов
 
@@ -30,9 +36,15 @@ npm run enrichment:watch
 
 ## Источники данных (приоритет)
 
-1. **Mouser API** - REST API, быстрый, надёжный, требует `MOUSER_API_KEY`. Квота: один запрос/сек, 1000/сутки.
-2. **LCSC** - scraping через Axios + cheerio. Может давать soft-rate-limit (~17 запросов подряд). Источник реализует `isBlocked()` и early-stop heuristic.
-3. **ChipDip** - stealth Chromium через cloakbrowser. Самый медленный, используется как fallback.
+1. **ChipDip** - stealth Chromium через cloakbrowser, русское описание и самый
+   сильный приоритет полей.
+2. **LCSC** - SPA и JSON-LD через cloakbrowser, английский fallback.
+3. **Mouser API** - REST API, требует `MOUSER_API_KEY`, лимит один запрос в
+   секунду и 1000 в сутки.
+
+Каждый источник обязан вернуть точный нормализованный MPN. Блокировка или
+явный skip переводит журнал к следующему источнику. Английская карточка остаётся
+`partial` до локализации.
 
 ## Расположение кода
 
@@ -43,8 +55,8 @@ src/lib/enrichment/
 │   ├── mpn-normalizer.ts      # нормализация MPN
 │   └── brand-mapper.ts        # маппинг брендов
 ├── sources/
-│   ├── mouser-api.ts          # Mouser REST API client
-│   ├── lcsc-client.ts         # LCSC scraping
+│   ├── mouser-client.ts       # Mouser REST API client
+│   ├── lcsc-client.ts         # LCSC SPA + JSON-LD
 │   └── chipdip-client.ts      # ChipDip stealth Chromium
 ├── persistence/               # запись результатов в Postgres
 ├── observability/
@@ -60,22 +72,22 @@ src/lib/enrichment/
 Главный файл пайплайна:
 1. Читает Excel-файлы из `ENRICHMENT_INPUT_DIR`
 2. Нормализует MPN через `mpn-normalizer.ts`
-3. Для каждого уникального (brand, mpn) создаёт запись в `EnrichmentJournal`
-4. Прогоняет по источникам в порядке приоритета (Mouser → LCSC → ChipDip)
-5. При успехе обновляет `Product` в Postgres и помечает запись в журнале как `resolved`
-6. При ошибке помечает `failed` с `errorMessage`, увеличивает `attempts`
-7. Флаг `--resume` пропускает уже `resolved` записи текущего `runId`
+3. Для каждого уникального `(brand, mpn)` создаёт запись в `EnrichmentJournal`
+4. Прогоняет каскад ChipDip -> LCSC -> Mouser
+5. Сохраняет результат до перевода статуса журнала на следующий этап
+6. При block или skip двигает все незавершённые записи к следующему источнику
+7. Флаг `--resume` продолжает последний незавершённый `runId`
 
 ## EnrichmentJournal (модель в Prisma)
 
 ```
 EnrichmentJournal {
-  runId          # ID текущего прогона (uuid)
+  runId          # ID текущего прогона
   canonicalBrand # нормализованное название бренда
   canonicalMpn   # нормализованный MPN
   originalMpn    # оригинальный MPN из Excel
-  status         # pending | resolved | failed | skipped
-  errorMessage   # текст ошибки если failed
+  status         # pending | chipdip_* | lcsc_* | mouser_* | unresolved
+  errorMessage   # причина block, skip или ошибки
   attempts       # число попыток
   mouserDay      # дата последнего Mouser-запроса (для квоты)
 }
@@ -87,6 +99,11 @@ EnrichmentJournal {
 
 ## Типичные проблемы
 
-- **LCSC isBlocked()** - после ~17 успешных запросов источник возвращает soft-block. Пайплайн останавливает LCSC и переходит к ChipDip.
+- **ChipDip block** - текущая и оставшиеся позиции переходят в LCSC, многочасовой
+  sleep внутри прогона не используется.
+- **LCSC 403/429** - клиент бросает `LcscBlockedError`, оставшиеся позиции
+  переходят в Mouser или unresolved finalizer.
 - **Mouser квота** - 1000 запросов/сутки. `mouserDay` в журнале трекает дату, чтобы не превысить.
+- **MPN-only miss** - если ни один источник не определил производителя, запись
+  остаётся unresolved в журнале без фиктивной товарной карточки.
 - **ChipDip зависание** - если браузер завис, `browser-registry.ts` убивает процесс при следующем graceful shutdown.

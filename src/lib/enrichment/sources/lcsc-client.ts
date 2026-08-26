@@ -23,6 +23,7 @@ import type { Browser, BrowserContext, Page } from 'playwright-core'
 
 import { type EnrichmentResult } from '../types'
 import { registerBrowser, unregisterBrowser } from '../browser-registry'
+import { normalizeMpn } from '../ingest/mpn-normalizer'
 
 export type LcscClientConfig = Record<string, never>
 
@@ -30,6 +31,13 @@ export interface LcscClient {
   searchMpn(mpn: string, canonicalBrand: string): Promise<EnrichmentResult | null>
   isBlocked(): boolean
   close(): Promise<void>
+}
+
+export class LcscBlockedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'LcscBlockedError'
+  }
 }
 
 const SEARCH_TIMEOUT_MS = 40_000
@@ -203,6 +211,14 @@ function mapProductToResult(
   }
 }
 
+export function isMatchingLcscProduct(
+  requestedMpn: string,
+  parsedMpn: string | undefined,
+): boolean {
+  if (!parsedMpn?.trim()) return false
+  return normalizeMpn(parsedMpn) === normalizeMpn(requestedMpn)
+}
+
 /**
  * Create an LCSC client backed by a single CloakBrowser session.
  * The client is sequential — call sites must not invoke searchMpn in parallel.
@@ -230,7 +246,9 @@ export async function createLcscClient(): Promise<LcscClient> {
     mpn: string,
     canonicalBrand: string,
   ): Promise<EnrichmentResult | null> {
-    if (isBlocked) return null
+    if (isBlocked) {
+      throw new LcscBlockedError('LCSC blocked: client paused after HTTP 403/429')
+    }
     if (!mpn || mpn.trim().length === 0) return null
 
     await jitter()
@@ -245,7 +263,7 @@ export async function createLcscClient(): Promise<LcscClient> {
     if (!resp) return null
     if (resp.status() === 403 || resp.status() === 429) {
       isBlocked = true
-      return null
+      throw new LcscBlockedError(`LCSC blocked: HTTP ${resp.status()} on search`)
     }
 
     const outcome = await waitForSearchResolution(page)
@@ -256,15 +274,18 @@ export async function createLcscClient(): Promise<LcscClient> {
 
     await jitter()
 
+    let pdpResp
     try {
-      const pdpResp = await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 30_000 })
-      if (!pdpResp) return null
-      if (pdpResp.status() === 403 || pdpResp.status() === 429) {
-        isBlocked = true
-        return null
-      }
+      pdpResp = await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 30_000 })
     } catch {
       return null
+    }
+    if (!pdpResp) return null
+    if (pdpResp.status() === 403 || pdpResp.status() === 429) {
+      isBlocked = true
+      throw new LcscBlockedError(
+        `LCSC blocked: HTTP ${pdpResp.status()} on product page`,
+      )
     }
 
     await page.waitForTimeout(PDP_HYDRATION_DELAY_MS)
@@ -272,6 +293,7 @@ export async function createLcscClient(): Promise<LcscClient> {
     const html = await page.content()
     const product = extractJsonLdProduct(html)
     if (!product) return null
+    if (!isMatchingLcscProduct(mpn, product.mpn)) return null
 
     return mapProductToResult(product, mpn, canonicalBrand)
   }

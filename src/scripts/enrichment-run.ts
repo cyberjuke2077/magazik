@@ -15,6 +15,7 @@
  *   --dry-run            Only import/normalize, no API calls
  *   --skip-mouser        Skip Mouser queue
  *   --skip-lcsc          Skip LCSC queue
+ *   --skip-chipdip       Skip ChipDip and start from LCSC
  *   --mouser-only        Only process Mouser queue
  *   --force-refresh      Re-fetch even recently completed products
  *   --no-tui             Disable TUI dashboard (legacy JSON mode)
@@ -25,7 +26,10 @@ import 'dotenv/config'
 
 import { loadEnrichmentConfig, runEnrichmentPipeline } from '../lib/enrichment'
 import { type OrchestratorConfig } from '../lib/enrichment'
-import { parseRunArgs } from '../lib/enrichment/observability/cli-args'
+import {
+  CliUsageError,
+  parseRunArgs,
+} from '../lib/enrichment/observability/cli-args'
 import {
   createEnrichmentEvents,
   createNoopEnrichmentEvents,
@@ -51,6 +55,9 @@ async function main(): Promise<void> {
   const baseConfig = loadEnrichmentConfig({
     requireDatabase: !cliArgs.dryRun,
   })
+  if (cliArgs.mouserOnly && !baseConfig.mouserApiKey) {
+    throw new CliUsageError('--mouser-only requires a configured MOUSER_API_KEY')
+  }
 
   // Build orchestrator config with CLI overrides
   // loggerSilent and progressSilentConsole start as false — they are
@@ -64,6 +71,7 @@ async function main(): Promise<void> {
     dryRun: cliArgs.dryRun,
     skipMouser: cliArgs.skipMouser,
     skipLcsc: cliArgs.skipLcsc,
+    skipChipdip: cliArgs.skipChipdip,
     mouserOnly: cliArgs.mouserOnly,
     forceRefresh: cliArgs.forceRefresh,
     bus,

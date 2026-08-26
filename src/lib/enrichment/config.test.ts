@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { loadEnrichmentConfig } from './config'
+import { loadEnrichmentConfig, normalizeMouserApiKey } from './config'
 
 const originalInputDir = process.env.ENRICHMENT_INPUT_DIR
 const originalDatabaseUrl = process.env.DATABASE_URL
@@ -27,6 +27,26 @@ describe('loadEnrichmentConfig', () => {
 
     expect(() => loadEnrichmentConfig()).toThrow(
       'Missing required environment variables: DATABASE_URL',
+    )
+  })
+})
+
+describe('normalizeMouserApiKey', () => {
+  it.each([
+    undefined,
+    '',
+    'dummy-mouser-key',
+    'PLACEHOLDER',
+    'change-me',
+    'your_api_key',
+    '[ЗАПОЛНИТЬ]',
+  ])('disables placeholder value %s', (value) => {
+    expect(normalizeMouserApiKey(value)).toBe('')
+  })
+
+  it('keeps a non-placeholder value trimmed', () => {
+    expect(normalizeMouserApiKey('  configured-key-value  ')).toBe(
+      'configured-key-value',
     )
   })
 })

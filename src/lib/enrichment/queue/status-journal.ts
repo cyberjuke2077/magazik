@@ -22,6 +22,12 @@ export interface StatusJournal {
   ): Promise<PartIdentity[]>
   getResumableItems(runId: string): Promise<number>
   requeueBlockedItems(runId: string, maxRetries?: number): Promise<number>
+  skipPendingChipDip(runId: string, reason: string): Promise<number>
+  routePendingLcsc(
+    runId: string,
+    status: 'lcsc_not_found' | 'lcsc_blocked',
+    reason: string,
+  ): Promise<number>
   getMouserQuotaToday(): Promise<number>
   getChipDipNotFound(runId: string, limit: number): Promise<PartIdentity[]>
   getLcscNotFound(runId: string, limit: number): Promise<PartIdentity[]>
@@ -130,6 +136,28 @@ export function createStatusJournal(): StatusJournal {
       return requeued.count
     },
 
+    async skipPendingChipDip(runId, reason) {
+      const updated = await prisma.enrichmentJournal.updateMany({
+        where: { runId, status: 'pending' },
+        data: {
+          status: 'chipdip_not_found',
+          errorMessage: reason,
+        },
+      })
+      return updated.count
+    },
+
+    async routePendingLcsc(runId, status, reason) {
+      const updated = await prisma.enrichmentJournal.updateMany({
+        where: {
+          runId,
+          status: { in: ['chipdip_not_found', 'chipdip_blocked'] },
+        },
+        data: { status, errorMessage: reason },
+      })
+      return updated.count
+    },
+
     async getMouserQuotaToday() {
       return prisma.enrichmentJournal.count({
         where: { mouserDay: todayUTC() },
@@ -156,7 +184,7 @@ export function createStatusJournal(): StatusJournal {
 
     async getLcscNotFound(runId, limit) {
       const entries = await prisma.enrichmentJournal.findMany({
-        where: { runId, status: 'lcsc_not_found' },
+        where: { runId, status: { in: ['lcsc_not_found', 'lcsc_blocked'] } },
         take: limit,
       })
       return entries.map((e) => ({
