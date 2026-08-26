@@ -7,17 +7,18 @@
 
 ## Последний подтвержденный публичный snapshot
 
-Проверено 2026-08-27 после merge PR #19 (`e4ab6f9`) на deployment
-`3NbdaF7ZtJcrWvcBPaKxojvZqrL5`:
+Последний полный snapshot проверен после merge PR #19 (`e4ab6f9`). После merge
+PR #21 (`9c0c585`) deployment `SrVU71EuwKXSn7pj7T93YVXGBRH6` завершился
+`success`; повторно проверены root, health, catalog и карточка товара:
 
 - Vercel Production `https://electromagaz-production.vercel.app` имеет статус `Ready`;
-- `/` и `/catalog` успешно загрузились через BrowserAct;
+- `/` и `/catalog` успешно загрузились через BrowserAct после PR #21;
 - каталог отрисовал 50 уникальных ссылок на товарные карточки на первой странице;
 - CSV export вернул HTTP 200, заголовок и 51 товар;
-- карточка `ADUC7061BCPZ32-RL` вернула HTTP 200 и содержит ожидаемый MPN;
+- карточка `ADUC7061BCPZ32-RL` отрисовалась и содержит ожидаемый MPN после PR #21;
 - API категорий вернул 8 корневых и 14 дочерних категорий;
 - `/best` не отрисовал товары, потому что его выборка требует `priceWholesale`.
-- `/api/health` вернул `status: ok` и `database: ok`;
+- `/api/health` вернул `status: ok` и `database: ok` после PR #21;
 - SQL snapshot от 2026-08-20: 51 товар, 22 категории, 8 производителей, 10 изображений,
   97 datasheet, 4 товара с розничной ценой, 0 с оптовой ценой и 0 в наличии;
 - заявки и оптовые лиды: 0.
