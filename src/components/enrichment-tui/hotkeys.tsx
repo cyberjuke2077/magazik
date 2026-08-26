@@ -12,11 +12,12 @@ export function useHotkeys({ mode, stateApi, bus }: Props) {
   const { exit } = useApp()
 
   const handleQuit = () => {
-    if (mode === 'live') {
-      bus?.emit('shutdown_initiated', {
+    if (mode === 'live' && bus) {
+      bus.emit('shutdown_initiated', {
         source: 'hotkey',
         timestamp: Date.now(),
       })
+      return
     }
     exit()
   }
@@ -28,17 +29,6 @@ export function useHotkeys({ mode, stateApi, bus }: Props) {
     }
     if (input === 'q') {
       handleQuit()
-      return
-    }
-    if (input === 'p') {
-      if (mode === 'watch') return
-      stateApi.togglePause()
-      const paused = stateApi.getState().paused
-      if (paused) {
-        bus?.emit('paused', { reason: 'hotkey', timestamp: Date.now() })
-      } else {
-        bus?.emit('resumed', { timestamp: Date.now() })
-      }
       return
     }
     if (input === '?') {

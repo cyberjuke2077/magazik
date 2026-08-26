@@ -36,6 +36,7 @@ import {
   createNoopEnrichmentEvents,
 } from './observability/event-bus'
 import { filterFreshProducts } from './queue/fresh-product-filter'
+import { loadResumableRun } from './queue/resume-run'
 import { hasResolvedManufacturer } from './persistence/manufacturer-resolver'
 
 export interface OrchestratorConfig extends EnrichmentConfig {
@@ -72,6 +73,30 @@ function sleep(ms: number): Promise<void> {
 function generateRunId(): string {
   const now = new Date()
   return `run-${now.toISOString().slice(0, 19).replace(/[T:]/g, '-')}`
+}
+
+async function selectNewRunParts(
+  deduplicatedParts: PartIdentity[],
+  config: OrchestratorConfig,
+): Promise<PartIdentity[]> {
+  const cacheResult =
+    config.skipFreshProducts && !config.forceRefresh
+      ? await filterFreshProducts(deduplicatedParts, config.freshnessDays)
+      : { pending: deduplicatedParts, skipped: 0 }
+  const parts = config.limit === undefined
+    ? cacheResult.pending
+    : cacheResult.pending.slice(0, config.limit)
+
+  console.log(`   Пропущено свежих карточек: ${cacheResult.skipped}`)
+  if (config.limit !== undefined) {
+    console.log(
+      `   Лимит пробного запуска: ${config.limit} (будет обработано: ${parts.length})`,
+    )
+  }
+  if (parts.length === 0) {
+    console.log(`\n🏁 Все карточки свежие. Запросы к источникам не выполнялись.`)
+  }
+  return parts
 }
 
 /**
@@ -142,6 +167,12 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
 
   process.on('SIGINT', () => handleShutdown('SIGINT'))
   process.on('SIGTERM', () => handleShutdown('SIGTERM'))
+  const unsubscribeHotkeyShutdown = bus.on(
+    'shutdown_initiated',
+    ({ source }) => {
+      if (source === 'hotkey') handleShutdown('SIGINT')
+    },
+  )
 
   try {
     // Step 1: Import and deduplicate
@@ -178,30 +209,19 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       return
     }
 
-    const cacheResult =
-      config.skipFreshProducts && !config.forceRefresh
-        ? await filterFreshProducts(deduplicatedParts, config.freshnessDays)
-        : { pending: deduplicatedParts, skipped: 0 }
-    const eligibleParts = cacheResult.pending
-    const parts = config.limit === undefined
-      ? eligibleParts
-      : eligibleParts.slice(0, config.limit)
     console.log(`   Уникальных артикулов: ${deduplicatedParts.length}`)
-    console.log(`   Пропущено свежих карточек: ${cacheResult.skipped}`)
-    if (config.limit !== undefined) {
-      console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${parts.length})`)
-    }
+    const resumedRun = config.resume ? await loadResumableRun() : null
+    const parts = resumedRun
+      ? []
+      : await selectNewRunParts(deduplicatedParts, config)
 
-    if (parts.length === 0) {
-      logger.info({ event: 'pipeline_nothing_to_do' })
-      console.log(`\n🏁 Все карточки свежие. Запросы к источникам не выполнялись.`)
-      return
-    }
+    if (!resumedRun && parts.length === 0) return
 
     // Step 4: Create ImportProgress record
-    const runId = config.resume ? await findExistingRunId() : generateRunId()
+    const runId = resumedRun?.id ?? generateRunId()
+    const runTotal = resumedRun?.totalProducts ?? parts.length
 
-    if (!config.resume) {
+    if (!resumedRun) {
       await prisma.importProgress.create({
         data: {
           id: runId,
@@ -213,7 +233,8 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     }
 
     // Step 5: Init journal (or resume)
-    if (!config.resume) {
+    let alreadyProcessed = 0
+    if (!resumedRun) {
       const inserted = await journal.initJournal(runId, parts)
       logger.info({ event: 'journal_initialized', durationMs: 0 })
       console.log(`   Записей в журнале: ${inserted}`)
@@ -226,11 +247,18 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
         console.log(`   Возвращено в очередь после блокировки: ${requeued}`)
       }
       const resumable = await journal.getResumableItems(runId)
-      console.log(`   Возобновление: ${resumable} артикулов в обработке`)
+      alreadyProcessed = Math.max(0, runTotal - resumable)
+      console.log(`   Возобновление run ${runId}: ${resumable} артикулов осталось`)
     }
 
     // Start progress reporter
-    progress.start(runId, parts.length)
+    bus.emit('run_initialized', {
+      runId,
+      total: runTotal,
+      processed: alreadyProcessed,
+      startedAt: resumedRun?.startedAt?.getTime() ?? Date.now(),
+    })
+    progress.start(runId, runTotal)
 
     const runChipDip = !config.mouserOnly && !config.skipChipdip
     const runLcsc = !config.mouserOnly && !config.skipLcsc
@@ -364,7 +392,7 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
       // with a stub Product, so MPNs aren't lost.
       activeLoops.push(
         runUnresolvedFinalizerLoop(
-          runId, journal, logger, progress, () => shutdownRequested,
+          runId, journal, logger, progress, bus, () => shutdownRequested,
         ),
       )
     }
@@ -392,6 +420,7 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     progress.stop()
     throw err
   } finally {
+    unsubscribeHotkeyShutdown()
     // Cleanup
     if (chipdipClient) {
       await chipdipClient.close().catch(() => {})
@@ -403,19 +432,6 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     // (e.g. orphaned by an aborted session rotation).
     await closeAllBrowsers()
   }
-}
-
-/**
- * Finds the most recent non-completed run ID for resume.
- */
-async function findExistingRunId(): Promise<string> {
-  const existing = await prisma.importProgress.findFirst({
-    where: { status: { in: ['running', 'paused'] } },
-    orderBy: { createdAt: 'desc' },
-  })
-
-  if (existing) return existing.id
-  return generateRunId()
 }
 
 /**
@@ -956,6 +972,7 @@ async function runUnresolvedFinalizerLoop(
   journal: StatusJournal,
   logger: EnrichmentLogger,
   progress: ProgressReporter,
+  bus: EnrichmentEvents,
   isShutdown: () => boolean,
 ): Promise<void> {
   while (!isShutdown()) {
@@ -985,6 +1002,14 @@ async function runUnresolvedFinalizerLoop(
         event: 'finalized_unresolved',
         mpn: part.canonicalMpn,
         brand: part.canonicalBrand,
+      })
+      bus.emit('mpn_completed', {
+        mpn: part.canonicalMpn,
+        brand: part.canonicalBrand,
+        source: 'lcsc',
+        status: 'unresolved',
+        durationMs: 0,
+        timestamp: Date.now(),
       })
 
       await updateProgressStats(runId, journal, progress)
@@ -1016,7 +1041,11 @@ async function updateProgressStats(
 
     // Update ImportProgress in database
     const importedProducts = (stats.chipdip_done ?? 0) + (stats.lcsc_done ?? 0) + (stats.mouser_done ?? 0)
-    const failedProducts = (stats.chipdip_blocked ?? 0) + (stats.lcsc_blocked ?? 0) + (stats.mouser_failed ?? 0)
+    const failedProducts =
+      (stats.mouser_not_found ?? 0) +
+      (stats.mouser_failed ?? 0) +
+      (stats.mouser_brand_mismatch ?? 0) +
+      (stats.unresolved ?? 0)
 
     await prisma.importProgress.update({
       where: { id: runId },

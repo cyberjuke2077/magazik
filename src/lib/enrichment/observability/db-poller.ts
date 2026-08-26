@@ -30,7 +30,14 @@ export async function loadDashboardSnapshot(): Promise<DashboardSnapshot> {
   })
 
   const FINAL = new Set([
-    'chipdip_done', 'lcsc_done', 'mouser_done', 'done',
+    'chipdip_done',
+    'lcsc_done',
+    'mouser_done',
+    'mouser_not_found',
+    'mouser_failed',
+    'mouser_brand_mismatch',
+    'done',
+    'unresolved',
   ])
   const brandMap = new Map<string, { done: number; remaining: number }>()
   for (const b of brandGroups) {
@@ -107,6 +114,9 @@ export async function loadDashboardSnapshot(): Promise<DashboardSnapshot> {
     (statusCounts.chipdip_done ?? 0) +
     (statusCounts.lcsc_done ?? 0) +
     (statusCounts.mouser_done ?? 0) +
+    (statusCounts.mouser_not_found ?? 0) +
+    (statusCounts.mouser_failed ?? 0) +
+    (statusCounts.mouser_brand_mismatch ?? 0) +
     (statusCounts.done ?? 0) +
     (statusCounts.unresolved ?? 0)
   const excelTotal = resolveExcelTotal(importProgress)

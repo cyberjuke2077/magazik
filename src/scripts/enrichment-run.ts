@@ -41,9 +41,13 @@ async function main(): Promise<void> {
   console.log()
 
   const cliArgs = parseRunArgs(process.argv)
+  if (cliArgs.inputDir) {
+    process.env.ENRICHMENT_INPUT_DIR = cliArgs.inputDir
+  }
 
   const tuiEnabled =
     process.stdout.isTTY === true &&
+    !cliArgs.dryRun &&
     !cliArgs.noTui &&
     process.env.NO_TUI !== '1'
 
@@ -95,15 +99,17 @@ async function main(): Promise<void> {
   console.log()
 
   const startTime = Date.now()
+  let closeTui: (() => void) | null = null
 
   // Mount TUI if enabled
   if (tuiEnabled) {
     try {
       const { render } = await import('ink')
       const React = await import('react')
-      const { App } = await import('../components/enrichment-tui')
-      const stateApi = createDashboardState({ excelTotal: 69_116 })
+      const { App } = await import('../components/enrichment-tui/index.js')
+      const stateApi = createDashboardState()
 
+      bus.on('run_initialized', (p) => stateApi.applyEvent('run_initialized', p))
       bus.on('mpn_started', (p) => stateApi.applyEvent('mpn_started', p))
       bus.on('mpn_completed', (p) => stateApi.applyEvent('mpn_completed', p))
       bus.on('phase_changed', (p) => stateApi.applyEvent('phase_changed', p))
@@ -116,7 +122,17 @@ async function main(): Promise<void> {
         stateApi.applyEvent('shutdown_initiated', p),
       )
 
-      render(React.createElement(App, { mode: 'live', stateApi, bus }))
+      const originalConsole = {
+        log: console.log,
+        info: console.info,
+        warn: console.warn,
+      }
+      const tui = render(React.createElement(App, { mode: 'live', stateApi, bus }))
+      const restoreConsole = muteRoutineConsoleOutput(originalConsole)
+      closeTui = () => {
+        tui.unmount()
+        restoreConsole()
+      }
       // TUI mounted successfully — suppress console output
       config.loggerSilent = true
       config.progressSilentConsole = true
@@ -127,19 +143,38 @@ async function main(): Promise<void> {
     }
   }
 
-  await runEnrichmentPipeline(config)
+  try {
+    await runEnrichmentPipeline(config)
+  } finally {
+    closeTui?.()
+  }
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(1)
   console.log()
   console.log(`Done in ${duration}s`)
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(
-      'Pipeline failed:',
-      error instanceof Error ? error.message : error,
-    )
-    process.exit(1)
-  })
+function muteRoutineConsoleOutput(original: {
+  log: typeof console.log
+  info: typeof console.info
+  warn: typeof console.warn
+}): () => void {
+  const muted = (): void => undefined
+  console.log = muted
+  console.info = muted
+  console.warn = muted
+
+  return () => {
+    console.log = original.log
+    console.info = original.info
+    console.warn = original.warn
+  }
+}
+
+main().catch((error) => {
+  console.error(
+    'Pipeline failed:',
+    error instanceof Error ? error.message : error,
+  )
+  process.exitCode = 1
+})
