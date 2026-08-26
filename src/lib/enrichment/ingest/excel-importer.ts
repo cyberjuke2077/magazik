@@ -14,7 +14,7 @@ import { mapBrand } from './brand-mapper'
 export interface ImportStats {
   /** Total number of files found in the input directory */
   totalFiles: number
-  /** Files where Chinese headers were detected */
+  /** Files where supported headers were detected */
   filesWithHeaders: number
   /** Files where auto-detect determined no headers (data starts at row 1) */
   filesWithoutHeaders: number
@@ -24,29 +24,40 @@ export interface ImportStats {
   totalRows: number
   /** Rows skipped due to empty/null MPN */
   skippedRows: number
+  /** CSV files that were not UTF-8 and were decoded as GB18030 */
+  csvFilesDecodedAsGb18030: number
 }
 
 /** Supported file extensions for import */
 const SUPPORTED_EXTENSIONS = ['.xlsx', '.xls', '.csv']
 
 /**
- * Regex for MPN auto-detection: Latin letter followed by 2-29 more
- * alphanumeric/dash/plus/slash/dot characters (total 3-30 chars).
+ * Conservative MPN auto-detection for headerless files. Real orderable
+ * numbers can start with a digit and contain spaces/colon, so requiring
+ * both a Latin letter and a digit is safer than a narrow punctuation list.
  */
-const MPN_PATTERN = /^[A-Za-z][A-Za-z0-9\-+/.]{2,29}$/
+const MPN_PATTERN = /^[A-Za-z0-9][A-Za-z0-9\-+/. :_]{1,79}$/
+const LATIN_LETTER_PATTERN = /[A-Za-z]/
+const DIGIT_PATTERN = /\d/
 
 /** Chinese character range — used to exclude non-MPN first cells */
 const CHINESE_CHAR_PATTERN = /[\u4e00-\u9fff]/
 
-/**
- * Chinese header patterns for column detection.
- * Each entry maps a field to a substring that must appear in the header cell.
- */
-const HEADER_PATTERNS = {
-  mpn: '型号',
-  brand: '品牌',
-  package: '封装',
-  dateCode: '批号',
+/** Header aliases accepted in customer and supplier files. */
+const HEADER_ALIASES = {
+  mpn: [
+    '型号',
+    'mpn',
+    'partnumber',
+    'manufacturerpartnumber',
+    'артикул',
+    'партномер',
+    'номердетали',
+    'маркировка',
+  ],
+  brand: ['品牌', 'brand', 'manufacturer', 'бренд', 'производитель'],
+  package: ['封装', 'package', 'case', 'корпус'],
+  dateCode: ['批号', 'datecode', 'batch', 'партия', 'датапартии'],
 } as const
 
 type ColumnMapping = {
@@ -76,6 +87,7 @@ export function importSupplierFiles(inputDir: string): { rows: SupplierRow[]; st
     skippedFiles: 0,
     totalRows: 0,
     skippedRows: 0,
+    csvFilesDecodedAsGb18030: 0,
   }
 
   const rows: SupplierRow[] = []
@@ -103,7 +115,7 @@ export function importSupplierFiles(inputDir: string): { rows: SupplierRow[]; st
 
     try {
       const fileRows = ext === '.csv'
-        ? readCsvFile(filePath)
+        ? readCsvFile(filePath, stats)
         : readExcelFile(filePath)
 
       if (fileRows.length === 0) {
@@ -152,13 +164,29 @@ function readExcelFile(filePath: string): string[][] {
 /**
  * Reads a CSV file and returns raw row data as string arrays.
  */
-function readCsvFile(filePath: string): string[][] {
-  const content = fs.readFileSync(filePath, 'utf-8')
+function readCsvFile(filePath: string, stats: ImportStats): string[][] {
+  const bytes = fs.readFileSync(filePath)
+  const content = decodeCsv(bytes, stats)
   const records: string[][] = csvParse(content, {
     skip_empty_lines: true,
     relax_column_count: true,
   })
   return records
+}
+
+function decodeCsv(bytes: Buffer, stats: ImportStats): string {
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+  } catch {
+    stats.csvFilesDecodedAsGb18030++
+    try {
+      return new TextDecoder('gb18030', { fatal: true }).decode(bytes)
+    } catch (err) {
+      throw new Error(
+        `CSV is neither valid UTF-8 nor GB18030: ${err instanceof Error ? err.message : String(err)}`,
+      )
+    }
+  }
 }
 
 /**
@@ -180,7 +208,7 @@ function processFileRows(
     return null
   }
 
-  // Try to detect Chinese headers in the first row
+  // Detect customer/supplier headers in the first row.
   const headerMapping = detectHeaders(firstRow)
 
   if (headerMapping) {
@@ -193,12 +221,7 @@ function processFileRows(
   // Try auto-detect: first cell matches MPN pattern (no Chinese chars)
   if (isAutoDetectMpn(firstRow[0])) {
     stats.filesWithoutHeaders++
-    // Positional mapping: col1→MPN, col2→brand, col3→package
-    const positionalMapping: ColumnMapping = {
-      mpn: 0,
-      brand: 1,
-      package: firstRow.length > 2 ? 2 : undefined,
-    }
+    const positionalMapping = inferHeaderlessMapping(rawRows)
     return extractRows(rawRows, positionalMapping, filePath, stats)
   }
 
@@ -210,7 +233,7 @@ function processFileRows(
 }
 
 /**
- * Detects Chinese header patterns in the first row.
+ * Detects supported header aliases in the first row.
  * Returns column mapping if headers are found, null otherwise.
  */
 function detectHeaders(row: string[]): ColumnMapping | null {
@@ -220,16 +243,16 @@ function detectHeaders(row: string[]): ColumnMapping | null {
   let dateCodeCol: number | undefined
 
   for (let i = 0; i < row.length; i++) {
-    const cell = (row[i] || '').trim()
+    const cell = normalizeHeader(row[i] || '')
     if (!cell) continue
 
-    if (cell.includes(HEADER_PATTERNS.mpn)) {
+    if (hasAlias(HEADER_ALIASES.mpn, cell)) {
       mpnCol = i
-    } else if (cell.includes(HEADER_PATTERNS.brand)) {
+    } else if (hasAlias(HEADER_ALIASES.brand, cell)) {
       brandCol = i
-    } else if (cell.includes(HEADER_PATTERNS.package)) {
+    } else if (hasAlias(HEADER_ALIASES.package, cell)) {
       packageCol = i
-    } else if (cell.includes(HEADER_PATTERNS.dateCode)) {
+    } else if (hasAlias(HEADER_ALIASES.dateCode, cell)) {
       dateCodeCol = i
     }
   }
@@ -245,6 +268,72 @@ function detectHeaders(row: string[]): ColumnMapping | null {
   }
 }
 
+function hasAlias(aliases: readonly string[], value: string): boolean {
+  return aliases.includes(value)
+}
+
+function normalizeHeader(value: string): string {
+  return value
+    .normalize('NFKC')
+    .trim()
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .replace(/[^\p{L}\p{N}]+/gu, '')
+}
+
+function inferHeaderlessMapping(rows: string[][]): ColumnMapping {
+  const maxColumns = rows.reduce((max, row) => Math.max(max, row.length), 0)
+  const candidates = Array.from({ length: Math.max(0, maxColumns - 2) }, (_, idx) => idx + 2)
+  const packageCol = bestMatchingColumn(rows, candidates, isLikelyPackage)
+  const dateCodeCol = bestMatchingColumn(
+    rows,
+    candidates.filter((idx) => idx !== packageCol),
+    isLikelyDateCode,
+  )
+
+  return {
+    mpn: 0,
+    brand: maxColumns > 1 ? 1 : -1,
+    package: packageCol,
+    dateCode: dateCodeCol,
+  }
+}
+
+function bestMatchingColumn(
+  rows: string[][],
+  candidates: number[],
+  predicate: (value: string) => boolean,
+): number | undefined {
+  let best: { column: number; score: number } | undefined
+
+  for (const column of candidates) {
+    const values = rows
+      .slice(0, 200)
+      .map((row) => (row[column] || '').trim())
+      .filter(Boolean)
+    if (values.length === 0) continue
+
+    const score = values.filter(predicate).length / values.length
+    if (score >= 0.6 && (!best || score > best.score)) {
+      best = { column, score }
+    }
+  }
+
+  return best?.column
+}
+
+function isLikelyPackage(value: string): boolean {
+  const normalized = value.trim().toUpperCase().replace(/\s+/g, '')
+  if (/^(0201|0402|0603|0805|1206|1210|1812|2010|2512)$/.test(normalized)) {
+    return true
+  }
+  return /^(?:P?G-)?(?:BGA|FBGA|VFBGA|PBGA|T?QFN|VQFN|LQFP|TQFP|QFP|SOIC|SOP|SSOP|TSSOP|TSOP|VSSOP|VSON|LFCSP|DFN|TDFN|DIP|PLCC|WLCSP|CSP|SOT|SC|TO)(?:[-_]?\d.*)?$/.test(normalized)
+}
+
+function isLikelyDateCode(value: string): boolean {
+  return /^(?:\d{2,4}\+|\d{2}|(?:19|20)\d{2}|\d{2}[A-Z]\d{1,2})$/i.test(value.trim())
+}
+
 /**
  * Checks if a cell value matches the MPN auto-detect pattern:
  * Latin letters + digits, 3-30 chars, no Chinese characters.
@@ -257,8 +346,7 @@ function isAutoDetectMpn(value: string | undefined): boolean {
   // Must not contain Chinese characters
   if (CHINESE_CHAR_PATTERN.test(trimmed)) return false
 
-  // Must match MPN pattern
-  return MPN_PATTERN.test(trimmed)
+  return MPN_PATTERN.test(trimmed) && LATIN_LETTER_PATTERN.test(trimmed) && DIGIT_PATTERN.test(trimmed)
 }
 
 /**

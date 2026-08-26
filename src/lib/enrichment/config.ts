@@ -8,7 +8,7 @@ import defaults from '../../../config/enrichment.json'
  *
  * Required vars (fail if missing):
  * - `ENRICHMENT_INPUT_DIR` — path to supplier Excel/CSV files
- * - `DATABASE_URL` — PostgreSQL connection string
+ * - `DATABASE_URL` - PostgreSQL connection string for non-dry runs
  *
  * Optional vars:
  * - `MOUSER_API_KEY` — Mouser Search API key (Mouser source disabled if absent)
@@ -21,8 +21,15 @@ import defaults from '../../../config/enrichment.json'
  *
  * @throws Error if required variables are missing or values are invalid
  */
-export function loadEnrichmentConfig(): EnrichmentConfig {
+interface LoadEnrichmentConfigOptions {
+  requireDatabase?: boolean
+}
+
+export function loadEnrichmentConfig(
+  options: LoadEnrichmentConfigOptions = {},
+): EnrichmentConfig {
   const missing: string[] = []
+  const requireDatabase = options.requireDatabase ?? true
 
   const inputDir = process.env.ENRICHMENT_INPUT_DIR
   if (!inputDir) missing.push('ENRICHMENT_INPUT_DIR')
@@ -31,7 +38,7 @@ export function loadEnrichmentConfig(): EnrichmentConfig {
   const mouserApiKey = process.env.MOUSER_API_KEY ?? ''
 
   const databaseUrl = process.env.DATABASE_URL
-  if (!databaseUrl) missing.push('DATABASE_URL')
+  if (requireDatabase && !databaseUrl) missing.push('DATABASE_URL')
 
   if (missing.length > 0) {
     throw new Error(
@@ -100,7 +107,7 @@ export function loadEnrichmentConfig(): EnrichmentConfig {
     mouserApiKey,
     batchSize,
     persistBatchSize,
-    databaseUrl: databaseUrl!,
+    ...(databaseUrl && { databaseUrl }),
   }
 }
 

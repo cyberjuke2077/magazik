@@ -18,6 +18,7 @@ export const BRAND_MAP: Record<string, string> = {
 
   // STMicroelectronics
   'ST': 'STMicroelectronics',
+  'ST意法': 'STMicroelectronics',
   'STMICROELECTRONICS': 'STMicroelectronics',
 
   // Microchip Technology (acquired Atmel)
@@ -41,7 +42,11 @@ export const BRAND_MAP: Record<string, string> = {
 
   // Infineon Technologies
   'INFINEON': 'Infineon Technologies',
+  'INFINEON/英飞凌': 'Infineon Technologies',
   'INFINEON TECHNOLOGIES': 'Infineon Technologies',
+
+  // Toshiba
+  'TOSHIBA': 'Toshiba',
 
   // NXP Semiconductors
   'NXP': 'NXP Semiconductors',

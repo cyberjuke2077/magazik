@@ -157,6 +157,22 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
 
     // Step 2: Deduplicate
     const deduplicatedParts = deduplicate(rows)
+
+    // A dry run validates only the input contract. It must not query the
+    // freshness cache, initialize a journal, call sources, or write data.
+    if (config.dryRun) {
+      const dryRunParts = config.limit === undefined
+        ? deduplicatedParts
+        : deduplicatedParts.slice(0, config.limit)
+      console.log(`   Уникальных артикулов: ${deduplicatedParts.length}`)
+      if (config.limit !== undefined) {
+        console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${dryRunParts.length})`)
+      }
+      logger.info({ event: 'dry_run_complete' })
+      console.log(`\n🏁 Dry run завершён. Без обращения к БД и внешним источникам.`)
+      return
+    }
+
     const cacheResult =
       config.skipFreshProducts && !config.forceRefresh
         ? await filterFreshProducts(deduplicatedParts, config.freshnessDays)
@@ -169,13 +185,6 @@ export async function runEnrichmentPipeline(config: OrchestratorConfig): Promise
     console.log(`   Пропущено свежих карточек: ${cacheResult.skipped}`)
     if (config.limit !== undefined) {
       console.log(`   Лимит пробного запуска: ${config.limit} (будет обработано: ${parts.length})`)
-    }
-
-    // Step 3: Dry run — log stats and exit
-    if (config.dryRun) {
-      logger.info({ event: 'dry_run_complete' })
-      console.log(`\n🏁 Dry run завершён. Без записи в БД.`)
-      return
     }
 
     if (parts.length === 0) {
