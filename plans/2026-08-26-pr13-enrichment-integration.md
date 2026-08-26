@@ -1,7 +1,8 @@
 # Разбиение PR #13 и перенос enrichment
 
 Дата: 2026-08-26
-Статус: в работе
+Статус: первый безопасный срез завершён; дальнейший parser/enrichment отложен
+до отдельной сессии
 
 ## Цель
 
@@ -11,7 +12,7 @@ watermark worker, Windows launcher и Vercel build.
 
 ## Исходная точка
 
-- `main` и `origin/main`: `4b62ff49ba52acdd43bc50cfbf7e57fe68bd4fd8`.
+- Исходный `main`: `4b62ff49ba52acdd43bc50cfbf7e57fe68bd4fd8`.
 - PR #13 открыт как draft, имеет статус `CONFLICTING` и `DIRTY`.
 - В PR #13 находятся 20 коммитов, 96 файлов и несколько независимых задач.
 - Production, Supabase, R2 и внешний enrichment в этой задаче не изменяются.
@@ -24,6 +25,7 @@ watermark worker, Windows launcher и Vercel build.
 - [x] Запустить TypeScript, lint и production build через Webpack fallback при
   sandbox-ошибке Turbopack.
 - [x] Зафиксировать commit `5b321b4` и открыть PR #17 только для importer/dry-run.
+- [x] Слить PR #17 merge-коммитом `71381a6` и проверить Production.
 - [ ] Отдельно оценить перенос source fallbacks.
 - [ ] Отдельно оценить media/datasheet/R2 pipeline.
 - [ ] Отдельно оценить Windows launcher.
@@ -35,3 +37,17 @@ watermark worker, Windows launcher и Vercel build.
 - Не писать в Cloudflare R2.
 - Не запускать `db:publish` и не изменять production Supabase/Vercel.
 - Не переписывать историю и не force-push старого PR #13.
+
+## Результат первого среза
+
+- PR #17 слит в `main` merge-коммитом
+  `71381a6e3f63a947492035b71e88b5b874c75bd8`.
+- Vercel check текущего target `electromagaz-production` завершился `success`:
+  deployment `FLnRR4ZaPMsqxWAuLjgds85AyWYc`.
+- Production smoke подтвердил HTTP 200 для `/`, `/catalog`, `/api/health`,
+  `/api/catalog/categories`, карточки товара и CSV export.
+- Каталог отрисовал 51 позицию, export вернул заголовок и 51 строку товаров,
+  `/api/health` вернул `status: ok`, `database: ok`.
+- Реальный enrichment, запись в БД/R2 и `db:publish` не запускались.
+- Следующая точка - новый task по parser/enrichment, начиная с отдельного аудита
+  source fallbacks из старого draft PR #13.
