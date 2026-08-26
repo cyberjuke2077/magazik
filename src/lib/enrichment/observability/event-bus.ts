@@ -17,6 +17,7 @@ export type EnrichmentJournalStatus =
   | 'lcsc_done'
   | 'lcsc_not_found'
   | 'lcsc_blocked'
+  | 'mouser_queued'
   | 'mouser_done'
   | 'mouser_not_found'
   | 'mouser_failed'
@@ -25,6 +26,12 @@ export type EnrichmentJournalStatus =
   | 'unresolved'
 
 export interface EnrichmentEventMap {
+  run_initialized: {
+    runId: string
+    total: number
+    processed: number
+    startedAt: number
+  }
   mpn_started: {
     mpn: string
     brand: string

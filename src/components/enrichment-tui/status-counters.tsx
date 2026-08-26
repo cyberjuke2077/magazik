@@ -11,14 +11,15 @@ const DISPLAY: Array<{
   label: string
   color?: string
 }> = [
-  { key: 'chipdip_done', label: 'ChipDip ✓', color: 'green' },
-  { key: 'chipdip_not_found', label: 'ChipDip ✗', color: 'red' },
-  { key: 'chipdip_blocked', label: 'ChipDip ⚠', color: 'yellow' },
-  { key: 'lcsc_done', label: 'LCSC ✓', color: 'green' },
-  { key: 'lcsc_not_found', label: 'LCSC ✗', color: 'red' },
-  { key: 'mouser_done', label: 'Mouser ✓', color: 'green' },
-  { key: 'mouser_not_found', label: 'Mouser ✗', color: 'red' },
-  { key: 'unresolved', label: 'unresolved', color: 'red' },
+  { key: 'chipdip_done', label: 'ChipDip найдено', color: 'green' },
+  { key: 'chipdip_not_found', label: 'ChipDip не найдено', color: 'red' },
+  { key: 'chipdip_blocked', label: 'ChipDip заблокировал', color: 'yellow' },
+  { key: 'lcsc_done', label: 'LCSC найдено', color: 'green' },
+  { key: 'lcsc_not_found', label: 'LCSC не найдено', color: 'red' },
+  { key: 'mouser_queued', label: 'Mouser в очереди', color: 'yellow' },
+  { key: 'mouser_done', label: 'Mouser найдено', color: 'green' },
+  { key: 'mouser_not_found', label: 'Mouser не найдено', color: 'red' },
+  { key: 'unresolved', label: 'Не найдено нигде', color: 'red' },
 ]
 
 export function StatusCounters({ counts }: Props) {

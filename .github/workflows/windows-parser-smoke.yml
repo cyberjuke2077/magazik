@@ -1,0 +1,51 @@
+name: Windows parser smoke
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/windows-parser-smoke.yml'
+      - 'package-lock.json'
+      - 'package.json'
+      - 'scripts/with-local-db.ts'
+      - 'src/components/enrichment-tui/**'
+      - 'src/lib/enrichment/**'
+      - 'src/scripts/enrichment-*.ts'
+      - 'src/scripts/enrichment-*.mts'
+      - 'windows/**'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Parse PowerShell launchers
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem windows -Filter *.ps1 | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $_.FullName,
+              [ref]$tokens,
+              [ref]$errors
+            ) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error $_.Message }
+              $failed = $true
+            }
+          }
+          if ($failed) { exit 1 }
+      - name: Run Windows launcher and terminal tests
+        run: npm test -- --run windows/windows-launcher.test.ts src/components/enrichment-tui/app.test.tsx src/lib/enrichment/observability/dashboard-state.test.ts src/lib/enrichment/queue/resume-run.test.ts
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Validate sample input without DB or external sources
+        run: npm run enrichment:run -- --input-dir data/trial-supplier --dry-run --limit 3 --no-tui

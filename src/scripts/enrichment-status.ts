@@ -125,11 +125,12 @@ async function runWatchMode(_flags: { brand: string | null }) {
   try {
     const { render } = await import('ink')
     const React = await import('react')
-    const { App } = await import('../components/enrichment-tui')
+    const { App } = await import('../components/enrichment-tui/index.js')
     render(React.createElement(App, { mode: 'watch' as const, stateApi }))
-  } catch {
+  } catch (error) {
     // Fallback: текстовый polling каждые 5 секунд
-    console.log('TUI недоступен, используем текстовый режим (Ctrl+C для выхода)')
+    console.error('TUI недоступен:', error)
+    console.log('Используем текстовый режим (Ctrl+C для выхода)')
     console.log()
     const poll = async () => {
       const snap = await loadDashboardSnapshot()

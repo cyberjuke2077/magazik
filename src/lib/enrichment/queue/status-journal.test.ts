@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const prismaMocks = vi.hoisted(() => ({
   updateMany: vi.fn(),
   findMany: vi.fn(),
+  count: vi.fn(),
 }))
 
 vi.mock('../../prisma', () => ({
@@ -10,6 +11,7 @@ vi.mock('../../prisma', () => ({
     enrichmentJournal: {
       updateMany: prismaMocks.updateMany,
       findMany: prismaMocks.findMany,
+      count: prismaMocks.count,
     },
   },
 }))
@@ -20,6 +22,7 @@ describe('source fallback routing', () => {
   beforeEach(() => {
     prismaMocks.updateMany.mockReset()
     prismaMocks.findMany.mockReset()
+    prismaMocks.count.mockReset()
   })
 
   it('moves pending entries past a skipped ChipDip stage', async () => {
@@ -72,6 +75,28 @@ describe('source fallback routing', () => {
         status: { in: ['lcsc_not_found', 'lcsc_blocked'] },
       },
       take: 100,
+    })
+  })
+
+  it('counts only statuses that a resumed run can process', async () => {
+    prismaMocks.count.mockResolvedValue(7)
+
+    await expect(createStatusJournal().getResumableItems('run-1')).resolves.toBe(7)
+
+    expect(prismaMocks.count).toHaveBeenCalledWith({
+      where: {
+        runId: 'run-1',
+        status: {
+          in: [
+            'pending',
+            'chipdip_not_found',
+            'chipdip_blocked',
+            'lcsc_not_found',
+            'lcsc_blocked',
+            'mouser_queued',
+          ],
+        },
+      },
     })
   })
 })

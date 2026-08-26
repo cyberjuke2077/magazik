@@ -4,7 +4,8 @@
 
 Актуальный TypeScript-пайплайн находится в `src/lib/enrichment/`, а парсер
 карточки ChipDip - в `src/lib/parser/`. Они запускаются локально на машине
-оператора и не входят в Vercel runtime.
+оператора на macOS или Windows и не входят в Vercel runtime. Windows использует
+`windows/INSTALL.cmd` для bootstrap и `windows/RUN-PARSER.cmd` для запуска.
 
 **Почему:** код импорта, каскад источников, журнал и persistence должны меняться
 атомарно и проверяться общими тестами. Браузеры, proxy и API-ключи при этом
@@ -15,12 +16,20 @@
 Готовые данные попадают в локальный Docker PostgreSQL, откуда публикуются в
 Supabase через `npm run db:publish`.
 
+**Длительный Windows-run:** input-only dry-run выполняется до БД и внешних
+источников. Live-run пишет в локальную PostgreSQL и создаёт per-MPN журнал.
+Клавиша `q` запускает graceful shutdown; продолжение выбирает только последний
+незавершённый run и работает по журналу без повторного freshness-фильтра.
+Полный проход гарантирует терминальный статус каждой позиции, но не гарантирует,
+что MPN существует в доступных источниках. Такие позиции остаются `unresolved`.
+Приватные входные файлы, runtime-state и логи в Git не добавляются.
+
 ---
 
 ## Архитектура «две БД»
 
 ```
-Парсер (Mac) → Docker PostgreSQL → db:publish → Supabase (прод)
+Парсер (Mac/Windows) → Docker PostgreSQL → db:publish → Supabase (прод)
 ```
 
 Локальная Docker PostgreSQL - источник правды по каталогу.

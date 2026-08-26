@@ -108,7 +108,16 @@ export function createStatusJournal(): StatusJournal {
       return prisma.enrichmentJournal.count({
         where: {
           runId,
-          status: { notIn: ['done', 'unresolved'] },
+          status: {
+            in: [
+              'pending',
+              'chipdip_not_found',
+              'chipdip_blocked',
+              'lcsc_not_found',
+              'lcsc_blocked',
+              'mouser_queued',
+            ],
+          },
         },
       })
     },
