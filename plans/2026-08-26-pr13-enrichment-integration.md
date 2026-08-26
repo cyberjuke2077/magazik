@@ -23,7 +23,7 @@ watermark worker, Windows launcher и Vercel build.
 - [x] Запустить целевые unit-тесты импортера и orchestration.
 - [x] Запустить TypeScript, lint и production build через Webpack fallback при
   sandbox-ошибке Turbopack.
-- [ ] Зафиксировать отдельный commit и подготовить PR только для importer/dry-run.
+- [x] Зафиксировать commit `5b321b4` и открыть PR #17 только для importer/dry-run.
 - [ ] Отдельно оценить перенос source fallbacks.
 - [ ] Отдельно оценить media/datasheet/R2 pipeline.
 - [ ] Отдельно оценить Windows launcher.
