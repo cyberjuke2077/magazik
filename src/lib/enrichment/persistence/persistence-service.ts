@@ -10,11 +10,13 @@ import { type Prisma } from '@prisma/client'
 
 import { prisma } from '../../prisma'
 import {
-  downloadImageBytes,
-  isR2Configured,
-  uploadImageBuffer,
-} from '../../storage/r2-client'
-import { classifyImage } from '../images/image-classifier'
+  canReplacePendingDatasheetSource,
+  normalizeDatasheetCandidates,
+} from '../datasheets/datasheet-candidates'
+import {
+  canReplacePendingImageSource,
+  normalizeImageCandidates,
+} from '../images/image-candidates'
 import { extractPackageFamily } from '../images/package-extractor'
 import {
   type DataSource,
@@ -96,8 +98,8 @@ function buildProvenance(source: DataSource): FieldProvenance {
  * 3. Upserts Product by (manufacturerId, mpnNormalized)
  * 4. Applies provenance merge before writing fields
  * 5. Replaces Specifications if provenance allows
- * 6. Replaces Datasheets with language based on source
- * 7. Replaces ProductImages (LCSC/Mouser only, max 10)
+ * 6. Queues datasheet URLs for validation and R2 storage
+ * 7. Queues image URLs for validation, cleanup and R2 storage
  *
  * @param items - Array of identity + result pairs to persist
  * @returns Summary of persisted/failed counts and errors
@@ -108,12 +110,6 @@ export async function persistBatch(
   const errors: Array<{ mpn: string; error: string }> = []
   let persisted = 0
   let failed = 0
-
-  // Pre-transaction: upload images to R2 outside the DB transaction.
-  // Network I/O inside a Prisma transaction holds row locks for the
-  // entire fetch+transcode duration — guaranteed deadlocks at scale.
-  // Mutates each item's result.imageUrls in-place to the R2 public URLs.
-  await mirrorImagesToStorage(items)
 
   try {
     await prisma.$transaction(
@@ -361,52 +357,55 @@ async function persistItem(
     })
   }
 
-  // 6. Replace Datasheets (if result has datasheets AND provenance allows)
+  // 6. Queue upstream PDF URLs. Existing Datasheet rows remain readable until
+  // the worker has validated and uploaded at least one replacement to R2.
   if (
     result?.datasheetUrls &&
     result.datasheetUrls.length > 0 &&
-    shouldOverwrite(existingMeta, 'datasheets', source)
+    shouldOverwrite(existingMeta, 'datasheets', source) &&
+    canReplacePendingDatasheetSource(existingMeta?.datasheetPipeline?.source, source)
   ) {
-    const language = source === 'chipdip' ? 'ru' : 'en'
-    await tx.datasheet.deleteMany({ where: { productId: product.id } })
-    await tx.datasheet.createMany({
-      data: result.datasheetUrls.map((url) => ({
-        productId: product.id,
-        title: `${identity.canonicalMpn} Datasheet`,
-        url,
-        language,
-      })),
-    })
-    newMeta.datasheets = buildProvenance(source)
-    await tx.product.update({
-      where: { id: product.id },
-      data: { enrichmentMeta: newMeta as unknown as JsonValue },
-    })
+    const candidates = normalizeDatasheetCandidates(
+      result.datasheetUrls,
+      source,
+      identity.canonicalMpn,
+    )
+    if (candidates.length > 0) {
+      newMeta.datasheetCandidates = candidates
+      newMeta.datasheetPipeline = {
+        status: 'pending',
+        source,
+        queuedAt: now.toISOString(),
+      }
+      await tx.product.update({
+        where: { id: product.id },
+        data: { enrichmentMeta: newMeta as unknown as JsonValue },
+      })
+    }
   }
 
-  // 7. Replace ProductImages (ChipDip/LCSC/Mouser, max 10, ordered).
-  // ChipDip фото качественнее LCSC, но с watermark www.chipdip.ru —
-  // он снимается отдельным batch-шагом (tools/watermark-removal).
+  // 7. Queue upstream URLs. ProductImage remains untouched until the local
+  // media worker has cleaned, verified and uploaded the replacement to R2.
   if (
     result?.imageUrls &&
     result.imageUrls.length > 0 &&
     (source === 'chipdip' || source === 'lcsc' || source === 'mouser') &&
-    shouldOverwrite(existingMeta, 'images', source)
+    shouldOverwrite(existingMeta, 'images', source) &&
+    canReplacePendingImageSource(existingMeta?.imagePipeline?.source, source)
   ) {
-    const imagesToSave = result.imageUrls.slice(0, 10)
-    await tx.productImage.deleteMany({ where: { productId: product.id } })
-    await tx.productImage.createMany({
-      data: imagesToSave.map((url, idx) => ({
-        productId: product.id,
-        imageUrl: url,
-        order: idx,
-      })),
-    })
-    newMeta.images = buildProvenance(source)
-    await tx.product.update({
-      where: { id: product.id },
-      data: { enrichmentMeta: newMeta as unknown as JsonValue },
-    })
+    const candidates = normalizeImageCandidates(result.imageUrls, source)
+    if (candidates.length > 0) {
+      newMeta.imageCandidates = candidates
+      newMeta.imagePipeline = {
+        status: 'pending',
+        source,
+        queuedAt: now.toISOString(),
+      }
+      await tx.product.update({
+        where: { id: product.id },
+        data: { enrichmentMeta: newMeta as unknown as JsonValue },
+      })
+    }
   }
 }
 
@@ -473,103 +472,4 @@ async function resolveCategory(
     update: { parentId: sectionCategory.id },
   })
   return leaf.id
-}
-
-const MAX_IMAGES_PER_PRODUCT = 10
-const IMAGE_UPLOAD_CONCURRENCY = 4
-
-/**
- * Mirror upstream image URLs (ChipDip/LCSC/Mouser) into R2 BEFORE the
- * persist transaction, keeping only images that pass classification.
- *
- * Per image: download once → classify (clean / watermark+junk). Only
- * `clean` images are transcoded and uploaded to R2; watermarked photos
- * and LCSC "no-image" boxes are dropped. The result's imageUrls is
- * rewritten to the surviving R2 public URLs (in original order), or
- * cleared if none survive — in which case the product falls back to a
- * generic package SVG on the frontend (see images/package-image.ts).
- *
- * Note: the sharp classifier targets LCSC's blue watermark, so ChipDip
- * photos (grey "www.chipdip.ru" mark) pass as `clean` and are uploaded
- * as-is; their watermark is removed later by the offline Florence-2+LaMa
- * batch step (tools/watermark-removal/clean_r2_watermarks.py).
- *
- * Downloading once and handing the same buffer to uploadImageBuffer
- * avoids a second fetch per image.
- *
- * No-op when R2 is not configured; upstream URLs flow through unchanged
- * so dev environments without credentials still work.
- *
- * Errors per-image are swallowed (logged) so a single 404 from LCSC
- * doesn't tank an entire enrichment batch.
- */
-async function mirrorImagesToStorage(
-  items: Array<{ identity: PartIdentity; result: EnrichmentResult | null }>,
-): Promise<void> {
-  if (!isR2Configured()) return
-
-  const tasks: Array<{
-    item: { identity: PartIdentity; result: EnrichmentResult | null }
-    sourceUrl: string
-    sourceIdx: number
-  }> = []
-
-  for (const item of items) {
-    const r = item.result
-    if (!r?.imageUrls?.length) continue
-    if (r.source !== 'chipdip' && r.source !== 'lcsc' && r.source !== 'mouser') continue
-    const urls = r.imageUrls.slice(0, MAX_IMAGES_PER_PRODUCT)
-    urls.forEach((url, idx) => tasks.push({ item, sourceUrl: url, sourceIdx: idx }))
-  }
-
-  if (tasks.length === 0) return
-
-  // sourceIdx → R2 url, per item, only for images that survived classification
-  const keptByItem = new Map<typeof items[number], Map<number, string>>()
-
-  for (let i = 0; i < tasks.length; i += IMAGE_UPLOAD_CONCURRENCY) {
-    const slice = tasks.slice(i, i + IMAGE_UPLOAD_CONCURRENCY)
-    await Promise.all(
-      slice.map(async ({ item, sourceUrl, sourceIdx }) => {
-        try {
-          const raw = await downloadImageBytes(sourceUrl)
-
-          const { verdict } = await classifyImage(raw)
-          if (verdict !== 'clean') {
-            // watermark / junk — отбрасываем; карточка уйдёт на generic
-            return
-          }
-
-          const uploaded = await uploadImageBuffer(sourceUrl, raw)
-          let bucket = keptByItem.get(item)
-          if (!bucket) {
-            bucket = new Map()
-            keptByItem.set(item, bucket)
-          }
-          bucket.set(sourceIdx, uploaded.url)
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err)
-          console.warn(
-            `[persistence] image skipped for ${item.identity.canonicalMpn} (${sourceUrl}): ${msg}`,
-          )
-        }
-      }),
-    )
-  }
-
-  // Rewrite imageUrls to only the surviving R2 URLs, preserving order.
-  // If nothing survived, clear the array so persistItem writes no images.
-  for (const item of items) {
-    const r = item.result
-    if (!r?.imageUrls?.length) continue
-    if (r.source !== 'chipdip' && r.source !== 'lcsc' && r.source !== 'mouser') continue
-    const kept = keptByItem.get(item)
-    if (!kept || kept.size === 0) {
-      r.imageUrls = []
-      continue
-    }
-    r.imageUrls = r.imageUrls
-      .map((_, idx) => kept.get(idx))
-      .filter((u): u is string => Boolean(u))
-  }
 }
