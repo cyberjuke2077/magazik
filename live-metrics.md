@@ -7,16 +7,17 @@
 
 ## Последний подтвержденный публичный snapshot
 
-Проверено 2026-08-20 после merge PR #14 и применения runtime RLS policies:
+Проверено 2026-08-26 после merge PR #17 (`71381a6`) на deployment
+`FLnRR4ZaPMsqxWAuLjgds85AyWYc`:
 
 - Vercel Production `https://electromagaz-production.vercel.app` имеет статус `Ready`;
-- `/`, `/best`, `/catalog` и `/api/catalog/categories` вернули HTTP 200;
-- первая страница каталога отрисовала 50 товарных строк;
-- CSV export вернул 51 товар, карточка `AD1580ARTZ-REEL7` вернула HTTP 200;
+- `/`, `/catalog`, `/api/health` и `/api/catalog/categories` вернули HTTP 200;
+- каталог отрисовал 51 позицию и 50 товарных карточек на первой странице;
+- CSV export вернул заголовок и 51 товар, карточка `ADUC7061BCPZ32-RL` вернула HTTP 200;
 - API категорий вернул 8 корневых и 14 дочерних категорий;
 - `/best` не отрисовал товары, потому что его выборка требует `priceWholesale`.
 - `/api/health` вернул `status: ok` и `database: ok`;
-- SQL snapshot: 51 товар, 22 категории, 8 производителей, 10 изображений,
+- SQL snapshot от 2026-08-20: 51 товар, 22 категории, 8 производителей, 10 изображений,
   97 datasheet, 4 товара с розничной ценой, 0 с оптовой ценой и 0 в наличии;
 - заявки и оптовые лиды: 0.
 
