@@ -1,7 +1,7 @@
 # Массовый запуск parser/enrichment на Windows
 
 Дата: 2026-08-27
-Статус: в работе
+Статус: код готов, ожидается физический live-пилот на Windows
 
 ## Цель
 
@@ -17,7 +17,7 @@
 - [x] Добавить локальные npm-команды и Windows installer/menu.
 - [x] Добавить Windows CI smoke с input-only dry-run.
 - [x] Запустить unit-тесты, TypeScript, lint и production build.
-- [ ] Зафиксировать ветку, commit и PR.
+- [x] Зафиксировать ветку, commit и PR.
 
 ## Стоп-условия
 
@@ -45,5 +45,10 @@
 - Production build через Webpack прошёл.
 - Input-only dry-run обработал 1 файл, 3 строки и 3 уникальных MPN при пустом
   `DATABASE_URL`, без БД и внешних источников.
-- Windows PowerShell syntax и dry-run на `windows-latest` проверяются после push
-  через `.github/workflows/windows-parser-smoke.yml`.
+- PR #23 смержен в `main`: merge SHA
+  `42841db523035c2d5f59ee32e42910adbc6a9e0d`.
+- GitHub Actions run `33020672898` на `windows-latest` завершился успешно:
+  PowerShell syntax, launcher-тесты, TypeScript и input-only dry-run прошли.
+- Не проверены реальные ChipDip/LCSC/Mouser и полный приватный набор на целевой
+  Windows-машине. Первый следующий шаг - dry-run 11 файлов, затем live-пилот 1
+  товара.

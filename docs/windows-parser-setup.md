@@ -3,6 +3,12 @@
 Эта инструкция запускает актуальный TypeScript pipeline из `src/lib/enrichment`.
 Архивный `tools/collector-legacy` не используется.
 
+Кодовая Windows-проверка выполнена на merge SHA
+`42841db523035c2d5f59ee32e42910adbc6a9e0d`: GitHub Actions run
+`33020672898` успешно проверил PowerShell syntax, launcher-тесты, TypeScript и
+input-only dry-run на `windows-latest`. Это не заменяет live-пилот реальных
+источников на целевой машине.
+
 ## Что реально делает запуск
 
 - читает CSV, XLS и XLSX с MPN и необязательным производителем;

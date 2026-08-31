@@ -19,9 +19,14 @@
 
 ## 3. Результат: частично
 
-Код готов к проверке на Windows. Локально прошли 307 unit-тестов, TypeScript,
-lint, production build и dry-run с пустым `DATABASE_URL`. Реальные источники,
-локальная рабочая БД, production Supabase, R2 и `db:publish` не запускались.
+Кодовая готовность Windows runner подтверждена. PR #23 смержен с merge SHA
+`42841db523035c2d5f59ee32e42910adbc6a9e0d`. Локально прошли 307 unit-тестов,
+TypeScript, lint, production build и dry-run с пустым `DATABASE_URL`. Отдельный
+GitHub Actions run `33020672898` успешно прошёл на `windows-latest`: PowerShell
+syntax, launcher-тесты, TypeScript и input-only dry-run зелёные.
+
+Реальные источники, локальная рабочая БД на целевой Windows, production
+Supabase, R2 и `db:publish` не запускались.
 
 Полный приватный набор отсутствует в Git. На Windows его нужно скопировать
 отдельно и сначала подтвердить dry-run: 11 файлов, 75 706 строк, 17 пропущенных
