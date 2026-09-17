@@ -98,9 +98,9 @@ it('rejects an oversized declared body before reading', async () => {
   expect(message.destroyed).toBe(true)
 })
 
-it('fails explicitly if the source ignores identity encoding', async () => {
+it('fails explicitly for an unsupported encoding', async () => {
   publicDns()
-  const message = response([], 200, { 'content-encoding': 'gzip' })
+  const message = response([], 200, { 'content-encoding': 'unknown' })
   request.mockResolvedValue(message)
   await expect(fetchImageBytes('https://assets.lcsc.com/test')).rejects.toThrow('encoding')
   expect(message.destroyed).toBe(true)

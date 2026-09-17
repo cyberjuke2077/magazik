@@ -1,10 +1,10 @@
 import { lookup } from 'node:dns/promises'
 import type { LookupAddress } from 'node:dns'
-import type { IncomingMessage } from 'node:http'
 import { BlockList, isIP } from 'node:net'
 import { requestPinnedImage } from './pinned-image-request'
+import { readImageBody } from './image-body'
 
-export const MAX_IMAGE_BYTES = 8 * 1024 * 1024
+export { MAX_IMAGE_BYTES } from './image-body'
 const blocked = new BlockList()
 for (const [address, prefix] of [['0.0.0.0',8], ['10.0.0.0',8], ['100.64.0.0',10],
   ['127.0.0.0',8], ['169.254.0.0',16], ['172.16.0.0',12], ['192.168.0.0',16],
@@ -43,29 +43,6 @@ function lookupWithSignal(host: string, signal: AbortSignal): Promise<LookupAddr
   })
 }
 
-async function readBoundedBody(response: IncomingMessage): Promise<Buffer> {
-  const chunks: Buffer[] = []
-  let total = 0
-  try {
-    if (Number(response.headers['content-length']) > MAX_IMAGE_BYTES) {
-      throw new Error('Image exceeds 8 MiB limit')
-    }
-    const encoding = response.headers['content-encoding']
-    if (encoding && encoding.toLowerCase() !== 'identity') {
-      throw new Error('Unsupported image content encoding')
-    }
-    for await (const chunk of response) {
-      const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
-      total += bytes.byteLength
-      if (total > MAX_IMAGE_BYTES) throw new Error('Image exceeds 8 MiB limit')
-      chunks.push(bytes)
-    }
-    return Buffer.concat(chunks, total)
-  } finally {
-    response.destroy()
-  }
-}
-
 export async function fetchImageBytes(source: string, options: { signal?: AbortSignal; timeoutMs?: number } = {}): Promise<Buffer> {
   const signal = AbortSignal.any([AbortSignal.timeout(options.timeoutMs ?? 20_000), ...(options.signal ? [options.signal] : [])])
   let url = new URL(source)
@@ -86,7 +63,7 @@ export async function fetchImageBytes(source: string, options: { signal?: AbortS
       response.destroy()
       throw new Error(`Image download failed: HTTP ${status}`)
     }
-    return readBoundedBody(response)
+    return readImageBody(response, signal)
   }
   throw new Error('Too many image redirects')
 }
