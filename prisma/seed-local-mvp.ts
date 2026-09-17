@@ -10,7 +10,9 @@ function localDatabaseUrl(): string {
   const user = encodeURIComponent(requiredEnv('POSTGRES_USER'))
   const password = encodeURIComponent(requiredEnv('POSTGRES_PASSWORD'))
   const database = encodeURIComponent(requiredEnv('POSTGRES_DB'))
-  return `postgresql://${user}:${password}@127.0.0.1:5432/${database}?schema=public`
+  const port = Number(process.env.POSTGRES_PORT ?? 5432)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid POSTGRES_PORT')
+  return `postgresql://${user}:${password}@127.0.0.1:${port}/${database}?schema=public`
 }
 
 async function main() {

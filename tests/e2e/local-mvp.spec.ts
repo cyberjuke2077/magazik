@@ -160,7 +160,7 @@ test('оптовая форма сохраняет лид и показывае�
     await page.getByRole('textbox', { name: 'Компания', exact: true }).fill('ООО Оптовый MVP')
     await page.getByLabel('Email *', { exact: true }).fill(email)
     await page.getByLabel('Телефон *', { exact: true }).fill('+7 999 111-22-33')
-    await page.getByLabel('Сообщение', { exact: true }).fill('Проверка локального оптового лида')
+    await page.getByLabel('Список компонентов и пожелания', { exact: true }).fill('Проверка локального оптового лида')
     await page.getByLabel(/Я соглашаюсь на обработку/).check()
     await page.getByRole('button', { name: 'Отправить заявку' }).click()
     await expect(page.getByRole('heading', { name: 'Заявка отправлена!' })).toBeVisible()

@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test'
 
-const baseURL = 'http://127.0.0.1:3000'
+const baseURL = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3000'
 const localChromiumExecutable = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
 const chromiumRuntime = localChromiumExecutable
   ? { launchOptions: { executablePath: localChromiumExecutable } }
@@ -52,7 +52,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev -- --webpack',
+    command: process.env.E2E_SERVER_COMMAND ?? 'npm run dev -- --webpack',
     url: baseURL,
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,

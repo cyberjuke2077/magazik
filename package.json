@@ -15,7 +15,7 @@
     "test:coverage": "vitest run --coverage",
     "test:integration": "vitest --run --config vitest.integration.config.ts",
     "test:e2e": "playwright test",
-    "test:e2e:local": "tsx scripts/with-local-db.ts npm run test:e2e",
+    "test:e2e:local": "tsx scripts/with-local-db.ts npm run test:e2e --",
     "test:e2e:update": "playwright test --update-snapshots",
     "db:migrate": "prisma migrate dev",
     "db:migrate:local": "tsx scripts/with-local-db.ts npm exec prisma -- migrate deploy",
@@ -40,7 +40,8 @@
     "images:backfill": "tsx scripts/backfill-images-to-r2.ts",
     "images:reclassify": "tsx scripts/reclassify-images.ts",
     "images:gen-packages": "tsx scripts/gen-package-svgs.ts",
-    "images:cleanup-r2": "tsx scripts/cleanup-r2-originals.ts"
+    "images:cleanup-r2": "tsx scripts/cleanup-r2-originals.ts",
+    "test:readiness": "tsx scripts/with-local-db.ts npm exec vitest -- run --config vitest.readiness.config.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1055.0",
