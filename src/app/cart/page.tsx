@@ -14,11 +14,12 @@ import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
 import { useCart } from '@/hooks/use-cart'
+import { cartSummary } from '@/lib/cart-pricing'
 import { formatPrice } from '@/lib/utils'
 import { RecentlyViewed } from '@/components/catalog/recently-viewed'
 
 export default function CartPage() {
-  const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
+  const { items, mounted, totalItems, totalPrice, unpricedItems, removeItem, updateQuantity, clearCart } =
     useCart()
 
   const [selected, setSelected] = useState<Set<string>>(new Set())
@@ -50,15 +51,7 @@ export default function CartPage() {
     setSelected(new Set())
   }
 
-  const selectedTotal = useMemo(() => {
-    return items
-      .filter((i) => selected.has(i.product.id))
-      .reduce((sum, i) => {
-        const isWholesale = i.product.priceWholesale !== undefined && i.quantity >= i.product.minOrder
-        const price = isWholesale ? (i.product.priceWholesale ?? i.product.price) : i.product.price
-        return sum + price * i.quantity
-      }, 0)
-  }, [items, selected])
+  const selectedSummary = useMemo(() => cartSummary(items.filter((item) => selected.has(item.product.id))), [items, selected])
 
   // Skeleton while hydrating
   if (!mounted) {
@@ -227,7 +220,7 @@ export default function CartPage() {
                   {selected.size > 0 && (
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-ink-3">Выбрано:</span>
-                      <span className="font-medium text-ink">{formatPrice(selectedTotal)}</span>
+                      <span className="font-medium text-ink">{selectedSummary.unpriced ? 'По запросу' : formatPrice(selectedSummary.total)}</span>
                     </div>
                   )}
 
@@ -235,10 +228,10 @@ export default function CartPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-ink-3">Сумма корзины:</span>
                       <span className={totalPrice > 0 ? 'price text-lg' : 'text-lg font-bold text-ink'}>
-                        {totalPrice > 0 ? formatPrice(totalPrice) : 'По запросу'}
+                        {unpricedItems ? 'По запросу' : formatPrice(totalPrice)}
                       </span>
                     </div>
-                    {totalPrice === 0 && (
+                    {unpricedItems > 0 && (
                       <p className="text-xs text-ink-4 mt-1">
                         Цены будут указаны в коммерческом предложении
                       </p>
