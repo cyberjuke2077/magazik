@@ -2,10 +2,27 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   checkAdminCredentials,
   createSessionToken,
+  revokeSessionToken,
   verifySessionToken,
+  type AdminSessionStore,
 } from './admin-auth'
 
 const originalEnv = { ...process.env }
+
+function createMemoryStore(): AdminSessionStore {
+  const sessions = new Map<string, Date>()
+
+  return {
+    async create({ id, expiresAt }) { sessions.set(id, expiresAt) },
+    async exists(id, now) { return (sessions.get(id)?.getTime() ?? 0) > now.getTime() },
+    async delete(id) { sessions.delete(id) },
+    async deleteExpired(now) {
+      for (const [id, expiresAt] of sessions) {
+        if (expiresAt <= now) sessions.delete(id)
+      }
+    },
+  }
+}
 
 describe('admin auth', () => {
   beforeEach(() => {
@@ -25,25 +42,35 @@ describe('admin auth', () => {
   })
 
   it('invalidates an existing session after the password changes', async () => {
-    const token = await createSessionToken()
-    await expect(verifySessionToken(token)).resolves.toBe(true)
+    const store = createMemoryStore()
+    const token = await createSessionToken(store)
+    await expect(verifySessionToken(token, store)).resolves.toBe(true)
 
     process.env.ADMIN_PASSWORD = 'changed-password'
-    await expect(verifySessionToken(token)).resolves.toBe(false)
+    await expect(verifySessionToken(token, store)).resolves.toBe(false)
   })
 
   it('rejects tampered and expired tokens', async () => {
+    const store = createMemoryStore()
     vi.useFakeTimers()
     vi.setSystemTime(new Date('2026-07-31T12:00:00.000Z'))
-    const token = await createSessionToken()
+    const token = await createSessionToken(store)
 
-    await expect(verifySessionToken(`${token}x`)).resolves.toBe(false)
-    vi.advanceTimersByTime(8 * 24 * 60 * 60 * 1000)
-    await expect(verifySessionToken(token)).resolves.toBe(false)
+    await expect(verifySessionToken(`${token}x`, store)).resolves.toBe(false)
+    vi.advanceTimersByTime(25 * 60 * 60 * 1000)
+    await expect(verifySessionToken(token, store)).resolves.toBe(false)
+  })
+
+  it('rejects the captured cookie immediately after logout revokes it', async () => {
+    const store = createMemoryStore()
+    const token = await createSessionToken(store)
+
+    await expect(revokeSessionToken(token, store)).resolves.toBe(true)
+    await expect(verifySessionToken(token, store)).resolves.toBe(false)
   })
 
   it('rejects a weak session secret', async () => {
     process.env.ADMIN_SESSION_SECRET = 'too-short'
-    await expect(createSessionToken()).rejects.toThrow('не менее 32 байт')
+    await expect(createSessionToken(createMemoryStore())).rejects.toThrow('не менее 32 байт')
   })
 })

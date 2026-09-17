@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { AdminPagination, ADMIN_PAGE_SIZE, adminPage } from '@/components/admin-pagination'
 import { WholesaleStatusSelect } from './status-select'
 import { prisma } from '@/lib/prisma'
+import { mailtoHref } from '@/lib/email-address'
 
 export const dynamic = 'force-dynamic'
 
@@ -48,20 +49,21 @@ export default async function AdminWholesalePage({ searchParams }: { searchParam
             </thead>
             <tbody className="divide-y divide-gray-50">
               {leads.map((l) => {
+                const emailHref = mailtoHref(l.email)
                 return (
                   <tr key={l.id} className="hover:bg-gray-50 align-top">
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">{l.name}</div>
                       {l.company && <div className="text-xs text-gray-400">{l.company}</div>}
                       <div className="text-xs text-gray-500 mt-1">
-                        <a href={`tel:${l.phone}`} className="hover:underline">
+                        <a href={`tel:${l.phone.replace(/[^\d+]/g, '')}`} className="hover:underline">
                           {l.phone}
                         </a>
                       </div>
                       <div className="text-xs text-gray-500">
-                        <a href={`mailto:${l.email}`} className="hover:underline">
-                          {l.email}
-                        </a>
+                        {emailHref ? (
+                          <a href={emailHref} className="hover:underline">{l.email}</a>
+                        ) : l.email}
                       </div>
                     </td>
                     <td className="px-4 py-3 text-gray-600 max-w-md">

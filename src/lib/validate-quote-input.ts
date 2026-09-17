@@ -1,4 +1,5 @@
 import { type QuoteRequestInput } from '@/app/request-list/actions'
+import { isValidEmailAddress } from '@/lib/email-address'
 
 export interface QuoteValidationResult {
   valid: boolean
@@ -14,7 +15,6 @@ export const MAX_COMMENT = 2000
 export const MAX_ADDRESS = 500
 export const MAX_ITEMS = 500
 export const MAX_QUANTITY = 1_000_000
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationResult {
   if (!input || typeof input !== 'object') return { valid: false, error: 'Некорректные данные' }
@@ -49,7 +49,7 @@ export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationRes
   }
 
   // Format checks — отсекаем мусорные лиды
-  if (!EMAIL_RE.test(input.email.trim())) {
+  if (!isValidEmailAddress(input.email.trim())) {
     return { valid: false, error: 'Некорректный email' }
   }
   const phoneDigits = input.phone.replace(/\D/g, '')

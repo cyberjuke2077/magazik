@@ -1,8 +1,8 @@
 /**
  * Авторизация админ-панели: один администратор, пароль в env,
- * сессия — подписанный HMAC-SHA256 токен в httpOnly-cookie.
+ * сессия - подписанный HMAC-SHA256 токен в httpOnly-cookie и запись в БД.
  *
- * Web Crypto API — работает и в edge-middleware, и в server actions.
+ * Web Crypto API работает в Node.js proxy и server actions.
  *
  * Env:
  *   ADMIN_USERNAME        — логин входа в /admin (по умолчанию "admin")
@@ -10,8 +10,41 @@
  *   ADMIN_SESSION_SECRET  — ключ подписи сессионных токенов (random 32+ байт)
  */
 
+import { prisma } from '@/lib/prisma'
+
 export const ADMIN_COOKIE = 'emg_admin'
-export const SESSION_TTL_HOURS = 24 * 7 // неделя
+export const SESSION_TTL_HOURS = 24
+
+interface AdminSessionInput {
+  id: string
+  expiresAt: Date
+}
+
+export interface AdminSessionStore {
+  create(input: AdminSessionInput): Promise<void>
+  exists(id: string, now: Date): Promise<boolean>
+  delete(id: string): Promise<void>
+  deleteExpired(now: Date): Promise<void>
+}
+
+const prismaSessionStore: AdminSessionStore = {
+  async create(input) {
+    await prisma.adminSession.create({ data: input })
+  },
+  async exists(id, now) {
+    const session = await prisma.adminSession.findFirst({
+      where: { id, expiresAt: { gt: now } },
+      select: { id: true },
+    })
+    return session !== null
+  },
+  async delete(id) {
+    await prisma.adminSession.deleteMany({ where: { id } })
+  },
+  async deleteExpired(now) {
+    await prisma.adminSession.deleteMany({ where: { expiresAt: { lte: now } } })
+  },
+}
 
 function getSigningKey(): string {
   const s = process.env.ADMIN_SESSION_SECRET
@@ -33,7 +66,7 @@ async function hmac(payload: string): Promise<string> {
     ['sign'],
   )
   const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload))
-  // base64url без Buffer — edge-runtime-совместимо
+  // base64url без Buffer.
   const bytes = new Uint8Array(sig)
   let bin = ''
   for (const b of bytes) bin += String.fromCharCode(b)
@@ -48,22 +81,56 @@ function timingSafeEqual(a: string, b: string): boolean {
   return diff === 0
 }
 
-/** Создать токен сессии: "exp.signature" */
-export async function createSessionToken(): Promise<string> {
-  const exp = Date.now() + SESSION_TTL_HOURS * 3600_000
-  const payload = `admin.${exp}`
-  return `${exp}.${await hmac(payload)}`
+interface ParsedSessionToken {
+  id: string
+  exp: number
+  signature: string
 }
 
-/** Проверить токен: подпись + срок действия. */
-export async function verifySessionToken(token: string | undefined): Promise<boolean> {
-  if (!token) return false
-  const dot = token.indexOf('.')
-  if (dot < 1) return false
-  const exp = Number(token.slice(0, dot))
-  if (!Number.isFinite(exp) || exp < Date.now()) return false
-  const expected = await hmac(`admin.${exp}`)
-  return timingSafeEqual(expected, token.slice(dot + 1))
+function parseSessionToken(token: string | undefined): ParsedSessionToken | null {
+  if (!token) return null
+  const parts = token.split('.')
+  if (parts.length !== 3) return null
+  const [id, rawExp, signature] = parts
+  const exp = Number(rawExp)
+  if (!/^[a-f0-9-]{36}$/i.test(id) || !Number.isSafeInteger(exp) || !signature) return null
+  return { id, exp, signature }
+}
+
+/** Создать токен сессии: "id.exp.signature". */
+export async function createSessionToken(
+  store: AdminSessionStore = prismaSessionStore,
+): Promise<string> {
+  const id = crypto.randomUUID()
+  const exp = Date.now() + SESSION_TTL_HOURS * 3600_000
+  const signature = await hmac(`admin.${id}.${exp}`)
+  await store.deleteExpired(new Date())
+  await store.create({ id, expiresAt: new Date(exp) })
+  return `${id}.${exp}.${signature}`
+}
+
+/** Проверить подпись, срок и наличие серверной сессии. */
+export async function verifySessionToken(
+  token: string | undefined,
+  store: AdminSessionStore = prismaSessionStore,
+): Promise<boolean> {
+  const parsed = parseSessionToken(token)
+  const now = Date.now()
+  if (!parsed || parsed.exp <= now) return false
+  const expected = await hmac(`admin.${parsed.id}.${parsed.exp}`)
+  if (!timingSafeEqual(expected, parsed.signature)) return false
+  return store.exists(parsed.id, new Date(now))
+}
+
+/** Отозвать конкретную сессию, чтобы старая cookie больше не работала. */
+export async function revokeSessionToken(
+  token: string | undefined,
+  store: AdminSessionStore = prismaSessionStore,
+): Promise<boolean> {
+  const parsed = parseSessionToken(token)
+  if (!parsed || !(await verifySessionToken(token, store))) return false
+  await store.delete(parsed.id)
+  return true
 }
 
 /**

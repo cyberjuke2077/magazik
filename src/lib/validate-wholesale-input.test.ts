@@ -29,6 +29,17 @@ describe('validateWholesaleInput', () => {
     expect(result.error).toBeDefined()
   })
 
+  it('rejects mailto parameter injection but accepts plus addressing', () => {
+    expect(validateWholesaleInput({
+      ...validInput,
+      email: 'buyer@example.ru?bcc=copy@example.ru',
+    }).valid).toBe(false)
+    expect(validateWholesaleInput({
+      ...validInput,
+      email: 'buyer+project@example.ru',
+    }).valid).toBe(true)
+  })
+
   it('rejects a non-string required field received at runtime', () => {
     const malformed = {
       ...validInput,

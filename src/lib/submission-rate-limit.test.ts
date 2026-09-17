@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  consumeAdminLoginRateLimits,
   consumeSubmissionRateLimit,
   SubmissionRateLimitExceededError,
   type SubmissionRateLimitStore,
@@ -60,5 +61,20 @@ describe('submission rate limit', () => {
         store,
       ),
     ).resolves.toBeUndefined()
+  })
+
+  it('limits one admin account even when forwarded addresses change', async () => {
+    const store = createMemoryStore()
+    const options = {
+      now: new Date('2026-07-31T12:00:00.000Z'),
+      limit: 2,
+      windowMs: 60_000,
+    }
+
+    await consumeAdminLoginRateLimits('Admin', '198.51.100.1', store, options)
+    await consumeAdminLoginRateLimits('admin', '198.51.100.2', store, options)
+    await expect(
+      consumeAdminLoginRateLimits(' ADMIN ', '198.51.100.3', store, options),
+    ).rejects.toBeInstanceOf(SubmissionRateLimitExceededError)
   })
 })

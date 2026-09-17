@@ -1,4 +1,5 @@
 import { type WholesaleLeadInput } from '@/app/wholesale/actions'
+import { isValidEmailAddress } from '@/lib/email-address'
 
 export interface WholesaleValidationResult {
   valid: boolean
@@ -9,7 +10,6 @@ export interface WholesaleValidationResult {
 // валидации верить нельзя.
 const MAX_FIELD = 200
 const MAX_MESSAGE = 20000
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function validateWholesaleInput(input: WholesaleLeadInput): WholesaleValidationResult {
   if (!input || typeof input !== 'object') return { valid: false, error: 'Некорректные данные' }
@@ -35,7 +35,7 @@ export function validateWholesaleInput(input: WholesaleLeadInput): WholesaleVali
   }
 
   // Format checks — отсекаем мусорные лиды
-  if (!EMAIL_RE.test(input.email.trim())) {
+  if (!isValidEmailAddress(input.email.trim())) {
     return { valid: false, error: 'Некорректный email' }
   }
   const phoneDigits = input.phone.replace(/\D/g, '')

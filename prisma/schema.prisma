@@ -331,6 +331,15 @@ model SubmissionRateLimit {
   @@index([expiresAt])
 }
 
+// Server-side admin sessions make logout revoke the captured cookie immediately.
+model AdminSession {
+  id        String   @id
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([expiresAt])
+}
+
 // Idempotency receipts contain no contact data. Keep for the lifetime of the request.
 model SubmissionReceipt {
   key       String   @id
