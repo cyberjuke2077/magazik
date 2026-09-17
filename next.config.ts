@@ -44,6 +44,13 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: '/wholesale/status/:path*',
+        headers: [
+          { key: 'Referrer-Policy', value: 'no-referrer' },
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+        ],
+      },
+      {
         source: '/admin/:path*',
         headers: [
           { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },

@@ -12,7 +12,19 @@ test.afterAll(async () => {
   try {
     await prisma.submissionRateLimit.deleteMany({
       where: {
-        scope: { in: ['quote_request', 'wholesale_lead', 'admin_login'] },
+        scope: {
+          in: [
+            'quote_request',
+            'quote_request_attempt_global',
+            'quote_request_attempt_network',
+            'wholesale_lead',
+            'wholesale_lead_attempt_global',
+            'wholesale_lead_attempt_network',
+            'admin_login_global',
+            'admin_login_network',
+            'admin_login_account',
+          ],
+        },
       },
     })
   } finally {
@@ -48,6 +60,19 @@ async function loginAdmin(page: Page, destination: '/admin/requests' | '/admin/w
   await expect(page).toHaveURL(destination)
 }
 
+test('выход отзывает сохранённую копию админской cookie', async ({ page, context }) => {
+  assertLocalDatabase()
+  await loginAdmin(page, '/admin/requests')
+  const captured = (await context.cookies()).find((cookie) => cookie.name === 'emg_admin')
+  expect(captured).toBeDefined()
+
+  await page.getByRole('button', { name: 'Выйти' }).click()
+  await expect(page).toHaveURL(/\/admin\/login/)
+  await context.addCookies([captured!])
+  await page.goto('/admin/requests')
+  await expect(page).toHaveURL(/\/admin\/login/)
+})
+
 test('товар проходит путь от каталога до сохраненной заявки', async ({ page }, testInfo) => {
   assertLocalDatabase()
 
@@ -77,17 +102,23 @@ test('товар проходит путь от каталога до сохра
         page.evaluate(() => {
           const raw = window.localStorage.getItem('electromagaz_cart')
           if (!raw) return null
-          const cart = JSON.parse(raw) as Array<{ product?: { partNumber?: string } }>
-          return cart[0]?.product?.partNumber ?? null
+          const cart = JSON.parse(raw) as {
+            version?: number
+            items?: Array<{ snapshot?: { partNumber?: string } }>
+          }
+          return {
+            version: cart.version,
+            partNumber: cart.items?.[0]?.snapshot?.partNumber,
+          }
         }),
       )
-      .toBe('TPS5430DDAR')
+      .toEqual({ version: 1, partNumber: 'TPS5430DDAR' })
 
     await page.goto('/catalog?q=STM32F103')
     const secondProduct = page.locator('article').filter({ hasText: 'STM32F103C8T6' })
     await expect(secondProduct).toBeVisible()
     await secondProduct.getByRole('button', { name: 'Добавить в корзину' }).click()
-    await expect(secondProduct.getByRole('button', { name: 'Товар в корзине' })).toBeVisible()
+    await expect(secondProduct.getByRole('button', { name: 'Перейти в корзину' })).toBeVisible()
 
     await page.getByRole('link', { name: 'Корзина', exact: true }).first().click()
     await expect(page.getByText('TPS5430DDAR', { exact: true })).toBeVisible()
@@ -112,6 +143,13 @@ test('товар проходит путь от каталога до сохра
     requestId = page.url().split('/').pop() ?? null
     expect(requestId).toBeTruthy()
     await expect(page.getByRole('heading', { name: 'Статус заявки' })).toBeVisible()
+    await expect.poll(() => page.evaluate(() => {
+      const raw = localStorage.getItem('electromagaz_cart')
+      if (!raw) return 0
+      const stored: unknown = JSON.parse(raw)
+      if (!stored || typeof stored !== 'object' || !('items' in stored)) return -1
+      return Array.isArray(stored.items) ? stored.items.length : -1
+    })).toBe(0)
 
     const saved = await prisma.quoteRequest.findUnique({
       where: { id: requestId ?? '' },

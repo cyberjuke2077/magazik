@@ -48,4 +48,13 @@ describe('validateWholesaleInput', () => {
 
     expect(validateWholesaleInput(malformed).valid).toBe(false)
   })
+
+  it('rejects extra nested data before idempotency hashing', () => {
+    const malformed = {
+      ...validInput,
+      unexpected: { nested: 'payload' },
+    } as unknown as Parameters<typeof validateWholesaleInput>[0]
+
+    expect(validateWholesaleInput(malformed).valid).toBe(false)
+  })
 })

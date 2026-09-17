@@ -1,33 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { FileText, Sparkles } from 'lucide-react'
-import { formatPrice, isNewProduct } from '@/lib/catalog-utils'
+import { isNewProduct } from '@/lib/catalog-utils'
+import { formatPrice } from '@/lib/utils'
 import { fallbackImageForProduct } from '@/lib/enrichment/images/package-image'
 import { CompareToggleBtn } from '@/components/catalog/compare-toggle-btn'
+import type { Product } from '@/lib/queries/products'
 import { AddToCartBtn } from './add-to-cart-btn'
 
-interface ProductRowData {
-  id: string
-  slug: string
-  name: string
-  partNumber: string
-  manufacturer: string
-  categorySlug?: string
-  price: number
-  minOrder: number
-  package?: string | null
-  lifecycle?: string | null
-  description?: string
-  lastEnrichedAt?: string | null
-  datasheets?: Array<{ id: string; title: string; url: string }>
-  images: string[]
-  specs: Record<string, string>
-  inStock: boolean
-  stockCount: number
-  unit: string
-}
-
-export function ProductRow({ product, priority = false }: { product: ProductRowData; priority?: boolean }) {
+export function ProductRow({ product, priority = false }: { product: Product; priority?: boolean }) {
   return (
     <article
       data-catalog-product-row
@@ -40,7 +21,7 @@ export function ProductRow({ product, priority = false }: { product: ProductRowD
   )
 }
 
-function ProductImage({ product, priority }: { product: ProductRowData; priority: boolean }) {
+function ProductImage({ product, priority }: { product: Product; priority: boolean }) {
   const image = product.images[0] ?? fallbackImageForProduct({
     package: product.package,
     partNumber: product.partNumber,
@@ -73,7 +54,7 @@ function ProductImage({ product, priority }: { product: ProductRowData; priority
   )
 }
 
-function ProductDetails({ product }: { product: ProductRowData }) {
+function ProductDetails({ product }: { product: Product }) {
   const specs = Object.entries(product.specs)
     .filter(([key, value]) => key.trim().toLowerCase() !== 'нет данных' && value.trim().length > 0)
     .slice(0, 4)
@@ -145,7 +126,7 @@ function ProductDetails({ product }: { product: ProductRowData }) {
   )
 }
 
-function ProductCommerce({ product }: { product: ProductRowData }) {
+function ProductCommerce({ product }: { product: Product }) {
   const displayPrice = product.price === 0 ? null : product.price
 
   return (
@@ -169,12 +150,7 @@ function ProductCommerce({ product }: { product: ProductRowData }) {
       </div>
       <div className="flex items-center justify-end gap-2">
         <AddToCartBtn
-          productId={product.id}
-          partNumber={product.partNumber}
-          name={product.name}
-          manufacturer={product.manufacturer}
-          minOrder={product.minOrder}
-          price={displayPrice}
+          product={product}
           highlightOnCardHover
         />
       </div>

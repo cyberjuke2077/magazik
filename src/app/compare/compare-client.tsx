@@ -121,7 +121,7 @@ export function CompareClient() {
     : comparisonRows
 
   function handleAddToCart(product: Product) {
-    addItem(product, product.minOrder)
+    void addItem(product, product.minOrder)
   }
 
   return (

@@ -5,14 +5,15 @@ import { usePathname } from 'next/navigation'
 import { CircleHelp, GitCompareArrows, Grid3X3, Home, MessageSquare, ShoppingCart, UserRound } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { LiveSearchDropdown } from '@/components/ui/live-search-dropdown'
+import { formatPrice } from '@/lib/utils'
 
 export function StickyNav() {
   const pathname = usePathname()
-  const { items, totalPrice, mounted: cartMounted } = useCart()
+  const { items, totalPrice, unpricedItems, mounted: cartMounted } = useCart()
   const cartCount = items.length
 
   const formattedTotal = cartMounted
-    ? totalPrice.toLocaleString('ru-RU', { maximumFractionDigits: 0 })
+    ? formatPrice(totalPrice)
     : ''
 
   return (
@@ -51,7 +52,7 @@ export function StickyNav() {
             <HeaderAction href="/account" label="Заявки" icon={UserRound} active={pathname.startsWith('/account')} />
             <HeaderAction
               href="/cart"
-              label={cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Корзина'}
+              label={cartMounted && unpricedItems === 0 && totalPrice > 0 ? formattedTotal : 'Корзина'}
               icon={ShoppingCart}
               count={cartCount}
               cart

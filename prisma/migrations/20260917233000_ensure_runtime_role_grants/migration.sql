@@ -10,6 +10,41 @@ BEGIN
 END
 $$;
 
+-- Preserve an existing LOGIN/password, but remove every capability that could
+-- bypass the table grants or RLS contract.
+ALTER ROLE electromagaz_app
+  NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pg_auth_members membership
+    JOIN pg_roles runtime_role ON runtime_role.oid = membership.member
+    WHERE runtime_role.rolname = 'electromagaz_app'
+  ) THEN
+    RAISE EXCEPTION 'electromagaz_app must not inherit or SET ROLE into another role';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM pg_class object
+    JOIN pg_namespace namespace ON namespace.oid = object.relnamespace
+    JOIN pg_roles owner ON owner.oid = object.relowner
+    WHERE namespace.nspname = 'public'
+      AND owner.rolname = 'electromagaz_app'
+  ) OR EXISTS (
+    SELECT 1
+    FROM pg_namespace namespace
+    JOIN pg_roles owner ON owner.oid = namespace.nspowner
+    WHERE namespace.nspname = 'public'
+      AND owner.rolname = 'electromagaz_app'
+  ) THEN
+    RAISE EXCEPTION 'electromagaz_app must not own objects in schema public';
+  END IF;
+END
+$$;
+
 REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM electromagaz_app;
 
 GRANT SELECT ON TABLE

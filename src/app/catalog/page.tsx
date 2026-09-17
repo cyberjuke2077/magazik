@@ -270,67 +270,21 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
               ) : parsed.view === 'table' ? (
                 <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--border)] bg-white">
                   <BulkSelectWrapper
-                    products={result.items.map((p) => ({
-                      id: p.id,
-                      partNumber: p.partNumber,
-                      name: p.name,
-                      manufacturer: p.manufacturer,
-                      minOrder: p.minOrder,
-                      price: p.price || null,
-                    }))}
+                    products={result.items}
                   >
-                    <ProductTable
-                      products={result.items.map((product) => ({
-                        id: product.id,
-                        slug: product.slug,
-                        name: product.name,
-                        partNumber: product.partNumber,
-                        manufacturer: product.manufacturer,
-                        price: product.price,
-                        minOrder: product.minOrder,
-                        package: product.package,
-                        lifecycle: product.lifecycle,
-                        lastEnrichedAt: product.lastEnrichedAt,
-                      }))}
-                    />
+                    <ProductTable products={result.items} />
                   </BulkSelectWrapper>
                 </div>
               ) : (
                 <div className="space-y-3" data-catalog-product-list>
                   <BulkSelectWrapper
-                    products={result.items.map((p) => ({
-                      id: p.id,
-                      partNumber: p.partNumber,
-                      name: p.name,
-                      manufacturer: p.manufacturer,
-                      minOrder: p.minOrder,
-                      price: p.price || null,
-                    }))}
+                    products={result.items}
                   >
                     {result.items.map((product, index) => (
                       <ProductRow
                         key={product.id}
                         priority={index === 0}
-                        product={{
-                          id: product.id,
-                          slug: product.slug,
-                          name: product.name,
-                          partNumber: product.partNumber,
-                          manufacturer: product.manufacturer,
-                          categorySlug: product.categorySlug,
-                          price: product.price,
-                          minOrder: product.minOrder,
-                          package: product.package,
-                          lifecycle: product.lifecycle,
-                          description: product.description,
-                          lastEnrichedAt: product.lastEnrichedAt,
-                          datasheets: product.datasheets,
-                          images: product.images,
-                          specs: product.specs,
-                          inStock: product.inStock,
-                          stockCount: product.stockCount,
-                          unit: product.unit,
-                        }}
+                        product={product}
                       />
                     ))}
                   </BulkSelectWrapper>

@@ -85,16 +85,6 @@ export function parseCatalogParams(
   }
 }
 
-export function formatPrice(price: number | null | undefined): string {
-  if (price === null || price === undefined || price === 0) {
-    return 'Цена по запросу'
-  }
-
-  const rounded = Math.round(price)
-  const formatted = rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-  return `${formatted} ₽`
-}
-
 export function isNewProduct(lastEnrichedAt: string | Date | null | undefined): boolean {
   if (!lastEnrichedAt) return false
   const enrichedDate = new Date(lastEnrichedAt)

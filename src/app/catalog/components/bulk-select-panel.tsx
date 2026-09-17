@@ -1,21 +1,17 @@
 'use client'
 
-import { useState, useCallback, createContext, useContext } from 'react'
+import { useState, useCallback, createContext, useContext, useRef } from 'react'
 import { CheckSquare, Square, X } from 'lucide-react'
-import { addToRequestList } from '@/lib/request-list-store'
-
-interface BulkProduct {
-  id: string
-  partNumber: string
-  name: string
-  manufacturer: string
-  minOrder: number
-  price: number | null
-}
+import { useCart } from '@/hooks/use-cart'
+import type { Product } from '@/types'
 
 interface BulkSelectContextValue {
   selectedIds: Set<string>
   toggle: (id: string) => void
+  addItem: (product: Product, quantity?: number) => Promise<boolean>
+  isInCart: (productId: string) => boolean
+  getQuantity: (productId: string) => number
+  updateQuantity: (productId: string, quantity: number) => Promise<boolean>
 }
 
 const BulkSelectContext = createContext<BulkSelectContextValue | null>(null)
@@ -25,12 +21,15 @@ export function useBulkSelect() {
 }
 
 interface BulkSelectWrapperProps {
-  products: BulkProduct[]
+  products: Product[]
   children: React.ReactNode
 }
 
 export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [isAdding, setIsAdding] = useState(false)
+  const addingRef = useRef(false)
+  const { addItem, isInCart, getQuantity, updateQuantity } = useCart()
 
   const toggle = useCallback((id: string) => {
     setSelectedIds((prev) => {
@@ -48,25 +47,27 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
     setSelectedIds(new Set())
   }, [])
 
-  const addAllToRequest = useCallback(() => {
-    for (const id of selectedIds) {
-      const product = products.find((p) => p.id === id)
-      if (product) {
-        addToRequestList({
-          productId: product.id,
-          partNumber: product.partNumber,
-          name: product.name,
-          manufacturer: product.manufacturer,
-          minOrder: product.minOrder,
-          price: product.price,
-        })
+  const addAllToRequest = useCallback(async () => {
+    if (addingRef.current) return
+    addingRef.current = true
+    setIsAdding(true)
+    const failed = new Set<string>()
+    try {
+      for (const id of selectedIds) {
+        const product = products.find((p) => p.id === id)
+        if (!product || !await addItem(product, product.minOrder)) failed.add(id)
       }
+      setSelectedIds(failed)
+    } finally {
+      addingRef.current = false
+      setIsAdding(false)
     }
-    setSelectedIds(new Set())
-  }, [selectedIds, products])
+  }, [addItem, selectedIds, products])
 
   return (
-    <BulkSelectContext.Provider value={{ selectedIds, toggle }}>
+    <BulkSelectContext.Provider value={{
+      selectedIds, toggle, addItem, isInCart, getQuantity, updateQuantity,
+    }}>
       <div className="relative">
         {/* Product rows (rendered by parent, with context available) */}
         {children}
@@ -78,10 +79,12 @@ export function BulkSelectWrapper({ products, children }: BulkSelectWrapperProps
               Выбрано {selectedIds.size} товаров
             </span>
             <button
-              onClick={addAllToRequest}
-              className="h-8 px-4 text-sm font-bold text-white bg-azure hover:bg-azure-hover transition-colors rounded"
+              onClick={() => void addAllToRequest()}
+              disabled={isAdding}
+              aria-busy={isAdding}
+              className="h-8 px-4 text-sm font-bold text-white bg-azure hover:bg-azure-hover transition-colors rounded disabled:cursor-wait disabled:opacity-70"
             >
-              Добавить в корзину
+              {isAdding ? 'Добавляем...' : 'Добавить в корзину'}
             </button>
             <button
               onClick={clearSelection}

@@ -4,9 +4,10 @@ import { createQuote } from '@/lib/create-quote'
 import { after } from 'next/server'
 import { drainNotifications } from '@/lib/notification-outbox'
 
-import { saveSubmission, SubmissionConflictError } from '@/lib/save-submission'
+import { lookupSubmission, saveSubmission, SubmissionConflictError } from '@/lib/save-submission'
 import { validateQuoteInput } from '@/lib/validate-quote-input'
 import {
+  enforceSubmissionAttemptRateLimit,
   enforceSubmissionRateLimit,
   SubmissionRateLimitExceededError,
 } from '@/lib/submission-rate-limit'
@@ -33,13 +34,37 @@ export interface QuoteRequestInput {
 
 export type QuoteRequestResult =
   | { success: true; requestId: string }
+  | { success: false; error: string; discardOperation?: true }
+
+export type QuoteRequestLookupResult =
+  | { success: true; requestId: string | null }
   | { success: false; error: string }
+
+export async function lookupQuoteRequest(
+  input: QuoteRequestInput,
+): Promise<QuoteRequestLookupResult> {
+  try {
+    await enforceSubmissionAttemptRateLimit('quote_request')
+    const validation = validateQuoteInput(input)
+    // An invalid payload could not have created a receipt, so the corrected
+    // form may safely start a new operation instead of getting stuck on lookup.
+    if (!validation.valid) return { success: true, requestId: null }
+    const requestId = await lookupSubmission(input.submissionKey, 'quote', input)
+    return { success: true, requestId }
+  } catch (error) {
+    if (error instanceof SubmissionRateLimitExceededError) {
+      return { success: false, error: 'Слишком много проверок. Повторите позже.' }
+    }
+    return { success: false, error: 'Не удалось проверить предыдущую отправку. Повторите позже.' }
+  }
+}
 
 export async function submitQuoteRequest(
   input: QuoteRequestInput,
 ): Promise<QuoteRequestResult> {
   const startedAt = Date.now()
   try {
+    await enforceSubmissionAttemptRateLimit('quote_request')
     // Единая серверная валидация (согласие ПДн, форматы, лимиты).
     const validation = validateQuoteInput(input)
     if (!validation.valid) {
@@ -48,8 +73,15 @@ export async function submitQuoteRequest(
         outcome: 'rejected_validation',
         durationMs: Date.now() - startedAt,
       })
-      return { success: false, error: validation.error ?? 'Некорректные данные' }
+      return {
+        success: false,
+        error: validation.error ?? 'Некорректные данные',
+        discardOperation: true,
+      }
     }
+
+    const previousRequestId = await lookupSubmission(input.submissionKey, 'quote', input)
+    if (previousRequestId) return { success: true, requestId: previousRequestId }
 
     await enforceSubmissionRateLimit('quote_request', input.email)
 

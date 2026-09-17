@@ -5,6 +5,11 @@ export function normalizeSearchQuery(value: string): string {
   return value.trim().slice(0, MAX_SEARCH_LENGTH)
 }
 
+export function buildContainsLikePattern(value: string): string {
+  const escaped = normalizeSearchQuery(value).replace(/[\\%_]/g, '\\$&')
+  return `%${escaped}%`
+}
+
 /** Quote each lexeme; punctuation-only input must never become a bare :*. */
 export function buildPrefixTsQuery(value: string): string | null {
   const terms = normalizeSearchQuery(value).split(/\s+/)

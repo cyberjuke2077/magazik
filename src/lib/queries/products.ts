@@ -1,4 +1,4 @@
-import { buildPrefixTsQuery } from '@/lib/search-query'
+import { buildContainsLikePattern, buildPrefixTsQuery } from '@/lib/search-query'
 import { Prisma, type Product as PrismaProduct, type Category, type Manufacturer } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
@@ -85,18 +85,23 @@ function transformProduct(p: ProductWithRelations): Product {
   }
 }
 
-function getSortOrderBy(sort: SortOption): Prisma.ProductOrderByWithRelationInput {
+function getSortOrderBy(sort: SortOption): Prisma.ProductOrderByWithRelationInput[] {
+  let primary: Prisma.ProductOrderByWithRelationInput
   switch (sort) {
     case 'name':
-      return { name: 'asc' }
+      primary = { name: 'asc' }
+      break
     case 'partNumber':
-      return { partNumber: 'asc' }
+      primary = { partNumber: 'asc' }
+      break
     case 'manufacturer':
-      return { manufacturer: { name: 'asc' } }
+      primary = { manufacturer: { name: 'asc' } }
+      break
     case 'date':
     default:
-      return { createdAt: 'desc' }
+      primary = { createdAt: 'desc' }
   }
+  return [primary, { id: 'asc' }]
 }
 
 export async function getProducts(options: { wholesale?: boolean; featured?: boolean } = {}): Promise<Product[]> {
@@ -266,15 +271,17 @@ export async function getProductsPaginated(params: {
   if (query) {
     // Build prefix-matching tsquery: "STM32" → "STM32:*", "100k resistor" → "100k:* & resistor:*"
     const tsqueryStr = buildPrefixTsQuery(query)
+    const manufacturerPattern = buildContainsLikePattern(query)
 
     if (!tsqueryStr) {
       return { items: [], total: 0, page, limit, totalPages: 0 }
     }
 
     // Build dynamic WHERE conditions for count and ID queries
-    const conditions: Prisma.Sql[] = [
-      Prisma.sql`p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})`,
-    ]
+    const conditions: Prisma.Sql[] = [Prisma.sql`(
+      p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})
+      OR m.name ILIKE ${manufacturerPattern}
+    )`]
 
     if (categorySlugs) {
       conditions.push(Prisma.sql`c.slug IN (${Prisma.join(categorySlugs)})`)
@@ -301,7 +308,10 @@ export async function getProductsPaginated(params: {
     }
 
     // When FTS is active, always order by relevance regardless of sort param
-    const orderByClause = Prisma.sql`ORDER BY ts_rank(p."searchVector", to_tsquery('simple', ${tsqueryStr})) DESC`
+    const orderByClause = Prisma.sql`ORDER BY GREATEST(
+      ts_rank(p."searchVector", to_tsquery('simple', ${tsqueryStr})),
+      CASE WHEN m.name ILIKE ${manufacturerPattern} THEN 1 ELSE 0 END
+    ) DESC, p.id ASC`
 
     // Get matching IDs ordered by relevance or sort
     const idsResult = await prisma.$queryRaw<Array<{ id: string }>>`
@@ -390,12 +400,14 @@ export async function getProductsForExport(params: {
 
   if (query) {
     const tsqueryStr = buildPrefixTsQuery(query)
+    const manufacturerPattern = buildContainsLikePattern(query)
 
     if (!tsqueryStr) return []
 
-    const conditions: Prisma.Sql[] = [
-      Prisma.sql`p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})`,
-    ]
+    const conditions: Prisma.Sql[] = [Prisma.sql`(
+      p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})
+      OR m.name ILIKE ${manufacturerPattern}
+    )`]
     if (categorySlugs) conditions.push(Prisma.sql`c.slug IN (${Prisma.join(categorySlugs)})`)
     if (manufacturerSlug) conditions.push(Prisma.sql`m.slug = ${manufacturerSlug}`)
 
@@ -406,7 +418,10 @@ export async function getProductsForExport(params: {
       JOIN "Category" c ON p."categoryId" = c.id
       JOIN "Manufacturer" m ON p."manufacturerId" = m.id
       ${whereClause}
-      ORDER BY ts_rank(p."searchVector", to_tsquery('simple', ${tsqueryStr})) DESC
+      ORDER BY GREATEST(
+        ts_rank(p."searchVector", to_tsquery('simple', ${tsqueryStr})),
+        CASE WHEN m.name ILIKE ${manufacturerPattern} THEN 1 ELSE 0 END
+      ) DESC, p.id ASC
       LIMIT 10000
     `
 

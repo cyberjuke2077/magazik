@@ -1,8 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { rememberRequest } from '@/lib/request-history'
-import { submissionKey } from '@/lib/submission-key'
+import {
+  clearSubmissionDraft,
+  finishSubmission,
+  loadSubmissionDraft,
+  loadPendingSubmission,
+  newSubmissionKey,
+  onSubmissionStateExpired,
+  saveSubmissionDraft,
+  submissionKey,
+  SubmissionPayloadChangedError,
+} from '@/lib/submission-key'
 import Link from 'next/link'
 import {
   ChevronRight,
@@ -18,26 +28,104 @@ import { Footer } from '@/components/layout/footer'
 import { useCart } from '@/hooks/use-cart'
 import { cartUnitPrice } from '@/lib/cart-pricing'
 import { formatPrice } from '@/lib/utils'
-import { submitQuoteRequest } from '@/app/request-list/actions'
+import { lookupQuoteRequest, submitQuoteRequest, type QuoteRequestInput } from '@/app/request-list/actions'
+import { CartUpdateNotice } from '@/components/cart/cart-update-notice'
+import { currentBusinessDate } from '@/lib/delivery-date'
+import type { CartItem } from '@/types'
+
+const QUOTE_SCOPE = 'quote'
+const EMPTY_QUOTE_FORM = {
+  companyName: '',
+  inn: '',
+  contactPerson: '',
+  phone: '',
+  email: '',
+  comment: '',
+  desiredDeliveryDate: '',
+  deliveryAddress: '',
+}
+type QuoteForm = typeof EMPTY_QUOTE_FORM
+type QuotePayload = Omit<QuoteRequestInput, 'submissionKey'>
+type ResolutionState = 'lookup' | 'choose' | null
+
+function isQuoteDraft(value: unknown): value is QuoteForm {
+  if (!value || typeof value !== 'object') return false
+  const draft = value as Partial<QuoteForm>
+  return Object.keys(EMPTY_QUOTE_FORM).every((key) => (
+    typeof draft[key as keyof QuoteForm] === 'string'
+  ))
+}
+
+function isQuotePayload(value: unknown): value is QuotePayload {
+  if (!value || typeof value !== 'object') return false
+  const payload = value as Partial<QuotePayload>
+  const itemsValid = Array.isArray(payload.items) && payload.items.every((item) => (
+    !!item && typeof item.productId === 'string' && typeof item.partNumber === 'string'
+    && typeof item.name === 'string' && typeof item.quantity === 'number'
+  ))
+  return typeof payload.companyName === 'string' && typeof payload.contactPerson === 'string'
+    && typeof payload.phone === 'string' && typeof payload.email === 'string'
+    && typeof payload.consent === 'boolean' && itemsValid
+}
+
+function hasQuoteDraftData(value: QuoteForm): boolean {
+  return Object.values(value).some((field) => field.trim().length > 0)
+}
 
 export default function RequestQuotePage() {
-  const { items, totalPrice, unpricedItems, mounted, clearCart } = useCart()
+  const {
+    items, totalPrice, unpricedItems, mounted, removeSubmittedItems, changes,
+    refreshError, isRefreshing, refresh, dismissChanges,
+  } = useCart({ refreshProducts: true })
 
-  const [formData, setFormData] = useState({
-    companyName: '',
-    inn: '',
-    contactPerson: '',
-    phone: '',
-    email: '',
-    comment: '',
-    desiredDeliveryDate: '',
-    deliveryAddress: '',
-  })
+  const [formData, setFormData] = useState<QuoteForm>(EMPTY_QUOTE_FORM)
   
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [consent, setConsent] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [draftReady, setDraftReady] = useState(false)
+  const [minimumDeliveryDate, setMinimumDeliveryDate] = useState('')
+  const [resolutionState, setResolutionState] = useState<ResolutionState>(null)
+  const [pendingOriginal, setPendingOriginal] = useState<{
+    key: string
+    payload: QuotePayload
+  } | null>(null)
+
+  useEffect(() => {
+    const draft = loadSubmissionDraft(QUOTE_SCOPE, isQuoteDraft)
+    const pending = loadPendingSubmission(QUOTE_SCOPE, isQuotePayload)
+    // Browser-only draft becomes available after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (draft) setFormData(draft)
+    if (pending) {
+      setPendingOriginal(pending)
+      setResolutionState('lookup')
+      setSubmitError('Есть незавершённая отправка. Проверьте её статус перед новой заявкой.')
+    }
+    setDraftReady(true)
+  }, [])
+
+  useEffect(() => {
+    if (!draftReady) return
+    if (hasQuoteDraftData(formData)) saveSubmissionDraft(QUOTE_SCOPE, formData)
+    else clearSubmissionDraft(QUOTE_SCOPE)
+  }, [draftReady, formData])
+
+  useEffect(() => onSubmissionStateExpired(QUOTE_SCOPE, () => {
+    setFormData(EMPTY_QUOTE_FORM)
+    setConsent(false)
+    setErrors({})
+    setPendingOriginal(null)
+    setResolutionState(null)
+    setSubmitError('Срок хранения черновика истёк. Контактные данные очищены.')
+  }), [])
+
+  useEffect(() => {
+    // The page is statically rendered, so the current date must be set in the browser.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMinimumDeliveryDate(currentBusinessDate())
+  }, [])
 
   function handleChange(field: string, value: string) {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -81,22 +169,63 @@ export default function RequestQuotePage() {
     return newErrors
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  function canSubmit() {
     setSubmitError(null)
+
+    if (isRefreshing) {
+      setSubmitError('Дождитесь проверки актуальных цен и минимальных партий')
+      return false
+    }
+    if (refreshError) {
+      setSubmitError('Сначала обновите цены и минимальные партии в корзине')
+      return false
+    }
+    if (changes.length > 0) {
+      setSubmitError('Просмотрите изменения корзины и нажмите «Понятно» перед отправкой')
+      return false
+    }
 
     const newErrors = validate()
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
-      return
+      return false
     }
     if (!consent) {
       setSubmitError('Подтвердите согласие на обработку персональных данных')
-      return
+      return false
     }
+    return true
+  }
 
+  async function refreshBeforeMutation(): Promise<CartItem[] | null> {
+    if (changes.length > 0) {
+      setSubmitError('Просмотрите изменения корзины и нажмите «Понятно» перед отправкой')
+      return null
+    }
+    const result = await refresh()
+    if (!result.ok) {
+      setSubmitError('Не удалось проверить актуальные цены и минимальные партии')
+      return null
+    }
+    if (result.changes.length > 0) {
+      setSubmitError('Условия в корзине изменились. Просмотрите их и нажмите «Понятно»')
+      return null
+    }
+    if (result.items.length === 0) {
+      setSubmitError('После проверки корзина пуста. Добавьте товары и повторите отправку.')
+      return null
+    }
+    return result.items
+  }
+
+  async function sendSubmission(forceNew = false) {
     setIsSubmitting(true)
+    let operationKey: string | null = null
     try {
+      const currentItems = await refreshBeforeMutation()
+      if (!currentItems) return
+      setResolutionState(null)
+      setPendingOriginal(null)
       const payload = {
         companyName: formData.companyName,
         inn: formData.inn || undefined,
@@ -107,30 +236,111 @@ export default function RequestQuotePage() {
         deliveryAddress: formData.deliveryAddress || undefined,
         desiredDeliveryDate: formData.desiredDeliveryDate || undefined,
         consent,
-        items: items.map((item) => ({
+        items: currentItems.map((item) => ({
           productId: item.product.id,
           partNumber: item.product.partNumber,
           name: item.product.name,
           quantity: item.quantity,
         })),
       }
-      const result = await submitQuoteRequest({ ...payload, submissionKey: await submissionKey('quote', payload) })
+      operationKey = forceNew
+        ? await newSubmissionKey(QUOTE_SCOPE, payload)
+        : await submissionKey(QUOTE_SCOPE, payload)
+      const result = await submitQuoteRequest({ ...payload, submissionKey: operationKey })
 
       if (result.success) {
-        rememberRequest(result.requestId)
-        clearCart()
+        rememberRequest(result.requestId, 'quote')
+        finishSubmission(QUOTE_SCOPE, operationKey)
+        clearSubmissionDraft(QUOTE_SCOPE)
+        setPendingOriginal(null)
+        await removeSubmittedItems(currentItems)
         // Полная навигация не даёт пустой корзине перерисовать страницу раньше
         // перехода на статус успешно сохранённой заявки.
         // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.assign(`/request-quote/status/${result.requestId}`)
       } else {
+        if (result.discardOperation && operationKey) finishSubmission(QUOTE_SCOPE, operationKey)
         setSubmitError(result.error)
       }
-    } catch {
-      setSubmitError('Связь прервалась. Данные формы сохранены. Повторите отправку - дубль заявки не создастся.')
+    } catch (caught) {
+      if (caught instanceof SubmissionPayloadChangedError && isQuotePayload(caught.originalPayload)) {
+        setResolutionState('lookup')
+        setPendingOriginal({ key: caught.operationKey, payload: caught.originalPayload })
+        setSubmitError('Предыдущая отправка могла сохраниться. Изменённые данные не отправлены. Сначала проверьте её статус.')
+      } else {
+        setSubmitError('Связь прервалась. Черновик сохранён в этой вкладке. Не меняйте данные и повторите отправку, чтобы проверить исходную заявку.')
+      }
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (canSubmit()) await sendSubmission()
+  }
+
+  function openPreviousReceipt(requestId: string, operationKey: string) {
+    rememberRequest(requestId, 'quote')
+    finishSubmission(QUOTE_SCOPE, operationKey)
+    // Текущие изменённые поля и корзина остаются черновиком новой заявки.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+    window.location.assign(`/request-quote/status/${requestId}`)
+  }
+
+  async function checkPreviousSubmission() {
+    if (!pendingOriginal) return
+    setIsSubmitting(true)
+    try {
+      const result = await lookupQuoteRequest({
+        ...pendingOriginal.payload,
+        submissionKey: pendingOriginal.key,
+      })
+      if (!result.success) {
+        setSubmitError(result.error)
+        return
+      }
+      if (result.requestId) {
+        openPreviousReceipt(result.requestId, pendingOriginal.key)
+        return
+      }
+      setResolutionState('choose')
+      setSubmitError('Предыдущая заявка пока не найдена. Исходная отправка могла ещё обрабатываться. Можно повторить её или отправить изменённые данные новой заявкой, но новая заявка может создать второе обращение.')
+    } catch {
+      setSubmitError('Не удалось проверить статус предыдущей отправки. Повторите проверку позже.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  async function repeatPreviousSubmission() {
+    if (!pendingOriginal) return
+    setIsSubmitting(true)
+    try {
+      const currentItems = items
+      const result = await submitQuoteRequest({
+        ...pendingOriginal.payload,
+        submissionKey: pendingOriginal.key,
+      })
+      if (result.success) {
+        const originalQuantities = new Map(
+          pendingOriginal.payload.items.map((item) => [item.productId, item.quantity]),
+        )
+        await removeSubmittedItems(currentItems.filter((item) => (
+          originalQuantities.get(item.product.id) === item.quantity
+        )))
+        openPreviousReceipt(result.requestId, pendingOriginal.key)
+      }
+      else setSubmitError(result.error)
+    } catch {
+      setSubmitError('Связь прервалась. Повторите исходную отправку с тем же ключом операции.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  async function sendChangedAsNew() {
+    if (canSubmit()) await sendSubmission(true)
   }
 
   // Skeleton while hydrating
@@ -155,13 +365,14 @@ export default function RequestQuotePage() {
   }
 
   // Пустой список
-  if (items.length === 0) {
+  if (items.length === 0 && !pendingOriginal) {
     return (
       <div className="flex min-h-screen flex-col bg-canvas">
         <Header />
         <StickyNav />
         <main className="flex-1 py-12">
           <div className="mx-auto max-w-md px-3 text-center sm:px-6">
+            <CartUpdateNotice changes={changes} error={refreshError} isRefreshing={isRefreshing} onRetry={refresh} onDismiss={dismissChanges} />
             <div className="border border-[var(--border)] bg-white p-8 shadow-[var(--shadow-xs)]">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#f8fafc] mb-4">
                 <FileText size={32} className="text-ink-4" />
@@ -213,7 +424,10 @@ export default function RequestQuotePage() {
             </p>
           </div>
 
-          <form aria-busy={isSubmitting} onSubmit={handleSubmit} className="space-y-4">
+          <CartUpdateNotice changes={changes} error={refreshError} isRefreshing={isRefreshing} onRetry={refresh} onDismiss={dismissChanges} />
+
+          <form aria-busy={isSubmitting || isRefreshing} onSubmit={handleSubmit} className="space-y-4">
+            <fieldset disabled={isSubmitting || isRefreshing} className="contents">
             {/* Контактная информация */}
             <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
@@ -359,7 +573,7 @@ export default function RequestQuotePage() {
                       type="date"
                       value={formData.desiredDeliveryDate}
                       onChange={(e) => handleChange('desiredDeliveryDate', e.target.value)}
-                      min={new Date().toISOString().split('T')[0]}
+                      min={minimumDeliveryDate || undefined}
                       className="w-full h-11 px-3 text-sm border border-[var(--border-2)] rounded text-ink outline-none focus:border-azure focus:ring-2 focus:ring-azure/10 transition-all"
                     />
                   </div>
@@ -441,11 +655,47 @@ export default function RequestQuotePage() {
             </label>
 
             {submitError && (
-              <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
-                <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-                <span>{submitError}</span>
+              <div className="space-y-3 bg-red-50 p-3 text-sm text-red-700 border border-red-200 rounded" role="alert">
+                <div className="flex items-start gap-2">
+                  <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+                  <span>{submitError}</span>
+                </div>
+                {resolutionState === 'lookup' && (
+                  <button
+                    type="button"
+                    disabled={isSubmitting}
+                    onClick={() => void checkPreviousSubmission()}
+                    className="rounded border border-red-300 bg-white px-3 py-2 text-xs font-semibold text-red-700"
+                  >
+                    Проверить статус предыдущей отправки
+                  </button>
+                )}
+                {resolutionState === 'choose' && (
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <button
+                      type="button"
+                      disabled={isSubmitting}
+                      onClick={() => void repeatPreviousSubmission()}
+                      className="rounded border border-red-300 bg-white px-3 py-2 text-xs font-semibold text-red-700"
+                    >
+                      Повторить исходную отправку
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isSubmitting}
+                      onClick={() => void sendChangedAsNew()}
+                      className="rounded bg-red-700 px-3 py-2 text-xs font-semibold text-white"
+                    >
+                      Отправить изменённые данные новой заявкой
+                    </button>
+                  </div>
+                )}
               </div>
             )}
+
+            <p className="text-xs leading-relaxed text-ink-4">
+              Контакты, черновик и снимок незавершённой отправки хранятся только в этой вкладке до 2 часов. Завершённая операция удаляется после подтверждения, а несохранённые изменения могут остаться новым черновиком.
+            </p>
 
             {/* Кнопки */}
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
@@ -459,13 +709,13 @@ export default function RequestQuotePage() {
               
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isRefreshing || Boolean(refreshError) || changes.length > 0}
                 className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-azure text-sm font-bold text-white transition duration-200 hover:-translate-y-0.5 hover:bg-azure-hover active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300"
               >
-                {isSubmitting ? (
+                {isSubmitting || isRefreshing ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Отправка...
+                    {isSubmitting ? 'Отправка...' : 'Проверяем корзину...'}
                   </>
                 ) : (
                   <>
@@ -475,7 +725,7 @@ export default function RequestQuotePage() {
                 )}
               </button>
             </div>
-
+            </fieldset>
           </form>
         </div>
       </main>

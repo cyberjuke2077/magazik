@@ -3,9 +3,10 @@
 import { after } from 'next/server'
 import { drainNotifications } from '@/lib/notification-outbox'
 
-import { saveSubmission, SubmissionConflictError } from '@/lib/save-submission'
+import { lookupSubmission, saveSubmission, SubmissionConflictError } from '@/lib/save-submission'
 import { validateWholesaleInput } from '@/lib/validate-wholesale-input'
 import {
+  enforceSubmissionAttemptRateLimit,
   enforceSubmissionRateLimit,
   SubmissionRateLimitExceededError,
 } from '@/lib/submission-rate-limit'
@@ -22,14 +23,36 @@ export interface WholesaleLeadInput {
 }
 
 export type WholesaleLeadResult =
-  | { success: true }
+  | { success: true; requestId: string }
+  | { success: false; error: string; discardOperation?: true }
+
+export type WholesaleLeadLookupResult =
+  | { success: true; requestId: string | null }
   | { success: false; error: string }
+
+export async function lookupWholesaleLead(
+  input: WholesaleLeadInput,
+): Promise<WholesaleLeadLookupResult> {
+  try {
+    await enforceSubmissionAttemptRateLimit('wholesale_lead')
+    const validation = validateWholesaleInput(input)
+    if (!validation.valid) return { success: true, requestId: null }
+    const requestId = await lookupSubmission(input.submissionKey, 'wholesale', input)
+    return { success: true, requestId }
+  } catch (error) {
+    if (error instanceof SubmissionRateLimitExceededError) {
+      return { success: false, error: 'Слишком много проверок. Повторите позже.' }
+    }
+    return { success: false, error: 'Не удалось проверить предыдущую отправку. Повторите позже.' }
+  }
+}
 
 export async function submitWholesaleLead(
   input: WholesaleLeadInput,
 ): Promise<WholesaleLeadResult> {
   const startedAt = Date.now()
   try {
+    await enforceSubmissionAttemptRateLimit('wholesale_lead')
     // Единая серверная валидация (согласие ПДн, форматы, лимиты).
     const validation = validateWholesaleInput(input)
     if (!validation.valid) {
@@ -38,8 +61,15 @@ export async function submitWholesaleLead(
         outcome: 'rejected_validation',
         durationMs: Date.now() - startedAt,
       })
-      return { success: false, error: validation.error ?? 'Некорректные данные' }
+      return {
+        success: false,
+        error: validation.error ?? 'Некорректные данные',
+        discardOperation: true,
+      }
     }
+
+    const previousRequestId = await lookupSubmission(input.submissionKey, 'wholesale', input)
+    if (previousRequestId) return { success: true, requestId: previousRequestId }
 
     await enforceSubmissionRateLimit('wholesale_lead', input.email)
 
@@ -68,7 +98,7 @@ export async function submitWholesaleLead(
       notificationStatus: 'queued',
     })
 
-    return { success: true }
+    return { success: true, requestId }
   } catch (error) {
     if (error instanceof SubmissionConflictError) return { success: false, error: error.message }
     if (error instanceof SubmissionRateLimitExceededError) {

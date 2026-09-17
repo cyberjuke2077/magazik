@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { ShoppingCart, Plus, Minus, Check, Zap, Sparkles } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { type Product } from '@/types'
@@ -35,7 +36,9 @@ const cardTheme = {
 }
 
 export function ProductCard({ product, showDiscount = true, priority = false }: ProductCardProps) {
-  const discountPercent = product.priceWholesale
+  const router = useRouter()
+  const discountPercent = product.price > 0 && product.priceWholesale
+    && product.priceWholesale > 0 && product.priceWholesale < product.price
     ? Math.round((1 - product.priceWholesale / product.price) * 100)
     : null
 
@@ -55,9 +58,13 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
     name: product.name,
   })
 
-  function handleAdd(e: React.MouseEvent) {
+  async function handleAdd(e: React.MouseEvent) {
     e.preventDefault()
-    addItem(product, localQty)
+    if (inCart) {
+      router.push('/cart')
+      return
+    }
+    if (!await addItem(product, localQty)) return
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1800)
     flyToCart(btnRef.current)
@@ -65,13 +72,13 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
 
   function handleMinus(e: React.MouseEvent) {
     e.preventDefault()
-    if (inCart) updateQuantity(product.id, Math.max(product.minOrder, cartQty - 1))
+    if (inCart) void updateQuantity(product.id, Math.max(product.minOrder, cartQty - 1))
     else setLocalQty((q) => Math.max(product.minOrder, q - 1))
   }
 
   function handlePlus(e: React.MouseEvent) {
     e.preventDefault()
-    if (inCart) updateQuantity(product.id, cartQty + 1)
+    if (inCart) void updateQuantity(product.id, cartQty + 1)
     else setLocalQty((q) => q + 1)
   }
 
@@ -207,7 +214,7 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
           <button
             ref={btnRef}
             onClick={handleAdd}
-            aria-label={justAdded ? 'Добавлено в корзину' : inCart ? 'Товар в корзине' : 'Добавить в корзину'}
+            aria-label={justAdded ? 'Добавлено в корзину' : inCart ? 'Перейти в корзину' : 'Добавить в корзину'}
             className={`flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] text-xs font-bold transition-all active:scale-[0.97] ${
               justAdded
                 ? 'bg-azure-hover text-white'

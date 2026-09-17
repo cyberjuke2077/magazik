@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { parseCatalogParams, formatPrice } from './catalog-utils'
+import { parseCatalogParams } from './catalog-utils'
+import { formatPrice } from './utils'
 
 describe('formatPrice', () => {
   it('returns "Цена по запросу" for null', () => {
@@ -14,20 +15,13 @@ describe('formatPrice', () => {
     expect(formatPrice(0)).toBe('Цена по запросу')
   })
 
-  it('formats price with thousands separator and ₽ suffix', () => {
-    expect(formatPrice(1234.5)).toBe('1 235 ₽')
-  })
-
-  it('formats small price', () => {
-    expect(formatPrice(5)).toBe('5 ₽')
-  })
-
-  it('formats large price with multiple separators', () => {
-    expect(formatPrice(1234567)).toBe('1 234 567 ₽')
-  })
-
-  it('formats price exactly 1000', () => {
-    expect(formatPrice(1000)).toBe('1 000 ₽')
+  it.each([
+    [0.01, '0,01\u00a0₽'],
+    [0.24, '0,24\u00a0₽'],
+    [2.4, '2,40\u00a0₽'],
+    [160, '160\u00a0₽'],
+  ])('keeps kopecks for %s', (price, expected) => {
+    expect(formatPrice(price)).toBe(expected)
   })
 })
 

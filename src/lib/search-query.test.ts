@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildPrefixTsQuery, normalizeSearchQuery } from './search-query'
+import { buildContainsLikePattern, buildPrefixTsQuery, normalizeSearchQuery } from './search-query'
 
 describe('search input', () => {
   it.each(['!!', '()', ':*', "'\\", '---', '  '])('ignores punctuation: %s', (query) => {
@@ -12,5 +12,8 @@ describe('search input', () => {
   it('bounds both query length and term count', () => {
     expect(normalizeSearchQuery('x'.repeat(1000))).toHaveLength(200)
     expect(buildPrefixTsQuery('a '.repeat(100))?.split(' & ')).toHaveLength(20)
+  })
+  it('escapes wildcard characters for a literal manufacturer lookup', () => {
+    expect(buildContainsLikePattern('ACME_100%\\')).toBe('%ACME\\_100\\%\\\\%')
   })
 })
