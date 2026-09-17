@@ -19,3 +19,8 @@ it('uses source prices for a genuinely new product and does not confuse manufact
   const [merged] = preserveCommercialData([source], [{id:'brand',slug:'other-maker'}], [current])
   expect(merged).toBe(source)
 })
+it('never matches unrelated products by a missing normalized MPN', () => {
+  const unknown = {...source, mpnNormalized:null}
+  const [merged] = preserveCommercialData([unknown], [{id:'brand',slug:'maker'}], [{...current,mpnNormalized:null}])
+  expect(merged).toBe(unknown)
+})

@@ -197,7 +197,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('Ошибка публикации (транзакция откатена, прод не изменён):', e)
+    console.error('Ошибка публикации. Проверьте стадию и состояние цели перед повтором:', e)
     process.exit(1)
   })
   .finally(async () => {

@@ -15,12 +15,13 @@ export function preserveCommercialData(
   current: CommercialProduct[],
 ): Product[] {
   const byId = new Map(current.map((product) => [product.id, product]))
-  const byIdentity = new Map(current.map((product) => [
+  const byIdentity = new Map(current.filter((product) => product.mpnNormalized).map((product) => [
     `${product.manufacturer.slug}\0${product.mpnNormalized}`, product,
   ]))
   const brands = new Map(manufacturers.map((manufacturer) => [manufacturer.id, manufacturer.slug]))
   return products.map((product) => {
-    const existing = byId.get(product.id) ?? byIdentity.get(`${brands.get(product.manufacturerId)}\0${product.mpnNormalized}`)
+    const existing = byId.get(product.id) ?? (product.mpnNormalized
+      ? byIdentity.get(`${brands.get(product.manufacturerId)}\0${product.mpnNormalized}`) : undefined)
     if (!existing) return product
     const { price, priceWholesale, currency, stockCount, inStock, minOrder } = existing
     return { ...product, price, priceWholesale, currency, stockCount, inStock, minOrder }
