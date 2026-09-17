@@ -17,6 +17,7 @@ export const MAX_QUANTITY = 1_000_000
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationResult {
+  if (!input || typeof input !== 'object') return { valid: false, error: 'Некорректные данные' }
   // Согласие на ПДн (ФЗ-152): проверяем на сервере, клиентский чекбокс обходится
   if (input.consent !== true) {
     return { valid: false, error: 'Необходимо согласие на обработку персональных данных' }
@@ -41,6 +42,10 @@ export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationRes
     (input.desiredDeliveryDate != null && typeof input.desiredDeliveryDate !== 'string')
   ) {
     return { valid: false, error: 'Некорректный формат одного из полей' }
+  }
+
+  if (input.inn?.trim() && !/^(?:\d{10}|\d{12})$/.test(input.inn.trim())) {
+    return { valid: false, error: 'ИНН должен содержать 10 или 12 цифр' }
   }
 
   // Format checks — отсекаем мусорные лиды
@@ -106,7 +111,8 @@ export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationRes
     if (
       typeof input.desiredDeliveryDate !== 'string' ||
       !/^\d{4}-\d{2}-\d{2}$/.test(input.desiredDeliveryDate) ||
-      Number.isNaN(new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).getTime())
+      Number.isNaN(new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).getTime()) ||
+      new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).toISOString().slice(0, 10) !== input.desiredDeliveryDate
     ) {
       return { valid: false, error: 'Некорректная желаемая дата поставки' }
     }

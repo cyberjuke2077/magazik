@@ -12,7 +12,7 @@ interface SubmissionLogEvent {
   durationMs: number
   requestId?: string
   errorType?: string
-  notificationStatus?: 'sent' | 'not_configured' | 'failed'
+  notificationStatus?: 'queued' | 'sent' | 'not_configured' | 'failed'
 }
 
 export function serializeSubmissionLog(event: SubmissionLogEvent): string {

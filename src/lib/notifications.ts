@@ -6,24 +6,8 @@
  *   TELEGRAM_CHAT_ID   - id чата получателя
  */
 
-interface QuoteNotification {
-  requestId: string
-  companyName: string
-  contactPerson: string
-  phone: string
-  email: string
-  itemsCount: number
-  comment?: string | null
-}
-
-interface WholesaleNotification {
-  leadId: string
-  name: string
-  company?: string | null
-  phone: string
-  email: string
-  message?: string | null
-}
+interface QuoteNotification { requestId: string; itemsCount: number }
+interface WholesaleNotification { leadId: string }
 
 export type NotificationDelivery =
   | { status: 'sent' }
@@ -54,6 +38,10 @@ async function sendTelegram(text: string): Promise<NotificationDelivery> {
     if (!res.ok) {
       return { status: 'failed', errorType: `TelegramHttp${res.status}` }
     }
+    const response: unknown = await res.json()
+    if (!response || typeof response !== 'object' || !('ok' in response) || response.ok !== true) {
+      return { status: 'failed', errorType: 'TelegramRejected' }
+    }
     return { status: 'sent' }
   } catch (e) {
     return {
@@ -69,12 +57,7 @@ export async function notifyNewQuoteRequest(q: QuoteNotification): Promise<Notif
   const text = [
     '🔔 <b>Новая заявка на КП</b>',
     '',
-    `<b>Компания:</b> ${escapeHtml(q.companyName)}`,
-    `<b>Контакт:</b> ${escapeHtml(q.contactPerson)}`,
-    `<b>Телефон:</b> ${escapeHtml(q.phone)}`,
-    `<b>Email:</b> ${escapeHtml(q.email)}`,
     `<b>Позиций:</b> ${q.itemsCount}`,
-    ...(q.comment ? [`<b>Комментарий:</b> ${escapeHtml(q.comment)}`] : []),
     '',
     `${baseUrl}/admin/requests/${q.requestId}`,
   ].join('\n')
@@ -88,11 +71,7 @@ export async function notifyNewWholesaleLead(w: WholesaleNotification): Promise<
   const text = [
     '🟠 <b>Новая оптовая заявка</b>',
     '',
-    `<b>Имя:</b> ${escapeHtml(w.name)}`,
-    ...(w.company ? [`<b>Компания:</b> ${escapeHtml(w.company)}`] : []),
-    `<b>Телефон:</b> ${escapeHtml(w.phone)}`,
-    `<b>Email:</b> ${escapeHtml(w.email)}`,
-    ...(w.message ? [`<b>Сообщение:</b> ${escapeHtml(w.message)}`] : []),
+    `<b>Номер:</b> ${escapeHtml(w.leadId)}`,
     '',
     `${baseUrl}/admin/wholesale`,
   ].join('\n')

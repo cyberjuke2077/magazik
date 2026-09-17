@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { rememberRequest } from '@/lib/request-history'
+import { submissionKey } from '@/lib/submission-key'
 import Link from 'next/link'
 import {
   ChevronRight,
@@ -14,11 +16,12 @@ import { Header } from '@/components/layout/header'
 import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { useCart } from '@/hooks/use-cart'
+import { cartUnitPrice } from '@/lib/cart-pricing'
 import { formatPrice } from '@/lib/utils'
 import { submitQuoteRequest } from '@/app/request-list/actions'
 
 export default function RequestQuotePage() {
-  const { items, totalPrice, mounted, clearCart } = useCart()
+  const { items, totalPrice, unpricedItems, mounted, clearCart } = useCart()
 
   const [formData, setFormData] = useState({
     companyName: '',
@@ -93,33 +96,40 @@ export default function RequestQuotePage() {
     }
 
     setIsSubmitting(true)
-    const result = await submitQuoteRequest({
-      companyName: formData.companyName,
-      inn: formData.inn || undefined,
-      contactPerson: formData.contactPerson,
-      phone: formData.phone,
-      email: formData.email,
-      comment: formData.comment || undefined,
-      deliveryAddress: formData.deliveryAddress || undefined,
-      desiredDeliveryDate: formData.desiredDeliveryDate || undefined,
-      consent,
-      items: items.map((item) => ({
-        productId: item.product.id,
-        partNumber: item.product.partNumber,
-        name: item.product.name,
-        quantity: item.quantity,
-      })),
-    })
-    setIsSubmitting(false)
+    try {
+      const payload = {
+        companyName: formData.companyName,
+        inn: formData.inn || undefined,
+        contactPerson: formData.contactPerson,
+        phone: formData.phone,
+        email: formData.email,
+        comment: formData.comment || undefined,
+        deliveryAddress: formData.deliveryAddress || undefined,
+        desiredDeliveryDate: formData.desiredDeliveryDate || undefined,
+        consent,
+        items: items.map((item) => ({
+          productId: item.product.id,
+          partNumber: item.product.partNumber,
+          name: item.product.name,
+          quantity: item.quantity,
+        })),
+      }
+      const result = await submitQuoteRequest({ ...payload, submissionKey: await submissionKey('quote', payload) })
 
-    if (result.success) {
-      clearCart()
-      // Полная навигация не даёт пустой корзине перерисовать страницу раньше
-      // перехода на статус успешно сохранённой заявки.
-      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-      window.location.assign(`/request-quote/status/${result.requestId}`)
-    } else {
-      setSubmitError(result.error)
+      if (result.success) {
+        rememberRequest(result.requestId)
+        clearCart()
+        // Полная навигация не даёт пустой корзине перерисовать страницу раньше
+        // перехода на статус успешно сохранённой заявки.
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+        window.location.assign(`/request-quote/status/${result.requestId}`)
+      } else {
+        setSubmitError(result.error)
+      }
+    } catch {
+      setSubmitError('Связь прервалась. Данные формы сохранены. Повторите отправку - дубль заявки не создастся.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -203,7 +213,7 @@ export default function RequestQuotePage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form aria-busy={isSubmitting} onSubmit={handleSubmit} className="space-y-4">
             {/* Контактная информация */}
             <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
@@ -389,10 +399,10 @@ export default function RequestQuotePage() {
                     </div>
                     <div className="text-right ml-4">
                       <div className="text-sm font-semibold text-ink">
-                        {item.quantity} × {formatPrice(item.product.price)}
+                        {item.quantity} × {cartUnitPrice(item.product, item.quantity) === null ? 'По запросу' : formatPrice(cartUnitPrice(item.product, item.quantity)!)}
                       </div>
                       <div className="text-xs text-ink-3 mt-0.5">
-                        = {formatPrice(item.product.price * item.quantity)}
+                        = {cartUnitPrice(item.product, item.quantity) === null ? 'По запросу' : formatPrice(cartUnitPrice(item.product, item.quantity)! * item.quantity)}
                       </div>
                     </div>
                   </div>
@@ -401,7 +411,7 @@ export default function RequestQuotePage() {
 
               <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
                 <span className="text-base font-semibold text-ink-2">Предварительная сумма:</span>
-                <span className="text-2xl font-bold text-ink">{formatPrice(totalPrice)}</span>
+                <span className="text-2xl font-bold text-ink">{unpricedItems ? 'По запросу' : formatPrice(totalPrice)}</span>
               </div>
 
               <div className="mt-4 border-l-4 border-azure bg-azure-light p-3">

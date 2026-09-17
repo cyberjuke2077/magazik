@@ -8,10 +8,11 @@ export interface WholesaleValidationResult {
 // Лимиты против спама — server action это публичный POST, клиентской
 // валидации верить нельзя.
 const MAX_FIELD = 200
-const MAX_MESSAGE = 2000
+const MAX_MESSAGE = 20000
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function validateWholesaleInput(input: WholesaleLeadInput): WholesaleValidationResult {
+  if (!input || typeof input !== 'object') return { valid: false, error: 'Некорректные данные' }
   // Согласие на ПДн (ФЗ-152): проверяем на сервере, клиентский чекбокс обходится
   if (input.consent !== true) {
     return { valid: false, error: 'Необходимо согласие на обработку персональных данных' }

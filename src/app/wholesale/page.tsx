@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { submissionKey } from '@/lib/submission-key'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -100,19 +101,26 @@ export default function WholesalePage() {
       return
     }
     setLoading(true)
-    const result = await submitWholesaleLead({
-      name: form.name,
-      company: form.company,
-      phone: form.phone,
-      email: form.email,
-      message: form.message,
-      consent,
-    })
-    setLoading(false)
-    if (result.success) {
-      setSubmitted(true)
-    } else {
-      setError(result.error)
+    try {
+      const payload = {
+        name: form.name,
+        company: form.company,
+        phone: form.phone,
+        email: form.email,
+        message: form.message,
+        consent,
+      }
+      const result = await submitWholesaleLead({ ...payload, submissionKey: await submissionKey('wholesale', payload) })
+
+      if (result.success) {
+        setSubmitted(true)
+      } else {
+        setError(result.error)
+      }
+    } catch {
+      setError('Связь прервалась. Данные формы сохранены. Повторите отправку - дубль заявки не создастся.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -246,7 +254,7 @@ export default function WholesalePage() {
                     </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form id="request-form" aria-busy={loading} onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="wholesale-name" className="block text-xs font-medium text-[#44403c] mb-1.5">Имя *</label>
@@ -313,7 +321,7 @@ export default function WholesalePage() {
                     </div>
 
                     <div>
-                      <label htmlFor="wholesale-message" className="block text-xs font-medium text-[#44403c] mb-1.5">Сообщение</label>
+                      <label htmlFor="wholesale-message" className="block text-xs font-medium text-[#44403c] mb-1.5">Список компонентов и пожелания</label>
                       <div className="relative">
                         <MessageSquare size={14} className="absolute left-3 top-3 text-ink-4" />
                         <textarea
@@ -321,8 +329,9 @@ export default function WholesalePage() {
                           name="message"
                           value={form.message}
                           onChange={(e) => set('message', e.target.value)}
-                          placeholder="Опишите ваши потребности: какие компоненты, объём, сроки..."
-                          rows={3}
+                          placeholder="MPN, количество, желаемый срок. Можно указать компоненты, которых нет в каталоге."
+                          rows={6}
+                          maxLength={20000}
                           className="w-full pl-9 pr-4 py-2.5 text-sm bg-azure-light border border-black/8 rounded text-ink placeholder:text-ink-4 outline-none focus:border-azure/40 focus:ring-2 focus:ring-azure/10 transition-all resize-none"
                         />
                       </div>

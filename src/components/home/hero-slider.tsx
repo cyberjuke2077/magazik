@@ -11,7 +11,7 @@ const serviceCards = [
   },
   {
     image: '/storefront/category-interfaces.jpg',
-    href: '/request-quote',
+    href: '/wholesale#request-form',
     title: 'Подбор аналогов',
     description: 'Совместимая замена для дефицитной позиции',
     tone: 'bg-[#e4f8ef]',
@@ -44,7 +44,7 @@ export function HeroSlider() {
     <section className="bg-white pb-6 pt-5 lg:pb-8 lg:pt-6" data-motion-reveal>
       <div className="no-scrollbar mx-auto flex max-w-[1380px] gap-3 overflow-x-auto px-4 pb-1 lg:gap-4 lg:px-0">
         <Link
-          href="/request-quote"
+          href="/wholesale#request-form"
           className="group relative h-[238px] w-[292px] shrink-0 overflow-hidden rounded-2xl bg-[#dcecff] p-5 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:w-[310px]"
         >
           <Image

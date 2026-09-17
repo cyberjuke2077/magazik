@@ -330,3 +330,30 @@ model SubmissionRateLimit {
 
   @@index([expiresAt])
 }
+
+// Idempotency receipts contain no contact data. Keep for the lifetime of the request.
+model SubmissionReceipt {
+  key       String   @id
+  hash      String
+  kind      String
+  requestId String
+  createdAt DateTime @default(now())
+}
+
+// Transactional outbox. Payload is resolved from the request, never copied here.
+model NotificationJob {
+  id          String   @id @default(cuid())
+  kind        String
+  requestId   String
+  status      String   @default("pending")
+  attempts    Int      @default(0)
+  nextAttempt DateTime @default(now())
+  lockedUntil DateTime?
+  lockToken   String?
+  lastError   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([kind, requestId])
+  @@index([status, nextAttempt])
+}
