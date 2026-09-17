@@ -9,8 +9,7 @@ import { getProducts } from '@/lib/queries/products'
 
 export default async function PopularPage() {
   await connection()
-  const products = await getProducts()
-  const popularProducts = products.filter((p) => !p.featured).slice(0, 20)
+  const popularProducts = await getProducts({ featured: false })
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <Header />

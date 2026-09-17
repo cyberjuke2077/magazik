@@ -99,6 +99,7 @@ export function LiveSearchDropdown() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResults | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [searchError, setSearchError] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
   const [history, setHistory] = useState<string[]>(getSearchHistory)
@@ -106,6 +107,7 @@ export function LiveSearchDropdown() {
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const requestVersion = useRef(0)
 
   // Build flat list of navigable items for keyboard nav
   const navItems = useCallback((): Array<{ type: string; href: string; label: string }> => {
@@ -126,6 +128,8 @@ export function LiveSearchDropdown() {
   }, [results])
 
   function handleSearch(searchQuery: string) {
+    const version = ++requestVersion.current
+    setSearchError(false)
     if (timerRef.current) clearTimeout(timerRef.current)
 
     if (searchQuery.trim().length < 2) {
@@ -141,12 +145,16 @@ export function LiveSearchDropdown() {
     timerRef.current = setTimeout(async () => {
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery.trim())}`)
+        if (!res.ok) throw new Error('Search unavailable')
         const data = await res.json()
+        if (version !== requestVersion.current) return
         setResults(data)
       } catch {
-        setResults({ products: [], categories: [], manufacturers: [] })
+        if (version !== requestVersion.current) return
+        setResults(null)
+        setSearchError(true)
       } finally {
-        setIsLoading(false)
+        if (version === requestVersion.current) setIsLoading(false)
       }
     }, 250)
   }
@@ -205,7 +213,7 @@ export function LiveSearchDropdown() {
   }
 
   const showDropdown = isFocused && (
-    isLoading ||
+    isLoading || searchError ||
     (results && (results.products.length > 0 || results.categories.length > 0 || results.manufacturers.length > 0)) ||
     (results && results.products.length === 0 && results.categories.length === 0 && results.manufacturers.length === 0 && query.trim().length >= 2) ||
     (query.trim().length < 2 && history.length > 0)
@@ -258,6 +266,7 @@ export function LiveSearchDropdown() {
         >
           {/* Loading skeleton */}
           {isLoading && <SkeletonResults />}
+          {!isLoading && searchError && <p role="alert" className="p-4 text-sm text-ink-3">Подсказки временно недоступны. Нажмите Enter, чтобы открыть каталог.</p>}
 
           {/* No results */}
           {!isLoading && noResults && (

@@ -1,3 +1,4 @@
+import { buildPrefixTsQuery } from '@/lib/search-query'
 import { cache } from 'react'
 import { Prisma } from '@prisma/client'
 
@@ -247,11 +248,7 @@ export async function getManufacturersWithCounts(
 
   // When FTS query is provided, use raw SQL for search vector matching
   if (query) {
-    const tsqueryStr = query
-      .split(/\s+/)
-      .filter((w) => w.length > 0)
-      .map((w) => w.replace(/[!&|()<>:*'\\]/g, '') + ':*')
-      .join(' & ')
+    const tsqueryStr = buildPrefixTsQuery(query)
 
     if (!tsqueryStr) return []
 

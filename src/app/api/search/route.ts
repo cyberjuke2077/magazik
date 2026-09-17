@@ -1,3 +1,4 @@
+import { buildPrefixTsQuery, normalizeSearchQuery } from '@/lib/search-query'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
@@ -9,7 +10,7 @@ import { prisma } from '@/lib/prisma'
  * Fast response (<100ms) for instant dropdown.
  */
 export async function GET(request: NextRequest) {
-  const q = request.nextUrl.searchParams.get('q')?.trim()
+  const q = normalizeSearchQuery(request.nextUrl.searchParams.get('q') ?? '')
 
   if (!q || q.length < 2) {
     return NextResponse.json({ products: [], categories: [], manufacturers: [] })
@@ -17,11 +18,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Build prefix-matching tsquery: "STM32" → "STM32:*"
-    const tsqueryStr = q
-      .split(/\s+/)
-      .filter((w) => w.length > 0)
-      .map((w) => w.replace(/[!&|()<>:*'\\]/g, '') + ':*')
-      .join(' & ')
+    const tsqueryStr = buildPrefixTsQuery(q)
 
     if (!tsqueryStr) {
       return NextResponse.json({ products: [], categories: [], manufacturers: [] })
@@ -112,6 +109,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('[search API] error:', error)
-    return NextResponse.json({ products: [], categories: [], manufacturers: [] })
+    return NextResponse.json({ error: 'Поиск временно недоступен' }, { status: 503 })
   }
 }

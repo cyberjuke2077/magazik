@@ -1,3 +1,4 @@
+import { normalizeSearchQuery } from './search-query'
 export type SortOption = 'name' | 'partNumber' | 'date' | 'manufacturer'
 export type ViewMode = 'list' | 'table'
 
@@ -54,7 +55,7 @@ export function parseCatalogParams(
   if (page > totalPages) page = totalPages
 
   // Parse query
-  const trimmedQuery = rawQuery?.trim() || null
+  const trimmedQuery = rawQuery ? normalizeSearchQuery(rawQuery) : null
   const query = trimmedQuery || null
 
   // Parse category slug

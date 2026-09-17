@@ -1,3 +1,4 @@
+import { buildPrefixTsQuery } from '@/lib/search-query'
 import { Prisma, type Product as PrismaProduct, type Category, type Manufacturer } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
@@ -98,8 +99,13 @@ function getSortOrderBy(sort: SortOption): Prisma.ProductOrderByWithRelationInpu
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(options: { wholesale?: boolean; featured?: boolean } = {}): Promise<Product[]> {
   const products = await prisma.product.findMany({
+    where: {
+      ...(options.wholesale && { priceWholesale: { gt: 0 } }),
+      ...(options.featured !== undefined && { featured: options.featured }),
+    },
+    take: 20,
     include: {
       category: true,
       manufacturer: true,
@@ -137,9 +143,11 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   return transformProduct(product)
 }
 
-export async function getProductsByCategory(categorySlug: string): Promise<Product[]> {
+export async function getProductsByCategory(categorySlug: string, excludeId?: string): Promise<Product[]> {
   const products = await prisma.product.findMany({
+    take: 4,
     where: {
+      ...(excludeId && { id: { not: excludeId } }),
       category: {
         slug: categorySlug,
       },
@@ -257,11 +265,7 @@ export async function getProductsPaginated(params: {
   // When a search query is provided, use raw SQL for FTS
   if (query) {
     // Build prefix-matching tsquery: "STM32" → "STM32:*", "100k resistor" → "100k:* & resistor:*"
-    const tsqueryStr = query
-      .split(/\s+/)
-      .filter((w) => w.length > 0)
-      .map((w) => w.replace(/[!&|()<>:*'\\]/g, '') + ':*')
-      .join(' & ')
+    const tsqueryStr = buildPrefixTsQuery(query)
 
     if (!tsqueryStr) {
       return { items: [], total: 0, page, limit, totalPages: 0 }
@@ -385,11 +389,7 @@ export async function getProductsForExport(params: {
   const categorySlugs = categorySlug ? await getCategorySubtreeSlugs(categorySlug) : null
 
   if (query) {
-    const tsqueryStr = query
-      .split(/\s+/)
-      .filter((w) => w.length > 0)
-      .map((w) => w.replace(/[!&|()<>:*'\\]/g, '') + ':*')
-      .join(' & ')
+    const tsqueryStr = buildPrefixTsQuery(query)
 
     if (!tsqueryStr) return []
 
