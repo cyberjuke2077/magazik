@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { ProductPricingRow, type PricingRowProduct } from './pricing-row'
 import { SearchBox } from './search-box'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,7 @@ export default async function AdminProductsPage({
 }: {
   searchParams: Promise<{ q?: string; filter?: string; page?: string }>
 }) {
+  await requireAdminPageSession()
   const { q = '', filter = '', page: pageRaw } = await searchParams
   const page = Math.max(1, parseInt(pageRaw ?? '1', 10) || 1)
 

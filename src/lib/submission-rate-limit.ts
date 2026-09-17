@@ -5,11 +5,15 @@ import { prisma } from '@/lib/prisma'
 export type SubmissionScope =
   | 'quote_request'
   | 'wholesale_lead'
+  | 'admin_login_global'
   | 'admin_login_network'
   | 'admin_login_account'
 
 const DEFAULT_LIMIT = 10
 const DEFAULT_WINDOW_MS = 15 * 60 * 1000
+const ADMIN_GLOBAL_LIMIT = 500
+const ADMIN_NETWORK_LIMIT = 10
+const ADMIN_ACCOUNT_LIMIT = 50
 
 interface CounterInput {
   key: string
@@ -29,12 +33,15 @@ interface ConsumeOptions {
   now?: Date
   limit?: number
   windowMs?: number
+  cleanup?: boolean
 }
 
 interface AdminLoginLimitOptions {
   now?: Date
-  limit?: number
   windowMs?: number
+  globalLimit?: number
+  networkLimit?: number
+  accountLimit?: number
 }
 
 export class SubmissionRateLimitExceededError extends Error {
@@ -80,7 +87,7 @@ export async function consumeSubmissionRateLimit(
   const expiresAt = new Date(windowStart.getTime() + windowMs)
   const key = digest(`${options.scope}:${bucket}:${digest(options.identity)}`)
 
-  await store.deleteExpired(now)
+  if (options.cleanup !== false) await store.deleteExpired(now)
   const count = await store.increment({ key, scope: options.scope, windowStart, expiresAt })
   if (count > limit) throw new SubmissionRateLimitExceededError()
 }
@@ -98,24 +105,28 @@ export async function consumeAdminLoginRateLimits(
 ): Promise<void> {
   const normalizedUsername = username.trim().toLowerCase().slice(0, 200) || '<empty>'
   const normalizedNetwork = networkIdentity?.trim().slice(0, 200) || '<unavailable>'
-  const sharedOptions = {
-    now: options.now,
-    limit: options.limit,
-    windowMs: options.windowMs,
-  }
+  const shared = { now: options.now, windowMs: options.windowMs }
 
-  await Promise.all([
-    consumeSubmissionRateLimit({
-      ...sharedOptions,
-      scope: 'admin_login_network',
-      identity: `network:${normalizedNetwork}`,
-    }, store),
-    consumeSubmissionRateLimit({
-      ...sharedOptions,
-      scope: 'admin_login_account',
-      identity: `account:${normalizedUsername}`,
-    }, store),
-  ])
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: 'admin_login_global',
+    identity: 'admin-login',
+    limit: options.globalLimit ?? ADMIN_GLOBAL_LIMIT,
+  }, store)
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: 'admin_login_network',
+    identity: `network:${normalizedNetwork}`,
+    limit: options.networkLimit ?? ADMIN_NETWORK_LIMIT,
+    cleanup: false,
+  }, store)
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: 'admin_login_account',
+    identity: `account:${normalizedUsername}`,
+    limit: options.accountLimit ?? ADMIN_ACCOUNT_LIMIT,
+    cleanup: false,
+  }, store)
 }
 
 export async function enforceAdminLoginRateLimit(username: string): Promise<void> {

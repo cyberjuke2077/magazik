@@ -4,6 +4,7 @@ import {
   createSessionToken,
   revokeSessionToken,
   verifySessionToken,
+  verifySessionTokenSignature,
   type AdminSessionStore,
 } from './admin-auth'
 
@@ -67,6 +68,7 @@ describe('admin auth', () => {
 
     await expect(revokeSessionToken(token, store)).resolves.toBe(true)
     await expect(verifySessionToken(token, store)).resolves.toBe(false)
+    await expect(verifySessionTokenSignature(token)).resolves.toBe(true)
   })
 
   it('rejects a weak session secret', async () => {

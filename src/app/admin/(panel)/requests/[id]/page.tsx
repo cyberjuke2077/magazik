@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 import { mailtoHref } from '@/lib/email-address'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 import { RequestStatusBadge } from '../status-badge'
 import { RequestStatusSelect } from './status-select'
 
@@ -13,6 +14,7 @@ export default async function AdminRequestDetailPage({
 }: {
   params: Promise<{ id: string }>
 }) {
+  await requireAdminPageSession()
   const { id } = await params
   const request = await prisma.quoteRequest.findUnique({
     where: { id },

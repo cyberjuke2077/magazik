@@ -1,9 +1,11 @@
 import { prisma } from '@/lib/prisma'
 import { retryNotifications } from '../../actions'
 import { AdminPagination, ADMIN_PAGE_SIZE, adminPage } from '@/components/admin-pagination'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 
 export const dynamic = 'force-dynamic'
 export default async function NotificationsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  await requireAdminPageSession()
   const page = adminPage((await searchParams).page)
   const where = { status: { not: 'sent' } }
   const [jobs, total] = await Promise.all([

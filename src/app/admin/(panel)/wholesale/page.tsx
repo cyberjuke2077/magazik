@@ -3,10 +3,12 @@ import { AdminPagination, ADMIN_PAGE_SIZE, adminPage } from '@/components/admin-
 import { WholesaleStatusSelect } from './status-select'
 import { prisma } from '@/lib/prisma'
 import { mailtoHref } from '@/lib/email-address'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminWholesalePage({ searchParams }: { searchParams: Promise<{ page?: string; status?: string }> }) {
+  await requireAdminPageSession()
   const params = await searchParams
   const page = adminPage(params.page)
   const status = typeof params.status === 'string' && ['new', 'in_progress', 'closed'].includes(params.status) ? params.status : ''

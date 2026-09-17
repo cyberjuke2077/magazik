@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { AdminPagination, ADMIN_PAGE_SIZE, adminPage } from '@/components/admin-pagination'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 import { RequestStatusBadge, REQUEST_STATUS_OPTIONS } from './status-badge'
 
 export const dynamic = 'force-dynamic'
@@ -12,6 +13,7 @@ export default async function AdminRequestsPage({
 }: {
   searchParams: Promise<{ status?: string; page?: string }>
 }) {
+  await requireAdminPageSession()
   const { status: rawStatus, page: rawPage } = await searchParams
   const status = typeof rawStatus === 'string' && FILTERS.some((filter) => filter.value === rawStatus) ? rawStatus : ''
   const page = adminPage(rawPage)
