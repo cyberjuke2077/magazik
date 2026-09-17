@@ -9,6 +9,7 @@ const NAV = [
   { href: '/admin', label: 'Дашборд', icon: LayoutDashboard },
   { href: '/admin/requests', label: 'Заявки', icon: Inbox },
   { href: '/admin/wholesale', label: 'Оптовые заявки', icon: Building2 },
+  { href: '/admin/notifications', label: 'Уведомления', icon: Inbox },
   { href: '/admin/products', label: 'Товары и цены', icon: Package },
 ]
 

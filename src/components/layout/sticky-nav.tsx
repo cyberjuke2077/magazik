@@ -48,7 +48,7 @@ export function StickyNav() {
 
           <div className="hidden h-14 grid-cols-[90px_90px_90px_57px] lg:grid">
             <HeaderAction href="/compare" label="Сравнение" icon={GitCompareArrows} active={pathname === '/compare'} />
-            <HeaderAction href="/account" label="Профиль" icon={UserRound} active={pathname.startsWith('/account')} />
+            <HeaderAction href="/account" label="Заявки" icon={UserRound} active={pathname.startsWith('/account')} />
             <HeaderAction
               href="/cart"
               label={cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Корзина'}
@@ -67,7 +67,7 @@ export function StickyNav() {
         <MobileNavItem href="/catalog" label="Каталог" icon={Grid3X3} active={pathname.startsWith('/catalog')} />
         <MobileNavItem href="/compare" label="Сравнить" icon={GitCompareArrows} active={pathname === '/compare'} />
         <MobileNavItem href="/cart" label="Корзина" icon={ShoppingCart} active={pathname === '/cart' || pathname.startsWith('/request-')} />
-        <MobileNavItem href="/account" label="Профиль" icon={UserRound} active={pathname.startsWith('/account')} />
+        <MobileNavItem href="/account" label="Заявки" icon={UserRound} active={pathname.startsWith('/account')} />
       </nav>
     </div>
   )
