@@ -1,5 +1,11 @@
 # Database Schema Design
 
+## Актуальность схемы после ревью 2026-09-17
+
+Исполняемый источник схемы: [prisma/schema.prisma](../prisma/schema.prisma). Локально добавлены `SubmissionReceipt` и `NotificationJob`; новая миграция ещё не применена в production. Файл миграции: [20260917021149_submission_outbox](../prisma/migrations/20260917021149_submission_outbox/migration.sql). Гарантии обработки и порядок применения: [архитектура](business/architecture.md) и [точка продолжения](operations/readiness-fixes-2026-09-17.md).
+
+Ниже сохранён прежний документ проектирования. Его примеры не заменяют текущую Prisma-схему и историю миграций; упоминание 2M+ относится к проектным ориентирам, а не к измеренной ёмкости или размеру production-каталога.
+
 ## Overview
 
 The Electromagaz database schema is designed to handle large-scale electronics catalogs (2M+ products) with complex relationships, flexible specifications, and optimized search performance.
