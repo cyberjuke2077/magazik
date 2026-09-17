@@ -25,7 +25,6 @@ function isNewProduct(createdAt?: string): boolean {
 
 interface ProductCardProps {
   product: Product
-  showDiscount?: boolean
   priority?: boolean
 }
 
@@ -35,12 +34,8 @@ const cardTheme = {
   iconColor: 'text-azure',
 }
 
-export function ProductCard({ product, showDiscount = true, priority = false }: ProductCardProps) {
+export function ProductCard({ product, priority = false }: ProductCardProps) {
   const router = useRouter()
-  const discountPercent = product.price > 0 && product.priceWholesale
-    && product.priceWholesale > 0 && product.priceWholesale < product.price
-    ? Math.round((1 - product.priceWholesale / product.price) * 100)
-    : null
 
   const { addItem, isInCart, getQuantity, updateQuantity } = useCart()
   const [justAdded, setJustAdded] = useState(false)
@@ -128,17 +123,12 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-20">
           {product.featured && (
             <span className="flex items-center gap-1 rounded-sm bg-azure px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-              <Zap size={8} />ХИТ
+              <Zap size={8} />В подборке
             </span>
           )}
           {isNew && (
             <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
               <Sparkles size={8} />Новинка
-            </span>
-          )}
-          {showDiscount && discountPercent && (
-            <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-              -{discountPercent}%
             </span>
           )}
         </div>
@@ -174,19 +164,25 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
           {product.partNumber}
         </div>
 
-        <div className="text-[11px] text-ink-4">1-2 недели</div>
+        <div className="text-[11px] text-ink-4">Срок подтвердим в КП</div>
 
         {/* Price */}
         <div className="pt-0.5">
           {product.price > 0 ? (
             <div className="flex items-baseline gap-1.5">
               <span className="price text-xl">{formatPrice(product.price)}</span>
-              <span className="text-xs text-ink-4">/ {product.unit}</span>
+              <span className="text-xs text-ink-4">/ {product.unit}, розница</span>
             </div>
           ) : (
             <div className="text-base font-bold text-azure">Уточнить цену</div>
           )}
         </div>
+
+        {product.priceWholesale != null && product.priceWholesale > 0 && (
+          <div className="text-xs text-ink-3">
+            Опт от {product.minOrder} {product.unit}: {formatPrice(product.priceWholesale)} / {product.unit}
+          </div>
+        )}
 
         {/* Stepper + Cart */}
         <div className="flex items-center gap-2 pt-1" onClick={(e) => e.preventDefault()}>
