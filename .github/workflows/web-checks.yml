@@ -45,7 +45,7 @@ jobs:
       - run: npm run test:readiness
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e:local -- local-mvp.spec.ts readiness.spec.ts
+      - run: npm run test:e2e:local -- --grep-invert 'visual baseline'
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

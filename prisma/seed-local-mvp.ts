@@ -158,8 +158,10 @@ async function main() {
       },
     ]
 
-    for (const product of products) {
+    for (const [index, product] of products.entries()) {
       const { specifications, datasheets, ...data } = product
+      // Stable ordering and expired "new" badges in the visual test fixture.
+      const fixtureDate = new Date(Date.UTC(2020, 0, index + 1))
       await prisma.product.upsert({
         where: { slug: product.slug },
         update: {
@@ -169,7 +171,8 @@ async function main() {
           inStock: true,
           featured: true,
           enrichmentStatus: 'complete',
-          lastEnrichedAt: new Date(),
+          createdAt: fixtureDate,
+          lastEnrichedAt: fixtureDate,
           specifications: {
             deleteMany: {},
             create: specifications.map((specification) => ({ ...specification })),
@@ -186,7 +189,8 @@ async function main() {
           inStock: true,
           featured: true,
           enrichmentStatus: 'complete',
-          lastEnrichedAt: new Date(),
+          createdAt: fixtureDate,
+          lastEnrichedAt: fixtureDate,
           specifications: {
             create: specifications.map((specification) => ({ ...specification })),
           },

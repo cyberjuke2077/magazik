@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
+import { assertVisualFixture } from './visual-fixture'
+import { resolve } from 'node:path'
 
 const publicRoutes = [
   '/',
@@ -170,6 +172,7 @@ test.describe('public storefront contracts', () => {
 })
 
 test.describe('visual baseline', () => {
+  test.beforeAll(assertVisualFixture)
   for (const route of ['/', '/catalog', '/cart', '/compare'] as const) {
     test(`${route} full page`, async ({ page }) => {
       await seedStorefrontStorage(page)
@@ -177,6 +180,7 @@ test.describe('visual baseline', () => {
       await expectVisualReady(page, route)
       await expect(page).toHaveScreenshot(`${route === '/' ? 'home' : route.slice(1)}-full.png`, {
         fullPage: true,
+        stylePath: resolve('tests/e2e/visual.css'),
       })
     })
   }
