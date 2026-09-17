@@ -45,9 +45,9 @@ export async function lookupQuoteRequest(
 ): Promise<QuoteRequestLookupResult> {
   try {
     await enforceSubmissionAttemptRateLimit('quote_request')
-    const validation = validateQuoteInput(input)
-    // An invalid payload could not have created a receipt, so the corrected
-    // form may safely start a new operation instead of getting stuck on lookup.
+    // A saved receipt remains valid after its delivery date has passed.
+    // Keep structural validation before the bounded receipt lookup.
+    const validation = validateQuoteInput(input, new Date(), 'receipt')
     if (!validation.valid) return { success: true, requestId: null }
     const requestId = await lookupSubmission(input.submissionKey, 'quote', input)
     return { success: true, requestId }
@@ -66,7 +66,7 @@ export async function submitQuoteRequest(
   try {
     await enforceSubmissionAttemptRateLimit('quote_request')
     // Единая серверная валидация (согласие ПДн, форматы, лимиты).
-    const validation = validateQuoteInput(input)
+    const validation = validateQuoteInput(input, new Date(), 'receipt')
     if (!validation.valid) {
       logSubmissionEvent({
         scope: 'quote_request',
@@ -82,6 +82,11 @@ export async function submitQuoteRequest(
 
     const previousRequestId = await lookupSubmission(input.submissionKey, 'quote', input)
     if (previousRequestId) return { success: true, requestId: previousRequestId }
+
+    const creationValidation = validateQuoteInput(input)
+    if (!creationValidation.valid) {
+      return { success: false, error: creationValidation.error ?? 'Некорректные данные', discardOperation: true }
+    }
 
     await enforceSubmissionRateLimit('quote_request', input.email)
 

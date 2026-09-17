@@ -29,6 +29,7 @@ export const MAX_QUANTITY = 1_000_000
 export function validateQuoteInput(
   input: QuoteRequestInput,
   now = new Date(),
+  purpose: 'create' | 'receipt' = 'create',
 ): QuoteValidationResult {
   if (!input || typeof input !== 'object') return { valid: false, error: 'Некорректные данные' }
   if (!hasOnlyKeys(input, INPUT_KEYS)) return { valid: false, error: 'Некорректные данные' }
@@ -130,7 +131,7 @@ export function validateQuoteInput(
       !/^\d{4}-\d{2}-\d{2}$/.test(input.desiredDeliveryDate) ||
       Number.isNaN(new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).getTime()) ||
       new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).toISOString().slice(0, 10) !== input.desiredDeliveryDate ||
-      input.desiredDeliveryDate < currentBusinessDate(now)
+      (purpose === 'create' && input.desiredDeliveryDate < currentBusinessDate(now))
     ) {
       return { valid: false, error: 'Желаемая дата поставки не может быть в прошлом' }
     }
