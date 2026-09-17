@@ -1,5 +1,8 @@
 import { lookup } from 'node:dns/promises'
+import type { LookupAddress } from 'node:dns'
+import type { IncomingMessage } from 'node:http'
 import { BlockList, isIP } from 'node:net'
+import { requestPinnedImage } from './pinned-image-request'
 
 export const MAX_IMAGE_BYTES = 8 * 1024 * 1024
 const blocked = new BlockList()
@@ -12,8 +15,9 @@ blocked.addAddress('::', 'ipv6')
 blocked.addAddress('::1', 'ipv6')
 blocked.addSubnet('fc00::', 7, 'ipv6')
 blocked.addSubnet('fe80::', 10, 'ipv6')
+blocked.addSubnet('ff00::', 8, 'ipv6')
 
-export async function assertImageSource(url: URL): Promise<void> {
+async function resolveImageSource(url: URL, signal: AbortSignal): Promise<LookupAddress[]> {
   const host = url.hostname.toLowerCase()
   const r2Host = process.env.R2_PUBLIC_URL ? new URL(process.env.R2_PUBLIC_URL).hostname : null
   const trusted = host === 'static.chipdip.ru' || host === 'www.chipdip.ru' || host === r2Host ||
@@ -21,38 +25,44 @@ export async function assertImageSource(url: URL): Promise<void> {
   if (url.protocol !== 'https:' || url.username || url.password || url.port && url.port !== '443' || !trusted) {
     throw new Error('Untrusted image source')
   }
-  const addresses = await lookup(host, { all: true, verbatim: true })
+  const addresses = await lookupWithSignal(host, signal)
   if (!addresses.length || addresses.some(({address}) => {
-    const normalized = address.replace(/^::ffff:/i, '')
-    const family = isIP(normalized)
-    return !family || blocked.check(normalized, family === 4 ? 'ipv4' : 'ipv6')
+    const family = isIP(address)
+    return !family || blocked.check(address, family === 4 ? 'ipv4' : 'ipv6')
   })) throw new Error('Image source resolves to a non-public address')
+  return addresses
 }
 
-async function readBoundedBody(response: Response): Promise<Buffer> {
-  const declaredSize = Number(response.headers.get('content-length'))
-  if (declaredSize > MAX_IMAGE_BYTES) {
-    await response.body?.cancel()
-    throw new Error('Image exceeds 8 MiB limit')
-  }
-  if (!response.body) throw new Error('Image response has no body')
-  const reader = response.body.getReader()
-  const chunks: Uint8Array[] = []
+function lookupWithSignal(host: string, signal: AbortSignal): Promise<LookupAddress[]> {
+  signal.throwIfAborted()
+  return new Promise((resolve, reject) => {
+    const abort = () => reject(signal.reason)
+    signal.addEventListener('abort', abort, { once: true })
+    lookup(host, { all: true, verbatim: true }).then(resolve, reject)
+      .finally(() => signal.removeEventListener('abort', abort))
+  })
+}
+
+async function readBoundedBody(response: IncomingMessage): Promise<Buffer> {
+  const chunks: Buffer[] = []
   let total = 0
   try {
-    for (;;) {
-      const { value, done } = await reader.read()
-      if (done) break
-      total += value.byteLength
-      if (total > MAX_IMAGE_BYTES) {
-        await reader.cancel()
-        throw new Error('Image exceeds 8 MiB limit')
-      }
-      chunks.push(value)
+    if (Number(response.headers['content-length']) > MAX_IMAGE_BYTES) {
+      throw new Error('Image exceeds 8 MiB limit')
+    }
+    const encoding = response.headers['content-encoding']
+    if (encoding && encoding.toLowerCase() !== 'identity') {
+      throw new Error('Unsupported image content encoding')
+    }
+    for await (const chunk of response) {
+      const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
+      total += bytes.byteLength
+      if (total > MAX_IMAGE_BYTES) throw new Error('Image exceeds 8 MiB limit')
+      chunks.push(bytes)
     }
     return Buffer.concat(chunks, total)
   } finally {
-    reader.releaseLock()
+    response.destroy()
   }
 }
 
@@ -61,19 +71,20 @@ export async function fetchImageBytes(source: string, options: { signal?: AbortS
   let url = new URL(source)
   for (let redirects = 0; redirects <= 3; redirects++) {
     signal.throwIfAborted()
-    await assertImageSource(url)
+    const addresses = await resolveImageSource(url, signal)
     signal.throwIfAborted()
-    const response = await fetch(url, { signal, redirect: 'manual', headers: { 'User-Agent': 'electromagaz-enrichment/1.0' } })
-    if ([301, 302, 303, 307, 308].includes(response.status)) {
-      await response.body?.cancel()
-      const location = response.headers.get('location')
+    const response = await requestPinnedImage(url, addresses, signal)
+    const status = response.statusCode ?? 0
+    if ([301, 302, 303, 307, 308].includes(status)) {
+      response.destroy()
+      const location = response.headers.location
       if (!location) throw new Error('Image redirect has no location')
       url = new URL(location, url)
       continue
     }
-    if (!response.ok) {
-      await response.body?.cancel()
-      throw new Error(`Image download failed: HTTP ${response.status}`)
+    if (status < 200 || status >= 300) {
+      response.destroy()
+      throw new Error(`Image download failed: HTTP ${status}`)
     }
     return readBoundedBody(response)
   }
