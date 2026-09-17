@@ -45,7 +45,8 @@ describe('protectedCountsMatch', () => {
     expect(protectedCountsMatch(before, { ...before })).toBe(true)
   })
 
-  it('detects a change in any protected table', () => {
-    expect(protectedCountsMatch(before, { ...before, WholesaleLead: 4 })).toBe(false)
+  it('allows concurrent new leads, but rejects any loss', () => {
+    expect(protectedCountsMatch(before, { ...before, WholesaleLead: 4 })).toBe(true)
+    expect(protectedCountsMatch(before, { ...before, QuoteRequest: 1 })).toBe(false)
   })
 })
