@@ -1,6 +1,19 @@
 # Preparation only. Replace shop.example.invalid and certificate paths on staging.
 # DNS must point directly to this nginx. A CDN/LB needs a separately reviewed trust chain.
 server {
+    listen 80 default_server;
+    server_name _;
+    return 444;
+}
+
+server {
+    listen 443 ssl default_server;
+    server_name _;
+    ssl_reject_handshake on;
+    return 444;
+}
+
+server {
     listen 80;
     server_name shop.example.invalid;
     return 308 https://shop.example.invalid$request_uri;
