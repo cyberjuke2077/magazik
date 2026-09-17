@@ -12,6 +12,7 @@ vi.mock('next/server', () => ({ after: vi.fn() }))
 vi.mock('@/lib/submission-rate-limit', () => ({ enforceSubmissionRateLimit: vi.fn(), SubmissionRateLimitExceededError: class extends Error {} }))
 const marker = `readiness-${randomUUID()}`
 const keys: string[] = []
+let localDatabaseVerified = false
 const lead = { name: marker, phone: '79990000000', email: 'test@example.invalid', consentAt: new Date() }
 const key = () => { const value = randomUUID(); keys.push(value); return value }
 
@@ -20,8 +21,10 @@ beforeAll(() => {
   if (!['localhost', '127.0.0.1'].includes(url.hostname) || url.pathname !== '/emg_readiness') {
     throw new Error('Readiness tests require the isolated local emg_readiness database')
   }
+  localDatabaseVerified = true
 })
 afterAll(async () => {
+  if (!localDatabaseVerified) return
   const receipts = await prisma.submissionReceipt.findMany({ where: { key: { in: keys } } })
   await prisma.notificationJob.deleteMany({ where: { requestId: { in: receipts.map((item) => item.requestId) } } })
   await prisma.submissionReceipt.deleteMany({ where: { key: { in: keys } } })
