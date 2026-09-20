@@ -173,8 +173,6 @@ export function LiveSearchDropdown() {
     const items = navItems()
     const totalItems = items.length + (query.trim().length >= 2 ? 1 : 0) // +1 for "all results"
 
-    if (totalItems === 0 && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) return
-
     if (e.key === 'ArrowDown') {
       e.preventDefault()
       setActiveIndex((prev) => (prev + 1) % totalItems)
@@ -230,13 +228,12 @@ export function LiveSearchDropdown() {
   let currentNavIndex = 0
 
   return (
-    <div className="relative min-w-0 flex-1">
-      <form onSubmit={handleSubmit} className="relative h-12 rounded-xl bg-surface-muted ring-1 ring-[var(--border)] transition-shadow focus-within:ring-2 focus-within:ring-azure/30">
+    <div className="flex-1 relative">
+      <form onSubmit={handleSubmit} className="relative h-9 rounded-xl bg-[#f7f7f7] lg:h-14 lg:rounded-2xl">
         <input
           ref={inputRef}
           type="text"
           name="q"
-          aria-label="Поиск компонентов"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value)
@@ -249,12 +246,12 @@ export function LiveSearchDropdown() {
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onKeyDown={handleKeyDown}
           placeholder="Поиск по артикулу, названию или производителю"
-          className="h-full w-full rounded-xl border border-transparent bg-transparent pl-4 pr-14 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 lg:pl-5 lg:text-sm"
+          className="h-full w-full rounded-xl border border-transparent bg-transparent pl-4 pr-14 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-azure focus:bg-white focus:ring-2 focus:ring-azure/10 lg:rounded-2xl lg:pl-5 lg:text-base"
           autoComplete="off"
         />
         <button
           type="submit"
-          className="absolute right-1 top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-white hover:text-azure lg:right-1 lg:size-10"
+          className="absolute right-1 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-ink-3 transition-colors hover:bg-white hover:text-azure lg:right-3 lg:size-11"
           aria-label="Найти"
         >
           <Search size={21} strokeWidth={1.7} />
@@ -265,7 +262,7 @@ export function LiveSearchDropdown() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute left-0 right-0 top-[56px] z-[var(--layer-menu)] overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] "
+          className="absolute left-0 right-0 top-[48px] z-[var(--layer-menu)] overflow-hidden rounded-xl border border-[var(--border)] bg-white shadow-[var(--shadow-xl)] lg:top-[64px]"
         >
           {/* Loading skeleton */}
           {isLoading && <SkeletonResults />}

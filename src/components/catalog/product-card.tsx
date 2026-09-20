@@ -30,7 +30,7 @@ interface ProductCardProps {
 
 // Единая тема - azure (30% палитра)
 const cardTheme = {
-  bg:        'bg-surface-muted',
+  bg:        'bg-azure-light',
   iconColor: 'text-azure',
 }
 
@@ -78,15 +78,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   }
 
   return (
-    <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[var(--border)] bg-white transition duration-200 hover:border-azure/30 hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
       {/* Image zone */}
       <div
-        className={`relative flex h-[180px] items-center justify-center overflow-hidden sm:h-[190px] ${cardTheme.bg}`}
+        className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${cardTheme.bg}`}
       >
         <Link
           href={`/product/${product.slug}`}
           className="absolute inset-0 z-10"
-          data-product-image-link
           aria-label={product.name}
         />
         {/* Image when available, fallback to package SVG, then category icon */}
@@ -98,7 +97,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
-            className="pointer-events-none object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+            className="z-10 object-contain p-3 transition-transform duration-300 group-hover:scale-105"
           />
         ) : packageSvg ? (
           <Image
@@ -108,10 +107,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
-            className="pointer-events-none object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+            className="z-10 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="pointer-events-none relative icon-svg">
+          <div className="relative z-10 icon-svg">
             <CategoryIcon
               slug={product.categorySlug || ''}
               size={72}
@@ -150,8 +149,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
-        <div className="text-[11px] font-medium text-ink-3">
+      <div className="flex flex-1 flex-col gap-2 p-3">
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-ink-4">
           {product.manufacturer}
         </div>
 
@@ -170,8 +169,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         {/* Price */}
         <div className="pt-0.5">
           {product.price > 0 ? (
-            <div className="flex flex-wrap items-baseline gap-1.5">
-              <span className="price text-2xl">{formatPrice(product.price)}</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="price text-xl">{formatPrice(product.price)}</span>
               <span className="text-xs text-ink-4">/ {product.unit}, розница</span>
             </div>
           ) : (
@@ -192,7 +191,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               onClick={handleMinus}
               disabled={displayQty <= product.minOrder}
               aria-label="Уменьшить количество"
-              className="flex h-11 w-9 items-center justify-center text-ink-3 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-25"
+              className="flex h-9 w-8 items-center justify-center text-ink-3 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-25"
             >
               <Minus size={12} />
             </button>
@@ -202,7 +201,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             <button
               onClick={handlePlus}
               aria-label="Увеличить количество"
-              className="flex h-11 w-9 items-center justify-center text-ink-3 hover:bg-gray-100"
+              className="flex h-9 w-8 items-center justify-center text-ink-3 hover:bg-gray-100"
             >
               <Plus size={12} />
             </button>
@@ -212,7 +211,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             ref={btnRef}
             onClick={handleAdd}
             aria-label={justAdded ? 'Добавлено в корзину' : inCart ? 'Перейти в корзину' : 'Добавить в корзину'}
-            className={`flex h-11 min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] text-xs font-bold transition-all active:scale-[0.97] ${
+            className={`flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] text-xs font-bold transition-all active:scale-[0.97] ${
               justAdded
                 ? 'bg-azure-hover text-white'
                 : inCart
@@ -223,17 +222,17 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             {justAdded ? (
               <>
                 <Check size={13} />
-                <span className="whitespace-nowrap">Добавлено</span>
+                <span className="hidden whitespace-nowrap sm:inline">Добавлено!</span>
               </>
             ) : inCart ? (
               <>
                 <Check size={13} />
-                <span className="whitespace-nowrap">В корзине</span>
+                <span className="hidden whitespace-nowrap sm:inline">В корзине</span>
               </>
             ) : (
               <>
                 <ShoppingCart size={13} />
-                <span className="whitespace-nowrap">В корзину</span>
+                <span className="hidden whitespace-nowrap sm:inline">В корзину</span>
               </>
             )}
           </button>

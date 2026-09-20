@@ -175,15 +175,15 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
 
           <div className="mt-4 flex gap-4">
             {/* Sidebar */}
-            <aside className="sticky top-[108px] hidden h-fit w-[240px] shrink-0 overflow-hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] lg:block">
-              <div className="mb-4 rounded-xl bg-azure-light p-3">
-                <div className="text-[10px] font-semibold text-azure">Инженерная поддержка</div>
+            <aside className="sticky top-[112px] hidden h-fit w-[280px] shrink-0 overflow-hidden rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] lg:block">
+              <div className="mb-4 rounded-xl bg-[#dff5e8] p-3">
+                <div className="text-[10px] font-semibold text-stock">Инженерная поддержка</div>
                 <div className="mt-1 text-sm font-bold text-ink">Нужен совместимый аналог?</div>
                 <p className="mt-1 text-[11px] leading-[1.4] text-ink-3">
                   Пришлите MPN и требования. Проверим замену и сроки поставки.
                 </p>
                 <Link
-                  href="/wholesale#request-form"
+                  href="/request-quote"
                   className="mt-3 inline-flex h-8 items-center rounded-lg bg-white px-3 text-xs font-bold text-ink shadow-[var(--shadow-button)] transition-colors hover:bg-azure hover:text-white"
                 >
                   Подобрать компонент
@@ -280,7 +280,6 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                   <BulkSelectWrapper
                     products={result.items}
                   >
-                    <div className="space-y-3">
                     {result.items.map((product, index) => (
                       <ProductRow
                         key={product.id}
@@ -288,7 +287,6 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                         product={product}
                       />
                     ))}
-                    </div>
                   </BulkSelectWrapper>
                 </div>
               )}

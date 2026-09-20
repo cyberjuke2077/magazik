@@ -10,8 +10,7 @@ export function flyToCart(sourceElement: HTMLElement | null): void {
   // Respect users who prefer reduced motion
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
 
-  const target = Array.from(document.querySelectorAll<HTMLElement>('[data-cart-icon]'))
-    .find((element) => element.getBoundingClientRect().width > 0)
+  const target = document.querySelector<HTMLElement>('[data-cart-icon]')
   if (!target) return
 
   const sourceRect = sourceElement.getBoundingClientRect()

@@ -52,11 +52,11 @@ async function expectVisualReady(page: Page, route: '/' | '/catalog' | '/cart' |
 }
 
 test.describe('public storefront contracts', () => {
-  test('home combines a focused hero and DNS-like service navigation', async ({ page }) => {
+  test('home starts with a DNS-like service shelf', async ({ page }) => {
     await openStable(page, '/')
 
     await expect(
-      page.getByRole('heading', { level: 1, name: 'От первого прототипа до серийного выпуска.' }),
+      page.getByRole('heading', { name: 'Соберем корзину по спецификации' }),
     ).toBeVisible()
     await expect(page.getByRole('link', { name: /Поиск по MPN/ })).toBeVisible()
     await expect(page.getByRole('link', { name: /Подбор аналогов/ })).toBeVisible()
@@ -175,15 +175,9 @@ test.describe('visual baseline', () => {
   test.beforeAll(assertVisualFixture)
   for (const route of ['/', '/catalog', '/cart', '/compare'] as const) {
     test(`${route} full page`, async ({ page }) => {
-      await page.emulateMedia({ reducedMotion: 'reduce' })
       await seedStorefrontStorage(page)
       await openStable(page, route)
       await expectVisualReady(page, route)
-      // Load below-the-fold images before a full-page capture.
-      await page.evaluate(async () => {
-        for (const image of document.images) image.loading = 'eager'
-        await Promise.all(Array.from(document.images, (image) => image.decode().catch(() => undefined)))
-      })
       await expect(page).toHaveScreenshot(`${route === '/' ? 'home' : route.slice(1)}-full.png`, {
         fullPage: true,
         stylePath: resolve('tests/e2e/visual.css'),

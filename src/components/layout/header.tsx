@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useRef } from 'react'
-import { Check, Mail, MapPin, Phone, Search, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Check, Mail, MapPin, Phone, Search } from 'lucide-react'
 import { COMPANY } from '@/lib/company'
 
 const cities = [
@@ -61,19 +61,15 @@ export function Header() {
   const [cityModalOpen, setCityModalOpen] = useState(false)
   const [selectedCity, setSelectedCity] = useState('Москва')
   const [searchQuery, setSearchQuery] = useState('')
-  const dialogRef = useRef<HTMLDialogElement>(null)
-  const cityTriggerRef = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
-    if (!cityModalOpen) return
-    const dialog = dialogRef.current
-    const previousOverflow = document.body.style.overflow
-    dialog?.showModal()
-    document.body.style.overflow = 'hidden'
+    if (cityModalOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
     return () => {
-      dialog?.close()
-      document.body.style.overflow = previousOverflow
-      cityTriggerRef.current?.focus()
+      document.body.style.overflow = 'unset'
     }
   }, [cityModalOpen])
 
@@ -91,12 +87,12 @@ export function Header() {
   return (
     <header className="w-full bg-white">
       <div className="hidden h-[42px] border-b border-[var(--border)]/70 lg:block">
-        <div className="storefront-container flex h-full items-center">
-          <div className="flex shrink-0 items-center gap-5 pr-8">
+        <div className="mx-auto flex h-full max-w-[1380px] items-center px-1">
+          <div className="flex w-[280px] shrink-0 items-center gap-5">
             <span className="text-xs font-semibold text-ink-3">RU</span>
             <div className="flex items-center">
               <button 
-                onClick={(event) => { cityTriggerRef.current = event.currentTarget; setCityModalOpen(true) }}
+                onClick={() => setCityModalOpen(true)}
                 className="flex items-center gap-1.5 text-sm font-medium text-ink-2 transition-colors hover:text-azure"
               >
                 <MapPin size={14} />
@@ -104,7 +100,7 @@ export function Header() {
               </button>
             </div>
           </div>
-          <nav className="flex items-center gap-5 text-xs font-medium text-ink-2">
+          <nav className="flex items-center gap-5 text-[13px] font-medium text-ink-2">
             <Link href="/catalog" className="transition-colors hover:text-azure">Каталог компонентов</Link>
             <Link href="/delivery" className="transition-colors hover:text-azure">Доставка</Link>
             <Link href="/brands" className="transition-colors hover:text-azure">Бренды</Link>
@@ -124,13 +120,13 @@ export function Header() {
         </div>
       </div>
 
-      <div className="flex h-14 items-center justify-between px-4 lg:hidden">
-        <Link href="/" className="brand-wordmark text-[23px] font-extrabold leading-none tracking-[-0.045em] text-ink">
+      <div className="flex h-11 items-center justify-between px-4 lg:hidden">
+        <Link href="/" className="text-[21px] font-extrabold leading-none tracking-[-0.045em] text-ink">
           electro<span className="text-azure">magaz</span><span className="text-azure">.</span>
         </Link>
         <button
-          onClick={(event) => { cityTriggerRef.current = event.currentTarget; setCityModalOpen(true) }}
-          className="flex min-h-11 items-center gap-1.5 text-xs font-semibold text-ink-2"
+          onClick={() => setCityModalOpen(true)}
+          className="flex items-center gap-1.5 text-xs font-semibold text-ink-2"
         >
           <MapPin size={13} />
           {selectedCity}
@@ -138,18 +134,19 @@ export function Header() {
       </div>
 
       {/* City Modal */}
-      <dialog ref={dialogRef} aria-labelledby="city-dialog-title" onCancel={() => setCityModalOpen(false)} onClose={() => setCityModalOpen(false)} className="fixed inset-0 m-auto max-h-[90dvh] w-[calc(100%-32px)] max-w-3xl overflow-hidden rounded-2xl bg-white p-0 text-ink shadow-xl backdrop:bg-ink/40">
-          <div className="flex items-center justify-between gap-4 px-5 pt-4">
-            <h2 id="city-dialog-title" className="text-lg font-semibold">Ваш город</h2>
-            <button type="button" onClick={() => setCityModalOpen(false)} aria-label="Закрыть выбор города" className="flex size-11 items-center justify-center rounded-xl hover:bg-surface-muted"><X size={20} /></button>
-          </div>
+      {cityModalOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-[var(--layer-overlay)] bg-black/45"
+            onClick={() => setCityModalOpen(false)}
+          />
+          <div className="fixed left-1/2 top-1/2 z-[var(--layer-overlay)] max-h-[min(620px,90dvh)] w-[calc(100%-24px)] max-w-4xl -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[var(--radius-panel)] bg-white shadow-[var(--shadow-xl)]">
             <div className="p-4 border-b border-[var(--border)]">
               <div className="relative">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" />
                 <input
                   type="text"
                   placeholder="Поиск города"
-                  aria-label="Поиск города"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   autoFocus
@@ -157,7 +154,7 @@ export function Header() {
                 />
               </div>
             </div>
-            <div className="p-4 overflow-y-auto max-h-[min(400px,60dvh)]">
+            <div className="p-4 overflow-y-auto max-h-[400px]">
               {filteredCities.length > 0 ? (
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {filteredCities.map((city) => (
@@ -186,7 +183,9 @@ export function Header() {
                 </div>
               )}
             </div>
-      </dialog>
+          </div>
+        </>
+      )}
     </header>
   )
 }

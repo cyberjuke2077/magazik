@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
 import { Suspense } from 'react'
 import './globals.css'
 import { ToastProvider } from '@/components/ui/toast'
@@ -7,8 +6,6 @@ import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
 import { SubmissionStateExpiryGuard } from '@/components/submission-state-expiry-guard'
-
-const cabinet = localFont({ src: './fonts/cabinet-grotesk-extrabold.woff2', weight: '800', display: 'swap', variable: '--font-cabinet', preload: false })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 
@@ -39,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={cabinet.variable} data-scroll-behavior="smooth">
+    <html lang="ru" data-scroll-behavior="smooth">
       <body className="min-h-screen bg-canvas antialiased">
         <a
           href="#main-content"

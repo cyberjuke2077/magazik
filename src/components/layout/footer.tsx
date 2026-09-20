@@ -51,7 +51,7 @@ export function Footer() {
       <div className="mx-auto max-w-[1380px] px-4 py-9 lg:px-0">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1.25fr_1fr_1fr_1fr]">
           <div>
-            <Link href="/" className="brand-wordmark inline-flex text-2xl font-extrabold tracking-[-0.055em] text-ink">
+            <Link href="/" className="inline-flex text-2xl font-extrabold tracking-[-0.055em] text-ink">
               electro<span className="text-azure">magaz.</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink-3">

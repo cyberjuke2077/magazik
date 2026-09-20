@@ -14,7 +14,7 @@ test('punctuation search renders a usable catalog, and the specification CTA ope
   await expect(page.getByText('Произошла ошибка', { exact: false })).toHaveCount(0)
   await expect(page.locator('main')).toBeVisible()
   await page.goto('/')
-  await page.getByRole('link', { name: 'Отправить список', exact: true }).click()
+  await page.getByRole('link').filter({ hasText: 'Пришлите список MPN' }).click()
   await expect(page).toHaveURL(/\/wholesale#request-form$/)
   await expect(page.getByLabel('Список компонентов и пожелания')).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
@@ -156,7 +156,7 @@ test('desktop cart total keeps kopecks from versioned local storage without a ca
   }, product)
   await page.reload()
 
-  const totalLabel = page.locator('a[data-cart-icon="true"]:visible > span').last()
+  const totalLabel = page.locator('a[data-cart-icon="true"] > span').last()
   await expect(totalLabel).toHaveText('0,24 ₽')
   await expect(totalLabel).not.toHaveText('0 ₽')
 })

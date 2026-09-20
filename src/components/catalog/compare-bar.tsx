@@ -15,7 +15,7 @@ export function CompareBar() {
   if (!mounted || count === 0) return null
 
   return (
-    <div className="fixed bottom-[calc(76px+env(safe-area-inset-bottom))] left-4 right-4 sm:left-auto sm:right-4 lg:bottom-4 z-[var(--layer-menu)] max-w-md sm:w-[380px] bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden">
+    <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:bottom-20 z-[140] max-w-md sm:w-[380px] bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 bg-azure text-white">
         <div className="flex items-center gap-2">
           <GitCompareArrows size={16} />
@@ -29,7 +29,7 @@ export function CompareBar() {
           <X size={14} />
         </button>
       </div>
-      <div className="p-3 space-y-1.5 max-h-[min(200px,30dvh)] overflow-y-auto">
+      <div className="p-3 space-y-1.5 max-h-[200px] overflow-y-auto">
         {items.map((it) => (
           <div
             key={it.id}

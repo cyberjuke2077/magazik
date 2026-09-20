@@ -18,27 +18,68 @@ function categoryPhoto(slug: string): string {
 }
 
 export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] }) {
-  const featuredSections = sections.slice(0, 8)
+  const featuredSections = sections.slice(0, 4)
   if (featuredSections.length === 0) return null
 
   return (
-    <section className="storefront-container py-9 sm:py-12" aria-labelledby="categories-title">
-      <div className="mb-5 flex items-center justify-between gap-4">
-        <h2 id="categories-title" className="text-xl font-bold tracking-tight text-ink sm:text-2xl">Что ищете?</h2>
-        <Link href="/catalog" className="text-sm font-semibold text-azure hover:underline">Все категории</Link>
-      </div>
-      <div className="category-grid grid grid-flow-dense grid-cols-2 gap-3">
-        {featuredSections.map((section, index) => (
-          <Link key={section.id} href={`/catalog?category=${section.slug}`} className={`group flex min-w-0 items-center gap-3 overflow-hidden rounded-2xl border border-[var(--border)] bg-white p-3 transition duration-200 hover:border-azure/30 hover:shadow-sm sm:p-4 ${featuredSections.length % 2 === 1 && index === featuredSections.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}>
-            <div className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-surface-muted sm:size-20">
-              <Image src={categoryPhoto(section.slug)} alt="" fill loading="lazy" className="object-cover transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105" sizes="80px" />
-            </div>
-            <div className="min-w-0">
-              <h3 className="text-[13px] font-semibold leading-snug text-ink transition-colors group-hover:text-azure sm:text-sm">{section.name}</h3>
-              <span className="mt-1 hidden text-xs text-ink-3 sm:block">Смотреть компоненты</span>
-            </div>
-          </Link>
-        ))}
+    <section className="bg-white pb-2 pt-[18px] lg:pb-[29px] lg:pt-[29px]" data-motion-reveal>
+      <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
+        <div className="grid grid-flow-dense grid-cols-2 gap-3 lg:grid-cols-12 lg:gap-5">
+          {featuredSections.map((section, index) => {
+            const children = section.children.slice(0, 4)
+
+            return (
+              <article
+                key={section.id}
+                className={`min-w-0 overflow-hidden rounded-xl bg-surface-muted transition-colors hover:bg-azure-dim lg:col-span-3 lg:overflow-visible lg:rounded-2xl lg:bg-transparent lg:p-3 ${
+                  index >= 2 ? 'hidden lg:block' : ''
+                }`}
+              >
+                <h2 className="hidden text-[18px] font-bold leading-tight text-ink lg:mb-[26px] lg:block">
+                  {section.name}
+                </h2>
+                <div className="lg:flex lg:items-start lg:gap-4">
+                <Link
+                  href={`/catalog?category=${section.slug}`}
+                  className="group block shrink-0"
+                >
+                  <div className="relative h-[96px] overflow-hidden bg-white lg:size-[112px] lg:rounded-xl lg:border lg:border-[var(--border)]">
+                    <Image
+                      src={categoryPhoto(section.slug)}
+                      alt={section.name}
+                      fill
+                      loading="eager"
+                      fetchPriority="high"
+                      className="object-cover saturate-[1.18] contrast-[1.04] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
+                      sizes="(max-width: 1024px) 50vw, 112px"
+                    />
+                  </div>
+                  <div className="flex min-h-12 items-center px-3 py-2 lg:hidden">
+                    <h3 className="text-[13px] font-bold leading-[1.08] text-ink transition-colors group-hover:text-azure">
+                      {section.name}
+                    </h3>
+                  </div>
+                </Link>
+
+                {children.length > 0 && (
+                  <ul className="hidden min-w-0 flex-1 lg:block">
+                    {children.map((child) => (
+                      <li key={child.id}>
+                        <Link
+                          href={`/catalog?category=${child.slug}`}
+                          className="block py-1 text-[14px] leading-[1.25] text-ink-3 transition-colors hover:text-azure"
+                        >
+                          <span className="line-clamp-1">{child.name}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                </div>
+              </article>
+            )
+          })}
+        </div>
       </div>
     </section>
   )
