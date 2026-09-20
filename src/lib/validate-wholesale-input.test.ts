@@ -29,10 +29,30 @@ describe('validateWholesaleInput', () => {
     expect(result.error).toBeDefined()
   })
 
+  it('rejects mailto parameter injection but accepts plus addressing', () => {
+    expect(validateWholesaleInput({
+      ...validInput,
+      email: 'buyer@example.ru?bcc=copy@example.ru',
+    }).valid).toBe(false)
+    expect(validateWholesaleInput({
+      ...validInput,
+      email: 'buyer+project@example.ru',
+    }).valid).toBe(true)
+  })
+
   it('rejects a non-string required field received at runtime', () => {
     const malformed = {
       ...validInput,
       name: { unexpected: true },
+    } as unknown as Parameters<typeof validateWholesaleInput>[0]
+
+    expect(validateWholesaleInput(malformed).valid).toBe(false)
+  })
+
+  it('rejects extra nested data before idempotency hashing', () => {
+    const malformed = {
+      ...validInput,
+      unexpected: { nested: 'payload' },
     } as unknown as Parameters<typeof validateWholesaleInput>[0]
 
     expect(validateWholesaleInput(malformed).valid).toBe(false)

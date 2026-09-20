@@ -8,7 +8,9 @@
  * keep working without changes.
  */
 
-import { type CartItem, type Product } from '@/types'
+import { cartUnitPrice } from '@/lib/cart-pricing'
+import { mutateCartItems, normalizeCartQuantity, readCartItems } from '@/lib/cart-storage'
+import type { CartItem, Product } from '@/types'
 
 export interface RequestListItem {
   productId: string
@@ -20,29 +22,6 @@ export interface RequestListItem {
   price: number | null
 }
 
-const CART_KEY = 'electromagaz_cart'
-const CART_UPDATED_EVENT = 'electromagaz:cart-updated'
-
-function readCart(): CartItem[] {
-  if (typeof window === 'undefined') return []
-  try {
-    const raw = localStorage.getItem(CART_KEY)
-    return raw ? (JSON.parse(raw) as CartItem[]) : []
-  } catch {
-    return []
-  }
-}
-
-function writeCart(items: CartItem[]): void {
-  if (typeof window === 'undefined') return
-  try {
-    localStorage.setItem(CART_KEY, JSON.stringify(items))
-    queueMicrotask(() => window.dispatchEvent(new Event(CART_UPDATED_EVENT)))
-  } catch (error) {
-    console.error('[cart] Failed to save request list:', error)
-  }
-}
-
 function toRequestItem(item: CartItem): RequestListItem {
   return {
     productId: item.product.id,
@@ -51,80 +30,46 @@ function toRequestItem(item: CartItem): RequestListItem {
     manufacturer: item.product.manufacturer,
     quantity: item.quantity,
     minOrder: item.product.minOrder,
-    price: item.product.price > 0 ? item.product.price : null,
+    price: cartUnitPrice(item.product, item.quantity),
   }
 }
 
 export function getRequestList(): RequestListItem[] {
-  return readCart().map(toRequestItem)
+  return readCartItems().map(toRequestItem)
 }
 
-/**
- * Legacy add-by-fields API. Builds a minimal Product shim and writes to cart.
- * New code should import `useCart` and call `addItem(product, qty)` instead.
- */
-export function addToRequestList(
-  item: Omit<RequestListItem, 'quantity'> & { quantity?: number },
-): void {
-  const items = readCart()
-  const existing = items.find((i) => i.product.id === item.productId)
-  const quantity = Math.max(item.quantity ?? item.minOrder, item.minOrder)
-
-  if (existing) {
-    existing.quantity += quantity
-    if (existing.quantity < existing.product.minOrder) {
-      existing.quantity = existing.product.minOrder
-    }
-  } else {
-    const productShim = {
-      id: item.productId,
-      slug: item.productId,
-      name: item.name,
-      partNumber: item.partNumber,
-      category: '',
-      categorySlug: '',
-      manufacturer: item.manufacturer,
-      price: item.price ?? 0,
-      currency: 'RUB',
-      inStock: true,
-      stockCount: 0,
-      unit: 'шт',
-      minOrder: item.minOrder,
-      description: '',
-      specs: {},
-      images: [],
-      featured: false,
-      tags: [],
-      datasheets: [],
-    } as unknown as Product
-    items.push({ product: productShim, quantity })
-  }
-
-  writeCart(items)
+export async function addToRequestList(
+  product: Product,
+  requestedQuantity = product.minOrder,
+): Promise<void> {
+  const quantity = normalizeCartQuantity(requestedQuantity, product.minOrder)
+  await mutateCartItems((items) => {
+    const existing = items.find((item) => item.product.id === product.id)
+    if (!existing) return [...items, { product, quantity }]
+    return items.map((item) => item.product.id === product.id
+      ? { product, quantity: normalizeCartQuantity(item.quantity + quantity, product.minOrder) }
+      : item)
+  })
 }
 
-export function removeFromRequestList(productId: string): void {
-  const items = readCart().filter((i) => i.product.id !== productId)
-  writeCart(items)
+export async function removeFromRequestList(productId: string): Promise<void> {
+  await mutateCartItems((items) => items.filter((item) => item.product.id !== productId))
 }
 
-export function updateRequestListQuantity(productId: string, quantity: number): void {
-  const items = readCart()
-  const item = items.find((i) => i.product.id === productId)
-  if (item) {
-    item.quantity = Math.max(quantity, item.product.minOrder)
-    writeCart(items)
-  }
+export async function updateRequestListQuantity(productId: string, quantity: number): Promise<void> {
+  await mutateCartItems((items) => items.map((item) => item.product.id === productId
+    ? { ...item, quantity: normalizeCartQuantity(quantity, item.product.minOrder) }
+    : item))
 }
 
-export function clearRequestList(): void {
-  writeCart([])
+export async function clearRequestList(): Promise<void> {
+  await mutateCartItems(() => [])
 }
 
 export function isInRequestList(productId: string): boolean {
-  return readCart().some((i) => i.product.id === productId)
+  return readCartItems().some((item) => item.product.id === productId)
 }
 
 export function getRequestListCount(): number {
-  return readCart().length
+  return readCartItems().length
 }

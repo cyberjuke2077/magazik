@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import { Inbox, Package, Tag, AlertTriangle } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 import { RequestStatusBadge } from './requests/status-badge'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboardPage() {
+  await requireAdminPageSession()
   const [newRequests, totalRequests, totalProducts, pricedProducts, latest] =
     await Promise.all([
       prisma.quoteRequest.count({ where: { status: 'new' } }),

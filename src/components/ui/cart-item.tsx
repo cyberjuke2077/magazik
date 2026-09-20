@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Minus, Plus, X, Package } from 'lucide-react'
 import { type CartItem } from '@/types'
+import { cartUnitPrice } from '@/lib/cart-pricing'
 import { formatPrice } from '@/lib/utils'
 import { packageSvgForProduct } from '@/lib/enrichment/images/package-image'
 
@@ -62,8 +63,8 @@ export function CartItemRow({
 }: CartItemRowProps) {
   const { product, quantity } = item
 
-  const isWholesale = product.priceWholesale !== undefined && quantity >= product.minOrder
-  const unitPrice = isWholesale ? (product.priceWholesale ?? product.price) : product.price
+  const isWholesale = (product.priceWholesale ?? 0) > 0 && quantity >= product.minOrder
+  const unitPrice = cartUnitPrice(product, quantity) ?? 0
   const lineTotal = unitPrice * quantity
   const image = product.images?.[0] ?? packageSvgForProduct({
     package: product.package,

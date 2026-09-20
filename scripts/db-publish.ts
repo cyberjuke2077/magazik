@@ -22,6 +22,7 @@
  */
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
+import { commercialSelect, preserveCommercialData } from '../src/lib/catalog-commercial-data'
 import {
   assertSafePublishUrls,
   protectedCountsMatch,
@@ -121,11 +122,19 @@ async function main() {
     return
   }
 
+  if (products.length === 0 && prodCounts.Product > 0) {
+    throw new Error('Пустой локальный каталог: публикация остановлена до удаления production-данных')
+  }
+
   // 2. Атомарная замена каталога в проде (заявки живут в других таблицах)
   console.log('Публикация (одна транзакция, читатели не блокируются)...')
   const t0 = Date.now()
   await prod.$transaction(
     async (tx) => {
+      // Serialize with admin pricing writes; read current values only after acquiring the lock.
+      await tx.$executeRaw`LOCK TABLE "Product" IN SHARE ROW EXCLUSIVE MODE`
+      const current = await tx.product.findMany({ select: commercialSelect })
+      const publishProducts = preserveCommercialData(products, manufacturers, current)
       // children → parents
       await tx.productAnalog.deleteMany()
       await tx.specification.deleteMany()
@@ -145,7 +154,7 @@ async function main() {
         await tx.category.update({ where: { id: cat.id }, data: { parentId: cat.parentId } })
       }
 
-      for (const c of chunks(products)) await tx.product.createMany({ data: c })
+      for (const c of chunks(publishProducts)) await tx.product.createMany({ data: c })
       for (const c of chunks(images)) await tx.productImage.createMany({ data: c })
       for (const c of chunks(specs)) await tx.specification.createMany({ data: c })
       for (const c of chunks(datasheets)) await tx.datasheet.createMany({ data: c })
@@ -174,7 +183,7 @@ async function main() {
   }
   const protectedAfter = await readProtectedCounts(prod)
   for (const table of Object.keys(protectedBefore) as (keyof ProtectedProductionCounts)[]) {
-    const match = protectedAfter[table] === protectedBefore[table]
+    const match = protectedAfter[table] >= protectedBefore[table]
     console.log(
       `  ${match ? '✓' : '✗'} ${table}: ${protectedAfter[table]} (было ${protectedBefore[table]})`,
     )
@@ -188,7 +197,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('Ошибка публикации (транзакция откатена, прод не изменён):', e)
+    console.error('Ошибка публикации. Проверьте стадию и состояние цели перед повтором:', e)
     process.exit(1)
   })
   .finally(async () => {

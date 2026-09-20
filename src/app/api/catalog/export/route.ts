@@ -1,3 +1,4 @@
+import { escapeCsvField } from '@/lib/csv'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { getProductsForExport } from '@/lib/queries/products'
@@ -5,12 +6,6 @@ import { type SortOption } from '@/lib/catalog-utils'
 
 const VALID_SORTS: SortOption[] = ['name', 'partNumber', 'date', 'manufacturer']
 
-function escapeCsvField(value: string): string {
-  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-    return `"${value.replace(/"/g, '""')}"`
-  }
-  return value
-}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl

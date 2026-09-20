@@ -47,8 +47,8 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
           }),
         ]
 
-  function handleAddToCart() {
-    addItem(product, quantity)
+  async function handleAddToCart() {
+    if (!await addItem(product, quantity)) return
     flyToCart(addBtnRef.current)
   }
 
@@ -356,8 +356,8 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                     <div className="text-xs text-ink-4">Этот же товар с другими ценами и сроками поставки</div>
                   </div>
                   <div>
-                    <a href="#analogs" className="text-ink font-bold hover:underline">Аналоги</a>
-                    <div className="text-xs text-ink-4">Товары со схожими характеристиками</div>
+                    <a href="#category-products" className="text-ink font-bold hover:underline">Другие товары категории</a>
+                    <div className="text-xs text-ink-4">Товары из того же раздела каталога</div>
                   </div>
                 </div>
               </div>
@@ -468,9 +468,9 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                 </div>
               </div>
 
-              {/* Analogs */}
-              <div className="mb-6" id="analogs">
-                <h3 className="text-base font-bold text-ink mb-4">Аналоги</h3>
+              {/* Products from the same category; compatibility is not implied. */}
+              <div className="mb-6" id="category-products">
+                <h3 className="text-base font-bold text-ink mb-4">Другие товары категории</h3>
                 <div className="overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-xs)]">
                   {related.length > 0 ? (
                     <div className="divide-y divide-[var(--border)]">
@@ -492,7 +492,7 @@ export function ProductClientChipDip({ product, related }: ProductClientProps) {
                     </div>
                   ) : (
                     <div className="p-4 text-center text-sm text-ink-4">
-                      Аналоги для этого товара отсутствуют
+                      В этой категории пока нет других товаров
                     </div>
                   )}
                 </div>

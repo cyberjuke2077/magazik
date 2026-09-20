@@ -1,3 +1,4 @@
+import { fetchImageBytes } from './image-download'
 /**
  * Cloudflare R2 client for product image storage.
  *
@@ -114,38 +115,6 @@ async function objectExists(bucket: string, key: string): Promise<boolean> {
     const name = (err as { name?: string })?.name
     if (name === 'NotFound' || name === 'NoSuchKey') return false
     throw err
-  }
-}
-
-interface FetchOptions {
-  signal?: AbortSignal
-  timeoutMs?: number
-}
-
-const MAX_BYTES = 8 * 1024 * 1024
-const DEFAULT_TIMEOUT_MS = 20_000
-
-/**
- * Fetch an upstream image into a Buffer. Caps payload size and time
- * so a hostile or hung CDN can't wedge the enrichment pipeline.
- */
-async function fetchImageBytes(sourceUrl: string, opts: FetchOptions = {}): Promise<Buffer> {
-  const ac = new AbortController()
-  const timeout = setTimeout(() => ac.abort(), opts.timeoutMs ?? DEFAULT_TIMEOUT_MS)
-  if (opts.signal) opts.signal.addEventListener('abort', () => ac.abort(), { once: true })
-  try {
-    const resp = await fetch(sourceUrl, {
-      signal: ac.signal,
-      headers: { 'User-Agent': 'electromagaz-enrichment/1.0' },
-    })
-    if (!resp.ok) throw new Error(`fetch ${sourceUrl} → HTTP ${resp.status}`)
-    const ab = await resp.arrayBuffer()
-    if (ab.byteLength > MAX_BYTES) {
-      throw new Error(`image too large: ${ab.byteLength} > ${MAX_BYTES}`)
-    }
-    return Buffer.from(ab)
-  } finally {
-    clearTimeout(timeout)
   }
 }
 

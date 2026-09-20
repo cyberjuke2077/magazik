@@ -1,4 +1,6 @@
 import { type QuoteRequestInput } from '@/app/request-list/actions'
+import { currentBusinessDate } from '@/lib/delivery-date'
+import { isValidEmailAddress } from '@/lib/email-address'
 
 export interface QuoteValidationResult {
   valid: boolean
@@ -6,6 +8,15 @@ export interface QuoteValidationResult {
 }
 
 const VALID_STATUSES = ['new', 'in_progress', 'quoted', 'rejected'] as const
+const INPUT_KEYS = new Set([
+  'submissionKey', 'companyName', 'inn', 'contactPerson', 'phone', 'email', 'comment',
+  'deliveryAddress', 'desiredDeliveryDate', 'consent', 'items',
+])
+const ITEM_KEYS = new Set(['productId', 'partNumber', 'name', 'quantity'])
+
+function hasOnlyKeys(value: object, allowed: Set<string>): boolean {
+  return Object.keys(value).every((key) => allowed.has(key))
+}
 
 // Лимиты против спама и раздувания транзакции — server action это публичный
 // POST, клиентской валидации верить нельзя.
@@ -14,9 +25,14 @@ export const MAX_COMMENT = 2000
 export const MAX_ADDRESS = 500
 export const MAX_ITEMS = 500
 export const MAX_QUANTITY = 1_000_000
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationResult {
+export function validateQuoteInput(
+  input: QuoteRequestInput,
+  now = new Date(),
+  purpose: 'create' | 'receipt' = 'create',
+): QuoteValidationResult {
+  if (!input || typeof input !== 'object') return { valid: false, error: 'Некорректные данные' }
+  if (!hasOnlyKeys(input, INPUT_KEYS)) return { valid: false, error: 'Некорректные данные' }
   // Согласие на ПДн (ФЗ-152): проверяем на сервере, клиентский чекбокс обходится
   if (input.consent !== true) {
     return { valid: false, error: 'Необходимо согласие на обработку персональных данных' }
@@ -43,8 +59,12 @@ export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationRes
     return { valid: false, error: 'Некорректный формат одного из полей' }
   }
 
+  if (input.inn?.trim() && !/^(?:\d{10}|\d{12})$/.test(input.inn.trim())) {
+    return { valid: false, error: 'ИНН должен содержать 10 или 12 цифр' }
+  }
+
   // Format checks — отсекаем мусорные лиды
-  if (!EMAIL_RE.test(input.email.trim())) {
+  if (!isValidEmailAddress(input.email.trim())) {
     return { valid: false, error: 'Некорректный email' }
   }
   const phoneDigits = input.phone.replace(/\D/g, '')
@@ -75,6 +95,9 @@ export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationRes
     input.items.some(
       (item) =>
         !item ||
+        typeof item !== 'object' ||
+        Array.isArray(item) ||
+        !hasOnlyKeys(item, ITEM_KEYS) ||
         typeof item.productId !== 'string' ||
         !item.productId.trim() ||
         item.productId.length > MAX_FIELD ||
@@ -106,9 +129,11 @@ export function validateQuoteInput(input: QuoteRequestInput): QuoteValidationRes
     if (
       typeof input.desiredDeliveryDate !== 'string' ||
       !/^\d{4}-\d{2}-\d{2}$/.test(input.desiredDeliveryDate) ||
-      Number.isNaN(new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).getTime())
+      Number.isNaN(new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).getTime()) ||
+      new Date(`${input.desiredDeliveryDate}T00:00:00.000Z`).toISOString().slice(0, 10) !== input.desiredDeliveryDate ||
+      (purpose === 'create' && input.desiredDeliveryDate < currentBusinessDate(now))
     ) {
-      return { valid: false, error: 'Некорректная желаемая дата поставки' }
+      return { valid: false, error: 'Желаемая дата поставки не может быть в прошлом' }
     }
   }
 

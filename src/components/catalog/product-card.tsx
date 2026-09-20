@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { ShoppingCart, Plus, Minus, Check, Zap, Sparkles } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { type Product } from '@/types'
@@ -24,8 +25,8 @@ function isNewProduct(createdAt?: string): boolean {
 
 interface ProductCardProps {
   product: Product
-  showDiscount?: boolean
   priority?: boolean
+  variant?: 'default' | 'home'
 }
 
 // Единая тема - azure (30% палитра)
@@ -34,10 +35,8 @@ const cardTheme = {
   iconColor: 'text-azure',
 }
 
-export function ProductCard({ product, showDiscount = true, priority = false }: ProductCardProps) {
-  const discountPercent = product.priceWholesale
-    ? Math.round((1 - product.priceWholesale / product.price) * 100)
-    : null
+export function ProductCard({ product, priority = false, variant = 'default' }: ProductCardProps) {
+  const router = useRouter()
 
   const { addItem, isInCart, getQuantity, updateQuantity } = useCart()
   const [justAdded, setJustAdded] = useState(false)
@@ -55,9 +54,13 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
     name: product.name,
   })
 
-  function handleAdd(e: React.MouseEvent) {
+  async function handleAdd(e: React.MouseEvent) {
     e.preventDefault()
-    addItem(product, localQty)
+    if (inCart) {
+      router.push('/cart')
+      return
+    }
+    if (!await addItem(product, localQty)) return
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1800)
     flyToCart(btnRef.current)
@@ -65,21 +68,21 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
 
   function handleMinus(e: React.MouseEvent) {
     e.preventDefault()
-    if (inCart) updateQuantity(product.id, Math.max(product.minOrder, cartQty - 1))
+    if (inCart) void updateQuantity(product.id, Math.max(product.minOrder, cartQty - 1))
     else setLocalQty((q) => Math.max(product.minOrder, q - 1))
   }
 
   function handlePlus(e: React.MouseEvent) {
     e.preventDefault()
-    if (inCart) updateQuantity(product.id, cartQty + 1)
+    if (inCart) void updateQuantity(product.id, cartQty + 1)
     else setLocalQty((q) => q + 1)
   }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <article className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${variant === 'home' ? 'border border-black/6' : 'shadow-sm'}`}>
       {/* Image zone */}
       <div
-        className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${cardTheme.bg}`}
+        className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${variant === 'home' ? 'bg-white' : cardTheme.bg}`}
       >
         <Link
           href={`/product/${product.slug}`}
@@ -95,7 +98,7 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
-            className="z-10 object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+            className="pointer-events-none z-10 object-contain p-3 transition-transform duration-300 group-hover:scale-105"
           />
         ) : packageSvg ? (
           <Image
@@ -105,10 +108,10 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
-            className="z-10 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+            className="pointer-events-none z-10 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="relative z-10 icon-svg">
+          <div className="pointer-events-none relative z-10 icon-svg">
             <CategoryIcon
               slug={product.categorySlug || ''}
               size={72}
@@ -121,17 +124,12 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
         <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-20">
           {product.featured && (
             <span className="flex items-center gap-1 rounded-sm bg-azure px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-              <Zap size={8} />ХИТ
+              <Zap size={8} />В подборке
             </span>
           )}
           {isNew && (
             <span className="flex items-center gap-1 rounded-sm bg-stock px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
               <Sparkles size={8} />Новинка
-            </span>
-          )}
-          {showDiscount && discountPercent && (
-            <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
-              -{discountPercent}%
             </span>
           )}
         </div>
@@ -167,19 +165,25 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
           {product.partNumber}
         </div>
 
-        <div className="text-[11px] text-ink-4">1-2 недели</div>
+        <div className="text-[11px] text-ink-4">Срок подтвердим в КП</div>
 
         {/* Price */}
         <div className="pt-0.5">
           {product.price > 0 ? (
             <div className="flex items-baseline gap-1.5">
               <span className="price text-xl">{formatPrice(product.price)}</span>
-              <span className="text-xs text-ink-4">/ {product.unit}</span>
+              <span className="text-xs text-ink-4">/ {product.unit}, розница</span>
             </div>
           ) : (
             <div className="text-base font-bold text-azure">Уточнить цену</div>
           )}
         </div>
+
+        {product.priceWholesale != null && product.priceWholesale > 0 && (
+          <div className="text-xs text-ink-3">
+            Опт от {product.minOrder} {product.unit}: {formatPrice(product.priceWholesale)} / {product.unit}
+          </div>
+        )}
 
         {/* Stepper + Cart */}
         <div className="flex items-center gap-2 pt-1" onClick={(e) => e.preventDefault()}>
@@ -207,7 +211,7 @@ export function ProductCard({ product, showDiscount = true, priority = false }: 
           <button
             ref={btnRef}
             onClick={handleAdd}
-            aria-label={justAdded ? 'Добавлено в корзину' : inCart ? 'Товар в корзине' : 'Добавить в корзину'}
+            aria-label={justAdded ? 'Добавлено в корзину' : inCart ? 'Перейти в корзину' : 'Добавить в корзину'}
             className={`flex h-9 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-control)] text-xs font-bold transition-all active:scale-[0.97] ${
               justAdded
                 ? 'bg-azure-hover text-white'

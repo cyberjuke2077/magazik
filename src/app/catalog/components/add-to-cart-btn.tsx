@@ -1,90 +1,71 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ShoppingCart, Check } from 'lucide-react'
-import {
-  addToRequestList,
-  getRequestList,
-  isInRequestList,
-  updateRequestListQuantity,
-} from '@/lib/request-list-store'
+import type { Product } from '@/types'
+import { useBulkSelect } from './bulk-select-panel'
 import { QuantityStepper } from './quantity-stepper'
 import { flyToCart } from '@/lib/fly-to-cart'
 
 interface AddToCartBtnProps {
-  productId: string
-  partNumber: string
-  name: string
-  manufacturer: string
-  minOrder: number
-  price: number | null
+  product: Product
   highlightOnCardHover?: boolean
 }
 
-/**
- * Add-to-cart button used in catalog rows. Writes to the unified
- * `electromagaz_cart` storage via the request-list-store adapter so the
- * header cart counter, /cart page and /request-list page all see the same
- * items.
- */
+/** Catalog button backed by the shared cart context and storage. */
 export function AddToCartBtn({
-  productId,
-  partNumber,
-  name,
-  manufacturer,
-  minOrder,
-  price,
+  product,
   highlightOnCardHover = false,
 }: AddToCartBtnProps) {
-  const [quantity, setQuantity] = useState(minOrder)
-  const [inCart, setInCart] = useState(false)
+  const router = useRouter()
+  const cart = useBulkSelect()
+  const [quantity, setQuantity] = useState(product.minOrder)
+  const [isAdding, setIsAdding] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const addingRef = useRef(false)
+  if (!cart) throw new Error('AddToCartBtn must be rendered inside BulkSelectWrapper')
+  const { addItem, getQuantity, isInCart, updateQuantity } = cart
+  const inCart = isInCart(product.id)
+  const displayQuantity = inCart ? getQuantity(product.id) : quantity
 
-  useEffect(() => {
-    // hydration from localStorage — required after mount
-    const exists = isInRequestList(productId)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setInCart(exists)
-    if (exists) {
-      const item = getRequestList().find((i) => i.productId === productId)
-      if (item) setQuantity(item.quantity)
+  async function handleAdd() {
+    if (addingRef.current) return
+    if (inCart) {
+      router.push('/cart')
+      return
     }
-  }, [productId])
-
-  function handleAdd() {
-    addToRequestList({
-      productId,
-      partNumber,
-      name,
-      manufacturer,
-      minOrder,
-      price,
-      quantity,
-    })
-    setInCart(true)
-    flyToCart(buttonRef.current)
+    addingRef.current = true
+    setIsAdding(true)
+    try {
+      if (!await addItem(product, quantity)) return
+      flyToCart(buttonRef.current)
+    } finally {
+      addingRef.current = false
+      setIsAdding(false)
+    }
   }
 
   function handleQuantityChange(newQty: number) {
     setQuantity(newQty)
-    if (inCart || isInRequestList(productId)) {
-      updateRequestListQuantity(productId, newQty)
-    }
+    if (inCart) void updateQuantity(product.id, newQty)
   }
 
   return (
     <div className="flex items-center gap-2">
       <QuantityStepper
-        value={quantity}
-        minOrder={minOrder}
+        value={displayQuantity}
+        minOrder={product.minOrder}
         onChange={handleQuantityChange}
       />
       <button
         ref={buttonRef}
         onClick={handleAdd}
+        disabled={isAdding}
+        aria-busy={isAdding}
         data-catalog-cart-button={highlightOnCardHover ? true : undefined}
-        aria-label={inCart ? 'Товар в корзине' : 'Добавить в корзину'}
-        className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-xs font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] ${
+        aria-label={inCart ? 'Перейти в корзину' : 'Добавить в корзину'}
+        className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-xs font-bold transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] disabled:cursor-wait disabled:opacity-70 ${
           inCart
             ? 'bg-azure-light text-azure border border-azure/30'
             : highlightOnCardHover

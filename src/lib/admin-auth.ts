@@ -1,8 +1,9 @@
 /**
  * Авторизация админ-панели: один администратор, пароль в env,
- * сессия — подписанный HMAC-SHA256 токен в httpOnly-cookie.
+ * сессия - подписанный HMAC-SHA256 токен в httpOnly-cookie и запись в БД.
  *
- * Web Crypto API — работает и в edge-middleware, и в server actions.
+ * Proxy проверяет только подпись через admin-session-token без запроса к БД.
+ * Страницы и server actions дополнительно проверяют серверную запись сессии.
  *
  * Env:
  *   ADMIN_USERNAME        — логин входа в /admin (по умолчанию "admin")
@@ -10,60 +11,82 @@
  *   ADMIN_SESSION_SECRET  — ключ подписи сессионных токенов (random 32+ байт)
  */
 
-export const ADMIN_COOKIE = 'emg_admin'
-export const SESSION_TTL_HOURS = 24 * 7 // неделя
+import { prisma } from '@/lib/prisma'
+import {
+  ADMIN_COOKIE,
+  SESSION_TTL_HOURS,
+  parseSessionToken,
+  signAdminPayload,
+  timingSafeEqualString,
+  verifySessionTokenSignature,
+} from '@/lib/admin-session-token'
 
-function getSigningKey(): string {
-  const s = process.env.ADMIN_SESSION_SECRET
-  if (!s) throw new Error('ADMIN_SESSION_SECRET не задан')
-  if (new TextEncoder().encode(s).length < 32) {
-    throw new Error('ADMIN_SESSION_SECRET должен содержать не менее 32 байт')
-  }
-  // Пароль в материале ключа: смена ADMIN_PASSWORD инвалидирует все
-  // активные сессии (старые подписи перестают сходиться).
-  return `${s}:${process.env.ADMIN_PASSWORD ?? ''}`
+export { ADMIN_COOKIE, SESSION_TTL_HOURS, verifySessionTokenSignature }
+
+interface AdminSessionInput {
+  id: string
+  expiresAt: Date
 }
 
-async function hmac(payload: string): Promise<string> {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(getSigningKey()),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
-  )
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(payload))
-  // base64url без Buffer — edge-runtime-совместимо
-  const bytes = new Uint8Array(sig)
-  let bin = ''
-  for (const b of bytes) bin += String.fromCharCode(b)
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+export interface AdminSessionStore {
+  create(input: AdminSessionInput): Promise<void>
+  exists(id: string, now: Date): Promise<boolean>
+  delete(id: string): Promise<void>
+  deleteExpired(now: Date): Promise<void>
 }
 
-/** Constant-time сравнение строк равной длины. */
-function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false
-  let diff = 0
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
-  return diff === 0
+const prismaSessionStore: AdminSessionStore = {
+  async create(input) {
+    await prisma.adminSession.create({ data: input })
+  },
+  async exists(id, now) {
+    const session = await prisma.adminSession.findFirst({
+      where: { id, expiresAt: { gt: now } },
+      select: { id: true },
+    })
+    return session !== null
+  },
+  async delete(id) {
+    await prisma.adminSession.deleteMany({ where: { id } })
+  },
+  async deleteExpired(now) {
+    await prisma.adminSession.deleteMany({ where: { expiresAt: { lte: now } } })
+  },
 }
 
-/** Создать токен сессии: "exp.signature" */
-export async function createSessionToken(): Promise<string> {
+/** Создать токен сессии: "id.exp.signature". */
+export async function createSessionToken(
+  store: AdminSessionStore = prismaSessionStore,
+): Promise<string> {
+  const id = crypto.randomUUID()
   const exp = Date.now() + SESSION_TTL_HOURS * 3600_000
-  const payload = `admin.${exp}`
-  return `${exp}.${await hmac(payload)}`
+  const signature = await signAdminPayload(`admin.${id}.${exp}`)
+  await store.deleteExpired(new Date())
+  await store.create({ id, expiresAt: new Date(exp) })
+  return `${id}.${exp}.${signature}`
 }
 
-/** Проверить токен: подпись + срок действия. */
-export async function verifySessionToken(token: string | undefined): Promise<boolean> {
-  if (!token) return false
-  const dot = token.indexOf('.')
-  if (dot < 1) return false
-  const exp = Number(token.slice(0, dot))
-  if (!Number.isFinite(exp) || exp < Date.now()) return false
-  const expected = await hmac(`admin.${exp}`)
-  return timingSafeEqual(expected, token.slice(dot + 1))
+/** Проверить подпись, срок и наличие серверной сессии. */
+export async function verifySessionToken(
+  token: string | undefined,
+  store: AdminSessionStore = prismaSessionStore,
+): Promise<boolean> {
+  if (!(await verifySessionTokenSignature(token))) return false
+  const parsed = parseSessionToken(token)
+  const now = new Date()
+  if (!parsed) return false
+  return store.exists(parsed.id, now)
+}
+
+/** Отозвать конкретную сессию, чтобы старая cookie больше не работала. */
+export async function revokeSessionToken(
+  token: string | undefined,
+  store: AdminSessionStore = prismaSessionStore,
+): Promise<boolean> {
+  const parsed = parseSessionToken(token)
+  if (!parsed || !(await verifySessionToken(token, store))) return false
+  await store.delete(parsed.id)
+  return true
 }
 
 /**
@@ -77,7 +100,13 @@ export async function checkAdminCredentials(
   const expectedPassword = process.env.ADMIN_PASSWORD
   const expectedUsername = process.env.ADMIN_USERNAME ?? 'admin'
   if (!expectedPassword) return false
-  const userOk = timingSafeEqual(await hmac(username), await hmac(expectedUsername))
-  const passOk = timingSafeEqual(await hmac(password), await hmac(expectedPassword))
+  const userOk = timingSafeEqualString(
+    await signAdminPayload(username),
+    await signAdminPayload(expectedUsername),
+  )
+  const passOk = timingSafeEqualString(
+    await signAdminPayload(password),
+    await signAdminPayload(expectedPassword),
+  )
   return userOk && passOk
 }

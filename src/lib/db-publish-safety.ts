@@ -38,6 +38,7 @@ export function protectedCountsMatch(
   after: ProtectedProductionCounts,
 ): boolean {
   return (Object.keys(before) as (keyof ProtectedProductionCounts)[]).every(
-    (key) => before[key] === after[key],
+    // New submissions can arrive while the catalog is being published.
+    (key) => after[key] >= before[key],
   )
 }

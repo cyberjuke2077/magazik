@@ -40,8 +40,7 @@ export default async function ProductPage({ params }: PageProps) {
     notFound()
   }
 
-  const related = await getProductsByCategory(product.categorySlug)
-  const relatedFiltered = related.filter(p => p.id !== product.id).slice(0, 4)
+  const relatedFiltered = await getProductsByCategory(product.categorySlug, product.id)
 
   const breadcrumbs = [
     { name: 'Главная', url: '/' },

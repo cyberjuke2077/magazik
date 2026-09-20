@@ -7,9 +7,10 @@ import {
   SESSION_TTL_HOURS,
   checkAdminCredentials,
   createSessionToken,
+  revokeSessionToken,
 } from '@/lib/admin-auth'
 import {
-  enforceSubmissionRateLimit,
+  enforceAdminLoginRateLimit,
   SubmissionRateLimitExceededError,
 } from '@/lib/submission-rate-limit'
 
@@ -20,7 +21,7 @@ export async function loginAdmin(
   const username = String(formData.get('username') ?? '')
   const password = String(formData.get('password') ?? '')
   try {
-    await enforceSubmissionRateLimit('admin_login', username.slice(0, 200))
+    await enforceAdminLoginRateLimit(username)
   } catch (error) {
     if (error instanceof SubmissionRateLimitExceededError) {
       return { error: 'Слишком много попыток входа. Повторите позже.' }
@@ -44,6 +45,7 @@ export async function loginAdmin(
 
 export async function logoutAdmin(): Promise<void> {
   const store = await cookies()
+  await revokeSessionToken(store.get(ADMIN_COOKIE)?.value)
   store.delete(ADMIN_COOKIE)
   redirect('/admin/login')
 }

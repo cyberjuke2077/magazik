@@ -5,8 +5,8 @@ import { Footer } from '@/components/layout/footer'
 import { AccountClient } from './account-client'
 
 export const metadata: Metadata = {
-  title: 'Личный кабинет',
-  description: 'Вход и регистрация в личном кабинете Electromagaz.',
+  title: 'Ваши заявки',
+  description: 'История заявок из этого браузера и ссылки на их статусы.',
   robots: { index: false, follow: false },
 }
 

@@ -10,7 +10,9 @@ function localDatabaseUrl(): string {
   const user = encodeURIComponent(requiredEnv('POSTGRES_USER'))
   const password = encodeURIComponent(requiredEnv('POSTGRES_PASSWORD'))
   const database = encodeURIComponent(requiredEnv('POSTGRES_DB'))
-  return `postgresql://${user}:${password}@127.0.0.1:5432/${database}?schema=public`
+  const port = Number(process.env.POSTGRES_PORT ?? 5432)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid POSTGRES_PORT')
+  return `postgresql://${user}:${password}@127.0.0.1:${port}/${database}?schema=public`
 }
 
 async function main() {
@@ -156,8 +158,10 @@ async function main() {
       },
     ]
 
-    for (const product of products) {
+    for (const [index, product] of products.entries()) {
       const { specifications, datasheets, ...data } = product
+      // Stable ordering and expired "new" badges in the visual test fixture.
+      const fixtureDate = new Date(Date.UTC(2020, 0, index + 1))
       await prisma.product.upsert({
         where: { slug: product.slug },
         update: {
@@ -167,7 +171,8 @@ async function main() {
           inStock: true,
           featured: true,
           enrichmentStatus: 'complete',
-          lastEnrichedAt: new Date(),
+          createdAt: fixtureDate,
+          lastEnrichedAt: fixtureDate,
           specifications: {
             deleteMany: {},
             create: specifications.map((specification) => ({ ...specification })),
@@ -184,7 +189,8 @@ async function main() {
           inStock: true,
           featured: true,
           enrichmentStatus: 'complete',
-          lastEnrichedAt: new Date(),
+          createdAt: fixtureDate,
+          lastEnrichedAt: fixtureDate,
           specifications: {
             create: specifications.map((specification) => ({ ...specification })),
           },

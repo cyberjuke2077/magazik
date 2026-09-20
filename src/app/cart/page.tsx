@@ -14,12 +14,16 @@ import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { CartItemRow } from '@/components/ui/cart-item'
 import { useCart } from '@/hooks/use-cart'
+import { cartSummary } from '@/lib/cart-pricing'
 import { formatPrice } from '@/lib/utils'
 import { RecentlyViewed } from '@/components/catalog/recently-viewed'
+import { CartUpdateNotice } from '@/components/cart/cart-update-notice'
 
 export default function CartPage() {
-  const { items, mounted, totalItems, totalPrice, removeItem, updateQuantity, clearCart } =
-    useCart()
+  const {
+    items, mounted, totalItems, totalPrice, unpricedItems, changes, refreshError, isRefreshing,
+    refresh, dismissChanges, removeItem, updateQuantity, clearCart,
+  } = useCart({ refreshProducts: true })
 
   const [selected, setSelected] = useState<Set<string>>(new Set())
 
@@ -45,20 +49,15 @@ export default function CartPage() {
     })
   }
 
-  function deleteSelected() {
-    selected.forEach((id) => removeItem(id))
-    setSelected(new Set())
+  async function deleteSelected() {
+    const removed = new Set<string>()
+    for (const id of selected) {
+      if (await removeItem(id)) removed.add(id)
+    }
+    setSelected((current) => new Set([...current].filter((id) => !removed.has(id))))
   }
 
-  const selectedTotal = useMemo(() => {
-    return items
-      .filter((i) => selected.has(i.product.id))
-      .reduce((sum, i) => {
-        const isWholesale = i.product.priceWholesale !== undefined && i.quantity >= i.product.minOrder
-        const price = isWholesale ? (i.product.priceWholesale ?? i.product.price) : i.product.price
-        return sum + price * i.quantity
-      }, 0)
-  }, [items, selected])
+  const selectedSummary = useMemo(() => cartSummary(items.filter((item) => selected.has(item.product.id))), [items, selected])
 
   // Skeleton while hydrating
   if (!mounted) {
@@ -90,6 +89,7 @@ export default function CartPage() {
         <main className="flex-1">
           <div className="mx-auto max-w-[1380px] px-4 pb-7 pt-7 lg:px-0">
             <h1 className="mb-3 text-[30px] font-bold leading-tight tracking-[-0.035em] text-ink">Корзина</h1>
+            <CartUpdateNotice changes={changes} error={refreshError} isRefreshing={isRefreshing} onRetry={refresh} onDismiss={dismissChanges} />
             <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl bg-white px-5 py-8 text-center shadow-[var(--shadow-xs)]" data-motion-reveal>
               <Image
                 src="/storefront/empty-request-list.png"
@@ -142,13 +142,15 @@ export default function CartPage() {
               </span>
             </h1>
             <button
-              onClick={clearCart}
+              onClick={() => void clearCart()}
               className="flex items-center gap-2 text-sm text-ink-4 hover:text-red-500 transition-colors"
             >
               <Trash2 size={15} />
               Очистить корзину
             </button>
           </div>
+
+          <CartUpdateNotice changes={changes} error={refreshError} isRefreshing={isRefreshing} onRetry={refresh} onDismiss={dismissChanges} />
 
           <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_296px]">
             {/* Left: items list */}
@@ -167,7 +169,7 @@ export default function CartPage() {
 
                 {selected.size > 0 && (
                   <button
-                    onClick={deleteSelected}
+                    onClick={() => void deleteSelected()}
                     className="flex items-center gap-2 text-sm text-red-500 hover:text-red-700 transition-colors ml-2"
                   >
                     <Trash2 size={14} />
@@ -186,13 +188,15 @@ export default function CartPage() {
                     item={item}
                     selected={selected.has(item.product.id)}
                     onToggleSelect={toggleSelect}
-                    onUpdateQuantity={updateQuantity}
+                    onUpdateQuantity={(id, quantity) => { void updateQuantity(id, quantity) }}
                     onRemove={(id) => {
-                      removeItem(id)
-                      setSelected((prev) => {
-                        const next = new Set(prev)
-                        next.delete(id)
-                        return next
+                      void removeItem(id).then((removed) => {
+                        if (!removed) return
+                        setSelected((prev) => {
+                          const next = new Set(prev)
+                          next.delete(id)
+                          return next
+                        })
                       })
                     }}
                   />
@@ -227,7 +231,7 @@ export default function CartPage() {
                   {selected.size > 0 && (
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-ink-3">Выбрано:</span>
-                      <span className="font-medium text-ink">{formatPrice(selectedTotal)}</span>
+                      <span className="font-medium text-ink">{selectedSummary.unpriced ? 'По запросу' : formatPrice(selectedSummary.total)}</span>
                     </div>
                   )}
 
@@ -235,10 +239,10 @@ export default function CartPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-ink-3">Сумма корзины:</span>
                       <span className={totalPrice > 0 ? 'price text-lg' : 'text-lg font-bold text-ink'}>
-                        {totalPrice > 0 ? formatPrice(totalPrice) : 'По запросу'}
+                        {unpricedItems ? 'По запросу' : formatPrice(totalPrice)}
                       </span>
                     </div>
-                    {totalPrice === 0 && (
+                    {unpricedItems > 0 && (
                       <p className="text-xs text-ink-4 mt-1">
                         Цены будут указаны в коммерческом предложении
                       </p>

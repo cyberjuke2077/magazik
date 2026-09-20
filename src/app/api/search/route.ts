@@ -1,3 +1,4 @@
+import { buildContainsLikePattern, buildPrefixTsQuery, normalizeSearchQuery } from '@/lib/search-query'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
@@ -9,7 +10,7 @@ import { prisma } from '@/lib/prisma'
  * Fast response (<100ms) for instant dropdown.
  */
 export async function GET(request: NextRequest) {
-  const q = request.nextUrl.searchParams.get('q')?.trim()
+  const q = normalizeSearchQuery(request.nextUrl.searchParams.get('q') ?? '')
 
   if (!q || q.length < 2) {
     return NextResponse.json({ products: [], categories: [], manufacturers: [] })
@@ -17,18 +18,14 @@ export async function GET(request: NextRequest) {
 
   try {
     // Build prefix-matching tsquery: "STM32" → "STM32:*"
-    const tsqueryStr = q
-      .split(/\s+/)
-      .filter((w) => w.length > 0)
-      .map((w) => w.replace(/[!&|()<>:*'\\]/g, '') + ':*')
-      .join(' & ')
+    const tsqueryStr = buildPrefixTsQuery(q)
 
     if (!tsqueryStr) {
       return NextResponse.json({ products: [], categories: [], manufacturers: [] })
     }
 
     // ILIKE pattern for category/manufacturer name matching
-    const ilikePattern = `%${q.replace(/[%_]/g, '\\$&')}%`
+    const ilikePattern = buildContainsLikePattern(q)
 
     // Run all three queries in parallel
     const [products, categories, manufacturers] = await Promise.all([
@@ -56,7 +53,11 @@ export async function GET(request: NextRequest) {
         JOIN "Manufacturer" m ON p."manufacturerId" = m.id
         JOIN "Category" c ON p."categoryId" = c.id
         WHERE p."searchVector" @@ to_tsquery('simple', ${tsqueryStr})
-        ORDER BY ts_rank(p."searchVector", to_tsquery('simple', ${tsqueryStr})) DESC
+          OR m.name ILIKE ${ilikePattern}
+        ORDER BY GREATEST(
+          ts_rank(p."searchVector", to_tsquery('simple', ${tsqueryStr})),
+          CASE WHEN m.name ILIKE ${ilikePattern} THEN 1 ELSE 0 END
+        ) DESC, p.id ASC
         LIMIT 7
       `,
 
@@ -78,7 +79,7 @@ export async function GET(request: NextRequest) {
         LEFT JOIN "Product" p ON p."categoryId" = c.id
         WHERE c.name ILIKE ${ilikePattern}
         GROUP BY c.id, c.slug, c.name
-        ORDER BY COUNT(p.id) DESC
+        ORDER BY COUNT(p.id) DESC, c.id ASC
         LIMIT 3
       `,
 
@@ -100,7 +101,7 @@ export async function GET(request: NextRequest) {
         LEFT JOIN "Product" p ON p."manufacturerId" = m.id
         WHERE m.name ILIKE ${ilikePattern}
         GROUP BY m.id, m.slug, m.name
-        ORDER BY COUNT(p.id) DESC
+        ORDER BY COUNT(p.id) DESC, m.id ASC
         LIMIT 3
       `,
     ])
@@ -112,6 +113,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error) {
     console.error('[search API] error:', error)
-    return NextResponse.json({ products: [], categories: [], manufacturers: [] })
+    return NextResponse.json({ error: 'Поиск временно недоступен' }, { status: 503 })
   }
 }

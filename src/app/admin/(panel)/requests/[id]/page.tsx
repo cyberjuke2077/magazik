@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
+import { mailtoHref } from '@/lib/email-address'
+import { requireAdminPageSession } from '@/lib/admin-page-auth'
 import { RequestStatusBadge } from '../status-badge'
 import { RequestStatusSelect } from './status-select'
 
@@ -12,6 +14,7 @@ export default async function AdminRequestDetailPage({
 }: {
   params: Promise<{ id: string }>
 }) {
+  await requireAdminPageSession()
   const { id } = await params
   const request = await prisma.quoteRequest.findUnique({
     where: { id },
@@ -32,6 +35,7 @@ export default async function AdminRequestDetailPage({
     ],
     ['Комментарий', request.comment],
   ]
+  const emailHref = mailtoHref(request.email)
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -99,12 +103,14 @@ export default async function AdminRequestDetailPage({
       </section>
 
       <div className="flex gap-3">
-        <a
-          href={`mailto:${request.email}`}
-          className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
-        >
-          Написать на email
-        </a>
+        {emailHref && (
+          <a
+            href={emailHref}
+            className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+          >
+            Написать на email
+          </a>
+        )}
         <a
           href={`tel:${request.phone.replace(/[^\d+]/g, '')}`}
           className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"

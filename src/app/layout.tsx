@@ -5,6 +5,7 @@ import { ToastProvider } from '@/components/ui/toast'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { NavProgress } from '@/components/ui/nav-progress'
 import { CompareBar } from '@/components/catalog/compare-bar'
+import { SubmissionStateExpiryGuard } from '@/components/submission-state-expiry-guard'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://electromagaz.ru'
 
@@ -44,6 +45,7 @@ export default function RootLayout({
           К основному содержанию
         </a>
         <ToastProvider>
+          <SubmissionStateExpiryGuard />
           <Suspense fallback={null}>
             <NavProgress />
           </Suspense>

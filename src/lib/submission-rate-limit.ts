@@ -2,10 +2,23 @@ import { createHash } from 'node:crypto'
 import { headers } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 
-export type SubmissionScope = 'quote_request' | 'wholesale_lead' | 'admin_login'
+export type SubmissionScope =
+  | 'quote_request'
+  | 'wholesale_lead'
+  | 'quote_request_attempt_network'
+  | 'wholesale_lead_attempt_network'
+  | 'admin_login_global'
+  | 'admin_login_network'
+  | 'admin_login_account'
+
+export type PublicSubmissionScope = 'quote_request' | 'wholesale_lead'
 
 const DEFAULT_LIMIT = 10
 const DEFAULT_WINDOW_MS = 15 * 60 * 1000
+const ADMIN_GLOBAL_LIMIT = 500
+const ADMIN_NETWORK_LIMIT = 10
+const ADMIN_ACCOUNT_LIMIT = 50
+const SUBMISSION_ATTEMPT_NETWORK_LIMIT = 60
 
 interface CounterInput {
   key: string
@@ -25,6 +38,21 @@ interface ConsumeOptions {
   now?: Date
   limit?: number
   windowMs?: number
+  cleanup?: boolean
+}
+
+interface AdminLoginLimitOptions {
+  now?: Date
+  windowMs?: number
+  globalLimit?: number
+  networkLimit?: number
+  accountLimit?: number
+}
+
+interface SubmissionAttemptLimitOptions {
+  now?: Date
+  windowMs?: number
+  networkLimit?: number
 }
 
 export class SubmissionRateLimitExceededError extends Error {
@@ -70,7 +98,7 @@ export async function consumeSubmissionRateLimit(
   const expiresAt = new Date(windowStart.getTime() + windowMs)
   const key = digest(`${options.scope}:${bucket}:${digest(options.identity)}`)
 
-  await store.deleteExpired(now)
+  if (options.cleanup !== false) await store.deleteExpired(now)
   const count = await store.increment({ key, scope: options.scope, windowStart, expiresAt })
   if (count > limit) throw new SubmissionRateLimitExceededError()
 }
@@ -80,15 +108,78 @@ function firstForwardedAddress(value: string | null): string | null {
   return first || null
 }
 
+async function requestNetworkIdentity(): Promise<string | null> {
+  const requestHeaders = await headers()
+  return firstForwardedAddress(requestHeaders.get('x-vercel-forwarded-for'))
+    || firstForwardedAddress(requestHeaders.get('x-forwarded-for'))
+    || requestHeaders.get('x-real-ip')?.trim()
+    || null
+}
+
+export async function consumeSubmissionAttemptRateLimits(
+  scope: PublicSubmissionScope,
+  networkIdentity: string | null,
+  store: SubmissionRateLimitStore = prismaStore,
+  options: SubmissionAttemptLimitOptions = {},
+): Promise<void> {
+  const normalizedNetwork = networkIdentity?.trim().slice(0, 200) || '<unavailable>'
+  const shared = { now: options.now, windowMs: options.windowMs }
+
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: `${scope}_attempt_network`,
+    identity: `network:${normalizedNetwork}`,
+    limit: options.networkLimit ?? SUBMISSION_ATTEMPT_NETWORK_LIMIT,
+  }, store)
+}
+
+export async function consumeAdminLoginRateLimits(
+  username: string,
+  networkIdentity: string | null,
+  store: SubmissionRateLimitStore = prismaStore,
+  options: AdminLoginLimitOptions = {},
+): Promise<void> {
+  const normalizedUsername = username.trim().toLowerCase().slice(0, 200) || '<empty>'
+  const normalizedNetwork = networkIdentity?.trim().slice(0, 200) || '<unavailable>'
+  const shared = { now: options.now, windowMs: options.windowMs }
+
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: 'admin_login_global',
+    identity: 'admin-login',
+    limit: options.globalLimit ?? ADMIN_GLOBAL_LIMIT,
+  }, store)
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: 'admin_login_network',
+    identity: `network:${normalizedNetwork}`,
+    limit: options.networkLimit ?? ADMIN_NETWORK_LIMIT,
+    cleanup: false,
+  }, store)
+  await consumeSubmissionRateLimit({
+    ...shared,
+    scope: 'admin_login_account',
+    identity: `account:${normalizedUsername}`,
+    limit: options.accountLimit ?? ADMIN_ACCOUNT_LIMIT,
+    cleanup: false,
+  }, store)
+}
+
+export async function enforceAdminLoginRateLimit(username: string): Promise<void> {
+  await consumeAdminLoginRateLimits(username, await requestNetworkIdentity())
+}
+
+export async function enforceSubmissionAttemptRateLimit(
+  scope: PublicSubmissionScope,
+): Promise<void> {
+  await consumeSubmissionAttemptRateLimits(scope, await requestNetworkIdentity())
+}
+
 export async function enforceSubmissionRateLimit(
   scope: SubmissionScope,
   fallbackContact: string,
 ): Promise<void> {
-  const requestHeaders = await headers()
-  const networkIdentity =
-    firstForwardedAddress(requestHeaders.get('x-forwarded-for')) ||
-    requestHeaders.get('x-real-ip')?.trim() ||
-    null
+  const networkIdentity = await requestNetworkIdentity()
   const normalizedContact = fallbackContact.trim().toLowerCase()
   const identity = networkIdentity
     ? `network:${networkIdentity}`

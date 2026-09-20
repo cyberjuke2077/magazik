@@ -9,8 +9,7 @@ import { getProducts } from '@/lib/queries/products'
 
 export default async function BestPage() {
   await connection()
-  const products = await getProducts()
-  const bestProducts = products.filter((p) => p.priceWholesale).slice(0, 20)
+  const bestProducts = await getProducts({ wholesale: true })
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       <Header />
@@ -29,6 +28,7 @@ export default async function BestPage() {
 
         <div className="mx-auto max-w-[1380px] px-3 py-8 sm:px-6">
           <h1 className="mb-6 max-w-6xl text-3xl font-bold tracking-[-0.03em] text-ink">Лучшие предложения</h1>
+          {bestProducts.length === 0 && <p className="mb-6 text-ink-3">Оптовые цены рассчитываем по вашей спецификации. <Link href="/wholesale#request-form" className="text-azure underline">Отправить список компонентов</Link></p>}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {bestProducts.map((product) => (
               <ProductCard key={product.id} product={product} />

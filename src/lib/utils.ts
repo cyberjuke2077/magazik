@@ -5,8 +5,8 @@ export function formatPrice(price: number | null | undefined, currency = 'RUB'):
   return new Intl.NumberFormat('ru-RU', {
     style: 'currency',
     currency,
-    minimumFractionDigits: price < 10 ? 2 : 0,
-    maximumFractionDigits: price < 10 ? 2 : 0,
+    minimumFractionDigits: Number.isInteger(price) ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(price)
 }
 

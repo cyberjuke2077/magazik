@@ -3,23 +3,13 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowUpDown, ArrowUp } from 'lucide-react'
-import { formatPrice } from '@/lib/catalog-utils'
+import { formatPrice } from '@/lib/utils'
+import type { Product } from '@/lib/queries/products'
 import { BulkSelectCheckbox } from './bulk-select-panel'
 import { AddToCartBtn } from './add-to-cart-btn'
 
 interface ProductTableProps {
-  products: Array<{
-    id: string
-    slug: string
-    name: string
-    partNumber: string
-    manufacturer: string
-    price: number
-    minOrder: number
-    package?: string | null
-    lifecycle?: string | null
-    lastEnrichedAt?: string | null
-  }>
+  products: Product[]
 }
 
 type SortKey = 'partNumber' | 'name' | 'manufacturer'
@@ -177,12 +167,7 @@ export function ProductTable({ products }: ProductTableProps) {
                 {/* Action */}
                 <td className="px-2">
                   <AddToCartBtn
-                    productId={product.id}
-                    partNumber={product.partNumber}
-                    name={product.name}
-                    manufacturer={product.manufacturer}
-                    minOrder={product.minOrder}
-                    price={displayPrice}
+                    product={product}
                   />
                 </td>
               </tr>

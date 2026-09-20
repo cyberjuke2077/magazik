@@ -1,1 +1,0 @@
-export const EXCEL_TOTAL_DEFAULT = 69_116

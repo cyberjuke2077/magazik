@@ -5,14 +5,15 @@ import { usePathname } from 'next/navigation'
 import { CircleHelp, GitCompareArrows, Grid3X3, Home, MessageSquare, ShoppingCart, UserRound } from 'lucide-react'
 import { useCart } from '@/hooks/use-cart'
 import { LiveSearchDropdown } from '@/components/ui/live-search-dropdown'
+import { formatPrice } from '@/lib/utils'
 
 export function StickyNav() {
   const pathname = usePathname()
-  const { items, totalPrice, mounted: cartMounted } = useCart()
+  const { items, totalPrice, unpricedItems, mounted: cartMounted } = useCart()
   const cartCount = items.length
 
   const formattedTotal = cartMounted
-    ? totalPrice.toLocaleString('ru-RU', { maximumFractionDigits: 0 })
+    ? formatPrice(totalPrice)
     : ''
 
   return (
@@ -48,10 +49,10 @@ export function StickyNav() {
 
           <div className="hidden h-14 grid-cols-[90px_90px_90px_57px] lg:grid">
             <HeaderAction href="/compare" label="Сравнение" icon={GitCompareArrows} active={pathname === '/compare'} />
-            <HeaderAction href="/account" label="Профиль" icon={UserRound} active={pathname.startsWith('/account')} />
+            <HeaderAction href="/account" label="Заявки" icon={UserRound} active={pathname.startsWith('/account')} />
             <HeaderAction
               href="/cart"
-              label={cartMounted && totalPrice > 0 ? `${formattedTotal} ₽` : 'Корзина'}
+              label={cartMounted && unpricedItems === 0 && totalPrice > 0 ? formattedTotal : 'Корзина'}
               icon={ShoppingCart}
               count={cartCount}
               cart
@@ -67,7 +68,7 @@ export function StickyNav() {
         <MobileNavItem href="/catalog" label="Каталог" icon={Grid3X3} active={pathname.startsWith('/catalog')} />
         <MobileNavItem href="/compare" label="Сравнить" icon={GitCompareArrows} active={pathname === '/compare'} />
         <MobileNavItem href="/cart" label="Корзина" icon={ShoppingCart} active={pathname === '/cart' || pathname.startsWith('/request-')} />
-        <MobileNavItem href="/account" label="Профиль" icon={UserRound} active={pathname.startsWith('/account')} />
+        <MobileNavItem href="/account" label="Заявки" icon={UserRound} active={pathname.startsWith('/account')} />
       </nav>
     </div>
   )

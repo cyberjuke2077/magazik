@@ -4,7 +4,8 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import fc from 'fast-check'
 
-import { formatPrice, parseCatalogParams } from '@/lib/catalog-utils'
+import { parseCatalogParams } from '@/lib/catalog-utils'
+import { formatPrice } from '@/lib/utils'
 import {
   addToRequestList,
   getRequestList,
@@ -12,6 +13,24 @@ import {
   updateRequestListQuantity,
 } from '@/lib/request-list-store'
 import { validateQuoteInput, isValidQuoteStatus, VALID_STATUSES } from '@/lib/validate-quote-input'
+import type { Product } from '@/types'
+
+function testProduct(item: {
+  productId: string
+  partNumber: string
+  name: string
+  manufacturer: string
+  minOrder: number
+  price: number | null
+}): Product {
+  return {
+    id: item.productId, slug: `product-${item.productId}`, name: item.name,
+    partNumber: item.partNumber, category: 'Test', categorySlug: 'test',
+    manufacturer: item.manufacturer, price: item.price ?? 0, currency: 'RUB',
+    inStock: true, stockCount: 1, unit: 'шт', minOrder: item.minOrder,
+    description: '', specs: {}, tags: [], images: [],
+  }
+}
 
 /**
  * Property 1: Форматирование цены
@@ -146,13 +165,13 @@ describe('Property 7: URL params round-trip', () => {
  * Validates: Requirements 5.2, 5.5
  */
 describe('Property 4: RequestList round-trip', () => {
-  beforeEach(() => {
-    clearRequestList()
+  beforeEach(async () => {
+    await clearRequestList()
   })
 
-  it('for any array of items: add all → getRequestList returns all with correct fields', () => {
-    fc.assert(
-      fc.property(
+  it('for any array of items: add all → getRequestList returns all with correct fields', async () => {
+    await fc.assert(
+      fc.asyncProperty(
         fc.array(
           fc.record({
             productId: fc.uuid(),
@@ -164,8 +183,8 @@ describe('Property 4: RequestList round-trip', () => {
           }),
           { minLength: 1, maxLength: 10 },
         ),
-        (items) => {
-          clearRequestList()
+        async (items) => {
+          await clearRequestList()
 
           // Add items with unique productIds
           const uniqueItems = items.filter(
@@ -173,15 +192,7 @@ describe('Property 4: RequestList round-trip', () => {
           )
 
           for (const item of uniqueItems) {
-            addToRequestList({
-              productId: item.productId,
-              partNumber: item.partNumber,
-              name: item.name,
-              manufacturer: item.manufacturer,
-              minOrder: item.minOrder,
-              price: item.price,
-              quantity: item.minOrder,
-            })
+            await addToRequestList(testProduct(item), item.minOrder)
           }
 
           const stored = getRequestList()
@@ -210,32 +221,27 @@ describe('Property 4: RequestList round-trip', () => {
  * Validates: Requirements 5.4
  */
 describe('Property 5: minOrder invariant', () => {
-  beforeEach(() => {
-    clearRequestList()
+  beforeEach(async () => {
+    await clearRequestList()
   })
 
-  it('for any item with minOrder M and any quantity Q < M, stored quantity is >= M', () => {
-    fc.assert(
-      fc.property(
+  it('for any item with minOrder M and any quantity Q < M, stored quantity is >= M', async () => {
+    await fc.assert(
+      fc.asyncProperty(
         fc.integer({ min: 2, max: 100 }),
         fc.integer({ min: 0, max: 1000 }),
         fc.uuid(),
-        (minOrder, quantity, productId) => {
-          clearRequestList()
+        async (minOrder, quantity, productId) => {
+          await clearRequestList()
 
           // Add item first
-          addToRequestList({
-            productId,
-            partNumber: 'TEST-001',
-            name: 'Test Product',
-            manufacturer: 'TestCorp',
-            minOrder,
-            price: 100,
-            quantity: minOrder,
-          })
+          await addToRequestList(testProduct({
+            productId, partNumber: 'TEST-001', name: 'Test Product',
+            manufacturer: 'TestCorp', minOrder, price: 100,
+          }), minOrder)
 
           // Try to update with arbitrary quantity (could be less than minOrder)
-          updateRequestListQuantity(productId, quantity)
+          await updateRequestListQuantity(productId, quantity)
 
           const stored = getRequestList()
           const item = stored.find((i) => i.productId === productId)
@@ -349,6 +355,14 @@ describe('Property 6: QuoteRequest validation', () => {
       fc.property(validInputArb, (base) => {
         const duplicate = [base.items[0], base.items[0]]
         expect(validateQuoteInput({ ...base, items: duplicate }).valid).toBe(false)
+        expect(validateQuoteInput({
+          ...base,
+          unexpected: { nested: true },
+        } as unknown as Parameters<typeof validateQuoteInput>[0]).valid).toBe(false)
+        expect(validateQuoteInput({
+          ...base,
+          items: [{ ...base.items[0], unexpected: 'payload' }],
+        } as unknown as Parameters<typeof validateQuoteInput>[0]).valid).toBe(false)
         expect(
           validateQuoteInput({
             ...base,
@@ -360,6 +374,26 @@ describe('Property 6: QuoteRequest validation', () => {
         ).toBe(false)
       }),
       { numRuns: 30 },
+    )
+  })
+
+  it('rejects a delivery date before the current Moscow business date', () => {
+    fc.assert(
+      fc.property(validInputArb, (base) => {
+        const now = new Date('2026-09-17T21:30:00.000Z')
+        expect(validateQuoteInput({
+          ...base,
+          desiredDeliveryDate: '2026-09-17',
+        }, now)).toEqual({
+          valid: false,
+          error: 'Желаемая дата поставки не может быть в прошлом',
+        })
+        expect(validateQuoteInput({
+          ...base,
+          desiredDeliveryDate: '2026-09-18',
+        }, now).valid).toBe(true)
+      }),
+      { numRuns: 10 },
     )
   })
 

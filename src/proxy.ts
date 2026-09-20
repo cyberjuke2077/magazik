@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { ADMIN_COOKIE, verifySessionToken } from '@/lib/admin-auth'
+import { ADMIN_COOKIE, verifySessionTokenSignature } from '@/lib/admin-session-token'
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -8,7 +8,7 @@ export async function proxy(request: NextRequest) {
   if (pathname === '/admin/login') return NextResponse.next()
 
   const token = request.cookies.get(ADMIN_COOKIE)?.value
-  if (await verifySessionToken(token)) return NextResponse.next()
+  if (await verifySessionTokenSignature(token)) return NextResponse.next()
 
   // API - 401, страницы - редирект на логин
   if (pathname.startsWith('/api/')) {

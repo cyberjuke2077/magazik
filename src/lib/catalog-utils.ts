@@ -1,3 +1,4 @@
+import { normalizeSearchQuery } from './search-query'
 export type SortOption = 'name' | 'partNumber' | 'date' | 'manufacturer'
 export type ViewMode = 'list' | 'table'
 
@@ -54,7 +55,7 @@ export function parseCatalogParams(
   if (page > totalPages) page = totalPages
 
   // Parse query
-  const trimmedQuery = rawQuery?.trim() || null
+  const trimmedQuery = rawQuery ? normalizeSearchQuery(rawQuery) : null
   const query = trimmedQuery || null
 
   // Parse category slug
@@ -82,16 +83,6 @@ export function parseCatalogParams(
     sort,
     view,
   }
-}
-
-export function formatPrice(price: number | null | undefined): string {
-  if (price === null || price === undefined || price === 0) {
-    return 'Цена по запросу'
-  }
-
-  const rounded = Math.round(price)
-  const formatted = rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
-  return `${formatted} ₽`
 }
 
 export function isNewProduct(lastEnrichedAt: string | Date | null | undefined): boolean {

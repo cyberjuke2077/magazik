@@ -1,5 +1,6 @@
 'use server'
 
+import { drainNotifications } from '@/lib/notification-outbox'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
@@ -55,8 +56,8 @@ export async function updateProductPricing(
 ): Promise<{ ok: boolean; error?: string }> {
   try {
     await requireAdmin()
-    const stockCount = input.stockCount.trim() === '' ? 0 : parseInt(input.stockCount, 10)
-    if (!Number.isFinite(stockCount) || stockCount < 0) {
+    const stockCount = input.stockCount.trim() === '' ? 0 : Number(input.stockCount)
+    if (!Number.isSafeInteger(stockCount) || stockCount < 0 || stockCount > 2147483647) {
       return { ok: false, error: 'Некорректный остаток' }
     }
     await prisma.product.update({
@@ -74,4 +75,22 @@ export async function updateProductPricing(
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Ошибка' }
   }
+}
+
+export async function updateWholesaleStatus(id: string, status: string) {
+  try {
+    await requireAdmin()
+    if (!['new', 'in_progress', 'closed'].includes(status)) return { ok: false, error: 'Неизвестный статус' }
+    await prisma.wholesaleLead.update({ where: { id }, data: { status } })
+    revalidatePath('/admin/wholesale')
+    return { ok: true }
+  } catch { return { ok: false, error: 'Не удалось обновить статус' } }
+}
+
+export async function retryNotifications() {
+  await requireAdmin()
+  await prisma.notificationJob.updateMany({ where: { status: { in: ['failed', 'pending'] } },
+    data: { status: 'pending', attempts: 0, nextAttempt: new Date() } })
+  await drainNotifications(4)
+  revalidatePath('/admin/notifications')
 }

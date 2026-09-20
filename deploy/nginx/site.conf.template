@@ -1,0 +1,34 @@
+# Preparation only. Replace shop.example.invalid and certificate paths on staging.
+# DNS must point directly to this nginx. A CDN/LB needs a separately reviewed trust chain.
+server {
+    listen 80 default_server;
+    server_name _;
+    return 444;
+}
+
+server {
+    listen 443 ssl default_server;
+    server_name _;
+    ssl_reject_handshake on;
+    return 444;
+}
+
+server {
+    listen 80;
+    server_name shop.example.invalid;
+    return 308 https://shop.example.invalid$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name shop.example.invalid;
+    ssl_certificate /etc/letsencrypt/live/shop.example.invalid/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/shop.example.invalid/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    # Bearer status URLs must not enter an access log.
+    access_log off;
+
+    location / {
+        include /etc/nginx/snippets/electromagaz-proxy.conf;
+    }
+}

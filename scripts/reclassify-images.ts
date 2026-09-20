@@ -32,6 +32,7 @@ import {
   contentHash,
 } from '../src/lib/enrichment/images/image-classifier'
 import { extractPackageFamily } from '../src/lib/enrichment/images/package-extractor'
+import { fetchImageBytes } from '../src/lib/storage/image-download'
 
 /** Контент, встречающийся у скольки разных товаров считаем junk-заглушкой. */
 const JUNK_MIN_DUPES = 3
@@ -63,9 +64,7 @@ async function classifyAll(
     await Promise.all(
       slice.map(async (r) => {
         try {
-          const resp = await fetch(r.imageUrl)
-          if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-          const buf = Buffer.from(await resp.arrayBuffer())
+          const buf = await fetchImageBytes(r.imageUrl)
           const { verdict } = await classifyImage(buf)
           out.set(r.id, { verdict, hash: contentHash(buf) })
         } catch (err) {
