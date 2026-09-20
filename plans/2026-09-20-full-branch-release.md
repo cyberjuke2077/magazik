@@ -5,15 +5,15 @@
 Принятая главная и девять опубликованных R2 PNG сохраняются.
 
 - [x] Сверить production target, миграции, права runtime и настройки Vercel.
-- [ ] Подготовить обратимый переход БД: schema/grants snapshot, dry-run, три миграции.
+- [x] Подготовить обратимый переход БД: schema/grants snapshot, dry-run, три миграции.
 - [ ] Подготовить безопасный запуск очереди уведомлений, проверить секреты и админку.
 - [x] Прогнать локальные release-проверки: 420 unit, 14 integration, 71 E2E, build/lint/tsc/audit.
 - [x] Проверить миграции и runtime CRUD на восстановленной синтетической PostgreSQL 17.
-- [ ] Подтвердить совместимость старого приложения на реальном production backup.
-- [ ] Применить необходимые зависимости к согласованному target и проверить runtime.
-- [x] Push и [draft PR #26](https://github.com/cyberjuke2077/magazik/pull/26).
-- [x] GitHub web CI и Windows smoke на `9f4cfb5` прошли.
-- [ ] Merge, проверка production deployment и публичного сайта.
+- [x] Подтвердить совместимость старого приложения на реальном production backup.
+- [x] Применить необходимые зависимости к согласованному target и проверить runtime.
+- [x] Push и [PR #26](https://github.com/cyberjuke2077/magazik/pull/26).
+- [x] GitHub web CI и Windows smoke на `12403b0` прошли.
+- [x] Merge, проверка production deployment и публичного сайта.
 - [x] Обновить второй мозг точными SHA, проверками и оставшимися ограничениями.
 
 Targets: GitHub cyberjuke2077/magazik; Vercel electromagaz-production
@@ -22,9 +22,8 @@ Targets: GitHub cyberjuke2077/magazik; Vercel electromagaz-production
 Тестовые сообщения людям не отправляются без явного указания пользователя.
 Не считать локальные тесты доказательством production-приёмки.
 
-Реализовано: принятая главная и R2 опубликованы в ветке 88378a8;
-release-тесты стабилизированы в d9bf95b и 9f4cfb5, финальный CI зелёный.
-Подготовлен выключенный cron SQL.
-Осталось: реальные backup/restore, миграции, env/scheduler и выпуск.
-Backup и передача секретов отклонены автоматической проверкой до отдельного
-разрешения. Точные targets, checksum и границы: [release handoff](../docs/operations/full-branch-release-2026-09-20.md).
+Реализовано: PR #26 слит (`ae1f732`), production READY на том же SHA.
+Реальный backup восстановлен, три миграции применены, runtime CRUD, публичные
+маршруты и login/logout проверены. Env, Vault и выключенный scheduler готовы.
+Осталось: уточнение разрешения на штатную обработку очереди, запуск cron
+и одно тестовое сообщение. Подробности: [итоги выпуска](../docs/operations/release-closeout-2026-09-20.md).
