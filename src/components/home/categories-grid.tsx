@@ -3,10 +3,11 @@ import Link from 'next/link'
 import { type CatalogSectionView } from '@/lib/queries/categories'
 
 const CATEGORY_PHOTOS: Record<string, string> = {
-  mikrokontrollery: '/storefront/category-mcu.jpg',
+  mikrokontrollery: '/storefront/objects-v2/category-mcu.png',
+  'passivnye-komponenty': '/storefront/objects-v2/category-passives.png',
   datchiki: '/storefront/category-sensors.jpg',
   'atsp-tsap': '/storefront/category-converters.jpg',
-  pitanie: '/storefront/category-power.jpg',
+  pitanie: '/storefront/objects-v2/category-power.png',
   usiliteli: '/storefront/category-amplifiers.jpg',
   interfeysy: '/storefront/category-interfaces.jpg',
   rch: '/storefront/category-rf.jpg',
@@ -22,20 +23,18 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
   if (featuredSections.length === 0) return null
 
   return (
-    <section className="bg-white pb-2 pt-[18px] lg:pb-[29px] lg:pt-[29px]" data-motion-reveal>
+    <section className="bg-white pb-3 pt-4 lg:pb-5 lg:pt-6" data-motion-reveal>
       <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
-        <div className="grid grid-flow-dense grid-cols-2 gap-3 lg:grid-cols-12 lg:gap-5">
-          {featuredSections.map((section, index) => {
+        <div className={`no-scrollbar grid auto-cols-[156px] grid-flow-col gap-3 overflow-x-auto pb-1 lg:auto-cols-auto lg:grid-flow-row lg:gap-6 lg:overflow-visible ${featuredSections.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'}`}>
+          {featuredSections.map((section) => {
             const children = section.children.slice(0, 4)
 
             return (
               <article
                 key={section.id}
-                className={`min-w-0 overflow-hidden rounded-xl bg-surface-muted transition-colors hover:bg-azure-dim lg:col-span-3 lg:overflow-visible lg:rounded-2xl lg:bg-transparent lg:p-3 ${
-                  index >= 2 ? 'hidden lg:block' : ''
-                }`}
+                className="min-w-0 overflow-hidden rounded-xl bg-white lg:overflow-visible"
               >
-                <h2 className="hidden text-[18px] font-bold leading-tight text-ink lg:mb-[26px] lg:block">
+                <h2 className="hidden text-[16px] font-bold leading-tight text-ink lg:mb-4 lg:block">
                   {section.name}
                 </h2>
                 <div className="lg:flex lg:items-start lg:gap-4">
@@ -43,15 +42,15 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
                   href={`/catalog?category=${section.slug}`}
                   className="group block shrink-0"
                 >
-                  <div className="relative h-[96px] overflow-hidden bg-white lg:size-[112px] lg:rounded-xl lg:border lg:border-[var(--border)]">
+                  <div className="relative h-[96px] overflow-hidden rounded-xl border border-black/6 bg-white lg:size-[104px]">
                     <Image
                       src={categoryPhoto(section.slug)}
                       alt={section.name}
                       fill
                       loading="eager"
                       fetchPriority="high"
-                      className="object-cover saturate-[1.18] contrast-[1.04] brightness-[1.08] transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
-                      sizes="(max-width: 1024px) 50vw, 112px"
+                      className="object-contain p-3 transition-transform duration-700 ease-out motion-reduce:transition-none group-hover:scale-105"
+                      sizes="(min-width: 1024px) 104px, 156px"
                     />
                   </div>
                   <div className="flex min-h-12 items-center px-3 py-2 lg:hidden">
@@ -61,7 +60,7 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
                   </div>
                 </Link>
 
-                {children.length > 0 && (
+                {children.length > 0 ? (
                   <ul className="hidden min-w-0 flex-1 lg:block">
                     {children.map((child) => (
                       <li key={child.id}>
@@ -74,6 +73,11 @@ export function CategoriesGrid({ sections }: { sections: CatalogSectionView[] })
                       </li>
                     ))}
                   </ul>
+                ) : (
+                  <div className="hidden min-w-0 pt-1 text-[13px] text-ink-3 lg:block">
+                    <p>Позиций в каталоге: {section.productCount}</p>
+                    <Link href={`/catalog?category=${section.slug}`} className="mt-3 inline-block font-medium text-ink-2 hover:text-azure">Все товары →</Link>
+                  </div>
                 )}
                 </div>
               </article>

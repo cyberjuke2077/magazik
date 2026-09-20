@@ -9,13 +9,14 @@ import { CategoriesGrid } from '@/components/home/categories-grid'
 import { Manufacturers } from '@/components/home/manufacturers'
 import { RecentProducts } from '@/components/home/recent-products'
 import { getCatalogSections } from '@/lib/queries/categories'
+import styles from './home-page.module.css'
 
 export default async function HomePage() {
   await connection()
   const sections = await getCatalogSections()
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className={`${styles.page} flex min-h-screen flex-col bg-white`}>
       <OrganizationJsonLd />
       <Header />
       <StickyNav />
@@ -23,8 +24,8 @@ export default async function HomePage() {
       <main className="flex-1">
         <HeroSlider />
         <CategoriesGrid sections={sections} />
-        <RecentProducts />
         <Manufacturers />
+        <RecentProducts />
         <RecentlyViewed variant="home" />
       </main>
 

@@ -1,0 +1,6 @@
+/* Keep the homepage shelf, header and category rows on one inset grid. */
+@media (min-width: 1024px) {
+  .page :global(.max-w-\[1380px\]) {
+    width: calc(100% - 48px);
+  }
+}

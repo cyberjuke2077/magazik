@@ -51,6 +51,7 @@ next-env.d.ts
 
 # Local-only generated homepage candidate; upload to R2 only after approval.
 /public/storefront/editorial-v1/
+/public/storefront/objects-v2/
 
 # python
 __pycache__/

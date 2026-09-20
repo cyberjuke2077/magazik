@@ -26,6 +26,7 @@ function isNewProduct(createdAt?: string): boolean {
 interface ProductCardProps {
   product: Product
   priority?: boolean
+  variant?: 'default' | 'home'
 }
 
 // Единая тема - azure (30% палитра)
@@ -34,7 +35,7 @@ const cardTheme = {
   iconColor: 'text-azure',
 }
 
-export function ProductCard({ product, priority = false }: ProductCardProps) {
+export function ProductCard({ product, priority = false, variant = 'default' }: ProductCardProps) {
   const router = useRouter()
 
   const { addItem, isInCart, getQuantity, updateQuantity } = useCart()
@@ -78,10 +79,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+    <article className={`group flex h-full flex-col overflow-hidden rounded-2xl bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${variant === 'home' ? 'border border-black/6' : 'shadow-sm'}`}>
       {/* Image zone */}
       <div
-        className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${cardTheme.bg}`}
+        className={`relative flex h-[138px] items-center justify-center overflow-hidden sm:h-[156px] ${variant === 'home' ? 'bg-white' : cardTheme.bg}`}
       >
         <Link
           href={`/product/${product.slug}`}
@@ -97,7 +98,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
-            className="z-10 object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+            className="pointer-events-none z-10 object-contain p-3 transition-transform duration-300 group-hover:scale-105"
           />
         ) : packageSvg ? (
           <Image
@@ -107,10 +108,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             loading={priority ? 'eager' : 'lazy'}
             fetchPriority={priority ? 'high' : 'auto'}
             sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 240px"
-            className="z-10 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+            className="pointer-events-none z-10 object-contain p-5 transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="relative z-10 icon-svg">
+          <div className="pointer-events-none relative z-10 icon-svg">
             <CategoryIcon
               slug={product.categorySlug || ''}
               size={72}
