@@ -21,6 +21,19 @@ GitHub web и Windows smoke прошли. Vercel checks подтверждают
 
 ## Проверенные targets
 
+Повторная сверка при продолжении 2026-09-20: рабочее дерево чистое,
+HEAD и origin ветки совпадают на `528ddbeffc28268d98e2b3f14c7e92a791ef39cf`.
+После fetch main остаётся на `2bd5d94480eb24e359a0bba10c232699ab5b88b5`.
+PR #26 открыт как draft. На `528ddbe` успешно завершились
+[web CI](https://github.com/cyberjuke2077/magazik/actions/runs/35535609731)
+и [Windows smoke](https://github.com/cyberjuke2077/magazik/actions/runs/35535609703).
+Отличия от `9f4cfb5` затрагивают только документы.
+Read-only запрос подтвердил ACTIVE_HEALTHY target, PostgreSQL 17.6,
+9 записей Prisma и отсутствие трёх новых таблиц. SHA-256 миграций повторно
+сверены с таблицей ниже. Запросы разрешений на backup/миграции и
+secrets/scheduler повторно показаны владельцу; ответа пока нет.
+Production-изменения в этой сверке не выполнялись.
+
 | Контур | Target |
 | --- | --- |
 | GitHub | `cyberjuke2077/magazik` |
