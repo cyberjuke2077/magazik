@@ -87,6 +87,7 @@ test('товар проходит путь от каталога до сохра
     const productCard = page.locator('article').filter({ hasText: 'TPS5430DDAR' })
     await expect(productCard).toBeVisible()
     await productCard.getByText('Понижающий преобразователь TPS5430DDAR', { exact: true }).click()
+    await expect(page).toHaveURL(/\/product\/[^/]+$/)
     await expect(page.getByRole('heading', { name: 'Понижающий преобразователь TPS5430DDAR' })).toBeVisible()
     await expect(page.getByText('Входное напряжение', { exact: true })).toBeVisible()
     await expect(page.getByRole('img', { name: /TPS5430DDAR/ }).first()).toBeVisible()
@@ -121,11 +122,18 @@ test('товар проходит путь от каталога до сохра
     await expect(secondProduct.getByRole('button', { name: 'Перейти в корзину' })).toBeVisible()
 
     await page.getByRole('link', { name: 'Корзина', exact: true }).first().click()
+    await expect(page).toHaveURL(/\/cart$/)
     await expect(page.getByText('TPS5430DDAR', { exact: true })).toBeVisible()
     await expect(page.getByText('STM32F103C8T6', { exact: true })).toBeVisible()
     const quantity = page.getByRole('textbox', { name: 'Количество TPS5430DDAR' })
     await quantity.fill('11')
     await quantity.press('Enter')
+    await expect.poll(() => page.evaluate(() => {
+      const stored = JSON.parse(localStorage.getItem('electromagaz_cart') ?? '{}') as {
+        items?: Array<{ quantity: number; snapshot?: { partNumber?: string } }>
+      }
+      return stored.items?.find((item) => item.snapshot?.partNumber === 'TPS5430DDAR')?.quantity
+    })).toBe(11)
     await page.reload()
     await expect(page.getByRole('textbox', { name: 'Количество TPS5430DDAR' })).toHaveValue('11')
     await page.getByRole('link', { name: 'Перейти к оформлению' }).click()

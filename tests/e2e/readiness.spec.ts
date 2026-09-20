@@ -133,10 +133,13 @@ test('catalog cart keeps the canonical product and refreshes changed commercial 
 })
 
 test('malformed cart storage does not break the storefront shell', async ({ page }) => {
-  await page.goto('/catalog')
+  await page.goto('/catalog?q=TPS5430DDAR')
+  const product = page.locator('[data-catalog-product-row]').filter({ hasText: 'TPS5430DDAR' })
+  await expect(product).toBeVisible()
   await page.evaluate(() => localStorage.setItem('electromagaz_cart', 'null'))
   await page.reload()
-  await expect(page.locator('header')).toBeVisible()
+  await expect(product).toBeVisible()
+  await expect(page.getByRole('banner')).toBeVisible()
   await expect(page.getByText('Не удалось загрузить страницу')).toHaveCount(0)
 })
 

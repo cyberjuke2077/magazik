@@ -46,6 +46,8 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e:local -- --grep-invert 'visual baseline'
+        env:
+          E2E_SERVER_COMMAND: npm run start -- --hostname 127.0.0.1 --port 3000
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

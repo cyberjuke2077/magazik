@@ -144,6 +144,8 @@ it('failed delivery stays durable and parallel workers do not deliver the same c
   // This isolated database is used only by this suite, before browser tests.
   await prisma.notificationJob.updateMany({ data: { status: 'sent' } })
   const id = await saveSubmission(key(), 'wholesale', lead, (tx) => tx.wholesaleLead.create({ data: lead }))
+  // Test retry/claim semantics with an explicitly due job, independent of clock precision.
+  await prisma.notificationJob.updateMany({ where: { requestId: id }, data: { nextAttempt: new Date(0) } })
   notify.mockResolvedValueOnce({ status: 'failed', errorType: 'TimeoutError' })
   await drainNotifications(1)
   const pending = await prisma.notificationJob.findFirstOrThrow({ where: { requestId: id } })
