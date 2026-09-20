@@ -1,12 +1,9 @@
-import { EXCEL_TOTAL_DEFAULT } from '../constants/observability'
-
 interface ImportProgressLite {
   totalProducts?: number | null
 }
 
 export function resolveExcelTotal(progress: ImportProgressLite | null): number {
-  if (progress?.totalProducts && progress.totalProducts > 0) return progress.totalProducts
-  return EXCEL_TOTAL_DEFAULT
+  return progress?.totalProducts ?? 0
 }
 
 export interface ExcelRemainder {
