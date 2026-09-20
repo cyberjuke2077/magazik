@@ -4,11 +4,15 @@
 
 Владелец ответил: сначала доделать зависимости всей ветки, затем слить.
 Продолжать с [release handoff](full-branch-release-2026-09-20.md).
-420 unit, 14 integration, 71 production E2E прошли; кодовые проверки `d9bf95b`.
+Финальный кандидат `9f4cfb58e1385827611fa909af84cd405aef8769` опубликован.
+420 unit, 14 integration, 71 локальный E2E на production-сборке прошли.
+GitHub web CI и Windows smoke на этом SHA зелёные; web E2E: 63 passed / 1 skip.
 Реальный backup и передача Telegram/cron secrets заблокированы автоматической
 проверкой до отдельного разрешения. Production migrations и merge не выполнены.
 Ветка опубликована, [PR #26](https://github.com/cyberjuke2077/magazik/pull/26)
 остаётся draft до закрытия этих зависимостей.
+Первый следующий шаг - ответы на два запроса из release handoff: backup
+с миграциями и секреты с scheduler/тестовым сообщением. Ответов пока нет.
 Ниже история этой сессии; прежние ограничения и ожидаемые ответы не актуальнее
 нового решения и release handoff.
 

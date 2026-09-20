@@ -2,6 +2,15 @@
 
 ## Подготовка всей ветки после приёмки
 
+Финальная фиксация: `9f4cfb58e1385827611fa909af84cd405aef8769` опубликован,
+[PR #26](https://github.com/cyberjuke2077/magazik/pull/26) остаётся draft.
+GitHub Storefront checks (63 E2E / 1 expected skip) и Windows smoke прошли.
+Первый CI обнаружил ещё два неверных ожидания streaming HTML и преобразования
+cart storage; исправления подтверждены 12 локальными повторами и финальным CI.
+Второй мозг обновлён после живой сверки remote SHA, состояния PR и checks.
+Сняты устаревшие формулировки о выполняющемся CI, уточнена единая точка
+продолжения и точный состав двух разрешений. Подтверждающих ответов пока нет.
+
 Задача: закончить зависимости накопленной ветки перед разрешённым merge.
 Проверены targets, production schema/grants и Vercel env. Полный production E2E:
 71 passed, 1 ожидаемый skip; 420 unit, 14 integration, lint/tsc/build/audit прошли.

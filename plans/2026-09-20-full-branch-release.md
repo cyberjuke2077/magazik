@@ -12,8 +12,9 @@
 - [ ] Подтвердить совместимость старого приложения на реальном production backup.
 - [ ] Применить необходимые зависимости к согласованному target и проверить runtime.
 - [x] Push и [draft PR #26](https://github.com/cyberjuke2077/magazik/pull/26).
-- [ ] Проверки GitHub, merge, проверка deployment и публичного сайта.
-- [ ] Обновить второй мозг точными SHA, проверками и оставшимися ограничениями.
+- [x] GitHub web CI и Windows smoke на `9f4cfb5` прошли.
+- [ ] Merge, проверка production deployment и публичного сайта.
+- [x] Обновить второй мозг точными SHA, проверками и оставшимися ограничениями.
 
 Targets: GitHub cyberjuke2077/magazik; Vercel electromagaz-production
 (prj_RkTeKu3bIIkImfBTfU11zTzpw8bm); Supabase dbumwpnbtvixfusxnggn.
@@ -22,7 +23,8 @@ Targets: GitHub cyberjuke2077/magazik; Vercel electromagaz-production
 Не считать локальные тесты доказательством production-приёмки.
 
 Реализовано: принятая главная и R2 опубликованы в ветке 88378a8;
-release-тесты стабилизированы в d9bf95b. Подготовлен выключенный cron SQL.
+release-тесты стабилизированы в d9bf95b и 9f4cfb5, финальный CI зелёный.
+Подготовлен выключенный cron SQL.
 Осталось: реальные backup/restore, миграции, env/scheduler и выпуск.
 Backup и передача секретов отклонены автоматической проверкой до отдельного
 разрешения. Точные targets, checksum и границы: [release handoff](../docs/operations/full-branch-release-2026-09-20.md).
