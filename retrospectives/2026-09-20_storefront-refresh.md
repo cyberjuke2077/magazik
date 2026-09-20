@@ -1,5 +1,22 @@
 # Обновление витрины и подготовка наполнения, 2026-09-20
 
+## Подготовка всей ветки после приёмки
+
+Задача: закончить зависимости накопленной ветки перед разрешённым merge.
+Проверены targets, production schema/grants и Vercel env. Полный production E2E:
+71 passed, 1 ожидаемый skip; 420 unit, 14 integration, lint/tsc/build/audit прошли.
+Три миграции проверены на PostgreSQL 17 с восстановлением синтетического backup,
+ROLLBACK и COMMIT. Результат частичный: production backup и передача секретов
+отклонены автоматической проверкой; БД, Vercel env и main не изменены.
+
+Что можно было лучше: сначала читать error-context, затем сообщать диагноз.
+Падение CSS locator ошибочно названо поломкой корзины; фактически приложение
+не требовало правки. Обновлено [правило](../ai-clone/feedback/verify-test-failure-before-diagnosis.md).
+Rule: проверять точную ошибку теста до объявления пользовательского бага | Why:
+две шапки в streaming HTML вызвали неоднозначность locator, а не падение корзины.
+Второй мозг: [полный release handoff](../docs/operations/full-branch-release-2026-09-20.md),
+план подготовки, актуальные INDEX и проект выключенного notification cron.
+
 ## Приёмка и подготовка push/merge
 
 Владелец принял компактную главную и запросил push/merge. Девять PNG с его
