@@ -49,6 +49,9 @@ next-env.d.ts
 # session files
 .tmp/
 
+# Local-only generated homepage candidate; upload to R2 only after approval.
+/public/storefront/editorial-v1/
+
 # python
 __pycache__/
 *.py[cod]
