@@ -10,6 +10,10 @@
 `d9bf95b5a973c50feb0d84dd1227bb46110961a4` (проверки релиза).
 База main после свежего fetch: `2bd5d94480eb24e359a0bba10c232699ab5b88b5`.
 Merge и новый production deployment не выполнены.
+Ветка опубликована, открыт [draft PR #26](https://github.com/cyberjuke2077/magazik/pull/26).
+GitHub Windows smoke прошёл; web CI выполняется. Vercel checks подтверждают
+Preview-сборки, не production-приёмку. Локальный preview на порту 3000 отвечает
+200 и использует только `emg_readiness` с отключёнными уведомлениями.
 
 ## Проверенные targets
 
@@ -104,8 +108,9 @@ Turbopack и физический Windows-пилот в этом проходе 
 Получить отдельное разрешение на два заблокированных направления: backup
 production в локальную ignored-папку и передачу перечисленных секретов в
 Vercel/Vault. Затем backup/restore, три миграции с runtime-проверками,
-настройки уведомлений и выключенный scheduler. Только после этого и зелёного
-GitHub CI разрешённый merge в main, проверка точного deployment SHA,
+настройки уведомлений и выключенный scheduler. Только после этого перевести
+PR #26 из draft; после зелёного GitHub CI разрешённый merge в main,
+проверка точного deployment SHA,
 публичных маршрутов и admin session, включение cron и проверка HTTP-ответа.
 Реальное тестовое Telegram-сообщение требует явного разрешения.
 

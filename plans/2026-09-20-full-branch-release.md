@@ -11,7 +11,8 @@
 - [x] Проверить миграции и runtime CRUD на восстановленной синтетической PostgreSQL 17.
 - [ ] Подтвердить совместимость старого приложения на реальном production backup.
 - [ ] Применить необходимые зависимости к согласованному target и проверить runtime.
-- [ ] Push/PR, проверки GitHub, merge, проверка deployment и публичного сайта.
+- [x] Push и [draft PR #26](https://github.com/cyberjuke2077/magazik/pull/26).
+- [ ] Проверки GitHub, merge, проверка deployment и публичного сайта.
 - [ ] Обновить второй мозг точными SHA, проверками и оставшимися ограничениями.
 
 Targets: GitHub cyberjuke2077/magazik; Vercel electromagaz-production
