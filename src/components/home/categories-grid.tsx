@@ -1,13 +1,14 @@
+import { STOREFRONT_IMAGES } from '@/lib/storefront-images'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type CatalogSectionView } from '@/lib/queries/categories'
 
 const CATEGORY_PHOTOS: Record<string, string> = {
-  mikrokontrollery: '/storefront/objects-v2/category-mcu.png',
-  'passivnye-komponenty': '/storefront/objects-v2/category-passives.png',
+  mikrokontrollery: STOREFRONT_IMAGES['category-mcu'],
+  'passivnye-komponenty': STOREFRONT_IMAGES['category-passives'],
   datchiki: '/storefront/category-sensors.jpg',
   'atsp-tsap': '/storefront/category-converters.jpg',
-  pitanie: '/storefront/objects-v2/category-power.png',
+  pitanie: STOREFRONT_IMAGES['category-power'],
   usiliteli: '/storefront/category-amplifiers.jpg',
   interfeysy: '/storefront/category-interfaces.jpg',
   rch: '/storefront/category-rf.jpg',

@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import { STOREFRONT_ASSET_ORIGIN } from './src/lib/storefront-images'
 
 const r2PublicUrl = process.env.R2_PUBLIC_URL
 const r2Hostname = (() => {
@@ -17,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
+      { protocol: 'https', hostname: new URL(STOREFRONT_ASSET_ORIGIN).hostname, pathname: '/storefront/home-20260920/**' },
       { protocol: 'https', hostname: 'assets.lcsc.com' },
       { protocol: 'https', hostname: '*.lcsc.com' },
       { protocol: 'https', hostname: 'www.mouser.com' },

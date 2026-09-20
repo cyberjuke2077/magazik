@@ -1,37 +1,38 @@
+import { STOREFRONT_IMAGES } from '@/lib/storefront-images'
 import Image from 'next/image'
 import Link from 'next/link'
 
 const serviceCards = [
   {
-    image: '/storefront/objects-v2/mpn.png',
+    image: STOREFRONT_IMAGES['mpn'],
     href: '/catalog',
     title: 'Поиск по MPN',
     description: 'Точный артикул, корпус и производитель',
     tone: 'bg-[#e5efff]',
   },
   {
-    image: '/storefront/objects-v2/alternatives.png',
+    image: STOREFRONT_IMAGES['alternatives'],
     href: '/wholesale#request-form',
     title: 'Подбор аналогов',
     description: 'Совместимая замена для дефицитной позиции',
     tone: 'bg-[#e4f5ec]',
   },
   {
-    image: '/storefront/objects-v2/datasheet.png',
+    image: STOREFRONT_IMAGES['datasheet'],
     href: '/catalog?category=atsp-tsap',
     title: 'Документация',
     description: 'Характеристики, корпуса и datasheet',
     tone: 'bg-[#fff0df]',
   },
   {
-    image: '/storefront/objects-v2/supply.png',
+    image: STOREFRONT_IMAGES['supply'],
     href: '/wholesale',
     title: 'Серийные поставки',
     description: 'Комплектация BOM и коммерческое предложение',
     tone: 'bg-[#e6f4fb]',
   },
   {
-    image: '/storefront/objects-v2/makers.png',
+    image: STOREFRONT_IMAGES['makers'],
     href: '/brands',
     title: 'Производители',
     description: 'Компоненты ведущих мировых брендов',
@@ -49,7 +50,7 @@ export function HeroSlider() {
         >
           <div className="pointer-events-none absolute -bottom-6 -right-3 h-[112px] w-[128px]">
             <Image
-              src="/storefront/objects-v2/bom.png"
+              src={STOREFRONT_IMAGES.bom}
               alt="Электронные компоненты для комплектации спецификации"
               fill
               loading="eager"
