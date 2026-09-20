@@ -29,7 +29,7 @@ export default async function HomePage() {
         <RecentlyViewed variant="home" />
       </main>
 
-      <Footer />
+      <Footer compact />
     </div>
   )
 }

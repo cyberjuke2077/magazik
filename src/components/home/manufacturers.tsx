@@ -1,33 +1,43 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { BRANDS } from '@/lib/brands'
+import { HorizontalShelf } from '@/components/ui/horizontal-shelf'
+
+// Compensate for whitespace inside the original logos without changing the assets.
+const logoScale: Record<string, number> = {
+  espressif: 1.45, worldsemi: 2.5, wch: 2.25, hilink: 1.75,
+  gigadevice: 1.35, yageo: 1.2, murata: 1.18,
+}
 
 export function Manufacturers() {
   const brands = BRANDS.filter((b) => b.featured && b.logo).slice(0, 12)
   if (brands.length === 0) return null
 
   return (
-    <section className="bg-white pb-6 pt-4 lg:pb-8 lg:pt-6" aria-label="Производители" data-motion-reveal>
-      <div className="no-scrollbar mx-auto flex max-w-[1380px] gap-2.5 overflow-x-auto px-4 lg:gap-3 lg:px-0">
+    <section className="bg-white pb-6 pt-3 lg:pb-7 lg:pt-4" aria-label="Производители" data-motion-reveal>
+      <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
+        <HorizontalShelf label="Производители" className="flex gap-3 py-1">
         {brands.map((brand, index) => (
           <Link
             key={brand.id}
             href={brand.id === 'xilinx' ? '/brands#brand-xilinx' : `/catalog?manufacturer=${brand.id}`}
             aria-label={brand.name}
-            className="flex h-[64px] w-[128px] shrink-0 items-center justify-center rounded-xl border border-black/6 bg-white p-3 transition duration-300 hover:-translate-y-1 hover:border-azure/30 hover:shadow-[var(--shadow-azure-sm)] active:translate-y-0 lg:h-[68px] lg:w-auto lg:min-w-0 lg:flex-1"
+            className="flex h-[80px] w-[160px] shrink-0 items-center justify-center overflow-hidden rounded-xl border border-black/8 bg-white px-4 transition-colors hover:border-azure/40 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-azure"
           >
-            <span className="relative h-9 w-full">
+            <span className="relative h-[52px] w-full">
               <Image
                 src={brand.logo!}
                 alt={brand.name}
                 fill
                 loading={index < 3 ? 'eager' : 'lazy'}
                 className="object-contain"
-                sizes="(max-width: 1024px) 128px, 115px"
+                style={{ transform: `scale(${logoScale[brand.id] ?? 1})` }}
+                sizes="320px"
               />
             </span>
           </Link>
         ))}
+        </HorizontalShelf>
       </div>
     </section>
   )
