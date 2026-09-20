@@ -11,8 +11,9 @@ function database() {
 
 test('punctuation search renders a usable catalog, and the specification CTA opens a real form', async ({ page }) => {
   await page.goto('/catalog?q=%21%21')
+  await expect(page.getByRole('heading', { name: 'Ничего не найдено', exact: true })).toBeVisible()
   await expect(page.getByText('Произошла ошибка', { exact: false })).toHaveCount(0)
-  await expect(page.locator('main')).toBeVisible()
+  await expect(page.getByRole('main')).toBeVisible()
   await page.goto('/')
   await page.getByRole('link').filter({ hasText: 'Пришлите список MPN' }).click()
   await expect(page).toHaveURL(/\/wholesale#request-form$/)
@@ -88,6 +89,10 @@ test('quote line totals match wholesale pricing and an unknown item prevents a m
   await page.goto('/request-quote')
   await expect(page.getByText(/10 × 80/)).toBeVisible()
   await expect(page.getByText('Предварительная сумма:').locator('..')).toContainText(/800/)
+  await expect.poll(() => page.evaluate(() => {
+    const stored = JSON.parse(localStorage.getItem('electromagaz_cart') ?? '{}') as { version?: number }
+    return stored.version
+  })).toBe(1)
   await page.evaluate((product) => {
     const cart = JSON.parse(localStorage.getItem('electromagaz_cart')!)
     cart.items.push({ productId: product.id, snapshot: product, quantity: 10 })
