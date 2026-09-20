@@ -95,7 +95,17 @@ Playwright/Next выводят конфликт NO_COLOR/FORCE_COLOR. Прове
 | --- | --- |
 | `20260917021149_submission_outbox` | `bf5e4d7e57317944166d5129c0595691db35c5b70a00fefe3dc77758372b65a1` |
 | `20260917230000_add_admin_sessions` | `2bbe99bc363bda8cdb4555a0c50c96a0844ed36e57c6119ff7164ac5b3eaa0c3` |
-| `20260917233000_ensure_runtime_role_grants` | `0592395ee19c607c0e5d50b6a32c2d20db684f09dfe8f6c26fe231262b8eaac7` |
+| `20260917233000_ensure_runtime_role_grants` | `4cc9c80c2d66d97775f7a66137e1993f8707da9e64761c1bb80711dff00feb35` |
+
+После явного подтверждения владельца backup public schema/data создан вне Git
+с mode 0600 и восстановлен в изолированной PostgreSQL 17. Первая попытка DDL
+полностью откатилась: Supabase запрещает лишний `ALTER ROLE ... NOSUPERUSER`.
+Третья, ещё не применённая в production миграция исправлена: безопасная роль
+не требует ALTER, небезопасные атрибуты не игнорируются. Поэтому её checksum
+изменён относительно исторического handoff 18 сентября. Повторная репетиция
+на реальном backup под администратором без SUPERUSER/BYPASSRLS прошла:
+rollback, commit, runtime CRUD и anonymous denial. Локальные БД со старым
+checksum требуют отдельного пересоздания из seed; production history не переписывалась.
 
 Изменения добавляют таблицы и права приложения, не удаляют существующие данные.
 После применения обязательны записи `_prisma_migrations` с этими checksum,

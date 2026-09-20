@@ -12,8 +12,22 @@ $$;
 
 -- Preserve an existing LOGIN/password, but remove every capability that could
 -- bypass the table grants or RLS contract.
-ALTER ROLE electromagaz_app
-  NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
+-- Managed Postgres administrators cannot issue NOSUPERUSER/NOBYPASSRLS,
+-- even when those flags are already false. Leave a safe role unchanged;
+-- an unsafe role still requires an administrator capable of removing them.
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_roles
+    WHERE rolname = 'electromagaz_app'
+      AND (rolsuper OR rolcreatedb OR rolcreaterole OR rolinherit
+        OR rolreplication OR rolbypassrls)
+  ) THEN
+    ALTER ROLE electromagaz_app
+      NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOREPLICATION NOBYPASSRLS;
+  END IF;
+END
+$$;
 
 DO $$
 BEGIN
