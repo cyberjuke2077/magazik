@@ -12,7 +12,7 @@ export function ProductRow({ product, priority = false }: { product: Product; pr
   return (
     <article
       data-catalog-product-row
-      className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl border border-transparent bg-white p-3 shadow-[var(--shadow-xs)] transition-colors duration-300 hover:border-azure/15 sm:min-h-[250px] sm:grid-cols-[210px_minmax(0,1fr)_220px] sm:gap-6 sm:p-5"
+      className="group grid grid-cols-[84px_minmax(0,1fr)] gap-3 rounded-2xl border border-transparent bg-white p-3 shadow-[var(--shadow-xs)] transition-colors duration-300 hover:border-azure/15 sm:min-h-[220px] sm:grid-cols-[130px_minmax(0,1fr)_180px] sm:gap-4 sm:p-5 xl:grid-cols-[180px_minmax(0,1fr)_210px] xl:gap-6"
     >
       <ProductImage product={product} priority={priority} />
       <ProductDetails product={product} />
@@ -82,10 +82,10 @@ function ProductDetails({ product }: { product: Product }) {
         {product.name}
       </Link>
       {specs.length > 0 ? (
-        <dl className="mt-2 hidden gap-x-4 gap-y-1 text-[11px] sm:grid sm:grid-cols-2">
+        <dl className="mt-2 hidden gap-x-4 gap-y-1 text-[11px] sm:grid sm:grid-cols-1 xl:grid-cols-2">
           {specs.map(([key, value]) => (
             <div key={key} className="flex min-w-0 gap-1.5">
-              <dt className="shrink-0 text-ink-4">{key}:</dt>
+              <dt className="min-w-0 break-words text-ink-4">{key}:</dt>
               <dd className="truncate text-ink-2">{value}</dd>
             </div>
           ))}
@@ -132,7 +132,7 @@ function ProductCommerce({ product }: { product: Product }) {
   return (
     <div
       data-product-commerce
-      className="col-span-2 flex items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-col sm:items-stretch sm:border-t-0 sm:pl-5 sm:pt-0"
+      className="col-span-2 flex flex-wrap items-end justify-between gap-3 border-t border-[var(--border)] pt-3 sm:col-span-1 sm:flex-nowrap sm:flex-col sm:items-stretch sm:border-t-0 sm:pl-5 sm:pt-0"
     >
       <div className="sm:text-right">
         <div className={displayPrice ? 'price text-xl' : 'text-base font-bold text-ink'}>
@@ -141,11 +141,7 @@ function ProductCommerce({ product }: { product: Product }) {
         <div className="text-[10px] text-ink-4">Минимум: {product.minOrder} {product.unit}</div>
       </div>
       <div className="mt-auto hidden text-right text-xs sm:block">
-        <div className={product.inStock ? 'font-medium text-stock' : 'font-medium text-ink-3'}>
-          {product.inStock
-            ? `В наличии${product.stockCount > 0 ? `: ${product.stockCount} ${product.unit}` : ''}`
-            : 'Поставка под заказ'}
-        </div>
+        <div className="font-medium text-ink-3">Условия поставки</div>
         <div className="mt-1 text-ink-4">Срок подтвердим в КП</div>
       </div>
       <div className="flex items-center justify-end gap-2">

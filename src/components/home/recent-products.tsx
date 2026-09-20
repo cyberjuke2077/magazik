@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 import { ProductCard } from '@/components/catalog/product-card'
 import { getRecentlyEnrichedProducts } from '@/lib/queries/products'
@@ -10,14 +10,10 @@ export async function RecentProducts() {
   if (products.length === 0) return null
 
   return (
-    <section className="bg-canvas py-12 sm:py-16" aria-labelledby="recent-products-title">
-      <div className="mx-auto max-w-[1380px] px-4 lg:px-0">
+    <section className="pb-10 sm:pb-14" aria-labelledby="recent-products-title">
+      <div className="storefront-container">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-azure">
-              <Sparkles size={14} aria-hidden="true" />
-              Каталог обновлен
-            </div>
             <h2
               id="recent-products-title"
               className="text-2xl font-bold tracking-[-0.035em] text-ink sm:text-3xl"
@@ -42,18 +38,15 @@ export async function RecentProducts() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="home-products-grid grid grid-cols-1 gap-4">
           {products.map((product, index) => (
             <ProductCard key={product.id} product={product} priority={index === 0} />
           ))}
         </div>
 
-        <Link
-          href="/catalog"
-          className="ui-btn ui-btn-secondary mt-6 w-full sm:hidden"
-        >
-          Весь каталог
-        </Link>
+        <div className="mt-6 sm:hidden">
+          <Link href="/catalog" className="ui-btn ui-btn-secondary w-full">Весь каталог</Link>
+        </div>
       </div>
     </section>
   )

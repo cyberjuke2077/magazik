@@ -426,8 +426,8 @@ export default function RequestQuotePage() {
 
           <CartUpdateNotice changes={changes} error={refreshError} isRefreshing={isRefreshing} onRetry={refresh} onDismiss={dismissChanges} />
 
-          <form aria-busy={isSubmitting || isRefreshing} onSubmit={handleSubmit} className="space-y-4">
-            <fieldset disabled={isSubmitting || isRefreshing} className="contents">
+          <form aria-busy={isSubmitting || isRefreshing || !draftReady} onSubmit={handleSubmit} className="space-y-4">
+            <fieldset disabled={isSubmitting || isRefreshing || !draftReady} className="contents">
             {/* Контактная информация */}
             <div className="rounded-2xl bg-white p-4 shadow-[var(--shadow-xs)] sm:p-5">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">

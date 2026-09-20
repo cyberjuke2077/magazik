@@ -59,7 +59,7 @@ export function StickyAddBar({
 
   return (
     <div
-      className={`fixed bottom-16 left-0 right-0 z-[var(--layer-sticky)] border-t border-[var(--border)] bg-white shadow-[0_-6px_18px_rgba(32,33,36,0.08)] transition-transform duration-200 lg:bottom-0 ${
+      className={`fixed bottom-[calc(64px+env(safe-area-inset-bottom))] left-0 right-0 z-[var(--layer-sticky)] border-t border-[var(--border)] bg-white shadow-[0_-6px_18px_rgba(32,33,36,0.08)] transition-transform duration-200 lg:bottom-0 ${
         visible ? 'translate-y-0' : 'translate-y-0 lg:translate-y-full'
       }`}
     >

@@ -414,8 +414,8 @@ export default function WholesalePage() {
                     </div>
                   </div>
                 ) : (
-                  <form id="request-form" aria-busy={loading} onSubmit={handleSubmit} className="space-y-4">
-                    <fieldset disabled={loading} className="contents">
+                  <form id="request-form" aria-busy={loading || !draftReady} onSubmit={handleSubmit} className="space-y-4">
+                    <fieldset disabled={loading || !draftReady} className="contents">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="wholesale-name" className="block text-xs font-medium text-[#44403c] mb-1.5">Имя *</label>

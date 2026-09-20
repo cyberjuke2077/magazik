@@ -4,6 +4,7 @@ import { StickyNav } from '@/components/layout/sticky-nav'
 import { Footer } from '@/components/layout/footer'
 import { OrganizationJsonLd } from '@/components/seo/product-jsonld'
 import { RecentlyViewed } from '@/components/catalog/recently-viewed'
+import { SourcingHelp } from '@/components/home/sourcing-help'
 import { HeroSlider } from '@/components/home/hero-slider'
 import { CategoriesGrid } from '@/components/home/categories-grid'
 import { Manufacturers } from '@/components/home/manufacturers'
@@ -15,16 +16,17 @@ export default async function HomePage() {
   const sections = await getCatalogSections()
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-canvas">
       <OrganizationJsonLd />
       <Header />
       <StickyNav />
 
-      <main className="flex-1">
+      <main className="w-full max-w-full flex-1 overflow-x-clip">
         <HeroSlider />
         <CategoriesGrid sections={sections} />
         <RecentProducts />
         <Manufacturers />
+        <SourcingHelp />
         <RecentlyViewed variant="home" />
       </main>
 
